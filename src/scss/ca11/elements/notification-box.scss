@@ -1,0 +1,72 @@
+.notification-box {
+    border-radius: $spacer / 2;
+    font-size: 0.75rem;
+    overflow: auto;
+    padding: $spacer ($spacer * 2);
+
+    &.info {
+        background: $grey-color-lightest;
+        border: 1px solid $grey-color-lighter;
+        color: $grey-color-darker;
+
+        a {
+            color: $brand-color;
+        }
+
+        header {
+            color: $brand-color;
+
+            svg {
+                fill: $brand-color;
+            }
+        }
+    }
+
+    &.troubleshoot {
+        background: $grey-color-lightest;
+        border: 1px solid $red-color;
+        color: $grey-color-darker;
+
+        a {
+            color: $red-color;
+        }
+
+        header {
+            color: $red-color;
+
+            svg {
+                fill: $red-color;
+            }
+        }
+    }
+
+    header {
+        align-items: center;
+        display: flex;
+        font-weight: bold;
+        margin-bottom: $spacer;
+        text-transform: uppercase;
+
+        svg {
+            color: $brand-color;
+            margin-right: $spacer;
+        }
+    }
+
+    .description {
+        margin-bottom: $spacer;
+    }
+
+    ul {
+        li {
+            margin-bottom: $spacer / 4;
+            text-align: left;
+
+            // Icons that are used in help texts.
+            svg {
+                height: 0.75rem;
+                width: 0.75rem;
+            }
+        }
+    }
+}

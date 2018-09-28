@@ -1,0 +1,243 @@
+@import "ca11/lib/mixins";
+@import "ca11/lib/variables";
+
+// Bulma form field with some small modifications.
+.field-password,
+.field-text {
+    &:not(:last-child) {
+        margin-bottom: 0;
+    }
+}
+
+.field {
+    align-items: flex-start;
+    justify-content: left;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .label {
+        width: 100%;
+
+        &:not(:last-child) {
+            margin-bottom: 0;
+        }
+    }
+
+    .control {
+        display: flex;
+    }
+
+    .help {
+        width: 100%;
+    }
+
+    .validation-message {
+        // Make sure it doesn't collapse when there is no message.
+        color: $red-color;
+        font-size: 0.75rem;
+        margin: 0;
+        margin-top: $spacer / 4;
+        transition: opacity 0.5s ease;
+
+        &.hide {
+            opacity: 0;
+        }
+
+        &.show {
+            opacity: 1;
+        }
+    }
+}
+
+// A select field with a button attached next to it.
+.field-select {
+    .control {
+        .select {
+            &.has-button {
+                select {
+                    border-bottom-right-radius: 0;
+                    border-top-right-radius: 0;
+                }
+            }
+
+            select {
+                border: 1px solid $grey-color-lightest;
+                box-shadow: none;
+                color: $grey-color-darker;
+                width: 100%;
+
+                &:focus {
+                    border: 1px solid lighten($brand-color, 20%);
+                }
+            }
+
+            &.is-danger {
+                select {
+                    &:active,
+                    &:focus {
+                        box-shadow: 0 0 0 1px inset $red-color;
+                    }
+                }
+            }
+        }
+
+        button {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+        }
+    }
+}
+
+.field-select-search {
+    .control {
+        position: relative;
+
+        .select-search {
+            width: 300px;
+
+            input {
+                border: 1px solid $grey-color-lightest;
+                color: $grey-color-darker;
+                font-size: 1rem;
+                height: $spacer * 4.5;
+                outline: none;
+                padding: $spacer;
+                position: relative;
+                user-select: none;
+                width: 100%;
+
+                &::placeholder {
+                    color: $grey-color-darker;
+                }
+
+                &:active,
+                &:focus {
+                    border: 1px solid lighten($brand-color, 20%);
+                }
+            }
+        }
+
+        button {
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+        }
+    }
+
+
+    .filtered-options {
+        background: $white-color;
+        border: 1px solid lighten($brand-color, 20%);
+        border-top: 1px solid $white-color;
+        margin-top: -1px;
+        max-height: 162px;
+        overflow: auto;
+        position: fixed;
+        width: 300px;
+        z-index: 100000;
+
+        .option {
+            color: $grey-color-darker;
+            padding: $spacer / 2;
+            user-select: none;
+
+            &.selected {
+                background: $grey-color-lightest;
+                color: $grey-color-darkest;
+            }
+
+            &:hover {
+                background: $grey-color-lightest;
+                color: $grey-color-darker;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.field-checkbox {
+    margin-bottom: $spacer * 2;
+
+    .switch[type="checkbox"] + label {
+        display: block;
+    }
+}
+
+.field-password {
+    .control {
+        .input {
+
+            +.icon {
+                pointer-events: auto;
+
+                &.visible {
+                    color: $brand-accent-color;
+                }
+
+                svg:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+
+// Override some of the default styling of Bulma inputs.
+.control {
+    input[disabled] {
+        background: $grey-color-lightest;
+
+        &:focus {
+            border: 1px solid $grey-color-lightest;
+        }
+    }
+
+    textarea,
+    .input {
+        box-shadow: none;
+
+        &:focus,
+        &:active {
+            border: 1px solid $brand-color;
+            box-shadow: 0 0 1px 1px rgba($brand-color, 0.3);
+        }
+
+        &[type="password"],
+        &[type="text"] {
+            height: $spacer * 5;
+
+            & + .icon {
+                height: $spacer * 5;
+            }
+        }
+    }
+}
+
+
+.switch[type="checkbox"] {
+    & + label {
+        font-weight: 500;
+    }
+
+    &:checked + label {
+        &::before {
+            background: $brand-accent-color;
+        }
+    }
+}
+
+// Obfiscate text-input during test runs and screenshot
+// generation. No need to give usernames away.
+html.test {
+    input {
+        // We really, really don't want anything else here.
+        color: transparent !important;  // sass-lint:disable-line no-important
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+
+        &::placeholder {
+            text-shadow: none;
+        }
+    }
+}

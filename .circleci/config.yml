@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:latest-browsers
+
+    working_directory: ~/ca11
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: v5-{{ checksum "package.json" }}
+
+      - run:
+          command:
+            npm install
+
+      - save_cache:
+          key: v4-{{ checksum "package.json" }}
+          paths:
+            - "node_modules"
+
+      - run: cp .ca11-rc.example .ca11rc
+      - run: npm run test

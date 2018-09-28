@@ -1,0 +1,14 @@
+node_modules
+build
+dist
+docs/screenshots
+package-lock.json
+super_secret.txt
+.tags
+.publish
+.ca11rc
+.directory
+src/brand/*
+src/brand/ca11/icons/
+!src/brand/ca11/
+!src/brand/ca11/*.*

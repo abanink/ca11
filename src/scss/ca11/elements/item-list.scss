@@ -1,0 +1,101 @@
+// Replaces an item with an option menu when
+// hovering over the item.
+
+.item-list {
+    .item {
+        &:hover {
+            .item-options {
+                display: flex;
+            }
+        }
+
+        .item-options {
+            display: flex;
+
+            .item-option {
+                align-items: center;
+                background: none;
+                border: 0;
+                color: $grey-color-lighter;
+                display: flex;
+                justify-content: center;
+                margin-left: $spacer / 2;
+                padding: 0;
+                transition: color ease-in-out 0.1s;
+                user-select: none;
+
+                svg {
+                    @include icon-size($spacer * 3);
+                }
+
+                &.green {
+                    &[disabled] {
+                        color: $grey-color-lightest;
+
+                        &:hover {
+                            color: $grey-color-lightest;
+                            cursor: not-allowed;
+                        }
+                    }
+
+                    &:hover {
+                        color: $green-color;
+                    }
+                }
+
+                &.grey {
+                    &.active {
+                        color: $yellow-color;
+
+                        &:hover {
+                            color: $yellow-color;
+                        }
+                    }
+
+                    // Suggests going to an active state.
+                    &:hover {
+                        color: lighten($yellow-color, 20%);
+                    }
+                }
+
+                &:hover {
+                    color: $white-color;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    &.dense {
+        .item {
+            .item-options {
+                .item-option {
+                    background: none;
+                    margin-left: 0;
+                    padding: $spacer / 4;
+
+                    svg {
+                        @include icon-size($spacer * 2);
+                    }
+                }
+            }
+
+        }
+    }
+
+
+    &.regular {
+        .item {
+            .item-options {
+                margin-right: $spacer;
+
+                .item-option {
+                    svg {
+                        @include icon-size($spacer * 2.5);
+                    }
+                }
+            }
+        }
+    }
+
+}

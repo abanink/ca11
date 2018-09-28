@@ -1,0 +1,72 @@
+@import "ca11/lib/mixins";
+@import "ca11/lib/variables";
+
+
+.component-main {
+    position: relative;
+    width: $max-popup-width;
+
+    .overlay {
+        animation: grow .3s ease-in-out;
+        background: $white;
+        height: 100vh;
+        position: absolute;
+        width: 100%;
+        z-index: 10000000000;
+
+        .close-button {
+            position: absolute;
+            right: $spacer;
+            top: $spacer;
+
+            &:hover {
+                color: $brand-color;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .app-view {
+        display: flex;
+        flex-direction: column;
+        max-height: $max-popup-height;
+
+        .app-view-top {
+            min-height: $spacer * 5;
+        }
+
+        .app-view-main {
+            align-content: stretch;
+            display: flex;
+            flex-direction: row;
+            // Show a scrollbar when the content height exceeds the max-height.
+
+            .app-view-sidebar {
+                width: $spacer * 5;
+            }
+
+            .app-view-layer {
+                flex: 1;
+                min-height: $min-popup-height + ($spacer * 5);
+                overflow-y: auto;
+
+                &.padded {
+                    padding: $spacer * 3;
+                }
+
+                h1 {
+                    color: $brand-color;
+                    font-size: 1rem;
+                    font-weight: 500;
+                    margin-bottom: $spacer * 2;
+                }
+
+                header {
+                    .header-line {
+                        display: flex;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,107 @@
+{
+    "brands": {
+        "ca11": {
+            "colors": {
+                "brand-color": "#35141f",
+                "brand-accent-color": "#00b8e5",
+                "green-color": "#28ca42",
+                "grey-color": "#888",
+                "orange-color": "#f98644",
+                "primary-color": "#3c3c50",
+                "red-color": "#da534F"
+            },
+            "plugins": {
+                "builtin": {
+                    "availability": {
+                        "addons": {
+                            "bg": [],
+                            "fg": [],
+                            "i18n": []
+                        }
+                    },
+                    "contacts": {
+                        "i18n": [],
+                        "providers": []
+                    },
+                    "user": {
+                        "adapter": "g11-adapter-user-voip",
+                        "i18n": []
+                    }
+                },
+                "custom": {}
+            },
+            "name": {
+                "alpha": "Ca11-alpha",
+                "beta": "Ca11-beta",
+                "production": "Ca11"
+            },
+            "permissions": "",
+            "sip_endpoint": "",
+            "stun": [
+                "stun:stun3.l.google.com:19302",
+                "stun:stun4.l.google.com:19302"
+            ],
+            "store": {
+                "chrome": {
+                    "clientId": "",
+                    "clientSecret": "",
+                    "extensionId_alpha": "",
+                    "extensionId_beta": "",
+                    "extensionId_production": "",
+                    "refreshToken": ""
+                },
+                "firefox": {
+                    "apiKey": "",
+                    "apiSecret": "",
+                    "gecko": {
+                        "id_alpha": "",
+                        "id_beta": "",
+                        "id_production": "",
+                        "strict_min_version": ""
+                    }
+                }
+            },
+            "telemetry": {
+                "sentry": {
+                    "apiKey": "",
+                    "dsn": "",
+                    "host": "",
+                    "org": "",
+                    "project": "ca11"
+                }
+            },
+            "tests": {
+                "alice": {
+                    "id": "",
+                    "username": "",
+                    "password": ""
+                },
+                "bob": {
+                    "id": "",
+                    "username": "",
+                    "password": ""
+                },
+                "charlie": {
+                    "id": "",
+                    "username": "",
+                    "password": ""
+                },
+                "endpoint": "",
+                "headless": false,
+                "port": 8999
+            },
+            "vendor": {
+                "name": "Ca11",
+                "portal": {
+                    "name": "",
+                    "url": ""
+                },
+                "support": {
+                    "email": "",
+                    "phone": "",
+                    "website": "https://ca11.io"
+                }
+            }
+        }
+    }
+}

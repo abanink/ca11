@@ -1,0 +1,75 @@
+@import "ca11/lib/mixins";
+@import "ca11/lib/variables";
+
+
+// The most upper box containing account info and
+// icon-links to several locations.
+.component-call-switch {
+    background: $white-tint-color-light;
+    width: $spacer * 5;
+
+    .call {
+        @include icon-size($spacer * 5);
+        align-items: center;
+        background: $white-tint-color-dark;
+        border-left: 1px solid $grey-color-lightest;
+        border-top: 1px solid $grey-color-lightest;
+        display: flex;
+        justify-content: center;
+
+        &:hover {
+            background: $white-tint-color-bright;
+
+            svg {
+                fill: $brand-color;
+            }
+        }
+
+        svg {
+            fill: $primary-color;
+            margin-left: -1px;
+        }
+
+        &.hint {
+            @include animation("hint-pulse 1s infinite ease-in-out");
+        }
+
+        // An existing call object with status `new`.
+        &.new-call {
+            background: $green-color;
+            svg {fill: $white-color;}
+
+            &.active {
+                background: $red-color;
+                svg {fill: $white-color;}
+            }
+        }
+
+        &.state-accepted {
+            background: $grey-color-dark;
+
+            svg {fill: $white-color;}
+
+            &.active {
+                background: $brand-color;
+                cursor: pointer;
+
+                svg {fill: $white-color;}
+            }
+        }
+
+
+        &.state-accept {
+            background: $green-color;
+
+            svg {fill: $white-color;}
+
+        }
+
+        &.state-hangup {
+            background: $red-color;
+
+            svg {fill: $white-color}
+        }
+    }
+}
