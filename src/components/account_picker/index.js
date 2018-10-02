@@ -6,7 +6,7 @@ module.exports = (app) => {
         computed: Object.assign({
             validationField: function() {
                 if (this.account.status === 'loading') return null
-                return this.v.settings.webrtc.account.selected.id
+                return this.v.settings.sip.account.selected.id
             },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
@@ -32,7 +32,7 @@ module.exports = (app) => {
         render: templates.account_picker.r,
         staticRenderFns: templates.account_picker.s,
         store: {
-            account: 'settings.webrtc.account',
+            account: 'settings.sip.account',
             settings: 'settings',
             toggle: 'settings.webrtc.toggle',
         },

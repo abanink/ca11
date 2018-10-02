@@ -7,7 +7,7 @@ const rc = require('rc')
 
 
 // The main settings object containing info from .ca11rc and build flags.
-module.exports = function(baseDir, overrides) {
+module.exports = function(baseDir, overrides, verbose = true) {
     // Define all static or simple condition settings here.
     let settings = {
         BASE_DIR: baseDir,
@@ -92,17 +92,20 @@ module.exports = function(baseDir, overrides) {
         if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development'
     }
 
+    settings.NODE_INSPECT = process.env.NODE_INSPECT ? ' --inspect' : ''
     settings.NODE_ENV = process.env.NODE_ENV
     // Load the Vialer settings from ~/.ca11rc into the existing settings.
     rc('ca11', settings)
 
     // Notify developer about some essential build flag values.
-    gutil.log('BUILD FLAGS:')
-    gutil.log(`- BRAND: ${settings.BRAND_TARGET}`)
-    gutil.log(`- DEPLOY: ${settings.DEPLOY_TARGET}`)
-    gutil.log(`- PRODUCTION: ${settings.PRODUCTION}`)
-    gutil.log(`- TARGET: ${settings.BUILD_TARGET}`)
-    gutil.log(`- VERBOSE: ${settings.VERBOSE}`)
+    if (verbose) {
+        gutil.log('SETTINGS FLAGS:')
+        gutil.log(`- BRAND: ${settings.BRAND_TARGET}`)
+        gutil.log(`- DEPLOY: ${settings.DEPLOY_TARGET}`)
+        gutil.log(`- PRODUCTION: ${settings.PRODUCTION}`)
+        gutil.log(`- TARGET: ${settings.BUILD_TARGET}`)
+        gutil.log(`- VERBOSE: ${settings.VERBOSE}`)        
+    }
 
     return settings
 }

@@ -1,50 +1,40 @@
-<component class="component-main-statusbar" :class="classes('component')">
+<component class="component-main-statusbar" :class="classes()">
 
     <div v-if="!user.authenticated" class="vendor">
         <icon class="vendor-logo" name="logo"></icon>
         <span class="vendor-name">{{vendor.name}}</span>
     </div>
     <div class="status-left" v-else>
-        <span class="status-indicator tooltip tooltip-right" :data-tooltip="titles('indicator')">
-            <icon class="spinner" name="spinner" v-if="status === 'loading'"/>
-            <icon name="user" v-else-if="!settings.webrtc.enabled" />
-            <icon class="error" name="mute" v-else-if="!settings.webrtc.media.permission"/>
-            <icon class="error" name="mute" v-else-if="!settings.webrtc.devices.ready"/>
-            <icon class="error" name="softphone" v-else-if="ua.status !== 'registered'"/>
-            <icon class="warning" name="dnd" v-else-if="dnd"/>
-            <icon class="ok test-status-registered" name="softphone" v-else-if="ua.status === 'registered'"/>
+        <span class="status-indicator tooltip tooltip-right" :data-tooltip="tooltip">
+            <icon name="mute" v-if="!settings.webrtc.media.permission"/>
+            <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
+            <icon name="dnd" v-else-if="dnd"/>
+            <icon name="dialer_sip" v-else-if="sip.enabled" :class="{spinner: (sig11.status === 'loading')}"/>
+            <icon name="phone" v-else-if="sig11.enabled"/>
         </span>
 
         <span class="username">{{user.username}}</span>
 
-        <div class="options">
-            <div class="option" @click="logout">
-                <icon name="logout"/>
-            </div>
-        </div>
     </div>
 
     <div class="options">
+
+        <div class="option" @click="logout">
+            <icon name="logout"/>
+        </div>
+
         <!-- No real use in showing the popout view from an unauthenticated view -->
-        <div class="option" v-if="env.isExtension && !env.isPopout && user.authenticated" @click="openPopoutView">
+        <div class="option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
             <icon class="ext-tab" name="ext-tab"/>
         </div>
 
-        <div class="option" v-if="user.authenticated" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
+        <div class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
             <icon class="settings" name="settings"/>
-        </div>
-
-        <div class="option" v-if="user.authenticated" :class="{disabled: !app.online}" @click="refreshApiData">
-            <icon class="refresh" name="refresh"/>
-        </div>
-
-        <!-- Allow the user to bail out when it's unable to unlock-->
-        <div class="option" @click="logout" v-else-if="layer === 'unlock'">
-            <icon name="logout"/>
         </div>
 
         <div class="option" :class="{active: layer === 'about'}" @click="setOverlay('about')">
             <icon name="help"/>
         </div>
+
     </div>
 </component>

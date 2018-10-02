@@ -1,9 +1,9 @@
 <component class="component-wizard-telemetry">
-    <header class="ca">{{$t('your privacy')}}</header>
+    <header class="ca">{{$t('telemetry')}}</header>
 
     <div class="step-description">
         <span class="cf">
-            {{$t('we are able to improve the {name} faster, when you allow us to process anonymized data about usage statistics and application errors for analysis.', {name: app.name})}}
+            {{$t('by automatically tracking errors that might occur in {name}, you\'re directly contributing to {name}\'s quality and stability.', {name: app.name})}}
         </span>
         <span class="cf">
             {{$t('do you want to help?')}}

@@ -130,7 +130,7 @@ class PluginContacts extends Plugin {
         this.resetEndpointsStatus()
         this.app.logger.info(`${this}updating contact endpoint presence status`)
         for (const contact of Object.values(this.contacts)) {
-            if (contact && ['registered', 'connected'].includes(this.app.state.calls.ua.status)) {
+            if (contact && ['registered', 'connected'].includes(this.app.state.calls.sip.status)) {
                 for (const endpoint of Object.values(contact.endpoints)) {
                     if (endpoint.presence) {
                         await endpoint.presence.subscribe()

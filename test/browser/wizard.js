@@ -14,19 +14,6 @@ module.exports = function(settings) {
 
         await runner.click('.test-wizard-telemetry-yes')
 
-        // For now, only vjs-adapter-user-vg supports account selection.
-        if (brand.plugins.builtin.user.adapter === 'vjs-adapter-user-vg') {
-            await runner.waitFor('.component-wizard-account')
-            // Wait for the select to be filled by the platform API call.
-            await runner.waitFor('.filtered-options .option')
-
-            await runner.click('input[id="webrtc_account"]')
-            await runner.click(`.filtered-options #option-${brand.tests[runner._name].id}`)
-
-            if (screens) await container.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}wizard-account.png`)})
-            await runner.click('.test-wizard-account-next')
-        }
-
         await runner.waitFor('.component-wizard-mic-permission')
         if (screens) await container.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}wizard-mic-permission.png`)})
         await runner.click('.test-wizard-mic-permission-next')

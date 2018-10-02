@@ -51,16 +51,13 @@ module.exports = (function() {
         availabilityPlugin.addons = brand.plugins.builtin.availability.addons
         contactsPlugin.providers = brand.plugins.builtin.contacts.providers
         contactsPlugin.i18n = brand.plugins.builtin.contacts.i18n
-        userPlugin.adapter = brand.plugins.builtin.user.adapter
         userPlugin.i18n = brand.plugins.builtin.user.i18n
         options.plugins.custom = brand.plugins.custom
     } else {
         // Load plugins through envify replacement.
         availabilityPlugin.addons = process.env.BUILTIN_AVAILABILITY_ADDONS
         contactsPlugin.providers = process.env.BUILTIN_CONTACTS_PROVIDERS
-        contactsPlugin.i18n = process.env.BUILTIN_USER_I18N
-        userPlugin.adapter = process.env.BUILTIN_USER_ADAPTER
-        userPlugin.i18n = process.env.BUILTIN_USER_I18N
+        contactsPlugin.i18n = process.env.BUILTIN_CONTACTS_I18N
         options.plugins.custom = process.env.CUSTOM_MOD
 
         // Add an extra extension-specific module.

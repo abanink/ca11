@@ -75,6 +75,13 @@ class App extends Skeleton {
         */
         this.state = Object.assign({
             env: this.env,
+            language: {
+                options: [
+                    {id: 'en', name: 'english'},
+                    {id: 'nl', name: 'nederlands'},
+                ],
+                selected: {id: null, name: null},
+            },
         }, initialState)
     }
 
@@ -268,10 +275,10 @@ class App extends Skeleton {
     * can't be derived from the application state.
     */
     _languagePresets() {
-        let language = this.state.settings.language.selected
+        let language = this.state.language.selected
 
         if (!language.id) {
-            const options = this.state.settings.language.options
+            const options = this.state.language.options
             // Try to figure out the language from the environment.
             // Check only the first part of en-GB/en-US.
             if (this.env.isBrowser) language = options.find((i) => i.id === navigator.language.split('-')[0])
@@ -281,7 +288,7 @@ class App extends Skeleton {
         }
 
         this.logger.info(`${this}selected language: ${language.id}`)
-        this.setState({settings: {language: {selected: language}}}, {persist: this.state.user.authenticated})
+        this.setState({language: {selected: language}}, {persist: this.state.user && this.state.user.authenticated})
         Vue.i18n.set(language.id)
     }
 
