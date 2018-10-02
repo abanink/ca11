@@ -233,7 +233,7 @@ class Crypto {
     __importPublicKey(publicKey, params, uses = []) {
         this.app.logger.debug(`${this}importing ${params.name} public key`)
         let publicKeyData
-        if (!this.app.env.isBrowser) {
+        if (this.app.env.isBrowser) {
             let chromeSpkiPublickey = publicKey.replace(
                 'MFYwEAYEK4EEcAYIKoZIzj0DAQcDQgAE',
                 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE'
@@ -320,51 +320,6 @@ class Crypto {
 
 
     /**
-    * An identity is foremost a sessionkey that is used to encrypt
-    * locally stored data with. It can also provide means to setup a secure
-    * communication channel with between two endpoints. In that case a transient
-    * ECDH key and a static RSA-PSS key is used to negotiate a PFS secret key
-    * between the two endpoints.
-    * @param {String} username - The username to unlock local data with.
-    * @param {String} password - The password to unlock local data with.
-    * @param {Boolean} e2e - Whether to create an asymmetric encryption key.
-    */
-    async createIdentity(username, password, e2e = false) {
-        this.sessionKey = await this._generateVaultKey(username, password)
-
-        if (!e2e) return
-
-        const rsa = this.app.store.get('rsa')
-        if (!rsa) {
-            try {
-                this.rsa = await crypto.subtle.generateKey(this.__cryptoParams.rsa.params, true, this.__cryptoParams.rsa.uses)
-            } catch (err) {
-                console.error(err)
-            }
-
-            let [privateKey, publicKey] = await Promise.all([
-                this.__exportPrivateKey(this.rsa.privateKey),
-                this.__exportPublicKey(this.rsa.publicKey),
-            ])
-
-            const rsaEncrypted = await this.encrypt(this.sessionKey, JSON.stringify({privateKey, publicKey}))
-            this.app.store.set('rsa', rsaEncrypted)
-        } else {
-            try {
-                let decryptedRsa = JSON.parse(await this.decrypt(this.sessionKey, rsa))
-                let [privateKey, publicKey] = await Promise.all([
-                    this.__importPrivateKey(decryptedRsa.privateKey, this.__cryptoParams.rsa.params, ['sign']),
-                    this.__importPublicKey(decryptedRsa.publicKey, this.__cryptoParams.rsa.params, ['verify']),
-                ])
-                this.rsa = {privateKey, publicKey}
-            } catch (err) {
-                console.error(`${this}unable to decrypt rsa identity`)
-            }
-        }
-    }
-
-
-    /**
     * Decrypt a cypher object with an AES-GCM session key.
     * @param {CryptoKey} sessionKey - The AES-GCM CryptoKey to decrypt a message with.
     * @param {Object} ciphertext - The cipher object.
@@ -402,6 +357,51 @@ class Crypto {
             additionalData: this.__dataArrayToBase64(additionalData),
             cipher: this.__dataArrayToBase64(encrypted),
             iv: this.__dataArrayToBase64(iv),
+        }
+    }
+
+
+    /**
+    * An identity is foremost a sessionkey that is used to encrypt
+    * locally stored data with. It can also provide means to setup a secure
+    * communication channel with between two endpoints. In that case a transient
+    * ECDH key and a static RSA-PSS key is used to negotiate a PFS secret key
+    * between the two endpoints.
+    * @param {String} username - The username to unlock local data with.
+    * @param {String} password - The password to unlock local data with.
+    * @returns {Object} - Public/private keypair.
+    */
+    async identityCreate(username, password) {
+        this.sessionKey = await this._generateVaultKey(username, password)
+
+        try {
+            this.rsa = await crypto.subtle.generateKey(this.__cryptoParams.rsa.params, true, this.__cryptoParams.rsa.uses)
+        } catch (err) {
+            console.error(err)
+        }
+
+        let [privateKey, publicKey] = await Promise.all([
+            this.__exportPrivateKey(this.rsa.privateKey),
+            this.__exportPublicKey(this.rsa.publicKey),
+        ])
+
+        return {privateKey, publicKey}
+    }
+
+
+    /**
+    * Import a RSA keypair
+    */
+    async identityImport({publicKey, privateKey}) {
+        try {
+            let [_privateKey, _publicKey] = await Promise.all([
+                this.__importPrivateKey(privateKey, this.__cryptoParams.rsa.params, ['sign']),
+                this.__importPublicKey(publicKey, this.__cryptoParams.rsa.params, ['verify']),
+            ])
+            this.rsa = {privateKey: _privateKey, publicKey: _publicKey}
+        } catch (err) {
+            console.error(`${this}unable to decrypt rsa identity`)
+            throw err
         }
     }
 

@@ -63,11 +63,11 @@ function helpers(app) {
         else {
             if (app.state.settings.webrtc.enabled) {
                 if (!app.state.settings.webrtc.media.permission) errors.push('mediaPermission')
-                if (!(app.state.calls.ua.status === 'registered')) errors.push('unregistered')
+                if (!(app.state.calls.sip.status === 'registered')) errors.push('unregistered')
                 if (!(app.state.settings.webrtc.devices.ready)) errors.push('device')
             } else {
                 // Non-WebRTC modus.
-                if (!app.state.calls.ua.status === 'connected') errors.push('disconnected')
+                if (!app.state.calls.sip.status === 'connected') errors.push('disconnected')
             }
         }
 
@@ -340,8 +340,8 @@ function helpers(app) {
                                     // No validation without WebRTC toggled off.
                                     if (!this.settings.webrtc.toggle) return true
                                     else {
-                                        if (this.settings.webrtc.account.status === 'loading') return false
-                                        else if (this.settings.webrtc.account.selected.id) return true
+                                        if (this.settings.sip.account.status === 'loading') return false
+                                        else if (this.settings.sip.account.selected.id) return true
                                     }
                                     return false
                                 }),

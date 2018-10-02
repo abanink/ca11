@@ -58,18 +58,6 @@
         "tabs"
     ],
     "content_security_policy": "script-src 'self'; object-src 'self'",
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "js/app_observer.js"
-            ],
-            "run_at": "document_end",
-            "all_frames": true
-        }
-    ],
     "web_accessible_resources": [
         "fonts/*.woff2",
         "img/*.png",

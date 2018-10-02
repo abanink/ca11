@@ -46,7 +46,7 @@ class AppBackground extends App {
         this.__writeQueue = []
         // Keep a reference of Vue watchers, so they can be toggled
         // when switching between sessions.
-        this._watchers = []
+        this._registeredWatchers = []
 
         // Send the background script's state to the requesting event.
         this.on('bg:get_state', ({callback}) => callback(JSON.stringify(this.state)))
@@ -114,11 +114,10 @@ class AppBackground extends App {
     __initServices() {
         if (this.state.app.online) {
             this.logger.info(`${this}init platform services`)
-            const endpoint = this.state.settings.webrtc.endpoint.uri
-            const account = this.state.settings.webrtc.account.using.id
-            if (endpoint && account) {
+
+            if (this.state.calls.sip.enabled) {
                 this.logger.info(`${this}init calling service`)
-                this.plugins.calls.connect({register: this.state.settings.webrtc.enabled})
+                this.plugins.calls.connect()
             }
 
             this.setState({ui: {menubar: {event: null}}})
@@ -134,22 +133,35 @@ class AppBackground extends App {
     * @param {String} [options.password] - The password to unlock the store with.
     */
     async __initSession({key = null, password = null} = {}) {
+        let newIdentity = {}
         if (key) {
             this.logger.info(`${this}init session storage with vault key`)
             await this.crypto._importVaultKey(key)
         } else if (password) {
             const sessionId = this.state.app.session.active
             this.logger.debug(`${this}init session identity for "${sessionId}"`)
-            await this.crypto.createIdentity(sessionId, password)
+            Object.assign(newIdentity, await this.crypto.identityCreate(sessionId, password))
         } else {
             throw new Error('failed to unlock (no session key or credentials)')
         }
 
         await this._restoreState()
+
+        // Either restore the user identity from the previously stored
+        // state, store the created identity into the state.
+        if (key) {
+            await this.crypto.identityImport(this.state.user.identity)
+        } else if (password) {
+            this.setState({user: {identity: newIdentity}}, {persist: true})
+        }
+
         this.setState({
             app: {vault: {unlocked: true}},
             user: {authenticated: true},
         }, {encrypt: false, persist: true})
+
+        this.plugins.calls.sig11.connect()
+
 
         // Set the default layer if it's still set to login.
         if (this.state.ui.layer === 'login') {
@@ -195,7 +207,7 @@ class AppBackground extends App {
             this.api.setupClient(this.state.user.username, this.state.user.token)
             // (!) State is reactive after initializing the view-model.
             this.__initViewModel({main: null})
-            this.__storeWatchers(true)
+            this._watchersActivate()
             this.__initServices()
 
         } else {
@@ -278,37 +290,6 @@ class AppBackground extends App {
                 } else if (this.__writeQueue[0].status === 2) {
                     this.__writeQueue.shift()
                 }
-            }
-        }
-    }
-
-
-    /**
-    * Watchers are added to the store, so application logic can be
-    * data-orientated (centralized around store properties), instead
-    * of having to spinkle the same reference to logic at each location
-    * where the store property is changed. Use with care, since it can
-    * introduce unpredicatable behaviour; especially in combination with
-    * multiple async setState calls.
-    * @param {Boolean} [activate=True] - Activates or deactivates watchers.
-    */
-    __storeWatchers(activate = true) {
-        if (!activate) {
-            this.logger.info(`${this}deactivating ${this._watchers.length} store watchers`)
-            for (const unwatch of this._watchers) unwatch()
-            this._watchers = []
-        } else {
-            this.logger.info(`${this}init store watchers...`)
-            let watchers = {}
-
-            for (let module of Object.keys(this.plugins)) {
-                if (this.plugins[module]._watchers) {
-                    Object.assign(watchers, this.plugins[module]._watchers())
-                }
-            }
-
-            for (const key of Object.keys(watchers)) {
-                this._watchers.push(this.vm.$watch(key, watchers[key]))
             }
         }
     }
@@ -405,6 +386,47 @@ class AppBackground extends App {
 
 
     /**
+    * App-wide store property watchers.
+    * @returns {Object} - Watched store properties.
+    */
+    _watchers() {
+        return {
+            /**
+            * Watch for language changes.
+            * @param {Object} languageId - The new language.
+            */
+            'store.language.selected.id': (languageId) => {
+                this.logger.info(`${this} setting language to ${languageId}`)
+                Vue.i18n.set(languageId)
+            },
+        }
+    }
+
+
+    _watchersActivate() {
+        this.logger.info(`${this}init store watchers...`)
+        let watchers = this._watchers()
+
+        for (let module of Object.keys(this.plugins)) {
+            if (this.plugins[module]._watchers) {
+                Object.assign(watchers, this.plugins[module]._watchers())
+            }
+        }
+
+        for (const key of Object.keys(watchers)) {
+            this._registeredWatchers.push(this.vm.$watch(key, watchers[key]))
+        }
+    }
+
+
+    _watchersDeactivate() {
+        this.logger.info(`${this}deactivating ${this._registeredWatchers.length} store watchers`)
+        for (const unwatch of this._registeredWatchers) unwatch()
+        this._registeredWatchers = []
+    }
+
+
+    /**
     * Reboot a session with a clean state. It can be used
     * to load a specific previously stored session, or to
     * continue the session that should be active or to
@@ -435,7 +457,7 @@ class AppBackground extends App {
 
         this.logger.debug(`${this}switch to session "${sessionId}"`)
         // Disable all watchers while switching sessions.
-        if (this._watchers.length) this.__storeWatchers(false)
+        if (this._registeredWatchers.length) this._watchersDeactivate()
 
         // Overwrite the current state with the initial state.
         this.__mergeDeep(this.state, this.__mergeDeep(this._initialState(), keptState))

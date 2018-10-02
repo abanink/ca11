@@ -6,6 +6,7 @@
 * @module ModuleCalls
 */
 const Plugin = require('ca11/lib/plugin')
+const Sig11 = require('./sig11')
 
 
 /**
@@ -24,6 +25,8 @@ class PluginCalls extends Plugin {
         this.calls = {}
         // This flag indicates whether a reconnection attempt will be
         // made when the websocket connection is gone.
+
+        this.sig11 = new Sig11(app)
 
         this.reconnect = true
         // The default connection timeout to start with.
@@ -324,7 +327,7 @@ class PluginCalls extends Plugin {
                 this.__registerPromise.resolve()
                 delete this.__registerPromise
             }
-            this.app.setState({calls: {status: null, ua: {status: 'registered'}}})
+            this.app.setState({calls: {sip: {status: 'registered'}}})
             this.app.emit('calls:registered', {}, true)
         })
 
@@ -336,13 +339,13 @@ class PluginCalls extends Plugin {
                 this.disconnect()
                 delete this.__registerPromise
             }
-            this.app.setState({calls: {status: null, ua: {status: 'registration_failed'}}})
+            this.app.setState({calls: {sip: {status: 'registration_failed'}}})
         })
 
 
         this.ua.on('unregistered', () => {
             this.app.logger.debug(`${this}<event:unregistered>`)
-            this.app.setState({calls: {ua: {status: this.ua.transport.isConnected() ? 'connected' : 'disconnected'}}})
+            this.app.setState({calls: {sip: {status: this.ua.transport.isConnected() ? 'connected' : 'disconnected'}}})
         })
 
         this.ua.on('transportCreated', (transport) => {
@@ -350,7 +353,7 @@ class PluginCalls extends Plugin {
 
             this.ua.transport.on('connected', () => {
                 this.app.logger.debug(`${this}<event:connected>`)
-                this.app.setState({calls: {ua: {status: 'connected'}}})
+                this.app.setState({calls: {sip: {status: 'connected'}}})
                 // Reset the retry interval timer..
                 this.retry = Object.assign({}, this.retryDefault)
                 this.app.emit('calls:connected', {}, true)
@@ -358,15 +361,11 @@ class PluginCalls extends Plugin {
 
             this.ua.transport.on('disconnected', () => {
                 this.app.logger.debug(`${this}<event:disconnected>`)
-                this.app.setState({calls: {ua: {status: 'disconnected'}}})
 
-                if (this.app.state.user.authenticated) {
-                    this.app.setState({calls: {ua: {status: 'disconnected'}}})
-                } else {
-                    this.app.setState({calls: {ua: {status: 'inactive'}}})
-                    this.retry = Object.assign({}, this.retryDefault)
-                    this.reconnect = false
-                }
+                this.app.setState({calls: {sip: {status: 'disconnected'}}})
+
+                this.retry = Object.assign({}, this.retryDefault)
+                this.reconnect = false
 
                 // We don't use SIPJS reconnect logic, because it can't deal
                 // with offline detection and incremental retry timeouts.
@@ -384,21 +383,10 @@ class PluginCalls extends Plugin {
 
 
     /**
-    * Setup the initial UA options. This depends for instance
-    * on whether the application will be using the softphone
-    * to connect to the backend with or the vendor portal user.
-    * @param {Object} account - The SIP credentials to connect with.
-    * @param {Object} account.username - Username to login with.
-    * @param {Object} account.password - Password to login with.
-    * @param {Object} account.uri - The SIP uri to login with.
-    * @param {String} [endpoint] - The SIP endpoint.
-    * @param {Object} [register] - Register to the SIP service.
+    * Setup the initial UA options.
     * @returns {Object} UA options that are passed to Sip.js
     */
-    __uaOptions(account, endpoint = null, register = true) {
-        const settings = this.app.state.settings
-
-        // For webrtc this is a voipaccount, otherwise an email address.
+    __uaOptions() {
         let options = {
             autostart: false,
             autostop: false,
@@ -423,24 +411,16 @@ class PluginCalls extends Plugin {
             transportOptions: {
                 // Reconnects are handled manually.
                 maxReconnectionAttempts: 0,
-                wsServers: `wss://${endpoint ? endpoint : settings.webrtc.endpoint.uri}`,
+                // Don't allow unencrypted websocket connections.
+                wsServers: `wss://${this.app.state.calls.sip.endpoint}`,
             },
             userAgentString: this._userAgent(),
         }
 
-        options.authorizationUser = account.username
-        options.password = account.password
-        options.uri = account.uri
-
-        // Log in with the WebRTC voipaccount when it is enabled.
-        // The voipaccount should be from the same client as the logged-in
-        // user, or subscribe information won't work.
-        if (settings.webrtc.enabled) {
-            options.register = register
-        } else {
-            options.register = register
-        }
-
+        options.password = this.app.state.calls.sip.account.selected.password
+        options.authorizationUser = this.app.state.calls.sip.account.selected.username
+        options.uri = `${options.authorizationUser}@${this.app.state.calls.sip.endpoint}`
+        options.register = true
         return options
     }
 
@@ -450,13 +430,32 @@ class PluginCalls extends Plugin {
     * @returns {Object} The module's store properties.
     */
     _initialState() {
-        return {
+        let state = {
             calls: {},
-            status: 'loading',
-            ua: {
-                status: 'inactive',
+            sig11: {
+                enabled: true,
+                endpoint: process.env.SIG11_ENDPOINT,
+                status: 'loading',
+            },
+            sip: {
+                account: {
+                    // <Platform> may provide account options.
+                    options: [],
+                    // Remembers the last selected option.
+                    selected: {id: null, name: null, password: null, uri: null, username: null},
+                    // Whether user can select <platform> accounts from options.
+                    selection: false,
+                },
+                enabled: false,
+                endpoint: process.env.SIP_ENDPOINT,
+                status: 'loading',
             },
         }
+
+        // The selection flag determines whether the UI should include endpoint selection.
+        state.sip.account.selection = Boolean(state.sip.endpoint)
+
+        return state
     }
 
 
@@ -534,11 +533,13 @@ class PluginCalls extends Plugin {
     * @param {Object} moduleStore - Root property for this module.
     */
     _restoreState(moduleStore) {
-        Object.assign(moduleStore, {
+        this.app.__mergeDeep(moduleStore, {
             calls: {},
-            status: 'loading',
-            ua: {
-                status: 'disconnected',
+            sig11: {
+                status: 'loading',
+            },
+            sip: {
+                status: 'loading',
             },
         })
     }
@@ -585,7 +586,7 @@ class PluginCalls extends Plugin {
                 if (online) {
                     // We are online again, try to reconnect and refresh API data.
                     this.app.logger.debug(`${this}reconnect sip service (online modus)`)
-                    this.connect({register: this.app.state.settings.webrtc.enabled})
+                    this.connect()
                 } else {
                     // Offline modus is not detected by Sip.js/Websocket.
                     // Disconnect manually.
@@ -604,17 +605,10 @@ class PluginCalls extends Plugin {
                 }
             },
             /**
-            * Watch for changes in UA status and update the menubar
-            * status accordingly. The menubar states are slightly
-            * different from the UA states, because there are conditions
-            * involved, besides the UA's.
+            * Update menubar status when the SIP status changes.
             * @param {String} uaStatus - The new UA status.
             */
-            'store.calls.ua.status': (uaStatus) => {
-                if (this.app.state.settings.webrtc.enabled) {
-                    if (uaStatus === 'registered') this.app.setState({calls: {status: null}})
-                } else if (uaStatus === 'connected') this.app.setState({calls: {status: null}})
-
+            'store.calls.sip.status': (uaStatus) => {
                 this.app.plugins.ui.menubarState()
             },
         }
@@ -718,23 +712,12 @@ class PluginCalls extends Plugin {
     * is no state to get credentials from yet.
     * @param {Boolean} [register] - Whether to register to the SIP endpoint.
     */
-    async connect({account = {}, endpoint = null, register = true} = {}) {
-        this.app.logger.info(`${this}connect to ua (${register ? 'register' : 'no-register'})`)
+    async connect({account = {}, endpoint = null} = {}) {
+        this.app.logger.info(`${this}connect to SIP service`)
         // The default is to reconnect.
         this.reconnect = true
 
-        if (!account.username || !account.password || !account.uri) {
-            account = this.app.state.settings.webrtc.account.using
-        } else {
-            this.app.setState({settings: {webrtc: {account: {using: account}}}})
-        }
-
-        this._uaOptions = this.__uaOptions(account, endpoint, register)
-
-        // Login with the WebRTC account or platform account.
-        if (!this._uaOptions.authorizationUser || !this._uaOptions.password) {
-            this.app.logger.error(`${this}cannot connect without username and password`)
-        }
+        this._uaOptions = this.__uaOptions()
 
         // Overwrite the existing instance with a new one every time.
         // SIP.js doesn't handle resetting configuration well.

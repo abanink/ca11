@@ -16,26 +16,24 @@ class PluginUser extends Plugin {
     /**
     * Setup events that can be called upon from `AppForeground`.
     * @param {AppBackground} app - The background application.
-    * @param {UserProvider} UserAdapter - An adapter that handles authentication and authorization.
     */
-    constructor(app, UserAdapter) {
+    constructor(app) {
         super(app)
 
-        this.adapter = new UserAdapter(app)
-
-        this.app.on('bg:user:account_select', this.adapter._selectAccount.bind(this.adapter))
+        this.app.on('bg:user:account_select', this._selectAccount.bind(this))
 
         // Other implementation may use other user identifiers than email,
         // that's why the main event uses `username` instead of `email`.
         this.app.on('bg:user:login', (...args) => {
-            try {this.adapter.login(...args)} catch (err) {console.trace(err)}
+            try {this.login(...args)} catch (err) {console.trace(err)}
         })
+
         this.app.on('bg:user:logout', (...args) => {
-            try {this.adapter.logout(...args)} catch (err) {console.trace(err)}
+            try {this.logout(...args)} catch (err) {console.trace(err)}
         })
 
         this.app.on('bg:user:unlock', (...args) => {
-            try {this.adapter.unlock(...args)} catch (err) {console.trace(err)}
+            try {this.unlock(...args)} catch (err) {console.trace(err)}
         })
 
         this.app.on('bg:user:set_session', ({session}) => {
@@ -53,22 +51,100 @@ class PluginUser extends Plugin {
     * @returns {Object} The module's store properties.
     */
     _initialState() {
-        return Object.assign({
+        return {
             authenticated: false,
             developer: false,
+            identity: {
+                privateKey: null,
+                publicKey: null,
+            },
             status: null,
             username: null,
-        }, this.adapter._initialState())
+        }
     }
 
 
     /**
-    * Call for platform data from the provider.
+    * Placeholder that warns that this method
+    * needs to be implemented in the adapter.
+    * @param {Object} options - Options to pass.
+    * @param {Object} options.account - The account credentials.
+    * @param {Function} options.callback - Called when the account is set.
     */
-    async _platformData() {
-        if (this.adapter._platformData) {
-            await this.adapter._platformData()
+    _selectAccount({account, callback}) {
+        this.app.logger.info(`${this}account selection not implemented!`)
+    }
+
+
+
+    /**
+    * Some default actions that are done, no matter
+    * what login provider is being used.
+    * @param {Object} options - Options to pass.
+    * @param {String} options.password - The password that is used to unlock a session.
+    * @param {String} options.userFields - The fields that the particular user requires.
+    * @param {String} options.username - The username the user is identified with.
+    */
+    async login({password, userFields, username}) {
+        this.app.setState({user: {status: 'login'}})
+        let sessionName = username
+        username = username.split('@')[0]
+
+        userFields = {
+            id: shortid.generate(),
         }
+
+        if (this.app.state.app.session.active !== sessionName) {
+            // State is reinitialized, but we are not done loading yet.
+            let keptState = {user: {status: 'login'}}
+            await this.app.changeSession(sessionName, keptState)
+        }
+
+        try {
+            // Connect to Ca11 backend by initializing network.
+
+            // await this.app.plugins.calls.register({
+            //     account: {id: shortid.generate(), username, password, uri: sessionName}, endpoint,
+            //     register: true,
+            // })
+
+            await this.app.__initSession({password})
+            this.app._watchersActivate()
+
+            this.app.setState({
+                // The `installed` and `updated` flag are toggled off after login.
+                app: {installed: false, updated: false},
+                ui: {layer: 'calls'},
+                user: {username},
+            }, {encrypt: false, persist: true})
+
+            await this.app.setState({user: userFields}, {persist: true})
+            // Update the state with language presets from the browser if applicable.
+            this.app._languagePresets()
+
+        } catch (err) {
+            this.app.notify({icon: 'warning', message: this.app.$t('failed to login; please check your credentials.'), type: 'warning'})
+        } finally {
+            this.app.setState({user: {status: null}})
+        }
+    }
+
+
+    /**
+    * Remove any stored session key, but don't delete the salt.
+    * This will render the cached and stored state useless.
+    */
+    async logout() {
+        this.app.logger.info(`${this}logging out and cleaning up state`)
+        this.app._watchersDeactivate()
+        await this.app.changeSession(null, {}, {logout: true})
+
+        // Remove credentials from basic auth.
+        this.app.api.setupClient()
+        // Disconnect without reconnect attempt.
+        // this.app.plugins.calls.disconnect(false)
+        this.app.emit('bg:user:logged_out', {}, true)
+        this.app._languagePresets()
     }
 
 
@@ -78,6 +154,36 @@ class PluginUser extends Plugin {
     */
     toString() {
         return `${this.app}[user] `
+    }
+
+
+    /**
+    * This method is called when the correct session is already
+    * selected. No need to change sessions again.
+    */
+    async unlock({username, password}) {
+        this.app.setState({user: {status: 'unlock'}})
+        this.app.logger.info(`${this}unlocking session "${username}"`)
+
+        try {
+            await this.app.__initSession({password})
+            this.app._watchersActivate()
+            this.app._languagePresets()
+            this.app.api.setupClient(username, this.app.state.user.token)
+            this.app.setState({ui: {layer: 'calls'}}, {encrypt: false, persist: true})
+            this.app.notify({icon: 'user', message: this.app.$t('welcome back!'), type: 'info'})
+            this.app.__initServices()
+        } catch (err) {
+            // Wrong password, resulting in a failure to decrypt.
+            this.app.setState({
+                ui: {layer: 'login'},
+                user: {authenticated: false},
+            }, {encrypt: false, persist: true})
+            const message = this.app.$t('failed to unlock session; check your password.')
+            this.app.notify({icon: 'warning', message, type: 'danger'})
+        } finally {
+            this.app.setState({user: {status: null}})
+        }
     }
 }
 
