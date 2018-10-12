@@ -1,6 +1,19 @@
 <component class="view-page">
+    <h1>Calling with SIP softphone</h1>
+    <div class="steps-images">
+        <div class="cell"><img src="/screens/7-alice-ready-to-use.png"/></div>
+        <div class="cell"><img src="/screens/9-alice-dialpad-call.png"/></div>
+        <div class="cell"><img src="/screens/10-alice-calldialog-outgoing.png"/></div>
+    </div>
+    <div class="steps-images">
+        <div class="cell"><img src="/screens/11-bob-calldialog-incoming.png"/></div>
+        <div class="cell"><img src="/screens/12-alice-calldialog-outgoing-accepted.png"/></div>
+    </div>
+
     <h1>Call options</h1>
-    During a call, there are several typical softphone options you can use.
+    <p>
+        During a call, there are several typical softphone options you can use.
+    </p>
 
     <h2>Mute microphone</h2>
     <p>
@@ -42,4 +55,5 @@
         Switching this option off will make you become available for incoming calls again.
 
     </p>
+
 </component>

@@ -16,7 +16,6 @@
             </li>
         </ul>
     </div>
-
     <!-- Phone preferences -->
     <div class="tab tab-phone" :class="{'is-active': tabs.active === 'phone'}">
 

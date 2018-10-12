@@ -18,7 +18,7 @@ module.exports = function(settings) {
 
             if (screens) {
                 const container = await runner.$('#app')
-                await container.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}login.png`)})
+                await container.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}settings-sip-enabled.png`)})
             }
 
             await runner.click('.test-settings-save')

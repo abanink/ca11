@@ -1,0 +1,8 @@
+{
+    "editor.fontLigatures": true,
+    "files.exclude": {
+        "**/*.git": true,
+        "build": true,
+    },
+    "files.trimTrailingWhitespace": true
+}

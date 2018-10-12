@@ -105,7 +105,9 @@ test('<alice,bob> start a new session', async(t1) => {
             await testWizard(bob, false),
         ])
 
-        if (SCREENS) await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}ready-to-use.png`)})
+        if (SCREENS) {
+            await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}ready-to-use.png`)})
+        }
 
         await Promise.all([
             alice.click('.test-delete-notification'),

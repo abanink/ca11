@@ -7,12 +7,11 @@
             {"name": "deployment", "title": "Deployment"}
         ],
         "user": [
-            {"name": "introduction", "title": "Welcome"},
-            {"name": "requirements", "title": "Requirements"},
-            {"name": "login", "title": "Login with an account"},
-            {"name": "wizard", "title": "Passing the wizard"},
-            {"name": "calling", "title": "Making a call"},
-            {"name": "call_options", "title": "Call options"},
+            {"name": "introduction", "title": "Introduction"},
+            {"name": "login", "title": "Start a session"},
+            {"name": "wizard", "title": "Follow setup wizard"},
+            {"name": "sip-setup", "title": "Setup SIP softphone"},
+            {"name": "sip-calling", "title": "Calling with SIP softphone"},
             {"name": "accessibility", "title": "Accessibility"}
         ]
     }

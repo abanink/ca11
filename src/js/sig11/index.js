@@ -4,15 +4,14 @@ const Network = require('./network')
 
 
 /**
-* Sig11 is a signalling layer that is used by Ca11 users
-* to setup p2p calls with. The first iteration focusses
-* on getting feature parity with SIP calling by keeping
-* complexity low. The second iteration will focus on
-* moving the signalling layer to Ca11, which means that
-* signalling becomes a p2p service with configurable
+* Sig11 is a signalling layer used to setup p2p calls with.
+* The first iteration focusses on getting feature parity
+* with SIP calling by keeping complexity low. The second
+* iteration will focus on moving the signalling layer to
+* Ca11 client, making signalling p2p with configurable
 * bootstrap nodes. Therefor the signalling protocol
 * in the first iteration will include a routing
-* strategy already.
+* strategy.
 */
 class Sig11 {
 
@@ -36,13 +35,10 @@ class Sig11 {
                     this.network.removeNode(identity)
                 })
             }
-
-
         })
 
         this.wss.on('request', function(request) {
             var connection = request.accept(null, request.origin)
-
             // This is the most important callback for us, we'll handle
             // all messages from users here.
             connection.on('message', function(message) {

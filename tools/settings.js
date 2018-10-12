@@ -32,6 +32,7 @@ module.exports = function(baseDir, overrides, verbose = true) {
     settings.BRAND_TARGET = argv.brand ? argv.brand : process.env.BRAND ? process.env.BRAND : 'ca11'
     settings.NODE_PATH = path.join(settings.ROOT_DIR, 'node_modules') || process.env.NODE_PATH
     settings.PACKAGE = require(`${settings.ROOT_DIR}/package`)
+    settings.SRC_DIR_CA11 = path.join(settings.ROOT_DIR, 'src')
     settings.VERSION = argv.version ? argv.version : settings.PACKAGE.version
 
     settings.BUILD_ROOT = path.join(settings.ROOT_DIR, 'build')
@@ -92,7 +93,6 @@ module.exports = function(baseDir, overrides, verbose = true) {
         if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development'
     }
 
-    settings.NODE_INSPECT = process.env.NODE_INSPECT ? ' --inspect' : ''
     settings.NODE_ENV = process.env.NODE_ENV
     // Load the Vialer settings from ~/.ca11rc into the existing settings.
     rc('ca11', settings)
@@ -104,7 +104,7 @@ module.exports = function(baseDir, overrides, verbose = true) {
         gutil.log(`- DEPLOY: ${settings.DEPLOY_TARGET}`)
         gutil.log(`- PRODUCTION: ${settings.PRODUCTION}`)
         gutil.log(`- TARGET: ${settings.BUILD_TARGET}`)
-        gutil.log(`- VERBOSE: ${settings.VERBOSE}`)        
+        gutil.log(`- VERBOSE: ${settings.VERBOSE}`)
     }
 
     return settings

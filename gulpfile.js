@@ -489,8 +489,6 @@ gulp.task('watch', 'Run developer watch modus.', () => {
     gulp.watch(path.join(settings.ROOT_DIR, 'test', 'bg', '**', '*.js'), ['test-unit'])
 
     if (!NO_SIG11) {
-
-
         gulp.watch([
             path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
         ], () => {

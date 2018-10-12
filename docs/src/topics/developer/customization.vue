@@ -15,25 +15,9 @@
     <p>
         Please <b>do not</b> publish under the same name or a different name with a branding
         that already exists. If you want to create your own brand, come up with
-        a unique branding name for your plugin, a unique color scheme and create branded
-        versions of at least the following images:
+        a unique branding name for your CA11 clone, a unique color scheme and create branded
+        versions of the images in <em>/src/brand/ca11/img</em>.
     </p>
-    <ul>
-        <li>menubar-active.png</li>
-        <li>menubar-dnd.png</li>
-        <li>menubar-disconnected.png</li>
-        <li>menubar-inactive.png</li>
-        <li>menubar-lock.png</li>
-        <li>menubar-unavailable.png</li>
-        <li>menubar-ringing-0.png ... menubar-ringing-4.png (sprite animation)</li>
-        <li>notification.png</li>
-        <li>electron-systray.png</li>
-        <li>electron-systray.icns</li>
-        <li>logo-16.png</li>
-        <li>logo-32.png</li>
-        <li>logo-64.png</li>
-        <li>logo-128.png</li>
-    </ul>
 
     <h2>Plugins</h2>
     <p>
@@ -46,23 +30,19 @@
     "builtin": {
         "availability": {
             "addons": {
-                "bg": ["vjs-addon-availability-vg"],
-                "fg": ["vjs-addon-availability-vg"],
-                "i18n": ["vjs-addon-availability-vg"]
+                "bg": ["ca11-addon-availability-customname"],
+                "fg": ["ca11-addon-availability-customname"],
+                "i18n": ["ca11-addon-availability-customname"]
             }
         },
         "contacts": {
-            "i18n": ["vjs-provider-contacts-vg"],
-            "providers": ["vjs-provider-contacts-vg"]
-        },
-        "user": {
-            "adapter": "vjs-adapter-user-vg",
-            "i18n": ["vjs-adapter-user-vg"]
+            "i18n": ["ca11-provider-contacts-customname"],
+            "providers": ["ca11-provider-contacts-customname"]
         }
     },
     "custom": {
         "queues": {
-            "name": "vjs-mod-queues-vg",
+            "name": "ca11-mod-queues-customname",
             "parts": ["bg", "fg", "i18n"]
         }
     }
@@ -71,9 +51,8 @@
     <p>
         The <em>builtin</em> plugins are existing core plugins, that can be extended
         by using a custom <i>adapter</i>, a <i>provider</i> or an <i>addon</i>.
-        This whole system is still a bit in flux and not documented yet.
-        Please checkout the sourcecode of <a href="https://github.com/garage11/ca11-adapter-user-voip">example plugins</a>
-        for documentation.
+        This system is still in flux, so it doesn't come with much documentation.
+        The sourcecode is your friend.
     </p>
 
 </component>

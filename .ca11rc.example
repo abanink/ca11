@@ -1,4 +1,4 @@
-{
+json{
     "brands": {
         "ca11": {
             "bootstrap_endpoint": "wss://localhost:9001",
@@ -33,6 +33,12 @@
                 "production": "Ca11"
             },
             "permissions": "",
+            "sig11": {
+                "endpoint": "ws://localhost:9001"
+            },
+            "sip": {
+                "endpoint": ""
+            },
             "stun": [
                 "stun:stun3.l.google.com:19302",
                 "stun:stun4.l.google.com:19302"
@@ -82,7 +88,6 @@
                     "username": "",
                     "password": ""
                 },
-                "endpoint": "",
                 "headless": false,
                 "port": 8999
             },

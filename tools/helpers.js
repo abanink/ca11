@@ -500,7 +500,7 @@ class Helpers {
         gutil.log('Starting SIG11 service')
         let _nodemon = nodemon({
             env: {NODE_ENV: this.settings.NODE_ENV},
-            exec: `node${this.settings.NODE_INSPECT}`,
+            exec: `node --inspect`,
             ext: 'js',
             // Reloads are triggered manually from the appropriate tasks.
             ignore: [
