@@ -1,6 +1,7 @@
-{
+json{
     "brands": {
         "ca11": {
+            "bootstrap_endpoint": "wss://localhost:9001",
             "colors": {
                 "brand-color": "#35141f",
                 "brand-accent-color": "#00b8e5",
@@ -22,10 +23,6 @@
                     "contacts": {
                         "i18n": [],
                         "providers": []
-                    },
-                    "user": {
-                        "adapter": "g11-adapter-user-voip",
-                        "i18n": []
                     }
                 },
                 "custom": {}
@@ -36,7 +33,12 @@
                 "production": "Ca11"
             },
             "permissions": "",
-            "sip_endpoint": "",
+            "sig11": {
+                "endpoint": "ws://localhost:9001"
+            },
+            "sip": {
+                "endpoint": ""
+            },
             "stun": [
                 "stun:stun3.l.google.com:19302",
                 "stun:stun4.l.google.com:19302"
@@ -72,30 +74,25 @@
             },
             "tests": {
                 "alice": {
-                    "id": "",
+                    "endpoint": "",
                     "username": "",
                     "password": ""
                 },
                 "bob": {
-                    "id": "",
+                    "endpoint": "",
                     "username": "",
                     "password": ""
                 },
                 "charlie": {
-                    "id": "",
+                    "endpoint": "",
                     "username": "",
                     "password": ""
                 },
-                "endpoint": "",
                 "headless": false,
                 "port": 8999
             },
             "vendor": {
                 "name": "Ca11",
-                "portal": {
-                    "name": "",
-                    "url": ""
-                },
                 "support": {
                     "email": "",
                     "phone": "",

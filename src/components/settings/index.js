@@ -16,23 +16,22 @@ module.exports = (app) => {
                 return classes
             },
             save: function(e) {
-                // This event is used, so an external API may have some time
-                // to retrieve credentials. This way, we don't have to store
-                // full credentials of all accounts.
-                let accountId = null
-                if (this.settings.webrtc.toggle) accountId = this.settings.webrtc.account.selected.id
-                app.emit('bg:user:account_select', {
-                    accountId,
-                    callback: ({account}) => {
-                        // Modify properties on the cloned settings object
-                        // before writing to the store.
-                        let settings = app.utils.copyObject(this.settings)
-                        delete settings.webrtc.account.options
-                        delete settings.webrtc.account.selected
-                        app.setState({availability: {dnd: false}, settings}, {persist: true})
-                        app.emit('bg:calls:connect')
+                let settings = app.utils.copyObject(this.settings)
+                app.setState({
+                    availability: {dnd: false},
+                    calls: {
+                        sip: {
+                            account: {
+                                selected: app.state.calls.sip.account.selected,
+                            },
+                            enabled: app.state.calls.sip.enabled,
+                            endpoint: app.state.calls.sip.endpoint,
+                        },
                     },
-                }, 'both')
+                    language: this.language,
+                    settings,
+                }, {persist: true})
+                app.emit('bg:calls:connect')
 
                 // Update the vault settings.
                 app.setState({app: {vault: this.app.vault}}, {encrypt: false, persist: true})
@@ -51,8 +50,10 @@ module.exports = (app) => {
         store: {
             app: 'app',
             availability: 'availability',
+            calls: 'calls',
             devices: 'settings.webrtc.devices',
             env: 'env',
+            language: 'language',
             ringtones: 'settings.ringtones',
             settings: 'settings',
             tabs: 'ui.tabs.settings',
@@ -61,34 +62,24 @@ module.exports = (app) => {
         },
         validations: function() {
             let validations = {
-                settings: {
-                    webrtc: {
-                        endpoint: {
-                            uri: {
-                                domain: app.helpers.validators.domain,
-                                required: v.required,
-                            },
-                        },
-                    },
-                },
+                // settings: {
+                //     sip: {
+                //         endpoint: {
+                //             uri: {
+                //                 domain: app.helpers.validators.domain,
+                //                 required: v.required,
+                //             },
+                //         },
+                //     },
+                // },
             }
             // Add the validation that is shared with step_voipaccount, but
             // only if the user is supposed to choose between account options.
-            if (this.settings.webrtc.account.selection) {
-                validations.settings.webrtc.account = app.helpers.sharedValidations.bind(this)().settings.webrtc.account
-            }
+            // if (this.calls.sip.account.selection) {
+            //     validations.settings.sip.account = app.helpers.sharedValidations.bind(this)().settings.sip.account
+            // }
 
             return validations
-        },
-        watch: {
-            /**
-            * Reactively change the language when the select updates.
-            * @param {Object} language - Selected language.
-            */
-            'settings.language.selected': function(language) {
-                app.logger.info(`${this} setting language to ${language.id}`)
-                Vue.i18n.set(language.id)
-            },
         },
     }
 

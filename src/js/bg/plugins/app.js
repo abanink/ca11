@@ -100,10 +100,6 @@ class PluginApp extends Plugin {
             },
             vendor: {
                 name: process.env.VENDOR_NAME,
-                portal: {
-                    name: process.env.PORTAL_NAME,
-                    url: process.env.PORTAL_URL,
-                },
                 support: {
                     email: process.env.VENDOR_SUPPORT_EMAIL,
                     phone: process.env.VENDOR_SUPPORT_PHONE,

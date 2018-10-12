@@ -26,10 +26,10 @@ From application functionality to the documentation look-and-feel; Ca11 can
 easily be branded or customized through the use of plugins that hook into
 the core functionality.
 
-<img align="left" src="https://ca11.io/screens/alice-1-login.png" height="200">
-<img align="left" src="https://ca11.io/screens/alice-6-wizard-devices.png" height="200">
-<img align="left" src="https://ca11.io/screens/alice-8-dialpad-call.png" height="200">
-<img src="https://ca11.io/screens/bob-2-calldialog-incoming-accepted.png" height="200">
+<img align="left" src="https://ca11.io/screens/1-alice-login.png" height="200">
+<img align="left" src="https://ca11.io/screens/6-alice-wizard-devices.png" height="200">
+<img align="left" src="https://ca11.io/screens/9-alice-dialpad-call.png" height="200">
+<img align="left" src="https://ca11.io/screens/12-alice-calldialog-outgoing-accepted.png" height="200">
 
 
 ## Decentralization & flexible communication protocols

@@ -1,21 +1,21 @@
 {
-    "name": "ca11",
+    "name": "@garage11/ca11",
     "productName": "ca11",
     "version": "1.0.0",
-    "description": "Pluggable WebRTC softphone and communication platform.",
+    "description": "Pluggable decentralized WebRTC communication platform and softphone.",
     "engines": {
         "node": ">=10.0.0"
     },
     "scripts": {
         "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
         "test": "gulp test-unit;gulp test-browser",
-        "link": "npm link g11-adapter-user-voip;npm link gulp-fuet",
+        "link": "npm link @garage11/vue-compiler-gulp;npm link @garage11/vue-i18n",
         "lint-js": "./node_modules/.bin/eslint './src/**/*.js'",
         "lint-scss": "./node_modules/sass-lint/bin/sass-lint.js -v -c ./.sass-lint.yml 'src/**/*.scss' --max-warnings 0"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/ca11/ca11.git"
+        "url": "https://github.com/garage11/ca11.git"
     },
     "keywords": [
         "chrome",
@@ -26,20 +26,25 @@
         "webextension",
         "webrtc"
     ],
-    "author": "Jeroen van Veen",
+    "author": {
+        "name": "Garage11",
+        "email": "jeroen@garage11.tech",
+        "url": "https://github.com/garage11"
+    },
     "main": "main.js",
     "contributors": [
         {
             "name": "CONTRIBUTORS",
-            "url": "https://github.com/ca11/ca11/graphs/contributors"
+            "url": "https://github.com/garage11/ca11/graphs/contributors"
         }
     ],
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/ca11/ca11/issues"
+        "url": "https://github.com/garage11/ca11/issues"
     },
     "homepage": "https://ca11.io",
     "devDependencies": {
+        "@garage11/vue-compiler-gulp": "1.x.x",
         "archiver": "2.x.x",
         "browserify": "14.x.x",
         "chrome-webstore-upload": "0.x.x",
@@ -56,13 +61,13 @@
         "gulp-concat": "2.x.x",
         "gulp-envify": "1.x.x",
         "gulp-flatten": "^0.4.0",
-        "gulp-fuet": "^1.0.13",
         "gulp-gh-pages": "0.x.x",
         "gulp-help": "1.x.x",
         "gulp-if-else": "1.x.x",
         "gulp-imagemin": "3.x.x",
         "gulp-insert": "0.x.x",
         "gulp-livereload": "3.x.x",
+        "gulp-nodemon": "git+https://github.com/garage11/gulp-nodemon.git#master",
         "gulp-notify": "3.x.x",
         "gulp-rename": "1.x.x",
         "gulp-sass": "3.x.x",
@@ -94,6 +99,7 @@
         "yargs": "7.x.x"
     },
     "dependencies": {
+        "@garage11/vue-i18n": "1.x.x",
         "axios": "0.16.x",
         "bulma": "0.6.x",
         "bulma-switch": "0.1.x",
@@ -101,7 +107,9 @@
         "electron": "^3.0.0-beta.4",
         "electron-reload": "1.x.x",
         "eventemitter3": "2.x.x",
+        "graphlib": "^2.1.5",
         "module-alias": "2.x.x",
+        "pem": "^1.13.1",
         "raven-js": "3.x.x",
         "roboto-fontface": "0.8.x",
         "sdp-transform": "2.4.x",
@@ -110,7 +118,6 @@
         "v-click-outside": "^2.0.1",
         "vjs-adapter-user-voip": "1.x.x",
         "vue": "2.5.x",
-        "vue-i18n-stash": "git+https://github.com/garage11/vue-stash-i18n.git#master",
         "vue-stash": "2.0.1-beta",
         "vuelidate": "0.6.x",
         "webextension-polyfill": "0.x.x"

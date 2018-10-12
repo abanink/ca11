@@ -125,7 +125,7 @@ class CallSIP extends Call {
     */
     _outgoing() {
         super._outgoing()
-        this.session = this.module.ua.invite(`sip:${this.state.number}@voipgrid.nl`, {
+        this.session = this.module.ua.invite(`sip:${this.state.number}@ca11.io`, {
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
             },
@@ -346,7 +346,7 @@ class CallSIP extends Call {
 
     transfer(targetCall) {
         if (typeof targetCall === 'string') {
-            this.session.refer(`sip:${targetCall}@voipgrid.nl`)
+            this.session.refer(`sip:${targetCall}@ca11.io`)
         } else {
             this.session.refer(targetCall.session)
         }

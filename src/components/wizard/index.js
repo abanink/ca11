@@ -1,13 +1,11 @@
 module.exports = (app) => {
     // Initialize sub-components for the wizard.
-    // TODO: Allow dynamic loading from modules.
     const shared = function() {
         return {
             methods: {
                 finishWizard: function() {
-                    app.emit('bg:calls:connect')
                     app.setState({settings: {wizard: {completed: true}}}, {persist: true})
-                    app.notify({icon: 'settings', message: this.$t('all set! Enjoy the {name}.', {name: this.app.name}), type: 'info'})
+                    app.notify({icon: 'settings', message: this.$t('all set! Enjoy {name}.', {name: this.app.name}), type: 'info'})
                 },
                 stepBack: function() {
                     const stepIndex = this.options.findIndex((option) => option.name === this.selected.name)
@@ -21,7 +19,6 @@ module.exports = (app) => {
         }
     }
 
-    app.components.WizardAccount = Vue.component('WizardAccount', require('./components/account')(app, shared))
     app.components.WizardDevices = Vue.component('WizardDevices', require('./components/devices')(app, shared))
     app.components.WizardMicPermission = Vue.component('WizardMicPermission', require('./components/mic_permission')(app, shared))
     app.components.WizardTelemetry = Vue.component('WizardTelemetry', require('./components/telemetry')(app, shared))
@@ -32,10 +29,9 @@ module.exports = (app) => {
     const Wizard = {
         computed: app.helpers.sharedComputed(),
         created: function() {
-            if (!this.settings.webrtc.account.selection) {
+            if (!this.calls.sip.account.selection) {
                 app.setState({
                     settings: {
-                        webrtc: {enabled: true, toggle: true},
                         wizard: {steps: {options: this.steps.options.filter((step) => step.name !== 'WizardAccount')}},
                     },
                 }, {persist: true})
@@ -45,6 +41,7 @@ module.exports = (app) => {
         staticRenderFns: templates.wizard.s,
         store: {
             app: 'app',
+            calls: 'calls',
             settings: 'settings',
             steps: 'settings.wizard.steps',
             user: 'user',

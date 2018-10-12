@@ -14,39 +14,40 @@ settings.BUILD_TARGET = 'webview'
 
 const brand = settings.brands[BRAND]
 
-// Allows overriding the headless setting with an environment flag.
+// An environment flag may override the default headless setting.
 let HEADLESS
 if (process.env.HEADLESS) {
     HEADLESS = process.env.HEADLESS === '1' ? true : false
 } else HEADLESS = brand.tests.headless
 
+let stepNumber = 0
+
 Object.assign(brand.tests, {
     step: function(runner) {
-        if (!this.steps[runner._name]) this.steps[runner._name] = 0
-        this.steps[runner._name] += 1
+        stepNumber += 1
         // Don't use steps in the filename, because the step number
         // may defer per build.
-        return `${runner._name}-`
+        return `${stepNumber}-${runner._name}-`
     },
     steps: {},
 })
 
 // Application sections.
-const login = require('./login')(settings)
-const wizard = require('./wizard')(settings)
+const testCall = require('./call')(settings)
+const testSession = require('./session')(settings)
+const testSettings = require('./settings')(settings)
+const testWizard = require('./wizard')(settings)
 
 
 // WARNING: Do NOT log CI variables while committing to Github.
-// This may expose the Circle CI secrets in the build log. Change the
-// account credentials immediately when this happens.
+// This may expose the Circle CI secrets in the build log.
+// Change account credentials immediately when this happens.
 if (process.env[`CI_USERNAME_ALICE_${BRAND.toUpperCase()}`]) {
     brand.tests.endpoint = process.env[`CI_ENDPOINT_${BRAND.toUpperCase()}`]
     brand.tests.alice.username = process.env[`CI_USERNAME_ALICE_${BRAND.toUpperCase()}`]
     brand.tests.alice.password = process.env[`CI_PASSWORD_ALICE_${BRAND.toUpperCase()}`]
-    brand.tests.alice.id = process.env[`CI_ID_ALICE_${BRAND.toUpperCase()}`]
     brand.tests.bob.username = process.env[`CI_USERNAME_BOB_${BRAND.toUpperCase()}`]
     brand.tests.bob.password = process.env[`CI_PASSWORD_BOB_${BRAND.toUpperCase()}`]
-    brand.tests.bob.id = process.env[`CI_ID_BOB_${BRAND.toUpperCase()}`]
 }
 
 
@@ -77,10 +78,8 @@ async function createBrowser(name, options) {
 }
 
 
-test('[browser] <alice> I am logging in.', async(t) => {
-    if (SCREENS) {
-        await mkdirp(settings.SCREENS_DIR)
-    }
+test('<alice,bob> start a new session', async(t1) => {
+    if (SCREENS) await mkdirp(settings.SCREENS_DIR)
 
     let [browserAlice, browserBob] = await Promise.all([createBrowser('alice'), createBrowser('bob')])
     let alice = browserAlice.pages[0]
@@ -93,20 +92,22 @@ test('[browser] <alice> I am logging in.', async(t) => {
     await Promise.all([alice.goto(uri, {}), bob.goto(uri, {})])
 
     await Promise.all([
-        await login(alice, SCREENS),
-        await login(bob, false),
+        await testSession.new(alice, SCREENS),
+        await testSession.new(bob, false),
     ])
 
-    t.end()
+    t1.end()
 
-    test('[browser] <alice> I am going to complete the wizard.', async(_t) => {
+    test('<alice,bob> complete the wizard', async(t2) => {
         const aliceContainer = await alice.$('#app')
         let [aliceOptions, bobOptions] = await Promise.all([
-            await wizard(alice, SCREENS),
-            await wizard(bob, false),
+            await testWizard(alice, SCREENS),
+            await testWizard(bob, false),
         ])
 
-        if (SCREENS) await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}ready-to-use.png`)})
+        if (SCREENS) {
+            await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}ready-to-use.png`)})
+        }
 
         await Promise.all([
             alice.click('.test-delete-notification'),
@@ -116,40 +117,28 @@ test('[browser] <alice> I am logging in.', async(t) => {
         // Check that there are 3 fake input/output/sound devices at the start.
         const aliceDevices = aliceOptions.input.length + aliceOptions.output.length + aliceOptions.sounds.length
         const bobDevices = bobOptions.input.length + bobOptions.output.length + bobOptions.sounds.length
-        t.equal(aliceDevices, 9, '[browser] <alice> all devices are available')
-        t.equal(bobDevices, 9, '[browser] <bob> all devices are available')
+        t2.equal(aliceDevices + bobDevices, 18, '<alice,bob> devices are available')
+        t2.end()
 
-        _t.end()
+        test('<alice,bob> enable sip service', async(t3) => {
+            await Promise.all([
+                testSettings.enableSip(alice, SCREENS),
+                testSettings.enableSip(bob, false),
+            ])
 
-        test('[browser] <alice> I am calling bob.', async(__t) => {
-            // Wait until the status indicates a registered device.
-            await alice.waitFor('.test-status-registered')
-            // Enter a number and press the call button.
-            await alice.click('.component-call-keypad .test-key-2')
-            await alice.click('.component-call-keypad .test-key-2')
-            await alice.click('.component-call-keypad .test-key-9')
-            if (SCREENS) await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}dialpad-call.png`)})
-            await alice.click('.test-call-button')
+            t3.end()
 
-            await alice.waitFor('.component-calls .call-ongoing')
-            if (SCREENS) await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}calldialog-outgoing.png`)})
+            test('<alice> initiate call to bob', async(t4) => {
+                await testCall.callNumber(alice, SCREENS, brand.tests.bob.username)
+                t4.end()
 
-            __t.end()
+                test('<bob> answer incoming call from alice', async(t5) => {
+                    await testCall.answerCall({callee: bob, caller: alice}, SCREENS)
 
-            test('[browser] <bob> alice is calling; let\'s talk.', async(___t) => {
-                const bobContainer = await bob.$('#app')
-                await bob.waitFor('.component-calls .call-ongoing')
-                if (SCREENS) await bobContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(bob)}calldialog-incoming.png`)})
-                await bob.click('.component-call .test-button-accept')
-                // Alice and bob are now getting connected;
-                // wait for Alice to see the connected screen.
-                await alice.waitFor('.component-call .call-options')
-                if (SCREENS) await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}calldialog-outgoing-accepted.png`)})
-                if (SCREENS) await bobContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(bob)}calldialog-incoming-accepted.png`)})
-
-                await browserAlice.browser.close()
-                await browserBob.browser.close()
-                ___t.end()
+                    t5.end()
+                    await browserAlice.browser.close()
+                    await browserBob.browser.close()
+                })
             })
         })
     })

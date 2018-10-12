@@ -11,7 +11,6 @@ const connect = require('connect')
 const createReleaseManager = require('gulp-sentry-release-manager')
 const envify = require('gulp-envify')
 const fs = require('fs')
-const fuet = require('gulp-fuet')
 const gulp = require('gulp-help')(require('gulp'), {})
 const gutil = require('gulp-util')
 const http = require('http')
@@ -21,6 +20,7 @@ const livereload = require('gulp-livereload')
 
 const minifier = composer(require('uglify-es'), console)
 const mount = require('connect-mount')
+const nodemon = require('gulp-nodemon')
 const notify = require('gulp-notify')
 const path = require('path')
 
@@ -32,6 +32,7 @@ const size = require('gulp-size')
 const source = require('vinyl-source-stream')
 const sourcemaps = require('gulp-sourcemaps')
 const through = require('through2')
+const vueCompiler = require('@garage11/vue-compiler-gulp')
 const watchify = require('watchify')
 
 // Browserify instance caching.
@@ -60,17 +61,15 @@ class Helpers {
             BUILTIN_AVAILABILITY_ADDONS: brand.plugins.builtin.availability.addons,
             BUILTIN_CONTACTS_I18N: brand.plugins.builtin.contacts.i18n,
             BUILTIN_CONTACTS_PROVIDERS: brand.plugins.builtin.contacts.providers,
-            BUILTIN_USER_ADAPTER: brand.plugins.builtin.user.adapter,
-            BUILTIN_USER_I18N: brand.plugins.builtin.user.i18n,
             CUSTOM_MOD: brand.plugins.custom,
 
             DEPLOY_TARGET: this.settings.DEPLOY_TARGET,
             NODE_ENV: this.settings.NODE_ENV,
             PLATFORM_URL: brand.permissions,
-            PORTAL_NAME: brand.vendor.portal.name,
-            PORTAL_URL: brand.vendor.portal.url,
             SENTRY_DSN: brand.telemetry.sentry.dsn,
-            SIP_ENDPOINT: brand.sip_endpoint,
+
+            SIG11_ENDPOINT: brand.sig11.endpoint,
+            SIP_ENDPOINT: brand.sip.endpoint,
             STUN: brand.stun,
 
             VENDOR_NAME: brand.vendor.name,
@@ -104,7 +103,7 @@ class Helpers {
 
     compileTemplates(sources) {
         return gulp.src(sources)
-            .pipe(fuet({
+            .pipe(vueCompiler({
                 commonjs: false,
                 namespace: 'global.templates',
                 pathfilter: ['src', 'components', 'node_modules'],
@@ -491,13 +490,36 @@ class Helpers {
             app.use(mount('/', serveStatic(this.settings.BUILD_DIR)))
         }
 
-
         for (const mountpoint of extraMounts) {
             app.use(mount(mountpoint.mount, serveStatic(mountpoint.dir)))
             gutil.log(`Development service mounted ${mountpoint.dir} on ${mountpoint.mount} (index: ${mountpoint.index ? 'yes' : 'no'})`)
         }
         http.createServer(app).listen(port)
-        gutil.log(`Development service listening on http://localhost:${port}`)
+        gutil.log(`Starting HTTP service on http://localhost:${port}`)
+
+        gutil.log('Starting SIG11 service')
+        let _nodemon = nodemon({
+            env: {NODE_ENV: this.settings.NODE_ENV},
+            exec: `node --inspect`,
+            ext: 'js',
+            // Reloads are triggered manually from the appropriate tasks.
+            ignore: [
+                '*.js',
+            ],
+            restartable: true,
+            script: path.join(this.settings.SRC_DIR, 'js', 'sig11', 'index.js'),
+        })
+
+        _nodemon.on('crash', function() {
+            console.error('Application has crashed!\n Trying to restart in 3 seconds...\n')
+            _nodemon.emit('restart', 3)
+        })
+
+        _nodemon.on('start:child', function() {
+            livereload.changed('app.js')
+        })
+
+        return _nodemon
     }
 }
 

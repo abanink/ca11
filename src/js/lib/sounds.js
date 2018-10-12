@@ -97,7 +97,6 @@ class DtmfTone {
         this.audio = new Audio()
         this.dest = context.createMediaStreamDestination()
         this.audio.srcObject = this.dest.stream
-        this.audio.play()
 
         this.frequencies = {
             '#': {f1: 941, f2: 1477},
@@ -153,6 +152,7 @@ class DtmfTone {
         this.osc2.start(0)
 
         this.started = true
+        this.audio.play()
     }
 
 

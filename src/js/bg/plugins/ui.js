@@ -92,7 +92,7 @@ class PluginUI extends Plugin {
                     active: 'recent',
                 },
                 settings: {
-                    active: 'general',
+                    active: 'phone',
                 },
             },
             visible: false,
@@ -196,7 +196,7 @@ class PluginUI extends Plugin {
     */
     menubarState(base = null) {
         const user = this.app.state.user
-        const uaStatus = this.app.state.calls.ua.status
+        const sipStatus = this.app.state.calls.sip.status
 
         if (base) {
             this.app.setState({ui: {menubar: {base}}})
@@ -206,19 +206,12 @@ class PluginUI extends Plugin {
         // Generic menubar behaviour.
         if (this.app.state.app.session.active && !user.authenticated) base = 'lock'
         else if (!user.authenticated) base = 'inactive'
-        else if (uaStatus === 'disconnected') base = 'disconnected'
+        else if (sipStatus === 'disconnected') base = 'disconnected'
         else {
-            if (this.app.state.settings.webrtc.enabled) {
-                if (uaStatus === 'registered') {
-                    if (this.app.state.availability.dnd) base = 'dnd'
-                    else base = 'active'
-                } else base = 'disconnected'
-            } else {
-                // ConnectAB only connects to a SIP backend.
-                if (uaStatus === 'connected') {
-                    base = 'active'
-                } else base = 'disconnected'
-            }
+            if (sipStatus === 'registered') {
+                if (this.app.state.availability.dnd) base = 'dnd'
+                else base = 'active'
+            } else base = 'disconnected'
         }
 
         // Modules can override the generic menubar behaviour using

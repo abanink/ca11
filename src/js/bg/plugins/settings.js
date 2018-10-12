@@ -19,31 +19,6 @@ class PluginSettings extends Plugin {
     */
     _initialState() {
         let state = {
-            click2dial: {
-                blacklist: [
-                    '^chrome',
-                    // we prefer not to add icons in documents
-                    '^https?.*docs\\.google\\.com.*$',
-                    '^https?.*drive\\.google\\.com.*$',
-                    // Pages on these websites tend to grow too large to parse them in
-                    // a reasonable amount of time.
-                    '^https?.*bitbucket\\.org.*$',
-                    '^https?.*github\\.com.*$',
-                    '^https?.*rbcommons\\.com.*$',
-                    // This site has at least tel: support and uses javascript to open
-                    // a new web page when clicking the anchor element wrapping the
-                    // inserted icon.
-                    '^https?.*slack\\.com.*$',
-                ],
-                enabled: true,
-            },
-            language: {
-                options: [
-                    {id: 'en', name: 'english'},
-                    {id: 'nl', name: 'nederlands'},
-                ],
-                selected: {id: null, name: null},
-            },
             platform: {
                 url: process.env.PLATFORM_URL,
             },
@@ -58,23 +33,6 @@ class PluginSettings extends Plugin {
                 sentryDsn: process.env.SENTRY_DSN,
             },
             webrtc: {
-                account: {
-                    // Account to use when no account is selected at all.
-                    fallback: {
-                        id: null,
-                        name: null,
-                        password: null,
-                        username: null,
-                    },
-                    // <Platform> may provide account options.
-                    options: [],
-                    // Remembers the last selected option.
-                    selected: {id: null, name: null, password: null, uri: null, username: null},
-                    // Whether user can select <platform> accounts from options.
-                    selection: true,
-                    status: null,
-                    using: {id: null, name: null, password: null, uri: null, username: null},
-                },
                 devices: {
                     input: [],
                     output: [],
@@ -91,9 +49,6 @@ class PluginSettings extends Plugin {
                     },
                 },
                 enabled: true,
-                endpoint: {
-                    uri: process.env.SIP_ENDPOINT,
-                },
                 media: {
                     permission: true,
                     type: {
@@ -113,7 +68,6 @@ class PluginSettings extends Plugin {
                     options: [
                         {name: 'WizardWelcome'},
                         {name: 'WizardTelemetry'},
-                        {name: 'WizardAccount'},
                         {name: 'WizardMicPermission'},
                         {name: 'WizardDevices'},
                     ],
@@ -122,8 +76,6 @@ class PluginSettings extends Plugin {
             },
         }
 
-        // The selection flag determines whether the UI should include endpoint selection.
-        state.webrtc.account.selection = Boolean(state.webrtc.endpoint.uri)
         return state
     }
 

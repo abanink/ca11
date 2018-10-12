@@ -7,7 +7,7 @@ const rc = require('rc')
 
 
 // The main settings object containing info from .ca11rc and build flags.
-module.exports = function(baseDir, overrides) {
+module.exports = function(baseDir, overrides, verbose = true) {
     // Define all static or simple condition settings here.
     let settings = {
         BASE_DIR: baseDir,
@@ -32,6 +32,7 @@ module.exports = function(baseDir, overrides) {
     settings.BRAND_TARGET = argv.brand ? argv.brand : process.env.BRAND ? process.env.BRAND : 'ca11'
     settings.NODE_PATH = path.join(settings.ROOT_DIR, 'node_modules') || process.env.NODE_PATH
     settings.PACKAGE = require(`${settings.ROOT_DIR}/package`)
+    settings.SRC_DIR_CA11 = path.join(settings.ROOT_DIR, 'src')
     settings.VERSION = argv.version ? argv.version : settings.PACKAGE.version
 
     settings.BUILD_ROOT = path.join(settings.ROOT_DIR, 'build')
@@ -97,12 +98,14 @@ module.exports = function(baseDir, overrides) {
     rc('ca11', settings)
 
     // Notify developer about some essential build flag values.
-    gutil.log('BUILD FLAGS:')
-    gutil.log(`- BRAND: ${settings.BRAND_TARGET}`)
-    gutil.log(`- DEPLOY: ${settings.DEPLOY_TARGET}`)
-    gutil.log(`- PRODUCTION: ${settings.PRODUCTION}`)
-    gutil.log(`- TARGET: ${settings.BUILD_TARGET}`)
-    gutil.log(`- VERBOSE: ${settings.VERBOSE}`)
+    if (verbose) {
+        gutil.log('SETTINGS FLAGS:')
+        gutil.log(`- BRAND: ${settings.BRAND_TARGET}`)
+        gutil.log(`- DEPLOY: ${settings.DEPLOY_TARGET}`)
+        gutil.log(`- PRODUCTION: ${settings.PRODUCTION}`)
+        gutil.log(`- TARGET: ${settings.BUILD_TARGET}`)
+        gutil.log(`- VERBOSE: ${settings.VERBOSE}`)
+    }
 
     return settings
 }

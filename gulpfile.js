@@ -38,9 +38,11 @@ const writeFileAsync = promisify(fs.writeFile)
 // The main settings object containing info from .ca11rc and build flags.
 let settings = require('./tools/settings')(__dirname)
 let WATCH_TASK = ''
+let nodemon
 
 // Initialize the helpers, which make this file less dense.
 const helpers = new Helpers(settings)
+const NO_SIG11 = argv.nosig11 ? true : false
 const WATCHTEST = argv.verify ? true : false
 
 
@@ -78,7 +80,7 @@ gulp.task('build', 'Generate a <brand> build for <target>.', (done) => {
     } else if (settings.BUILD_TARGET === 'webview') {
         runSequence(mainTasks, () => {done()})
     } else if (['chrome', 'firefox'].includes(settings.BUILD_TARGET)) {
-        runSequence(mainTasks.concat(['js-app-observer', 'manifest']), () => {done()})
+        runSequence(mainTasks.concat(['manifest']), () => {done()})
     }
 })
 
@@ -145,7 +147,7 @@ gulp.task('build-run', 'Generate an unoptimized build and run it in the target e
         const electronPath = './node_modules/electron/dist/electron'
         command = `${command};${electronPath} --js-flags='--harmony-async-await' ${buildDir}/main.js`
     } else if (settings.BUILD_TARGET === 'webview') {
-        helpers.startDevService()
+        nodemon = helpers.startDevService()
         const urlTarget = `http://localhost:8999/${settings.BRAND_TARGET}/webview/index.html`
         command = `${command};chromium --disable-web-security --new-window ${urlTarget}`
     }
@@ -281,14 +283,6 @@ gulp.task('js-app-plugins', 'Generate app sections plugin JavaScript.', ['js-app
 })
 
 
-gulp.task('js-app-observer', 'Generate tab app section Javascript.', (done) => {
-    helpers.jsEntry('./src/js/observer/index.js', 'app_observer', []).then(() => {
-        if (WATCHTEST) runSequence(['test-unit'], done)
-        else done()
-    })
-})
-
-
 gulp.task('manifest', 'Generate a browser-specific manifest file.', (done) => {
     let manifest = helpers.getManifest(settings.BRAND_TARGET, settings.BUILD_TARGET)
     const manifestTarget = path.join(settings.BUILD_DIR, 'manifest.json')
@@ -301,7 +295,7 @@ gulp.task('manifest', 'Generate a browser-specific manifest file.', (done) => {
 
 
 gulp.task('scss', 'Generate all CSS files.', [], (done) => {
-    runSequence(['scss-app', 'scss-observer'], () => {
+    runSequence(['scss-app'], () => {
         if (settings.LIVERELOAD) livereload.changed('app.css')
         done()
     })
@@ -329,11 +323,6 @@ gulp.task('scss-app', 'Generate application CSS.', () => {
         }
     }
     return helpers.scssEntry('./src/scss/ca11/app.scss', !settings.PRODUCTION, sources)
-})
-
-
-gulp.task('scss-observer', 'Generate observer CSS.', () => {
-    return helpers.scssEntry('./src/scss/ca11/observer.scss', !settings.PRODUCTION)
 })
 
 
@@ -408,7 +397,7 @@ gulp.task('__test-browser', '', function() {
 
 gulp.task('test-browser', 'Run browser tests on a served webview.', function(done) {
     // Force the build target.
-    helpers.startDevService()
+    nodemon = helpers.startDevService()
     settings.BUILD_TARGET = 'webview'
     runSequence(['build'], ['__test-browser'], () => {
         process.exit(0)
@@ -418,7 +407,7 @@ gulp.task('test-browser', 'Run browser tests on a served webview.', function(don
 
 
 gulp.task('watch', 'Run developer watch modus.', () => {
-    helpers.startDevService()
+    nodemon = helpers.startDevService()
 
     if (settings.BUILD_TARGET === 'electron') {
         gulp.watch([path.join(settings.SRC_DIR, 'js', 'main.js')], ['js-electron'])
@@ -479,11 +468,6 @@ gulp.task('watch', 'Run developer watch modus.', () => {
         runSequence('js-app-plugins')
     })
 
-    gulp.watch([
-        path.join(settings.SRC_DIR, 'js', 'observer', '**', '*.js'),
-        path.join(settings.SRC_DIR, 'js', 'lib', '**', '*.js'),
-    ], ['js-app-observer'])
-
     gulp.watch(path.join(settings.SRC_DIR, 'js', 'bg', 'vendor.js'), ['js-vendor-bg'])
     gulp.watch(path.join(settings.SRC_DIR, 'js', 'fg', 'vendor.js'), ['js-vendor-fg'])
 
@@ -492,10 +476,8 @@ gulp.task('watch', 'Run developer watch modus.', () => {
         path.join(settings.SRC_DIR, 'components', '**', '*.scss'),
         path.join(settings.NODE_PATH, 'vjs-addon-*', 'src', 'components', '**', '*.scss'),
         path.join(settings.NODE_PATH, 'vjs-mod-*', 'src', 'components', '**', '*.scss'),
-        `!${path.join(settings.SRC_DIR, 'scss', 'ca11', 'observer.scss')}`,
     ], ['scss-app'])
 
-    gulp.watch(path.join(settings.SRC_DIR, 'scss', 'ca11', 'observer.scss'), ['scss-observer'])
     gulp.watch(path.join(settings.SRC_DIR, 'scss', 'ca11', 'vendor.scss'), ['scss-vendor'])
 
     gulp.watch([
@@ -505,4 +487,13 @@ gulp.task('watch', 'Run developer watch modus.', () => {
     ], ['templates'])
 
     gulp.watch(path.join(settings.ROOT_DIR, 'test', 'bg', '**', '*.js'), ['test-unit'])
+
+    if (!NO_SIG11) {
+        gulp.watch([
+            path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
+        ], () => {
+            nodemon.emit('restart', 'index.js')
+        })
+    }
+
 })
