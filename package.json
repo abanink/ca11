@@ -44,7 +44,7 @@
     },
     "homepage": "https://ca11.io",
     "devDependencies": {
-        "@garage11/vue-compiler-gulp": "1.x.x",
+        "@garage11/vue-compiler-gulp": "git+https://github.com/garage11/vue-compiler-gulp.git#master",
         "archiver": "2.x.x",
         "browserify": "14.x.x",
         "chrome-webstore-upload": "0.x.x",
