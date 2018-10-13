@@ -6,7 +6,6 @@
 * @module ModuleExtension
 */
 const Plugin = require('ca11/lib/plugin')
-const Tabs = require('./tabs')
 
 
 /**
@@ -75,16 +74,6 @@ class PluginExtension extends Plugin {
             }
         })
     }
-
-
-    /**
-    * Setup a browser Tabs handler after the background
-    * application signalled it is ready.
-    */
-    _ready() {
-        this.tabs = new Tabs(this.app)
-    }
-
 }
 
 module.exports = PluginExtension

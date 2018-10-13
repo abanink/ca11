@@ -314,13 +314,16 @@
      width="30"
      height="30"
      x="-147.25424"
-     y="-60.847454" />
+     y="-60.847454"
+     inkscape:export-filename="/home/jeroen/projects/ca11/src/brand/ca11/img/notification.png"
+     inkscape:export-xdpi="409.59995"
+     inkscape:export-ydpi="409.59995" />
   <path
      d="m -132.15173,-55.346586 c 4.47801,0 8.1107,3.554007 8.1107,7.935018 v 8.84402 c 0,1.446818 -1.22471,2.645005 -2.70356,2.645005 h -5.40714 v -1.777444 h 6.29391 v -0.867561 h -3.59034 v -7.067457 h 3.59034 v -1.777445 c 0,-3.430572 -2.78828,-6.157574 -6.29391,-6.157574 -3.50562,0 -6.2939,2.727883 -6.2939,6.157574 v 1.777445 h 3.59034 v 7.067457 h -2.70357 c -1.47885,0 -2.70357,-1.198188 -2.70357,-2.645006 v -6.199014 c 0,-4.381011 3.63269,-7.935018 8.1107,-7.935018 z"
      id="path4-75"
      style="fill:#ffffff;fill-opacity:1;stroke-width:0.89137536"
-     inkscape:export-xdpi="445.85849"
-     inkscape:export-ydpi="445.85849"
-     inkscape:export-filename="/home/jeroen/projects/ca11/src/brand/ca11/img/logo-128.png"
+     inkscape:export-xdpi="409.59995"
+     inkscape:export-ydpi="409.59995"
+     inkscape:export-filename="/home/jeroen/projects/ca11/src/brand/ca11/img/notification.png"
      inkscape:connector-curvature="0" />
 </svg>

@@ -248,20 +248,6 @@ class PluginUI extends Plugin {
         options.iconUrl = 'img/notification.png'
 
         if (this.app.env.isExtension) {
-            // Notify click-to-dial icon labels.
-            if (number) {
-                if (title) {
-                    // Used to restore click-to-dial icon label state
-                    // when reloading a tab page.
-                    this.lastLabelMessage = {enabled: false, label: title, numbers: [number]}
-                    this.app.plugins.extension.tabs.signalIcons(this.lastLabelMessage)
-                } else {
-                    // No title is a reason to re-enable the target click-to-dial icon.
-                    this.app.plugins.extension.tabs.signalIcons({enabled: true, label: null, numbers: [number]})
-                    this.lastLabelMessage = null
-                }
-            }
-
             // Only create a notification under the right conditions.
             if (!message || !title || (this.app.state.ui.visible && !force)) return
 

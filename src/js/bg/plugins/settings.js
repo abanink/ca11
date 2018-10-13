@@ -120,11 +120,6 @@ class PluginSettings extends Plugin {
     */
     _watchers() {
         return {
-            'store.settings.click2dial.enabled': (enabled) => {
-                if (this.app.env.isExtension) {
-                    this.app.plugins.extension.tabs.signalIcons({enabled})
-                }
-            },
             'store.settings.telemetry.enabled': (enabled) => {
                 this.app.logger.info(`${this}switching sentry exception monitoring ${enabled ? 'on' : 'off'}`)
                 if (enabled) {
