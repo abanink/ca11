@@ -103,11 +103,6 @@ class PluginUser extends Plugin {
         try {
             // Connect to Ca11 backend by initializing network.
 
-            // await this.app.plugins.calls.register({
-            //     account: {id: shortid.generate(), username, password, uri: sessionName}, endpoint,
-            //     register: true,
-            // })
-
             await this.app.__initSession({password})
             this.app._watchersActivate()
 

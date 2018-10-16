@@ -84,6 +84,8 @@ class AppBackground extends App {
         this.__loadPlugins(this.__plugins)
 
         this.api = new Api(this)
+
+        // The background needs video elements to keep the call alive.
         this.media = new Media(this)
 
         await this.__initStore()
@@ -160,7 +162,7 @@ class AppBackground extends App {
             user: {authenticated: true},
         }, {encrypt: false, persist: true})
 
-        this.plugins.calls.sig11.connect()
+        this.plugins.calls.sig11Calls.connect()
 
 
         // Set the default layer if it's still set to login.
@@ -175,7 +177,8 @@ class AppBackground extends App {
             await this.crypto.storeVaultKey()
         }
         // Get a fresh reference to the media permission on unlock.
-        this.media.poll()
+        if (this.env.isExtension) this.media.poll()
+
         this.emit('bg:user-unlocked', {}, true)
     }
 

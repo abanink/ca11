@@ -13,25 +13,43 @@ class Media {
     constructor(app) {
         this.app = app
 
-        if (this.app.env.isBrowser) {
-            // Create audio/video elements in a browser-like environment.
-            // The audio element is used to playback sounds with
-            // (like ringtones, dtmftones). The video element is
-            // used to attach the remote WebRTC stream to.
-            this.localVideo = document.createElement('video')
-            this.localVideo.setAttribute('id', 'local')
-            this.localVideo.muted = true
+        if (!this.app.env.isBrowser) return
 
-            this.remoteVideo = document.createElement('video')
-            this.remoteVideo.setAttribute('id', 'remote')
-            document.body.prepend(this.localVideo)
-            document.body.prepend(this.remoteVideo)
+        // Create audio/video elements in a browser-like environment.
+        // The audio element is used to playback sounds with
+        // (like ringtones, dtmftones). The video element is
+        // used to attach the remote WebRTC stream to.
 
-            // Trigger play automatically. This is required for any audio
-            // to play during a call.
-            this.remoteVideo.addEventListener('canplay', () => this.remoteVideo.play())
-            this.localVideo.addEventListener('canplay', () => this.localVideo.play())
+        if (!this.app.env.isExtension) {
+            if (this.app.env.section.bg) {
+                this.__createVideoElements()
+            } else {
+                this.localVideo = document.querySelector('video#local')
+                this.remoteVideo = document.querySelector('video#remote')
+            }
+        } else {
+            this.__createVideoElements()
         }
+
+
+
+        document.body.prepend(this.localVideo)
+        document.body.prepend(this.remoteVideo)
+    }
+
+
+    __createVideoElements() {
+        this.localVideo = document.createElement('video')
+        this.localVideo.setAttribute('id', 'local')
+        this.localVideo.muted = true
+
+        this.remoteVideo = document.createElement('video')
+        this.remoteVideo.setAttribute('id', 'remote')
+
+        // Trigger play automatically. This is required for any audio
+        // to play during a call.
+        this.remoteVideo.addEventListener('canplay', () => this.remoteVideo.play())
+        this.localVideo.addEventListener('canplay', () => this.localVideo.play())
     }
 
 
@@ -52,6 +70,7 @@ class Media {
                     googNoiseSuppression: false,
                     googTypingNoiseDetection: false,
                 },
+                video: true,
             },
             AUDIO_PROCESSING: {
                 audio: {},
@@ -107,18 +126,21 @@ class Media {
     */
     async query() {
         // Check media permission at the start of the bg/fg.
-        if (this.app.env.isFirefox || this.app.env.isNode) {
+        if (this.app.env.isNode) {
             this.app.setState({settings: {webrtc: {media: {permission: false}}}})
             return
         }
 
         try {
-            await navigator.mediaDevices.getUserMedia(this._getUserMediaFlags())
-            this.__failedShutdown = false
-            this.__failedShutdownFresh = false
+            this.app.localStream = await navigator.mediaDevices.getUserMedia(this._getUserMediaFlags())
+            if (this.app.env.section.fg && !this.app.env.isExtension) {
+                this.app.apps.bg.localStream = this.app.localStream
+            }
             if (!this.app.state.settings.webrtc.media.permission) {
                 this.app.setState({settings: {webrtc: {media: {permission: true}}}})
             }
+
+            this.app.emit('media:local-stream-ready', null, true)
         } catch (err) {
             // There are no devices at all. Spawn a warning.
             if (err.message === 'Requested device not found') {

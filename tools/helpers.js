@@ -7,27 +7,26 @@ const childExec = require('child_process').exec
 const cleanCSS = require('gulp-clean-css')
 const composer = require('gulp-uglify/composer')
 const concat = require('gulp-concat')
-const connect = require('connect')
+
 const createReleaseManager = require('gulp-sentry-release-manager')
 const envify = require('gulp-envify')
 const fs = require('fs')
 const gulp = require('gulp-help')(require('gulp'), {})
 const gutil = require('gulp-util')
-const http = require('http')
+
 const ifElse = require('gulp-if-else')
 const insert = require('gulp-insert')
 const livereload = require('gulp-livereload')
 
 const minifier = composer(require('uglify-es'), console)
-const mount = require('connect-mount')
+
 const nodemon = require('gulp-nodemon')
 const notify = require('gulp-notify')
 const path = require('path')
 
 const runSequence = require('run-sequence')
 const sass = require('gulp-sass')
-const serveIndex = require('serve-index')
-const serveStatic = require('serve-static')
+
 const size = require('gulp-size')
 const source = require('vinyl-source-stream')
 const sourcemaps = require('gulp-sourcemaps')
@@ -474,28 +473,10 @@ class Helpers {
     * @param {Number} [port] - Port to listen on for the HTTP server.
     * @param {Array} [extraMounts] - Extra mountpoints to add.
     */
-    startDevService({extraMounts = [], mode = 'spa', port = 8999} = {}) {
+    async startDevService({extraMounts = [], mode = 'spa', port = 8999} = {}) {
         this.settings.LIVERELOAD = true
-        const app = connect()
+
         livereload.listen({silent: false})
-
-        if (mode === 'spa') {
-            app.use(serveStatic(this.settings.BUILD_DIR))
-            app.use((req, res, next) => {
-                return fs.createReadStream(path.join(this.settings.BUILD_DIR, 'index.html')).pipe(res)
-            })
-
-        } else {
-            app.use(mount('/', serveIndex(this.settings.BUILD_DIR, {icons: true})))
-            app.use(mount('/', serveStatic(this.settings.BUILD_DIR)))
-        }
-
-        for (const mountpoint of extraMounts) {
-            app.use(mount(mountpoint.mount, serveStatic(mountpoint.dir)))
-            gutil.log(`Development service mounted ${mountpoint.dir} on ${mountpoint.mount} (index: ${mountpoint.index ? 'yes' : 'no'})`)
-        }
-        http.createServer(app).listen(port)
-        gutil.log(`Starting HTTP service on http://localhost:${port}`)
 
         gutil.log('Starting SIG11 service')
         let _nodemon = nodemon({

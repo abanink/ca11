@@ -23,15 +23,6 @@ function helpers(app) {
             if (this.calls[id].active) activeCall = this.calls[id]
         }
 
-        // Fallback to the first call in case there is no active call at all.
-        if (!activeCall) {
-            if (Object.keys(this.calls).length === 0) {
-                app.emit('bg:calls:call_create', {
-                    callback: ({call}) => {
-                        activeCall = call
-                    }, number: null, start: null})
-            }
-        }
         return activeCall
     }
 
@@ -61,14 +52,8 @@ function helpers(app) {
 
         if (!app.state.app.online) errors.push('offline')
         else {
-            if (app.state.settings.webrtc.enabled) {
-                if (!app.state.settings.webrtc.media.permission) errors.push('mediaPermission')
-                if (!(app.state.calls.sip.status === 'registered')) errors.push('unregistered')
-                if (!(app.state.settings.webrtc.devices.ready)) errors.push('device')
-            } else {
-                // Non-WebRTC modus.
-                if (!app.state.calls.sip.status === 'connected') errors.push('disconnected')
-            }
+            if (!app.state.settings.webrtc.media.permission) errors.push('mediaPermission')
+            if (!(app.state.settings.webrtc.devices.ready)) errors.push('device')
         }
 
         if (!errors.length) return false
@@ -211,7 +196,6 @@ function helpers(app) {
                 app.setState({ui: {overlay: null}})
             },
             createCall: function(number, start = true, transfer = false) {
-                if (!this.user.authenticated) return false
                 // Empty Calls are allowed (used in the call switcher), but
                 // number must specifically be set to `false`. Default Store
                 // value `null` and an empty string are not allowed.

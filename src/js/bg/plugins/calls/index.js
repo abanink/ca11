@@ -6,7 +6,9 @@
 * @module ModuleCalls
 */
 const Plugin = require('ca11/lib/plugin')
-const Sig11 = require('./sig11')
+const SipCalls = require('./sip')
+const Sig11Calls = require('./sig11')
+
 
 
 /**
@@ -26,7 +28,8 @@ class PluginCalls extends Plugin {
         // This flag indicates whether a reconnection attempt will be
         // made when the websocket connection is gone.
 
-        this.sig11 = new Sig11(app)
+        this.sig11Calls = new Sig11Calls(this)
+        this.sipCalls = new SipCalls(this)
 
         this.reconnect = true
         // The default connection timeout to start with.
@@ -61,7 +64,10 @@ class PluginCalls extends Plugin {
         */
         this.app.on('bg:calls:call_create', ({callback, number, start, type}) => {
             // Always sanitize the number.
-            number = this.app.utils.sanitizeNumber(number)
+            if (this.app.state.calls.callType === 'sip') {
+                number = this.app.utils.sanitizeNumber(number)
+            }
+
 
             // Deal with a blind transfer Call.
             let activeOngoingCall = this.findCall({active: true, ongoing: true})
@@ -112,8 +118,12 @@ class PluginCalls extends Plugin {
         */
         this.app.on('bg:calls:call_terminate', ({callId}) => this.calls[callId].terminate())
 
-        this.app.on('bg:calls:connect', ({}) => this.connect({register: this.app.state.settings.webrtc.enabled}))
-        this.app.on('bg:calls:disconnect', ({reconnect}) => this.disconnect(reconnect))
+        this.app.on('bg:calls:connect', ({}) => {
+            this.connect()
+        })
+        this.app.on('bg:calls:disconnect', ({reconnect}) => {
+            this.disconnect(reconnect)
+        })
 
         this.app.on('bg:calls:dtmf', ({callId, key}) => this.calls[callId].session.dtmf(key))
         this.app.on('bg:calls:hold_toggle', ({callId}) => {
@@ -253,189 +263,18 @@ class PluginCalls extends Plugin {
 
 
     /**
-    * Deal with events coming from a UA.
-    */
-    __uaEvents() {
-        /**
-        * An incoming call. Call-waiting is not implemented.
-        * A new incoming call on top of a call that is already
-        * ongoing will be silently terminated.
-        */
-        this.ua.on('invite', (session) => {
-            this.app.logger.debug(`${this}<event:invite>`)
-            const callIds = Object.keys(this.calls)
-            const callOngoing = this.app.helpers.callOngoing()
-            const closingCalls = this.app.helpers.callsClosing()
-            const deviceReady = this.app.state.settings.webrtc.devices.ready
-            const dnd = this.app.state.availability.dnd
-            const microphoneAccess = this.app.state.settings.webrtc.media.permission
-
-            let acceptCall = true
-            let declineReason
-            if (dnd || !microphoneAccess || !deviceReady) {
-                acceptCall = false
-                if (dnd) declineReason = 'dnd'
-                if (!microphoneAccess) declineReason = 'microphone'
-                if (!deviceReady) declineReason = 'device'
-            }
-
-            if (callOngoing) {
-                // All ongoing calls are closing. Accept the call.
-                if (callIds.length === closingCalls.length) {
-                    acceptCall = true
-                } else {
-                    // Filter non-closing calls from all Call objects.
-                    const notClosingCalls = callIds.filter((i) => !closingCalls.includes(i))
-                    // From these Call objects, see which ones are not `new`.
-                    const notClosingNotNewCalls = notClosingCalls.filter((i) => this.calls[i].state.status !== 'new')
-
-                    if (notClosingNotNewCalls.length) {
-                        acceptCall = false
-                        declineReason = 'call ongoing'
-                    } else acceptCall = true
-                }
-            }
-
-            if (acceptCall) {
-                // An ongoing call may be a closing call. In that case we first
-                // remove all the closing calls before starting the new one.
-                for (const callId of closingCalls) {
-                    this.app.logger.debug(`${this}deleting closing call ${callId}.`)
-                    this.deleteCall(this.calls[callId])
-                }
-            }
-            // A declined Call will still be initialized, but as a silent
-            // Call, meaning it won't notify the user about it.
-            const call = this.callFactory(session, {silent: !acceptCall}, 'CallSIP')
-            this.calls[call.id] = call
-            call.start()
-
-            if (!acceptCall) {
-                this.app.logger.info(`${this}incoming call ${session.request.call_id} denied by invite handler: (${declineReason})`)
-                call.terminate()
-            } else {
-                this.app.logger.info(`${this}incoming call ${session.request.call_id} allowed by invite handler`)
-                Vue.set(this.app.state.calls.calls, call.id, call.state)
-                this.app.emit('fg:set_state', {action: 'upsert', path: `calls.calls.${call.id}`, state: call.state})
-            }
-        })
-
-
-        this.ua.on('registered', () => {
-            this.app.logger.debug(`${this}<event:registered>`)
-            if (this.__registerPromise) {
-                this.__registerPromise.resolve()
-                delete this.__registerPromise
-            }
-            this.app.setState({calls: {sip: {status: 'registered'}}})
-            this.app.emit('calls:registered', {}, true)
-        })
-
-
-        this.ua.on('registrationFailed', () => {
-            this.app.logger.debug(`${this}<event:registrationFailed>`)
-            if (this.__registerPromise) {
-                this.__registerPromise.reject()
-                this.disconnect()
-                delete this.__registerPromise
-            }
-            this.app.setState({calls: {sip: {status: 'registration_failed'}}})
-        })
-
-
-        this.ua.on('unregistered', () => {
-            this.app.logger.debug(`${this}<event:unregistered>`)
-            this.app.setState({calls: {sip: {status: this.ua.transport.isConnected() ? 'connected' : 'disconnected'}}})
-        })
-
-        this.ua.on('transportCreated', (transport) => {
-            this.app.logger.debug(`${this}<event:transportCreated>`)
-
-            this.ua.transport.on('connected', () => {
-                this.app.logger.debug(`${this}<event:connected>`)
-                this.app.setState({calls: {sip: {status: 'connected'}}})
-                // Reset the retry interval timer..
-                this.retry = Object.assign({}, this.retryDefault)
-                this.app.emit('calls:connected', {}, true)
-            })
-
-            this.ua.transport.on('disconnected', () => {
-                this.app.logger.debug(`${this}<event:disconnected>`)
-
-                this.app.setState({calls: {sip: {status: 'disconnected'}}})
-
-                this.retry = Object.assign({}, this.retryDefault)
-                this.reconnect = false
-
-                // We don't use SIPJS reconnect logic, because it can't deal
-                // with offline detection and incremental retry timeouts.
-                if (this.reconnect) {
-                    // Reconnection timer logic is performed only here.
-                    this.app.logger.debug(`${this}reconnect in ${this.retry.timeout} ms`)
-                    setTimeout(() => {
-                        this.connect({register: this.app.state.settings.webrtc.enabled})
-                    }, this.retry.timeout)
-                    this.retry = this.app.timer.increaseTimeout(this.retry)
-                }
-            })
-        })
-    }
-
-
-    /**
-    * Setup the initial UA options.
-    * @returns {Object} UA options that are passed to Sip.js
-    */
-    __uaOptions() {
-        let options = {
-            autostart: false,
-            autostop: false,
-            log: {
-                builtinEnabled: true,
-                level: 'error',
-            },
-            // Incoming unanswered calls are terminated after x seconds.
-            noanswertimeout: 60,
-            sessionDescriptionHandlerFactoryOptions: {
-                constraints: {
-                    audio: true,
-                    video: false,
-                },
-                peerConnectionOptions: {
-                    rtcConfiguration: {
-                        iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
-                    },
-                },
-            },
-            traceSip: false,
-            transportOptions: {
-                // Reconnects are handled manually.
-                maxReconnectionAttempts: 0,
-                // Don't allow unencrypted websocket connections.
-                wsServers: `wss://${this.app.state.calls.sip.endpoint}`,
-            },
-            userAgentString: this._userAgent(),
-        }
-
-        options.password = this.app.state.calls.sip.account.selected.password
-        options.authorizationUser = this.app.state.calls.sip.account.selected.username
-        options.uri = `${options.authorizationUser}@${this.app.state.calls.sip.endpoint}`
-        options.register = true
-        return options
-    }
-
-
-    /**
     * Initializes the module's store.
     * @returns {Object} The module's store properties.
     */
     _initialState() {
         let state = {
             calls: {},
+            callType: 'sig11',
             sig11: {
                 enabled: true,
                 endpoint: process.env.SIG11_ENDPOINT,
                 status: 'loading',
+                toggled: true,
             },
             sip: {
                 account: {
@@ -449,6 +288,7 @@ class PluginCalls extends Plugin {
                 enabled: false,
                 endpoint: process.env.SIP_ENDPOINT,
                 status: 'loading',
+                toggled: false,
             },
         }
 
@@ -484,14 +324,14 @@ class PluginCalls extends Plugin {
                 // When an empty call already exists, it must
                 // adhere to the current WebRTC-SIP/ConnectAB settings
                 // if the Call type is not explicitly passed.
-                if (this.app.state.settings.webrtc.enabled) {
-                    if (this.calls[callId].constructor.name === 'CallConnectAB') {
+                if (this.app.state.calls.callType === 'sig11') {
+                    if (this.calls[callId].constructor.name !== 'CallSIG11') {
                         this.deleteCall(this.calls[callId])
                     } else {
                         call = this.calls[callId]
                     }
                 } else {
-                    if (this.calls[callId].constructor.name === 'CallSIP') {
+                    if (this.calls[callId].constructor.name !== 'CallSIP') {
                         this.deleteCall(this.calls[callId])
                     } else call = this.calls[callId]
                 }
@@ -502,8 +342,15 @@ class PluginCalls extends Plugin {
         }
 
         if (!call) {
-            call = this.callFactory(number, {}, type)
+            if (!type) {
+                if (this.app.state.calls.callType === 'sip') {
+                    call = this.callFactory(number, {}, 'CallSIP')
+                } else {
+                    call = this.callFactory(number, {}, 'CallSIP11')
+                }
+            }
         }
+
         this.calls[call.id] = call
         // Set the number and propagate the call state to the foreground.
         call.state.number = number
@@ -542,33 +389,6 @@ class PluginCalls extends Plugin {
                 status: 'loading',
             },
         })
-    }
-
-
-    /**
-    * Build the useragent to identify Ca11 with.
-    * The format is `Ca11/<VERSION> (<OS/<ENV>) <Vendor>`.
-    * Don't change this string lightly since third-party
-    * applications depend on it.
-    * @returns {String} - Useragent string.
-    */
-    _userAgent() {
-        const env = this.app.env
-        // Don't use dynamic extension state here as version.
-        // Ca11 may run outside of an extension's (manifest)
-        // context. Also don't use template literals, because envify
-        // can't deal with string replacement otherwise.
-        let userAgent = 'Ca11/' + process.env.VERSION + ' '
-        if (env.isLinux) userAgent += '(Linux/'
-        else if (env.isMacOS) userAgent += '(MacOS/'
-        else if (env.isWindows) userAgent += '(Windows/'
-
-        if (env.isChrome) userAgent += 'Chrome'
-        if (env.isElectron) userAgent += 'Electron'
-        else if (env.isFirefox) userAgent += 'Firefox'
-        else if (env.isEdge) userAgent += 'Edge'
-        userAgent += `) ${this.app.state.app.vendor.name}`
-        return userAgent
     }
 
 
@@ -704,26 +524,8 @@ class PluginCalls extends Plugin {
     }
 
 
-    /**
-    * Initialize the SIPJS UserAgent and register its events.
-    * Connection details can be passed or substracted from the
-    * state. This is because the connect method is also used
-    * to determine a succesful login; and before login there
-    * is no state to get credentials from yet.
-    * @param {Boolean} [register] - Whether to register to the SIP endpoint.
-    */
-    async connect({account = {}, endpoint = null} = {}) {
-        this.app.logger.info(`${this}connect to SIP service`)
-        // The default is to reconnect.
-        this.reconnect = true
-
-        this._uaOptions = this.__uaOptions()
-
-        // Overwrite the existing instance with a new one every time.
-        // SIP.js doesn't handle resetting configuration well.
-        this.ua = new SIP.UA(this._uaOptions)
-        this.__uaEvents()
-        this.ua.start()
+    connect() {
+        this.sipCalls.connect()
     }
 
 
@@ -765,22 +567,8 @@ class PluginCalls extends Plugin {
     }
 
 
-    /**
-    * Graceful stop, do not reconnect automatically.
-    * @param {Boolean} reconnect - Whether try to reconnect.
-    */
-    disconnect(reconnect = true) {
-        this.app.logger.info(`${this}disconnect ua (reconnect: ${reconnect ? 'yes' : 'no'})`)
-        this.reconnect = reconnect
-        this.retry.timeout = 0
-
-        this.app.setState({calls: {status: reconnect ? 'loading' : null, ua: {status: 'disconnected'}}})
-        this.ua.unregister()
-        this.ua.transport.disconnect()
-        this.ua.transport.disposeWs()
-        if (reconnect) {
-            this.connect()
-        }
+    disconnect(reconnect = true){
+        this.sipCalls.disconnect(reconnect)
     }
 
 
@@ -808,14 +596,6 @@ class PluginCalls extends Plugin {
             }
         }
         return matchedCall
-    }
-
-
-    register(...args) {
-        return new Promise((resolve, reject) => {
-            this.__registerPromise = {reject, resolve}
-            this.connect(...args)
-        })
     }
 
 

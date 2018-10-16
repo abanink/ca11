@@ -93,22 +93,17 @@ module.exports = (app) => {
         render: templates.call_keypad.r,
         staticRenderFns: templates.call_keypad.s,
         store: {
+            callType: 'calls.callType',
             contacts: 'contacts.contacts',
             user: 'user',
         },
         watch: {
-            number: function(newNumber) {
-                // Toggle developer features with a special number.
-                if (newNumber === '02*06*18') {
-                    if (!this.user.developer) {
-                        app.notify({icon: 'info', message: this.$t('developer mode activated'), type: 'success'})
-                    } else {
-                        app.notify({icon: 'info', message: this.$t('developer mode deactivated'), type: 'success'})
-                    }
-                    app.setState({user: {developer: !this.user.developer}}, {persist: true})
-                }
+            number: function(number) {
                 if (this.callingDisabled) return
-                let cleanedNumber = app.utils.sanitizeNumber(newNumber)
+                let cleanedNumber = number
+                if (this.callType === 'sip') {
+                    cleanedNumber = app.utils.sanitizeNumber(number)
+                }
                 this.$emit('update:model', cleanedNumber)
             },
         },

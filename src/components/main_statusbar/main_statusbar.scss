@@ -15,29 +15,21 @@
     &.error {
         background: $red-color;
         color: $white-color;
-
-        .status-left .status-indicator svg {
-            fill: $white-color;
-        }
+        .status-indicators .status-indicator svg {fill: $white-color;}
     }
 
     &.warning {
         background: $orange-color;
         color: $white-color;
-
-        .status-left .status-indicator svg {
-            fill: $white-color;
-        }
+        .status-indicators .status-indicator svg {fill: $white-color;}
     }
 
     &.ok {
         background: $grey-color-lightest;
-
-
-        .status-left .status-indicator svg {
-            fill: $green-color;
-        }
+        .status-indicators .status-indicator svg {fill: $green-color;}
     }
+
+    .status-indicators .status-indicator svg.disabled {fill: $grey-color-light;}
 
     .vendor {
         align-items: center;
@@ -71,7 +63,7 @@
         }
     }
 
-    .status-left {
+    .status-indicators {
         // Don't wrap but put dots at the end if it doesn't fit.
         align-items: center;
         display: flex;
@@ -87,15 +79,10 @@
                 @include icon-size($spacer * 3);
             }
         }
-
-        .username {
-            margin: 0 $spacer;
-        }
-
     }
 
     // The icon links container at the right top of the popup.
-    .options {
+    .menu-options {
         display: flex;
         flex-direction: row;
         vertical-align: middle;

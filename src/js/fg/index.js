@@ -102,8 +102,10 @@ class AppForeground extends App {
                     // This check is also required in the foreground, since
                     // the popup opens a popout which is the only way an
                     // extension can be given permission.
-                    this.media.poll()
+
                 }
+
+                this.media.poll()
 
             },
         })

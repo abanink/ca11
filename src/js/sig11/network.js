@@ -17,6 +17,11 @@ class Network {
     }
 
 
+    findNode(id) {
+        return this.nodes.get(id)
+    }
+
+
     removeNode(id) {
         this.nodes.delete(id)
         console.log(`node removed: ${this.nodes.size} nodes in network`)

@@ -15,7 +15,7 @@ module.exports = function(baseDir, overrides, verbose = true) {
         BUILD_ARCH: argv.arch ? argv.arch : 'x64',
         // `all`, or one or more of: `darwin`, `linux`, `mas`, `win32`
         BUILD_PLATFORM: argv.platform ? argv.platform : 'linux',
-        BUILD_TARGET: argv.target ? argv.target : 'chrome',
+        BUILD_TARGET: argv.target ? argv.target : 'webview',
         BUILD_TARGETS: ['chrome', 'docs', 'electron', 'edge', 'firefox', 'node', 'webview'],
         // Default deploy target is `alpha` because it has the least impact.
         DEPLOY_TARGET: argv.deploy ? argv.deploy : 'alpha',

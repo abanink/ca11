@@ -6,6 +6,42 @@
     display: flex;
     flex-direction: column;
 
+    .call-type {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        font-weight: bold;
+
+        strong {
+            font-weight: bold;
+        }
+
+        .switch-light {
+            width: 100px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+
+    .call-local-video {
+        object-fit: fill;
+        position: absolute;
+        display: block;
+        background: #fff;
+        opacity: 0.05;
+        width: calc(100% - #{$spacer * 5});
+        left: $spacer * 5;
+        height: calc(100% - #{$spacer * 5});
+        z-index: 0;
+        margin-left: auto;
+        margin-right: auto;
+        top: $spacer * 5;
+    }
+
     .calls-container {
         display: flex;
         flex-direction: row;

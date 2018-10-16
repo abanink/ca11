@@ -1,5 +1,5 @@
 const SipCall = require('./sip')
-
+const Sig11Call = require('./sig11')
 
 module.exports = function(app) {
     /**
@@ -17,17 +17,10 @@ module.exports = function(app) {
         // Return a specific type of Call when requested.
         let call = null
 
-        if (type) {
-            if (type === 'CallSIP') {
-                call = new SipCall(app, target, options)
-            }
+        if (type === 'CallSIP') {
+            call = new SipCall(app, target, options)
         } else {
-            // Let application state decide.
-            if (app.state.user.authenticated) {
-                if (app.state.settings.webrtc.enabled) {
-                    call = new SipCall(app, target, options)
-                }
-            }
+            call = new Sig11Call(app, target, options)
         }
 
         if (call) return call

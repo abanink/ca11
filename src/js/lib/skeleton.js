@@ -116,8 +116,10 @@ class Skeleton extends EventEmitter {
                 for (const name of Object.keys(this.apps)) {
                     this.apps[name].emit(event, data)
                 }
+            } else {
+                super.emit(event, data)
             }
-            super.emit(event, data)
+
         }
     }
 

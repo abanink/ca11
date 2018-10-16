@@ -19,8 +19,7 @@ class Call {
     */
     constructor(app, target, {active, silent} = {}) {
         this.app = app
-        this.module = app.plugins.calls
-
+        this.plugin = app.plugins.calls
         this.silent = silent
 
         this._started = false
@@ -118,7 +117,7 @@ class Call {
             })
 
             this.ringtone.play()
-            this.module.activateCall(this, true)
+            this.plugin.activateCall(this, true)
         }
     }
 
@@ -138,7 +137,7 @@ class Call {
 
         this.app.logger.debug(`${this}change sink of remote video element to ${outputSink}`)
         try {
-            await this.app.media.remoteVideo.setSinkId(outputSink)
+            // await this.app.media.remoteVideo.setSinkId(outputSink)
         } catch (err) {
             const message = this.app.$t('failed to set output device!')
             this.app.notify({icon: 'warning', message, type: 'danger'})
@@ -161,7 +160,7 @@ class Call {
         }
 
         // Always set this call to be the active call.
-        this.module.activateCall(this, true)
+        this.plugin.activateCall(this, true)
         let message = ''
         if (displayName) {
             message = `${this.state.number}: ${displayName}`
@@ -224,7 +223,7 @@ class Call {
     _stop({force = false, message = '', timeout = 2750} = {}) {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
         if (this.silent) {
-            this.module.deleteCall(this)
+            this.plugin.deleteCall(this)
             return
         }
 
@@ -256,11 +255,11 @@ class Call {
         this.setState({keypad: {active: false}})
         // Reset the transfer state of target calls in case the transfer mode
         // of this Call is active and the callee ends the call.
-        if (this.state.transfer.active) this.module.__setTransferState(this, false)
+        if (this.state.transfer.active) this.plugin.__setTransferState(this, false)
 
         window.setTimeout(() => {
             this.busyTone.stop()
-            this.module.deleteCall(this)
+            this.plugin.deleteCall(this)
             // Signal browser tabs to remove the click-to-dial notification label.
             this.app.plugins.ui.notification({number: this.state.number})
         }, timeout)

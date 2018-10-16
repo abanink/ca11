@@ -39,6 +39,7 @@ $tooltip-color: hsla(0, 0%, 30%, 0.5);
     border: 6px solid transparent;
     content: "";
     z-index: 100111111111111;
+    display: inline-block;
 }
 
 // Base styles for the tooltip's content area.
@@ -51,6 +52,8 @@ $tooltip-color: hsla(0, 0%, 30%, 0.5);
     line-height: 1.2;
     padding: $spacer ($spacer * 2);
     z-index: 100111111111110;
+    display: inline-block;
+    &::first-letter {text-transform: uppercase;}
 }
 
 // Directions.

@@ -1,4 +1,5 @@
 <component class="component-call" :class="classes('component')">
+
     <!-- Call information during a call. Hide when the keypad takes too muchs space. -->
     <div class="call-info" v-if="(!call.keypad.active || call.keypad.display === 'dense') && !['new'].includes(call.status)">
         <icon class="contact-avatar" name="user"/>

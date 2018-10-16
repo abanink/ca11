@@ -77,7 +77,7 @@ class CallSIP extends Call {
         * call module's invite handler.
         */
         this.session.on('failed', (message) => {
-            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.module.ua)
+            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.plugin.sipCalls.ua)
             let reason = message.getHeader('Reason')
             if (reason) {
                 reason = this._parseHeader(reason).get('text')
@@ -125,7 +125,7 @@ class CallSIP extends Call {
     */
     _outgoing() {
         super._outgoing()
-        this.session = this.module.ua.invite(`sip:${this.state.number}@ca11.io`, {
+        this.session = this.plugin.sipCalls.ua.invite(`sip:${this.state.number}@ca11.io`, {
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
             },
@@ -302,7 +302,7 @@ class CallSIP extends Call {
     terminate() {
         if (this.state.status === 'new') {
             // An empty/new call; just delete the Call object without noise.
-            this.module.deleteCall(this)
+            this.plugin.deleteCall(this)
             return
         } else if (this.state.status === 'create') {
             // A fresh outgoing Call; not yet started. There may or may not

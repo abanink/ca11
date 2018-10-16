@@ -6,58 +6,64 @@ module.exports = (app) => {
         computed: app.helpers.sharedComputed(),
         data: function() {
             return {
-                tooltip: '',
+                tooltipSig11: '',
+                tooltipSip: '',
             }
         },
         methods: Object.assign({
             classes: function() {
                 let classes = {}
-                let tooltips = []
+                let generalError = false
+                let tooltip = {sig11: '', sip: ''}
 
-                if (!this.settings.webrtc.media.permission) {
+                // Handle common errors that affects any protocol.
+                if (!this.settings.webrtc.media.permission) generalError = this.$t('no microphone access')
+                else if (!this.settings.webrtc.devices.ready) generalError = this.$t('invalid audio device')
+                else if (!this.app.online) generalError = this.$t('offline')
+
+                if (generalError) {
                     classes.error = true
-                    tooltips.push(this.$t('no microphone access'))
-                } else if (!this.settings.webrtc.devices.ready) {
-                    classes.error = true
-                    tooltips.push(this.$t('invalid audio device'))
-                } else if (this.dnd) {
-                    classes.warning = true
-                    tooltips.push(this.$t('do not disturb'))
+                    tooltip.sip = tooltip.sig11 = generalError.capitalize()
                 } else {
-                    // Although the SIG11 protocol can be switched off,
-                    // we presume the protocol is always switched on when
-                    // building this tooltip.
-                    if (this.sig11.enabled) {
-                        if (this.sig11.status === 'loading') {
-                            tooltips.push(`SIG11: ${this.$t('loading')}`)
-                        } else if (this.sig11.status === 'connected') {
-                            tooltips.push(`SIG11: ${this.$t('connected')}`)
-                        } else {
+                    if (!this.sip.enabled) tooltip.sip = this.$t('disabled')
+                    else {
+                        if (this.sip.status === 'loading') tooltip.sip = this.$t('loading')
+                        else if (this.sip.status === 'registered') {
+                            if (this.dnd) {
+                                classes.warning = true
+                                tooltip.sip = this.$t('do not disturb')
+                            } else tooltip.sip = this.$t('registered')
+
+                            tooltip.sip += ` (${this.sip.account.selected.username})`
+                        }
+                        else {
                             classes.error = true
-                            if (!this.app.online) tooltips.push(this.$t('offline'))
-                            else tooltips.push(this.$t('no connection'))
+                            if (this.sip.status === 'disconnected') tooltip.sip = this.$t('disconnected')
+                            else tooltip.sip = this.$t(this.sip.status) // Handle unknown status.
                         }
                     }
 
-                    if (this.sip.enabled) {
-                        if (this.sip.status === 'loading') {
-                            tooltips.push(`SIP: ${this.$t('loading')}`)
-                        } else if (this.sip.status === 'registered') {
-                            classes['test-status-sip-registered'] = true
-                            tooltips.push(`SIP: ${this.$t('registered')} (${this.sip.account.selected.username})`)
-                        } else {
+                    if (!this.sig11.enabled) tooltip.sig11 = this.$t('disabled')
+                    else {
+                        if (this.sig11.status === 'loading') tooltip.sig11 = this.$t('loading')
+                        else if (this.sig11.status === 'registered') {
+                            if (this.dnd) {
+                                classes.warning = true
+                                tooltip.sig11 = this.$t('do not disturb')
+                            } else tooltip.sig11 = this.$t('registered')
+                        }
+                        else {
                             classes.error = true
-                            if (this.sip.status === 'registration_failed') {
-                                tooltips.push(`SIP: ${this.$t('registration failed')}`)
-                            }
+                            if (this.sig11.status === 'disconnected') tooltip.sig11 = this.$t('disconnected')
+                            else tooltip.sig11 = this.$t(this.sig11.status) // Handle unknown status.
                         }
                     }
-
-
-                    if (!classes.error || classes.warning) classes.ok = true
                 }
 
-                this.tooltip = tooltips.join(', ')
+                this.tooltipSip = tooltip.sip.capitalize()
+                this.tooltipSig11 = tooltip.sig11.capitalize()
+
+                if (!classes.error && !classes.warning) classes.ok = true
                 return classes
             },
             logout: app.helpers.logout,
@@ -66,6 +72,7 @@ module.exports = (app) => {
         staticRenderFns: templates.main_statusbar.s,
         store: {
             app: 'app',
+            callType: 'calls.callType',
             dnd: 'availability.dnd',
             env: 'env',
             layer: 'ui.layer',
