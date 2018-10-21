@@ -1,9 +1,10 @@
 <component class="component-call" :class="classes('component')">
-
     <!-- Call information during a call. Hide when the keypad takes too muchs space. -->
+    <video ref="local-video" class="call-local-video"></video>
+
     <div class="call-info" v-if="(!call.keypad.active || call.keypad.display === 'dense') && !['new'].includes(call.status)">
         <icon class="contact-avatar" name="user"/>
-        <div class="info-number">{{call.number}}</div>
+        <div class="info-number">{{call.endpoint}}</div>
         <div class="info-name" v-if="call.displayName">{{call.displayName}}</div>
         <div class="info-status">
             <span>{{sessionTime}} - </span>
@@ -60,12 +61,11 @@
             </div>
         </div>
         <div class="transfer-text cf">{{$t('select a transfer recipient')}}:</div>
-        <CallKeypad :model.sync="call.keypad.number" display="dense" :call="call" mode="call" :number="call.keypad.number"/>
+        <CallKeypad :model.sync="call.keypad.endpoint" display="dense" mode="call" :number="call.keypad.endpoint"/>
     </div>
     <!-- Show attended/blind transfer option and a dense keypad when transfer is active and the call is still active -->
     <div class="new-call" v-if="call.status === 'new' || call.keypad.active">
-        <CallKeypad :model.sync="call.keypad.number" :call="call" :display="call.keypad.display"
-            :mode="call.keypad.mode" :number="call.keypad.number"/>
+        <CallKeypad :model.sync="call.keypad.endpoint" :display="call.keypad.display" :mode="call.keypad.mode" :number="call.keypad.endpoint"/>
     </div>
 
     <div class="call-actions" v-if="!call.hangup.disabled">

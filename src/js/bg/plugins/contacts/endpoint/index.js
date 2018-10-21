@@ -23,7 +23,7 @@ class Endpoint {
             active: state.active,
             id: state.id,
             name: state.name,
-            number: state.number,
+            number: state.endpoint,
             status: state.status,
             ua: state.ua,
         }

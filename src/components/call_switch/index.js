@@ -38,7 +38,7 @@ module.exports = (app) => {
                     if (call.active) return this.$t('close new call').capitalize()
                     else return `${this.$t('select new call')}`.capitalize()
                 } else {
-                    let text = `${call.number} - `
+                    let text = `${call.endpoint} - `
                     if (call.status === 'accepted') {
                         if (call.hold.active) text += translations[call.status].hold
                         else text += translations[call.status][call.type]

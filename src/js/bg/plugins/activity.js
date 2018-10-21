@@ -32,9 +32,9 @@ class PluginActivity extends Plugin {
                 status: 'warning',
                 type: `${call.type}-call`,
             }
-            const contact = this.app.helpers.matchContact(call.number)
+            const contact = this.app.helpers.matchContact(call.endpoint)
             if (contact) Object.assign(activity, contact)
-            else activity.number = call.number
+            else activity.endpoint = call.endpoint
             this.addActivity(activity)
         })
 
@@ -44,9 +44,9 @@ class PluginActivity extends Plugin {
                 type: `${call.type}-call`,
             }
 
-            const contact = this.app.helpers.matchContact(call.number)
+            const contact = this.app.helpers.matchContact(call.endpoint)
             if (contact) Object.assign(activity, contact)
-            else activity.number = call.number
+            else activity.endpoint = call.endpoint
             this.addActivity(activity)
         })
     }

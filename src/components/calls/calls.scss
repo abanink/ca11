@@ -6,6 +6,10 @@
     display: flex;
     flex-direction: column;
 
+    .component-call-keypad {
+        margin: $spacer * 2 0;
+    }
+
     .call-type {
         align-items: center;
         display: flex;
@@ -26,32 +30,23 @@
         }
     }
 
-
-    .call-local-video {
-        object-fit: fill;
-        position: absolute;
-        display: block;
-        background: #fff;
-        opacity: 0.05;
-        width: calc(100% - #{$spacer * 5});
-        left: $spacer * 5;
-        height: calc(100% - #{$spacer * 5});
-        z-index: 0;
-        margin-left: auto;
-        margin-right: auto;
-        top: $spacer * 5;
-    }
-
-    .calls-container {
+    .call-active {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+
+        .call-components {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
     }
 
     &.call-ongoing {
         background: $white-tint-color-dark;
     }
 
-    .disabled-placeholder {
+    .calls-disabled {
         align-items: center;
         color: $grey-color-lighter;
         display: flex;

@@ -54,6 +54,15 @@
 </div>
 
 
+<div class="field field-radio-group switch-toggle" v-else-if="type === 'radio-group'">
+    <template v-for="option in options">
+        <input :id="option" :name="name" type="radio" :checked="option === model" :value="option" @change="updateModel($event)">
+        <label :for="option">{{option}}</label>
+    </template>
+    <a></a>
+</div>
+
+
 <div class="field field-select" v-else-if="type === 'select'">
     <label class="label ca" :class="classes('label')" :for="name">{{label}}</label>
     <div class="control">
@@ -112,7 +121,7 @@
     <label class="label ca" :class="classes('label')" :for="name">{{label}}</label>
     <div class="control">
         <input type="text" :class="classes('input')"
-            @input="updateModel($event)" :value="model"
+            @input="updateModel($event)" :readonly="readonly" :value="model"
             :id="name" :name="name" :placeholder="placeholder.capitalize()" :disabled="disabled" :autofocus="autofocus"/>
     </div>
     <em class="help cf" v-if="help">{{help}}</em>
@@ -122,7 +131,7 @@
 
 <div class="field field-textarea" v-else-if="type === 'textarea'">
     <label class="label ca" :class="classes('label')" :for="name">{{label}}</label>
-    <textarea class="textarea" v-on:input="updateModel($event)" :value="model.join('\n')"
-         :id="name" :name="name" :placeholder="placeholder" :disabled="disabled">{{model.join('\n')}}</textarea>
+    <textarea class="textarea" v-on:input="updateModel($event)" :readonly="readonly" :value="model"
+         :id="name" :name="name" :placeholder="placeholder" :disabled="disabled">{{model}}</textarea>
     <span class="validation-message help is-danger" :class="{hide: !invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></span>
 </div>

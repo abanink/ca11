@@ -58,27 +58,26 @@ class PluginCalls extends Plugin {
         * Create - and optionally start - a new Call. This is the main
         * event used to start a call with.
         * @event module:ModuleCalls#bg:calls:call_create
-        * @property {String} options.number - The number to call.
-        * @property {String} [options.start] - Start calling right away or just create a Call instance.
-        * @property {String} [options.type] - Class name of the Call implementation, e.g. a `CallSIP` instance.
+        *  @property {Object} callDescription - Information about the new Call.
+        * @property {String} [callDescription.endpoint] - The endpoint to call.
+        * @property {String} [callDescription.start] - Start calling right away or just create a Call instance.
         */
-        this.app.on('bg:calls:call_create', ({callback, number, start, type}) => {
-            // Always sanitize the number.
-            if (this.app.state.calls.callType === 'sip') {
-                number = this.app.utils.sanitizeNumber(number)
+        this.app.on('bg:calls:call_create', ({callback, callDescription, start}) => {
+            // Sanitize the number.
+            if (this.app.state.calls.call.protocol === 'sip') {
+                callDescription.endpoint = this.app.utils.sanitizeNumber(callDescription.endpoint)
             }
-
 
             // Deal with a blind transfer Call.
             let activeOngoingCall = this.findCall({active: true, ongoing: true})
             if (activeOngoingCall && activeOngoingCall.state.transfer.active && activeOngoingCall.state.transfer.type === 'blind') {
                 // Directly transfer the number to the currently activated
                 // call when the active call has blind transfer mode set.
-                activeOngoingCall.transfer(number)
+                activeOngoingCall.transfer(callDescription.endpoint)
             } else {
                 // Both a 'regular' new call and an attended transfer call will
                 // create or get a new Call and activate it.
-                let call = this._newCall({number, type})
+                let call = this._newCall(callDescription)
 
                 // An actual call may only be made when calling is enabled.
                 if (start && !this.app.helpers.callingDisabled()) {
@@ -118,14 +117,9 @@ class PluginCalls extends Plugin {
         */
         this.app.on('bg:calls:call_terminate', ({callId}) => this.calls[callId].terminate())
 
-        this.app.on('bg:calls:connect', ({}) => {
-            this.connect()
-        })
-        this.app.on('bg:calls:disconnect', ({reconnect}) => {
-            this.disconnect(reconnect)
-        })
+        this.app.on('bg:calls:connect', ({}) => this.connect())
+        this.app.on('bg:calls:disconnect', ({reconnect}) => this.disconnect(reconnect))
 
-        this.app.on('bg:calls:dtmf', ({callId, key}) => this.calls[callId].session.dtmf(key))
         this.app.on('bg:calls:hold_toggle', ({callId}) => {
             const call = this.calls[callId]
             if (!call.state.hold.active) {
@@ -268,8 +262,11 @@ class PluginCalls extends Plugin {
     */
     _initialState() {
         let state = {
+            call: {
+                endpoint: '',
+                protocol: 'sig11',
+            },
             calls: {},
-            callType: 'sig11',
             sig11: {
                 enabled: true,
                 endpoint: process.env.SIG11_ENDPOINT,
@@ -300,62 +297,19 @@ class PluginCalls extends Plugin {
 
 
     /**
-    * Return a `Call` object that can be used to setup a new Call with,
-    * depending on the current settings. This requires some extra
-    * bookkeeping because settings may change in the meanwhile.
-    * @param {Object} opts - Options to pass.
-    * @param {String} [opts.type] - The type of call to find.
-    * @param {String} [opts.number] - The number to call to.
+    * Create and return a new `Call` object based on a
+    * call description.
+    * @param {Object} callDescription - New call object.
+    * @param {String} [callDescription.endpoint] - Endpoint to call to.
+    * @param {String} [callDescription.protocol] - Protocol to use.
     * @returns {Call} - A new or existing Call with status `new`.
     */
-    _newCall({number = null, type} = {}) {
-        let call
-
-        for (const callId of Object.keys(this.calls)) {
-            if (this.calls[callId].state.status !== 'new') continue
-
-            // See if we can reuse an existing `new` Call object.
-            if (type) {
-                // Check if the found Call matches the expected type.
-                if (this.calls[callId].constructor.name === type) {
-                    call = this.calls[callId]
-                } else this.deleteCall(this.calls[callId])
-            } else {
-                // When an empty call already exists, it must
-                // adhere to the current WebRTC-SIP/ConnectAB settings
-                // if the Call type is not explicitly passed.
-                if (this.app.state.calls.callType === 'sig11') {
-                    if (this.calls[callId].constructor.name !== 'CallSIG11') {
-                        this.deleteCall(this.calls[callId])
-                    } else {
-                        call = this.calls[callId]
-                    }
-                } else {
-                    if (this.calls[callId].constructor.name !== 'CallSIP') {
-                        this.deleteCall(this.calls[callId])
-                    } else call = this.calls[callId]
-                }
-            }
-
-            if (this.calls[callId]) call = this.calls[callId]
-            break
-        }
-
-        if (!call) {
-            if (!type) {
-                if (this.app.state.calls.callType === 'sip') {
-                    call = this.callFactory(number, {}, 'CallSIP')
-                } else {
-                    call = this.callFactory(number, {}, 'CallSIP11')
-                }
-            }
-        }
-
+    _newCall(callDescription = null) {
+        let call = this.callFactory(callDescription)
         this.calls[call.id] = call
         // Set the number and propagate the call state to the foreground.
-        call.state.number = number
+        call.state.endpoint = callDescription.endpoint
         call.setState(call.state)
-
         // Sync the store's reactive properties to the foreground.
         if (!this.app.state.calls.calls[call.id]) {
             Vue.set(this.app.state.calls.calls, call.id, call.state)
@@ -363,7 +317,7 @@ class PluginCalls extends Plugin {
         }
 
         // Always set the number in the local state.
-        this.app.logger.debug(`${this}_newCall ${call.constructor.name} instance`)
+        this.app.logger.info(`${this}created new ${call.constructor.name} call`)
         return call
     }
 
@@ -376,7 +330,7 @@ class PluginCalls extends Plugin {
 
 
     /**
-    * Restore stored dumped state from localStorage.
+    * Restore stored state from localStorage.
     * @param {Object} moduleStore - Root property for this module.
     */
     _restoreState(moduleStore) {
@@ -504,7 +458,6 @@ class PluginCalls extends Plugin {
         const activeCall = this.findCall({active: true, ongoing: true})
 
         if (action === 'action-accept-hangup') {
-
             if (inviteCall) inviteCall.accept()
             else if (activeCall) activeCall.terminate()
         } else if (action === 'action-decline-new') {

@@ -1,30 +1,34 @@
 <component class="component-call-keypad" tabindex="-1" :class="{'call-ongoing': callOngoing}">
-    <div :class="classes('number-input')" v-if="display === 'dense'">
+    <div :class="classes('number-input')" v-if="display === 'touch'">
         <input name="number-input" type="text" ref="input" autocomplete="off" autofocus placeholder="..."
             @keyup="pressKey()" @keydown="pressKey($event.key)"
-
-            v-bind:value="number" v-on:input="inputChange($event.target.value)"
-            v-on:keyup.enter="placeCall(number)"/>
-
-        <i class="icon icon-small" v-if="mode === 'call'" :class="{'disabled': !number}"
-            v-on:keyup.enter="keypadAction" @click="placeCall(number)"><icon name="transfer"/></i>
-    </div>
-    <div :class="classes('number-input')" v-else-if="display === 'touch'">
-        <input name="number-input" type="text" ref="input" autocomplete="off" autofocus placeholder="..."
-            @keyup="pressKey()" @keydown="pressKey($event.key)"
-            v-bind:value="number" v-on:input="inputChange($event.target.value)"
-            v-on:keyup.enter="placeCall(number)"/>
+            v-bind:value="endpoint" v-on:input="inputChange($event.target.value)"
+            v-on:keyup.enter="placeCall()"/>
 
         <i class="correct" v-if="mode === 'call'" @click="removeLastNumber">
             <icon name="correct"/>
         </i>
     </div>
 
+    <div :class="classes('number-input')" v-else>
+        <input name="number-input" type="text" ref="input" autocomplete="off" autofocus placeholder="..."
+            @keyup="pressKey()" @keydown="pressKey($event.key)"
+
+            v-bind:value="endpoint" v-on:input="inputChange($event.target.value)"
+            v-on:keyup.enter="placeCall()"/>
+
+        <i class="icon icon-small" v-if="mode === 'call'" :class="{'disabled': !endpoint}"
+            v-on:keyup.enter="keypadAction" @click="placeCall()"><icon name="transfer"/></i>
+    </div>
+
+
+    <Field name="protocol" type="radio-group" :model.sync="call.protocol" :options="protocols"/>
+
     <div class="contacts-match" v-if="mode === 'call'">
         <span v-if="matchedContact">{{matchedContact.endpoint.number}} - {{matchedContact.contact.name}}</span>
     </div>
 
-    <div class="keys" v-if="display === 'touch'" v-on:keyup.enter="placeCall(number)">
+    <div class="keys" v-if="display === 'touch'" v-on:keyup.enter="placeCall()">
         <div class="key-row">
             <button class="rounded-button key test-key-1" @mouseup="pressKey()" @mousedown="pressKey('1')">1</button>
             <button class="rounded-button key test-key-2" @mouseup="pressKey()" @mousedown="pressKey('2')">2<div class="sub">ABC</div></button>
@@ -48,7 +52,7 @@
     </div>
     <!-- Dial actions when not used in combination with a call. -->
     <div class="call-actions touch" v-if="mode === 'call' && display === 'touch'">
-        <div class="rounded-button action dial test-call-button" @click="placeCall(number)" :class="{'disabled': !number}">
+        <div class="rounded-button action dial test-call-button" @click="placeCall()" :class="{'disabled': !call.endpoint}">
             <icon name="phone"/>
         </div>
     </div>

@@ -1,6 +1,8 @@
 @import "ca11/lib/mixins";
 @import "ca11/lib/variables";
 
+@import "./radio-group";
+
 // Bulma form field with some small modifications.
 .field-password,
 .field-text {
@@ -179,6 +181,16 @@
                     cursor: pointer;
                 }
             }
+        }
+    }
+}
+
+.field-textarea {
+    textarea {
+        resize: none;
+
+        &[readonly] {
+            border: 1px solid $grey-color-lightest;
         }
     }
 }

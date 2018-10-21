@@ -38,4 +38,10 @@
     .tabs-actions {
         margin-top: $spacer * 2;
     }
+
+    .network-public-key {
+        textarea {
+            font-size: 0.6rem !important;
+        }
+    }
 }

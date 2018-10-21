@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    z-index: 1000000;
 
     .contacts-match {
         color: $primary-color;
@@ -38,7 +39,7 @@
             }
 
             &::placeholder {
-                color: lighten($brand-color, 20%);
+                color: $brand-accent-color;
             }
         }
 
@@ -98,7 +99,7 @@
             }
 
             .correct {
-                color: $primary-color;
+                color: $brand-accent-color;
                 position: absolute;
                 right: 10px;
 
@@ -160,7 +161,7 @@
             .key {
                 @include no-outline;
                 background: none;
-                border: 2px solid $brand-color;
+                border: 2px solid $grey-color-lighter;
                 border-radius: 100%;
                 break-inside: avoid;
                 color: $brand-color;
@@ -187,10 +188,6 @@
         svg {
             @include icon-size($spacer * 4);
         }
-    }
-
-    .call-actions {
-        margin-top: $spacer * 3;
     }
 
 

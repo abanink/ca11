@@ -3,28 +3,23 @@ const Sig11Call = require('./sig11')
 
 module.exports = function(app) {
     /**
-    * Produce a Call instance based on the application's
-    * conditions like whether WebRTC calling is enabled or
-    * when a ConnectAB call is required. The Factory should
-    * always be used to create Calls with.
-    * @param {String} target - Target for the Call constructor.
+    * Produce a Call instance based on the preferred protocol.
+    * @param {Object} callDescription - Describes the new Call object.
     * @param {String} options - Options to pass to the Call constructor.
-    * @param {String} type - Force to create a type of Call.
-    * @returns {Call} - A type of Call, currently `CallSIP` or `CallConnectAB`.
+    * @returns {Call} - A type of Call, currently `CallSIP` or `Sig11Call`.
     * @memberof app.plugins.calls
     */
-    function callFactory(target = null, options = {}, type = null) {
+    function callFactory(callDescription, options) {
         // Return a specific type of Call when requested.
         let call = null
-
-        if (type === 'CallSIP') {
-            call = new SipCall(app, target, options)
-        } else {
-            call = new Sig11Call(app, target, options)
+        if (callDescription.protocol === 'sip') {
+            call = new SipCall(app, callDescription, options)
+        } else if (call.protocol === 'sig11') {
+            call = new Sig11Call(app, callDescription, options)
         }
 
         if (call) return call
-        throw 'Factory couldn\'t produce a valid Call target!'
+        throw 'Factory couldn\'t produce a Call!'
     }
 
     return callFactory

@@ -20,18 +20,16 @@ class Media {
         // (like ringtones, dtmftones). The video element is
         // used to attach the remote WebRTC stream to.
 
-        if (!this.app.env.isExtension) {
+        if (this.app.env.isExtension) {
+            this.__createVideoElements()
+        } else {
             if (this.app.env.section.bg) {
                 this.__createVideoElements()
             } else {
                 this.localVideo = document.querySelector('video#local')
                 this.remoteVideo = document.querySelector('video#remote')
             }
-        } else {
-            this.__createVideoElements()
         }
-
-
 
         document.body.prepend(this.localVideo)
         document.body.prepend(this.remoteVideo)
@@ -48,8 +46,12 @@ class Media {
 
         // Trigger play automatically. This is required for any audio
         // to play during a call.
-        this.remoteVideo.addEventListener('canplay', () => this.remoteVideo.play())
-        this.localVideo.addEventListener('canplay', () => this.localVideo.play())
+        this.remoteVideo.addEventListener('canplay', () => {
+            this.remoteVideo.play()
+        })
+        this.localVideo.addEventListener('canplay', () => {
+            this.localVideo.play()
+        })
     }
 
 
@@ -74,6 +76,7 @@ class Media {
             },
             AUDIO_PROCESSING: {
                 audio: {},
+                video: true,
             },
         }
 
@@ -139,8 +142,6 @@ class Media {
             if (!this.app.state.settings.webrtc.media.permission) {
                 this.app.setState({settings: {webrtc: {media: {permission: true}}}})
             }
-
-            this.app.emit('media:local-stream-ready', null, true)
         } catch (err) {
             // There are no devices at all. Spawn a warning.
             if (err.message === 'Requested device not found') {

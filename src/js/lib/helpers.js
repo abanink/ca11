@@ -195,16 +195,6 @@ function helpers(app) {
             closeOverlay: function() {
                 app.setState({ui: {overlay: null}})
             },
-            createCall: function(number, start = true, transfer = false) {
-                // Empty Calls are allowed (used in the call switcher), but
-                // number must specifically be set to `false`. Default Store
-                // value `null` and an empty string are not allowed.
-                if (number === null || number === '') return false
-                if (this.callingDisabled) return false
-
-                app.emit('bg:calls:call_create', {number, start, transfer})
-                return number
-            },
             getTranslations: _helpers.getTranslations,
             isTransferTarget: function(contact, number) {
                 let numbers = []

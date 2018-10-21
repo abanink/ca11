@@ -10,21 +10,31 @@ const Call = require('./index')
 class CallSIP extends Call {
     /**
     * @param {AppBackground} app - The background application.
-    * @param {String|Number|Session} [target] - An endpoint identifier to call to.
-    * @param {Object} [options] - An endpoint identifier to call to.
+    * @param {Object} [callDescription] - SIP call description.
     * @param {Boolean} [options.active] - Activates this Call in the UI.
     * @param {Boolean} [options.silent] - Setup a Call without interfering with the UI.
     */
-    constructor(app, target, {active, silent} = {}) {
-        super(app, target, {active, silent})
+    constructor(app, callDescription, {active, silent} = {}) {
+        super(app, callDescription, {active, silent})
+        this.state.protocol = 'sip'
 
-        if (!target || ['string', 'number'].includes(typeof target)) {
-            // Passing in no target or a number means an outgoing call.
-            app.__mergeDeep(this.state, {keypad: {mode: 'call'}, number: target, status: 'new', type: 'outgoing'})
-        } else {
+        // Created from an invite means that the session is
+        // already there, e.g. this is an incoming call.
+        if (callDescription.session) {
             // Passing in a session as target means an incoming call.
-            app.__mergeDeep(this.state, {keypad: {mode: 'dtmf'}, status: 'invite', type: 'incoming'})
-            this.session = target
+            app.__mergeDeep(this.state, {
+                keypad: {mode: 'dtmf'},
+                status: 'invite',
+                type: 'incoming',
+            })
+            this.session = callDescription.session
+        } else {
+            // Passing in no target or a number means an outgoing call.
+            app.__mergeDeep(this.state, {
+                endpoint: callDescription.endpoint,
+                keypad: {mode: 'call'},
+                status: 'new', type: 'outgoing',
+            })
         }
     }
 
@@ -35,14 +45,13 @@ class CallSIP extends Call {
     _incoming() {
         // (!) Set the state before calling super.
         this.state.displayName = this.session.remoteIdentity.displayName
-
-        // Try to get the caller info first from the RPID.
+        // Try to get caller info from the RPID first; e.g. this was a reinvite.
         let rpid = this.session.transaction.request.getHeader('Remote-Party-Id')
         if (rpid) {
             rpid = this._parseRpid(rpid)
             Object.assign(this.state, rpid)
         } else {
-            this.state.number = this.session.remoteIdentity.uri.user
+            this.state.endpoint = this.session.remoteIdentity.uri.user
         }
 
         this.state.stats.callId = this.session.request.call_id
@@ -120,18 +129,39 @@ class CallSIP extends Call {
 
 
     /**
+     * SIP.js event handler that takes care of adding
+     * tracks to a stream and binding them to the video
+     * elements.
+     */
+    _onTrackAdded() {
+        console.log("TRACK ADDED")
+        this.localStream = new MediaStream()
+        this.remoteStream = new MediaStream()
+
+        this.pc = this.session.sessionDescriptionHandler.peerConnection
+        this.pc.getReceivers().forEach((receiver) => this.remoteStream.addTrack(receiver.track))
+        this.app.media.remoteVideo.srcObject = this.remoteStream
+
+        this.pc.getSenders().forEach((sender) => this.localStream.addTrack(sender.track))
+        this.app.media.localVideo.srcObject = this.localStream
+    }
+
+
+    /**
     * Setup an outgoing call.
-    * @param {(Number|String)} number - The number to call.
     */
     _outgoing() {
         super._outgoing()
-        this.session = this.plugin.sipCalls.ua.invite(`sip:${this.state.number}@ca11.io`, {
+        this.session = this.plugin.sipCalls.ua.invite(`sip:${this.state.endpoint}@${this.app.state.calls.sip.endpoint}`, {
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
             },
         })
 
         this.setState({stats: {callId: this.session.request.call_id}})
+
+        // Handle connecting streams to the appropriate video element.
+        this.session.on('trackAdded', this._onTrackAdded.bind(this))
 
         // Notify user about the new call being setup.
         this.session.on('accepted', (data) => {
@@ -145,17 +175,6 @@ class CallSIP extends Call {
             this._stop({message: this.translations[this.state.status]})
         })
 
-        // Handle connecting streams to the appropriate video element.
-        this.session.on('trackAdded', async() => {
-            this.localStream = new MediaStream()
-            this.remoteStream = new MediaStream()
-
-            this.pc = this.session.sessionDescriptionHandler.peerConnection
-            this.pc.getReceivers().forEach((receiver) => this.remoteStream.addTrack(receiver.track))
-            this.app.media.remoteVideo.srcObject = this.remoteStream
-            this.pc.getSenders().forEach((sender) => this.localStream.addTrack(sender.track))
-            this.app.media.localVideo.srcObject = this.localStream
-        })
 
         /**
         * Play a ringback tone on the following status codes:
@@ -225,10 +244,10 @@ class CallSIP extends Call {
 
         if (numberMatch) {
             try {
-                rpid.number = numberMatch[1].split('@')[0].replace('sip:', '')
+                rpid.endpoint = numberMatch[1].split('@')[0].replace('sip:', '')
             } catch (err) {
                 this.app.logger.warn(`${this}failed to parse rpid header ${header}`)
-                rpid.number = numberMatch[0]
+                rpid.endpoint = numberMatch[0]
             }
         }
 
@@ -247,17 +266,7 @@ class CallSIP extends Call {
         super.accept()
 
         // Handle connecting streams to the appropriate video element.
-        this.session.on('trackAdded', () => {
-            this.localStream = new MediaStream()
-            this.remoteStream = new MediaStream()
-
-            this.pc = this.session.sessionDescriptionHandler.peerConnection
-            this.pc.getReceivers().forEach((receiver) => this.remoteStream.addTrack(receiver.track))
-            this.app.media.remoteVideo.srcObject = this.remoteStream
-
-            this.pc.getSenders().forEach((sender) => this.localStream.addTrack(sender.track))
-            this.app.media.localVideo.srcObject = this.localStream
-        })
+        this.session.on('trackAdded', this._onTrackAdded.bind(this))
         this.session.accept({
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
@@ -274,24 +283,6 @@ class CallSIP extends Call {
                 },
             })
             this.setState({hold: {active: true}})
-        }
-    }
-
-
-    async start() {
-        if (this.silent) {
-            if (this.state.status === 'invite') this._incoming()
-            else this._outgoing()
-        } else {
-            // Query media and assign the stream. The actual permission must be
-            // already granted from a foreground script running in a tab.
-            try {
-                await this._initSinks()
-                if (this.state.status === 'invite') this._incoming()
-                else this._outgoing()
-            } catch (err) {
-                console.error(err)
-            }
         }
     }
 
@@ -313,7 +304,6 @@ class CallSIP extends Call {
             // trigger the Call to stop here.
             this._stop()
         } else {
-
             // Calls with other statuses need some more work to end.
             try {
                 if (this.state.status === 'invite') {

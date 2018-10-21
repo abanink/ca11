@@ -92,7 +92,7 @@ class PluginUI extends Plugin {
                     active: 'recent',
                 },
                 settings: {
-                    active: 'identity',
+                    active: 'general',
                 },
             },
             visible: false,

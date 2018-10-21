@@ -11,6 +11,22 @@
     padding-bottom: 0;
     z-index: 1000;
 
+
+    .call-local-video {
+        background: #fff;
+        display: block;
+        height: calc(100% - #{$spacer * 5});
+        left: $spacer * 5;
+        margin-left: auto;
+        margin-right: auto;
+        object-fit: fill;
+        opacity: 0.08;
+        position: absolute;
+        top: $spacer * 5;
+        width: calc(100% - #{$spacer * 5});
+        z-index: -1;
+    }
+
     .call-info {
         font-weight: 400;
         text-align: center;
@@ -234,3 +250,4 @@
         }
     }
 }
+

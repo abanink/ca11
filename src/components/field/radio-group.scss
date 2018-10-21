@@ -1,0 +1,86 @@
+/*
+* CSS TOGGLE SWITCH
+*
+* Ionuț Colceriu - ghinda.net
+* https://github.com/ghinda/css-toggle-switch
+*
+* Modified to fit in the CA11 theme.
+*/
+@import "ca11/lib/variables";
+
+$size-unit: em !default;
+$em-base: 16 !default;
+
+
+@mixin clearfix {
+    &::after {
+        clear: both;
+        content: '';
+        display: table;
+    }
+}
+
+@import "css-toggle-switch/src/core/functions";
+@import "css-toggle-switch/src/core/shared";
+@import "css-toggle-switch/src/core/toggle";
+
+
+.switch-toggle {
+
+    input {
+        display: none;
+
+        & + label {
+            border-radius: $spacer * 5;
+            user-select: none;
+            min-width: 60px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &:focus + label {
+            outline:none;
+            background-color: $brand-accent-color;
+        }
+    }
+
+    input:checked {
+        & + label {
+            background-color: $brand-accent-color;
+            color: $white-color;
+        }
+    }
+
+
+    background-color: $grey-color-lightest;
+    border-radius: $spacer * 5;
+    box-shadow: inset rgba(0, 0, 0, 0.1) 0 1px 0;
+
+    a {
+        border-radius: 100%;
+        left: 0;
+        top: 0;
+        transition: all .2s ease-out;
+    }
+
+    label {
+        height: $spacer * 4;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: $grey-color-dark;
+        line-height: $spacer * 4;
+        vertical-align: middle;
+        padding: 0 $spacer * 2;
+        text-align: center;
+    }
+
+
+    &.switch-toggle {
+        a {
+            background-color: $brand-accent-color;
+            transition: all 0.12s ease-out;
+        }
+    }
+}

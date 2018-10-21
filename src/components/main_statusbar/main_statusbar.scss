@@ -26,7 +26,7 @@
 
     &.ok {
         background: $grey-color-lightest;
-        .status-indicators .status-indicator svg {fill: $green-color;}
+        .status-indicators .status-indicator svg {fill: $brand-accent-color;}
     }
 
     .status-indicators .status-indicator svg.disabled {fill: $grey-color-light;}

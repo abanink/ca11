@@ -6,6 +6,6 @@
 	],
 	"settings": {
 		"telemetry.enableCrashReporter": false,
-		"debug.node.autoAttach": "on"
+		"debug.node.autoAttach": "off"
 	}
 }

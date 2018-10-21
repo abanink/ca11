@@ -22,9 +22,9 @@ module.exports = (app) => {
     const CallKeypad = {
         computed: Object.assign({
             matchedContact: function() {
-                let _number = String(this.number)
+                let _number = String(this.endpoint)
                 if (_number.length > 1) {
-                    let match = app.helpers.matchContact(String(this.number), true)
+                    let match = app.helpers.matchContact(String(this.endpoint), true)
                     if (match) {
                         return {
                             contact: this.contacts[match.contact],
@@ -33,6 +33,12 @@ module.exports = (app) => {
                     }
                 }
                 return null
+            },
+            protocols: function() {
+                let protocols = []
+                if (this.sig11.enabled) protocols.push('sig11')
+                if (this.sip.enabled) protocols.push('sip')
+                return protocols
             },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
@@ -49,13 +55,12 @@ module.exports = (app) => {
             inputChange: function(newVal) {
                 this.$emit('update:model', newVal)
             },
-            placeCall: function(number, start = true, transfer = false) {
+            placeCall: function() {
                 if (this.mode === 'call') {
-                    this.createCall(number, start, transfer)
+                    app.emit('bg:calls:call_create', {callDescription: this.call, start: true, transfer: false})
                 }
             },
             pressKey: function(key) {
-                if (this.callingDisabled) return
                 if (!key) {
                     // No key pressed. Stop playing sound.
                     window.setTimeout(() => app.sounds.dtmfTone.stop(), 50)
@@ -67,13 +72,14 @@ module.exports = (app) => {
                 // because mouseup event may not fire properly, in case of
                 // a right-click => contextmenu.
                 window.setTimeout(() => app.sounds.dtmfTone.stop(), 500)
-                let newVal = app.utils.sanitizeNumber(`${this.number}${key}`)
+
+                let newVal = app.utils.sanitizeNumber(`${this.endpoint}${key}`)
                 if (newVal) this.$emit('update:model', newVal)
                 if (this.mode === 'dtmf') app.emit('bg:calls:dtmf', {callId: this.call.id, key})
             },
             removeLastNumber: function() {
                 if (this.callingDisabled) return
-                if (this.number) this.$emit('update:model', this.number.substring(0, this.number.length - 1))
+                if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
             },
         }, app.helpers.sharedMethods()),
         mounted: function() {
@@ -83,26 +89,30 @@ module.exports = (app) => {
             }
         },
         props: {
-            call: {default: null},
             display: {default: 'expanded', type: String},
             dtmf: {default: false, type: Boolean},
+            endpoint: {default: '', type: String},
             mode: {default: 'call', type: String},
-            number: {default: '', type: String},
             search: {default: true, type: Boolean},
         },
         render: templates.call_keypad.r,
         staticRenderFns: templates.call_keypad.s,
         store: {
-            callType: 'calls.callType',
+            call: 'calls.call',
             contacts: 'contacts.contacts',
+            sig11: 'calls.sig11',
+            sip: 'calls.sip',
             user: 'user',
         },
         watch: {
-            number: function(number) {
+            'call.protocol': function(protocol) {
+                app.setState({calls: {call: {protocol}}}, {persist: true})
+            },
+            endpoint: function(endpoint) {
                 if (this.callingDisabled) return
-                let cleanedNumber = number
-                if (this.callType === 'sip') {
-                    cleanedNumber = app.utils.sanitizeNumber(number)
+                let cleanedNumber = endpoint
+                if (this.call.protocol === 'sip') {
+                    cleanedNumber = app.utils.sanitizeNumber(endpoint)
                 }
                 this.$emit('update:model', cleanedNumber)
             },

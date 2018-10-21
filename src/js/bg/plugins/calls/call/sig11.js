@@ -10,20 +10,27 @@ const Call = require('./index')
 class CallSIG11 extends Call {
     /**
     * @param {AppBackground} app - The background application.
-    * @param {String|Number|Session} [target] - An endpoint identifier to call to.
+    * @param {String|Number|Session} [calldescription] - An endpoint identifier to call to.
     * @param {Object} [options] - An endpoint identifier to call to.
     * @param {Boolean} [options.active] - Activates this Call in the UI.
     * @param {Boolean} [options.silent] - Setup a Call without interfering with the UI.
     */
-    constructor(app, target, {active, silent} = {}) {
-        super(app, target, {active, silent})
+    constructor(app, calldescription, {active, silent} = {}) {
+        super(app, calldescription, {active, silent})
 
-        if (!target || ['string', 'number'].includes(typeof target)) {
-            app.__mergeDeep(this.state, {keypad: {mode: 'call'}, number: target, status: 'new', type: 'outgoing'})
+        this.state.protocol = 'sig11'
+
+        if (!calldescription || ['string', 'number'].includes(typeof calldescription)) {
+            app.__mergeDeep(this.state, {
+                endpoint: calldescription,
+                keypad: {mode: 'call'},
+                status: 'new',
+                type: 'outgoing',
+            })
         } else {
             // Passing in a session as target means an incoming call.
             app.__mergeDeep(this.state, {keypad: {mode: 'dtmf'}, status: 'invite', type: 'incoming'})
-            this.session = target
+            this.session = calldescription
         }
     }
 
@@ -86,7 +93,7 @@ class CallSIG11 extends Call {
         this.pc.setLocalDescription(offer)
 
         this.plugin.sig11Calls.ws.send(JSON.stringify({
-            node: this.state.number,
+            node: this.state.endpoint,
             sdp: this.pc.localDescription,
         }))
     }
@@ -102,24 +109,6 @@ class CallSIG11 extends Call {
 
     hold() {
 
-    }
-
-
-    async start() {
-        if (this.silent) {
-            if (this.state.status === 'invite') this._incoming()
-            else this._outgoing()
-        } else {
-            // Query media and assign the stream. The actual permission must be
-            // already granted from a foreground script running in a tab.
-            try {
-                await this._initSinks()
-                if (this.state.status === 'invite') this._incoming()
-                else this._outgoing()
-            } catch (err) {
-                console.error(err)
-            }
-        }
     }
 
 

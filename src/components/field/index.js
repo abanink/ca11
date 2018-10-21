@@ -229,10 +229,11 @@ module.exports = (app) => {
             */
             updateModel: function(event) {
                 let value = event.target.value
+
                 // Toggles value of a checkbox.
                 if (event.target.type === 'checkbox') {
                     this.$emit('update:model', event.target.checked)
-                } else if (['password', 'text'].includes(event.target.type)) {
+                } else if (['password', 'radio', 'text'].includes(event.target.type)) {
                     this.$emit('update:model', event.target.value)
                 } else if (event.target.tagName === 'SELECT') {
                     // A multiselect.
@@ -296,6 +297,10 @@ module.exports = (app) => {
             name: '',
             options: Array,
             placeholder: String,
+            readonly: {
+                default: false,
+                type: Boolean,
+            },
             type: String,
             validation: Object,
         },

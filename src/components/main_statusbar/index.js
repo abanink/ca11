@@ -72,7 +72,6 @@ module.exports = (app) => {
         staticRenderFns: templates.main_statusbar.s,
         store: {
             app: 'app',
-            callType: 'calls.callType',
             dnd: 'availability.dnd',
             env: 'env',
             layer: 'ui.layer',
