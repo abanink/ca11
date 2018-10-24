@@ -35,9 +35,10 @@ module.exports = (app) => {
                 return null
             },
             protocols: function() {
-                let protocols = []
-                if (this.sig11.enabled) protocols.push('sig11')
-                if (this.sip.enabled) protocols.push('sip')
+                let protocols = [
+                    {value: 'sip', name: 'sip', disabled: !this.sip.enabled},
+                    {value: 'sig11', name: 'sig11', disabled: !this.sig11.enabled}
+                ]
                 return protocols
             },
         }, app.helpers.sharedComputed()),

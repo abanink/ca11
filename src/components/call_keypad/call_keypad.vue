@@ -22,7 +22,7 @@
     </div>
 
 
-    <Field name="protocol" type="radio-group" :model.sync="call.protocol" :options="protocols"/>
+    <Field v-if="mode === 'call'" name="protocol" type="radio-group" :model.sync="call.protocol" :options="protocols"/>
 
     <div class="contacts-match" v-if="mode === 'call'">
         <span v-if="matchedContact">{{matchedContact.endpoint.number}} - {{matchedContact.contact.name}}</span>

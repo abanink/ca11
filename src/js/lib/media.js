@@ -46,12 +46,8 @@ class Media {
 
         // Trigger play automatically. This is required for any audio
         // to play during a call.
-        this.remoteVideo.addEventListener('canplay', () => {
-            this.remoteVideo.play()
-        })
-        this.localVideo.addEventListener('canplay', () => {
-            this.localVideo.play()
-        })
+        this.remoteVideo.addEventListener('canplay', () => this.remoteVideo.play())
+        this.localVideo.addEventListener('canplay', () => this.localVideo.play())
     }
 
 
@@ -72,11 +68,9 @@ class Media {
                     googNoiseSuppression: false,
                     googTypingNoiseDetection: false,
                 },
-                video: true,
             },
             AUDIO_PROCESSING: {
                 audio: {},
-                video: true,
             },
         }
 

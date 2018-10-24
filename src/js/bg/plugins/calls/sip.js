@@ -190,10 +190,7 @@ class SipCalls {
             password: this.app.state.calls.sip.account.selected.password,
             register: true,
             sessionDescriptionHandlerFactoryOptions: {
-                constraints: {
-                    audio: true,
-                    video: true,
-                },
+                constraints: this.app.media._getUserMediaFlags(),
                 peerConnectionOptions: {
                     rtcConfiguration: {
                         iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),

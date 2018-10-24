@@ -56,8 +56,10 @@
 
 <div class="field field-radio-group switch-toggle" v-else-if="type === 'radio-group'">
     <template v-for="option in options">
-        <input :id="option" :name="name" type="radio" :checked="option === model" :value="option" @change="updateModel($event)">
-        <label :for="option">{{option}}</label>
+        <input type="radio" :id="option.value" :name="name"
+            :disabled="option.disabled" :checked="option.value === model"
+            :value="option.value" @change="updateModel($event)">
+        <label :for="option.value">{{option.name}}</label>
     </template>
     <a></a>
 </div>

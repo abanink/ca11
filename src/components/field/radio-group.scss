@@ -26,37 +26,46 @@ $em-base: 16 !default;
 
 
 .switch-toggle {
+    background-color: $grey-color-lightest;
+    border-radius: $spacer * 5;
+    box-shadow: inset rgba(0, 0, 0, 0.1) 0 1px 0;
+    margin: 0;
 
     input {
         display: none;
 
         & + label {
             border-radius: $spacer * 5;
+            min-width: 55px;
+            padding: 0;
+            margin: 0;
             user-select: none;
-            min-width: 60px;
 
             &:hover {
                 cursor: pointer;
             }
         }
 
+        &:checked {
+            & + label {
+                background-color: $brand-accent-color;
+                color: $white-color;
+            }
+        }
+
+        &:disabled + label {
+            color: $grey-color-lighter;
+
+            &:hover {
+                cursor: not-allowed;
+            }
+        }
+
         &:focus + label {
-            outline:none;
             background-color: $brand-accent-color;
+            outline: none;
         }
     }
-
-    input:checked {
-        & + label {
-            background-color: $brand-accent-color;
-            color: $white-color;
-        }
-    }
-
-
-    background-color: $grey-color-lightest;
-    border-radius: $spacer * 5;
-    box-shadow: inset rgba(0, 0, 0, 0.1) 0 1px 0;
 
     a {
         border-radius: 100%;
@@ -66,14 +75,14 @@ $em-base: 16 !default;
     }
 
     label {
-        height: $spacer * 4;
+        color: $grey-color-dark;
         font-size: 0.8rem;
         font-weight: 500;
-        color: $grey-color-dark;
+        height: $spacer * 4;
         line-height: $spacer * 4;
-        vertical-align: middle;
         padding: 0 $spacer * 2;
         text-align: center;
+        vertical-align: middle;
     }
 
 

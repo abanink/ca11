@@ -1,5 +1,5 @@
 <component class="component-calls" :class="classes('component')">
-    <div v-if="keypadEnabled && activeCall" class="call-active">
+    <div v-if="activeCall" class="call-active">
         <div class="call-components">
             <Call :call="activeCall"/>
             <CallSwitch :call="activeCall"/>

@@ -1,9 +1,8 @@
 const WebSocket = require('ws')
 const connect = require('connect')
 const fs = require('fs')
-const https = require('https')
+const http = require('http')
 const path = require('path')
-const pem = require('pem')
 const serveStatic = require('serve-static')
 
 const Network = require('./network')
@@ -27,31 +26,6 @@ class Sig11 {
 
         this.network = new Network()
         this.startService()
-    }
-
-
-    /**
-    * Checks if a public/private keypair exists. Returns a Promise
-    * with a boolean resolve indicating whether the key exists
-    * or not.
-    * @return {Promise}
-    */
-    keyPairExists(publicKeyPath, privateKeyPath) {
-        return new Promise((resolve) => {
-            fs.stat(publicKeyPath, err => {
-                if (!err) {
-                    fs.stat(privateKeyPath, _err => {
-                        if (!_err) {
-                            resolve(true)
-                        } else {
-                            resolve(false)
-                        }
-                    })
-                } else {
-                    resolve(false)
-                }
-            })
-        })
     }
 
 
@@ -92,40 +66,6 @@ class Sig11 {
         })
     }
 
-    /**
-    * Reuse an existing public/private keypair to setup a HTTP server with,
-    * or create a new keypair before starting the HTTPS server during development.
-    * HTTPS is a requirement to use the WebCrypto API, as well as some other
-    * API's, that's why the development server is using HTTPS as well.
-    * @param {String} publicKeyPath - Path to a PEM public key file.
-    * @param {String} privateKeyPath - Path to a PEM private key file.
-    */
-    setupKeyPair(publicKeyPath, privateKeyPath) {
-        return new Promise(resolve => {
-            this.keyPairExists(publicKeyPath, privateKeyPath)
-            .then(keyExists => {
-                if (keyExists) {
-                    fs.readFile(publicKeyPath, 'ascii', (err, publicKey) => {
-                        fs.readFile(privateKeyPath, 'ascii', (_err, privateKey) => {
-                            resolve({
-                                public: publicKey,
-                                private: privateKey,
-                            })
-                        })
-                    })
-                } else {
-                    pem.createCertificate({days: 1, selfSigned: true}, (err, keys) => {
-                        fs.writeFile(publicKeyPath, keys.certificate, 'ascii', () => {
-                            fs.writeFile(privateKeyPath, keys.serviceKey, 'ascii', () => {
-                                resolve({public: keys.certificate, private: keys.serviceKey})
-                            })
-                        })
-                    })
-                }
-            })
-        })
-    }
-
 
     async startService() {
         const app = connect()
@@ -135,11 +75,7 @@ class Sig11 {
             return fs.createReadStream(path.join(this.settings.BUILD_DIR, 'index.html')).pipe(res)
         })
 
-        let publicKeyPath = path.join(this.settings.ROOT_DIR, 'public.pem')
-        let privateKeyPath = path.join(this.settings.ROOT_DIR, 'private.pem')
-        let keypair = await this.setupKeyPair(publicKeyPath, privateKeyPath)
-
-        this.server = https.createServer({cert: keypair.public, key: keypair.private}, app).listen(8999)
+        this.server = http.createServer(app).listen(8080)
         this.wss = new WebSocket.Server({
             disableHixie: true,
             perMessageDeflate: false,

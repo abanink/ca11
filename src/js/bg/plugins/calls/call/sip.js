@@ -48,7 +48,7 @@ class CallSIP extends Call {
         // Try to get caller info from the RPID first; e.g. this was a reinvite.
         let rpid = this.session.transaction.request.getHeader('Remote-Party-Id')
         if (rpid) {
-            rpid = this._parseRpid(rpid)
+            rpid = this._parseRpid(srpid)
             Object.assign(this.state, rpid)
         } else {
             this.state.endpoint = this.session.remoteIdentity.uri.user
@@ -134,7 +134,6 @@ class CallSIP extends Call {
      * elements.
      */
     _onTrackAdded() {
-        console.log("TRACK ADDED")
         this.localStream = new MediaStream()
         this.remoteStream = new MediaStream()
 

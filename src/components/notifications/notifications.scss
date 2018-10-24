@@ -3,7 +3,6 @@
 .component-notifications {
     left: 0;
     position: fixed;
-    width: $max-popup-width;
     z-index: 100000;
 
     &.topbar {
@@ -12,7 +11,7 @@
 
     &.sidebar {
         left: $spacer * 5;
-        width: calc(#{$max-popup-width} - #{$spacer * 5});
+        width: calc(100% - #{$spacer * 5});
     }
 
     .notification {
