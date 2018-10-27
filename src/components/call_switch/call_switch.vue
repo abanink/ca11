@@ -13,7 +13,10 @@
     </div>
 
     <!-- Create new Call button is visible when there are no new calls yet and we are not in an accepted call. -->
-    <div :data-tooltip="$t('setup new call').capitalize()" class="call new-call tooltip tooltip-left" v-if="callAccepted && newCallAllowed()" @click="createCall(false, false)">
+    <div v-if="callAccepted && newCallAllowed()"
+        class="call new-call tooltip tooltip-left"
+        @click="createCall(false, false)"
+        :data-tooltip="$t('setup new call').capitalize()">
         <icon name="dialpad"/>
     </div>
 

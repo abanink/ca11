@@ -11,11 +11,11 @@ module.exports = (app) => {
         },
         methods: Object.assign({
             callRecent: function(recent) {
-                if (recent.contact) {
-                    this.createCall(this.contacts[recent.contact].endpoints[recent.endpoint].number)
-                } else {
-                    this.createCall(recent.number)
-                }
+                let endpoint
+                if (recent.contact) endpoint = this.contacts[recent.contact].endpoints[recent.endpoint].number
+                else endpoint = recent.endpoint
+
+                app.emit('bg:calls:call_create', {callDescription: {endpoint, protocol: 'sip'}, start: true})
             },
             classes: function(block, modifier) {
                 let classes = {}

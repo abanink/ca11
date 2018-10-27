@@ -8,6 +8,5 @@ if (!global.Vue) {
 global.Raven = require('raven-js')
 // Specific to vendor_bg.js
 global.axios = require('axios')
-global.sdpTransform = require('sdp-transform')
 global.shortid = require('shortid')
 global.SIP = require('sip.js')

@@ -3,7 +3,7 @@
 
 // The default styling is against a white background. The
 // `call-ongoing` class is used to differentiate.
-.component-call-keypad {
+.component-call-keypad-touch {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -26,11 +26,16 @@
         position: relative;
 
         input {
-            background: transparent;
+            @include no-outline;
+            border: 0;
             color: $brand-color;
+            background: transparent;
             font-size: 1.8rem;
             font-weight: 500;
-            text-align: right;
+            height: $spacer * 6;
+            padding: 0 40px;
+            text-align: center;
+            width: 100%;
 
             &[disabled="disabled"] {
                 &::placeholder {
@@ -43,91 +48,36 @@
             }
         }
 
-        &.dense {
-            flex-direction: row;
-            margin-bottom: $spacer;
+        .correct {
+            color: $brand-accent-color;
+            position: absolute;
+            right: 10px;
 
-            input {
-                background: $white-color;
-                border: 1px solid $white;
-                border-radius: ($spacer / 2) 0 0 ($spacer / 2);
-                height: 40px;
-                padding-right: $spacer;
-                width: 200px;
-            }
-
-            // Transfer button next to input.
-            i {
-                background: $white-tint-color-light;
-                border: 1px solid $grey-color-lighter;
-                border-bottom-right-radius: $spacer / 2;
-                border-top-right-radius: $spacer / 2;
-                color: $grey-color;
-                height: $spacer * 5;
-                transition: all 300ms ease;
-                width: $spacer * 5;
+            &.disabled {
+                opacity: 0.5;
 
                 &:hover {
-                    background: $brand-color;
-                    color: $white-color;
-                    cursor: pointer;
-                }
-
-                &.disabled {
-                    background: $grey-color-lightest;
-                    border: 1px solid $grey-color-lighter;
-                    color: rgba($grey-color, 0.4);
                     cursor: not-allowed;
                 }
             }
 
-            & + .number-input-match {
-                color: $white;
-                height: $spacer * 3;
-                line-height: $spacer * 3;
+            svg {
+                height: 1.8rem;
+                width: 1.8rem;
+            }
+
+            &:hover {
+                cursor: pointer;
             }
         }
 
-        &.touch {
-            input {
-                @include no-outline;
-                border: 0;
-                height: $spacer * 6;
-                padding: 0 40px;
-                text-align: center;
-                width: 100%;
-            }
-
-            .correct {
-                color: $brand-accent-color;
-                position: absolute;
-                right: 10px;
-
-                &.disabled {
-                    opacity: 0.5;
-
-                    &:hover {
-                        cursor: not-allowed;
-                    }
-                }
-
-                svg {
-                    height: 1.8rem;
-                    width: 1.8rem;
-                }
-
-                &:hover {
-                    cursor: pointer;
-                }
-            }
-
-            & + .number-input-match {
-                color: $grey-color-darker;
-                height: $spacer * 5;
-                line-height: $spacer * 5;
-            }
+        & + .number-input-match {
+            color: $grey-color-darker;
+            height: $spacer * 5;
+            line-height: $spacer * 5;
         }
     }
+
 
     .keys {
         align-content: center;

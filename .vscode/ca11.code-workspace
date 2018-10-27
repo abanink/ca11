@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "../"
+		},
+		{
+			"path": "/home/jeroen/projects/vue-compiler"
+		},
+		{
+			"path": "/home/jeroen/projects/vue-compiler-gulp"
 		}
 	],
 	"settings": {

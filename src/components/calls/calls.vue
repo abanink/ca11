@@ -1,7 +1,8 @@
 <component class="component-calls" :class="classes('component')">
     <div v-if="activeCall" class="call-active">
         <div class="call-components">
-            <Call :call="activeCall"/>
+            <Call v-if="typeof activeCall === 'object'" :call="activeCall"/>
+            <CallKeypadTouch v-else :model.sync="call.endpoint" display="touch" mode="call" :endpoint="call.endpoint"/>
             <CallSwitch :call="activeCall"/>
         </div>
         <Soundmeter class="soundmeter"/>
@@ -21,7 +22,7 @@
         </div>
     </div>
     <div v-else>
-        <CallKeypad :model.sync="call.endpoint" display="touch" mode="call" :endpoint="call.endpoint"/>
+        <CallKeypadTouch :model.sync="call.endpoint" display="touch" mode="call" :endpoint="call.endpoint"/>
         <Soundmeter class="soundmeter"/>
     </div>
 </component>

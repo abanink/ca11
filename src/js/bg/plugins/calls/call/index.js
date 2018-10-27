@@ -62,9 +62,7 @@ class Call {
             keypad: {
                 active: false,
                 disabled: false,
-                display: 'touch', // 'dense' or 'touch'
                 endpoint: null,
-                mode: 'dtmf', // 'call' or 'dtmf'
             },
             mute: {
                 active: false,

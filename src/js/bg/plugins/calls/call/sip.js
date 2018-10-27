@@ -23,7 +23,6 @@ class CallSIP extends Call {
         if (callDescription.session) {
             // Passing in a session as target means an incoming call.
             app.__mergeDeep(this.state, {
-                keypad: {mode: 'dtmf'},
                 status: 'invite',
                 type: 'incoming',
             })
@@ -32,7 +31,6 @@ class CallSIP extends Call {
             // Passing in no target or a number means an outgoing call.
             app.__mergeDeep(this.state, {
                 endpoint: callDescription.endpoint,
-                keypad: {mode: 'call'},
                 status: 'new', type: 'outgoing',
             })
         }

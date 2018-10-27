@@ -31,7 +31,7 @@
                 <div class="name" v-if="activity.contact">
                     {{contacts[activity.contact].name}}
                 </div>
-                <div class="name" v-else>{{activity.number}}</div>
+                <div class="name" v-else>{{activity.endpoint}}</div>
                 <div class="description">{{activity.date | fuzzydate}}</div>
             </div>
             <div class="activity-label" v-if="activity.label">

@@ -77,6 +77,12 @@ module.exports = (app) => {
                 }
                 return allowed
             },
+            placeCall: function() {
+                // This method is also called on enter. The keypad may
+                // be in dtmf mode at that moment; block the call request.
+                if (!this.mode === 'call') return
+                app.emit('bg:calls:call_create', {callDescription: this.call, start: false, transfer: false})
+            },
         }, app.helpers.sharedMethods()),
         render: templates.call_switch.r,
         staticRenderFns: templates.call_switch.s,

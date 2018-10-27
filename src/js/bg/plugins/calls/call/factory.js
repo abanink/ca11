@@ -14,7 +14,7 @@ module.exports = function(app) {
         let call = null
         if (callDescription.protocol === 'sip') {
             call = new SipCall(app, callDescription, options)
-        } else if (call.protocol === 'sig11') {
+        } else if (callDescription.protocol === 'sig11') {
             call = new Sig11Call(app, callDescription, options)
         }
 

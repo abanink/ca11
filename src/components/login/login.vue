@@ -23,7 +23,7 @@
         <!-- Only show the username field with a 'new' session. -->
         <Field name="username" type="text" autocomplete="off"
             :autofocus="true" :label="$t('your screen name')" :model.sync="user.username"
-            :placeholder="$t('your screen name on the {name} network', {name: vendor.name})"
+            :placeholder="$t('your screen name on the SIG11 network')"
             :validation="$v.user.username"/>
 
         <Field name="password" type="password"

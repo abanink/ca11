@@ -61,11 +61,11 @@
             </div>
         </div>
         <div class="transfer-text cf">{{$t('select a transfer recipient')}}:</div>
-        <CallKeypad :model.sync="call.keypad.endpoint" display="dense" mode="call" :number="call.keypad.endpoint"/>
+        <CallKeypadInput :model.sync="call.keypad.endpoint" mode="call" :endpoint="call.keypad.endpoint"/>
     </div>
     <!-- Show attended/blind transfer option and a dense keypad when transfer is active and the call is still active -->
     <div class="new-call" v-if="call.status === 'new' || call.keypad.active">
-        <CallKeypad :model.sync="call.keypad.endpoint" :display="call.keypad.display" :mode="call.keypad.mode" :number="call.keypad.endpoint"/>
+        <CallKeypadTouch :model.sync="call.keypad.endpoint" mode="dtmf" :call="call" :endpoint="call.keypad.endpoint"/>
     </div>
 
     <div class="call-actions" v-if="!call.hangup.disabled">

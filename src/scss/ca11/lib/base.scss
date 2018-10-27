@@ -6,6 +6,8 @@ body {
     padding: 0;
     zoom: 1;
 
+    width: $max-popup-width;
+
     &.extension {
         width: $max-popup-width;
     }

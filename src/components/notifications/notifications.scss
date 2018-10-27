@@ -11,7 +11,7 @@
 
     &.sidebar {
         left: $spacer * 5;
-        width: calc(100% - #{$spacer * 5});
+        width: calc(#{$max-popup-width} - #{$spacer * 5});
     }
 
     .notification {

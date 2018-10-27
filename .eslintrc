@@ -27,7 +27,6 @@
         "$": true,
         "$$": true,
         "shortid": true,
-        "sdpTransform": true,
         "templates": true,
         "Vue": true,
         "VueRouter": true,

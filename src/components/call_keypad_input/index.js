@@ -19,7 +19,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const CallKeypad = {
+    const CallKeypadInput = {
         computed: Object.assign({
             matchedContact: function() {
                 let _number = String(this.endpoint)
@@ -56,17 +56,7 @@ module.exports = (app) => {
             inputChange: function(newVal) {
                 this.$emit('update:model', newVal)
             },
-            placeCall: function() {
-                if (this.mode === 'call') {
-                    app.emit('bg:calls:call_create', {callDescription: this.call, start: true, transfer: false})
-                }
-            },
             pressKey: function(key) {
-                if (!key) {
-                    // No key pressed. Stop playing sound.
-                    window.setTimeout(() => app.sounds.dtmfTone.stop(), 50)
-                    return
-                }
                 if (!allowedKeys.includes(key)) return
                 app.sounds.dtmfTone.play(key)
                 // Force stop playing dtmf sound after x amount of time,
@@ -76,34 +66,37 @@ module.exports = (app) => {
 
                 let newVal = app.utils.sanitizeNumber(`${this.endpoint}${key}`)
                 if (newVal) this.$emit('update:model', newVal)
-                if (this.mode === 'dtmf') app.emit('bg:calls:dtmf', {callId: this.call.id, key})
             },
             removeLastNumber: function() {
                 if (this.callingDisabled) return
                 if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
             },
+            setupCall: function() {
+                app.emit('bg:calls:call_create', {callDescription: {
+                    endpoint: this.endpoint,
+                    protocol: 'sip',
+                }, start: true, transfer: false})
+            },
+            unpressKey: function() {
+                // No key pressed. Stop playing sound.
+                window.setTimeout(() => app.sounds.dtmfTone.stop(), 50)
+            }
         }, app.helpers.sharedMethods()),
         mounted: function() {
-            // Focus the input element directly.
-            if (!this.callingDisabled) {
-                this.$refs.input.focus()
-            }
+            this.$refs.input.focus()
         },
         props: {
-            display: {default: 'expanded', type: String},
-            dtmf: {default: false, type: Boolean},
             endpoint: {default: '', type: String},
             mode: {default: 'call', type: String},
             search: {default: true, type: Boolean},
         },
-        render: templates.call_keypad.r,
-        staticRenderFns: templates.call_keypad.s,
+        render: templates.call_keypad_input.r,
+        staticRenderFns: templates.call_keypad_input.s,
         store: {
-            call: 'calls.call',
+            callDescription: 'calls.call',
             contacts: 'contacts.contacts',
             sig11: 'calls.sig11',
             sip: 'calls.sip',
-            user: 'user',
         },
         watch: {
             'call.protocol': function(protocol) {
@@ -112,7 +105,7 @@ module.exports = (app) => {
             endpoint: function(endpoint) {
                 if (this.callingDisabled) return
                 let cleanedNumber = endpoint
-                if (this.call.protocol === 'sip') {
+                if (this.callDescription.protocol === 'sip') {
                     cleanedNumber = app.utils.sanitizeNumber(endpoint)
                 }
                 this.$emit('update:model', cleanedNumber)
@@ -120,5 +113,5 @@ module.exports = (app) => {
         },
     }
 
-    return CallKeypad
+    return CallKeypadInput
 }

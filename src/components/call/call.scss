@@ -157,7 +157,7 @@
 
             .transfer-button {
                 background: $white-color;
-                border: 2px solid $white;
+                border: 2px solid darken($grey-color-lightest, 5%);
                 border-radius: $spacer / 2;
                 color: $grey-color-dark;
                 font-size: 0.8rem;
@@ -170,11 +170,12 @@
 
                 &.active,
                 &:hover {
-                    color: $brand-color;
                     cursor: pointer;
                 }
 
                 &.active {
+                    border: 2px solid $brand-color;
+                    color: $brand-color;
                     cursor: default;
                 }
 

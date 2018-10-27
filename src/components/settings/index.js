@@ -17,7 +17,8 @@ module.exports = (app) => {
             },
             save: function(e) {
                 let settings = app.utils.copyObject(this.settings)
-                app.setState({
+
+                let settingsState = {
                     availability: {dnd: false},
                     calls: {
                         sip: {
@@ -30,7 +31,14 @@ module.exports = (app) => {
                     },
                     language: this.language,
                     settings,
-                }, {persist: true})
+                }
+
+                // Disable SIP as selected call protocol when it is disabled.
+                if (!this.calls.sip.enabled && this.calls.call.protocol === 'sip') {
+                    settingsState.calls.call = {protocol: 'sig11'}
+                }
+
+                app.setState(settingsState, {persist: true})
                 app.emit('bg:calls:connect')
 
                 // Update the vault settings.

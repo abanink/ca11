@@ -1,0 +1,84 @@
+@import "ca11/lib/variables";
+@import "ca11/lib/mixins";
+
+// The default styling is against a white background. The
+// `call-ongoing` class is used to differentiate.
+.component-call-keypad-input {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    z-index: 1000000;
+
+    .number-input {
+        align-items: center;
+        color: $primary-color;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: $spacer;
+        max-width: 300px;
+        position: relative;
+
+        input {
+            background: $white-color;
+            border: 1px solid $white;
+            border-radius: ($spacer / 2) 0 0 ($spacer / 2);
+            color: $primary-color;
+            font-size: 1.8rem;
+            font-weight: 500;
+            height: 40px;
+            padding-right: $spacer;
+            text-align: right;
+            width: 200px;
+
+            &[disabled="disabled"] {
+                &::placeholder {
+                    color: $grey-color-light;
+                }
+            }
+
+            &::placeholder {
+                color: $grey-color;
+            }
+        }
+
+        // Transfer button next to input.
+        i {
+            background: $white-tint-color-light;
+            border: 1px solid $grey-color-lighter;
+            border-bottom-right-radius: $spacer / 2;
+            border-top-right-radius: $spacer / 2;
+            color: $grey-color;
+            height: $spacer * 5;
+            transition: all 300ms ease;
+            width: $spacer * 5;
+
+            &:hover {
+                background: $brand-color;
+                color: $white-color;
+                cursor: pointer;
+            }
+
+            &.disabled {
+                background: $grey-color-lightest;
+                border: 1px solid $grey-color-lighter;
+                color: rgba($grey-color, 0.4);
+                cursor: not-allowed;
+            }
+        }
+
+        & + .number-input-match {
+            color: $white;
+            height: $spacer * 3;
+            line-height: $spacer * 3;
+        }
+    }
+
+    .contacts-match {
+        color: $primary-color;
+        font-weight: 500;
+        height: $spacer * 3;
+        text-align: center;
+    }
+}
