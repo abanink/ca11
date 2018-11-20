@@ -20,12 +20,11 @@ const Network = require('./network')
 */
 class Sig11 {
 
-    constructor() {
+    constructor(settings) {
         process.title = 'sig11'
-        this.settings = require('../../../tools/settings')(__dirname)
+        this.settings = settings
 
         this.network = new Network()
-        this.startService()
     }
 
 
@@ -55,7 +54,7 @@ class Sig11 {
     }
 
 
-    onRequest(message) {
+    onRequest(request) {
         var connection = request.accept(null, request.origin)
         // This is the most important callback for us, we'll handle
         // all messages from users here.
@@ -67,7 +66,7 @@ class Sig11 {
     }
 
 
-    async startService() {
+    async start() {
         const app = connect()
 
         app.use(serveStatic(this.settings.BUILD_DIR))
@@ -89,6 +88,7 @@ class Sig11 {
 }
 
 
-let settings = require('../../../tools/settings')(__dirname, null, false)
+let settings = require('../../../gulp/settings')(__dirname)
 
 const server = new Sig11(settings)
+server.start()

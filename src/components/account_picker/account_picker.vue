@@ -16,7 +16,6 @@
             <span class="icon is-small"><icon name="refresh"/></span>
         </button>
 
-        <!-- This component must be provided by a `vjs-addon-availability-*` module. -->
         <AccountPickerInstructions slot="select-after"/>
     </Field>
 </component>

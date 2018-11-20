@@ -17,7 +17,7 @@ const notify = require('gulp-notify')
 const size = require('gulp-size')
 const svgo = require('gulp-svgo')
 const template = require('gulp-template')
-const vueCompiler = require('@vialer/vue-compiler-gulp')
+const vueCompiler = require('@garage11/vue-compiler-gulp')
 
 let tasks = {}
 

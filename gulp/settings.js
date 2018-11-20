@@ -44,13 +44,13 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
         SRC_DIR: path.join(projectDir, 'src'),
     }
 
-    // Mix Vialer-js config file(~/.vialer-jsrc)
-    // in settings and apply overrides.
-    rc('vialer-js', settings)
+    // Mix config file in settings and apply overrides.
+    rc('ca11', settings)
+
     Object.assign(settings, overrides)
 
     // Setup directory config.
-    settings.BRAND_TARGET = argv.brand ? argv.brand : process.env.BRAND ? process.env.BRAND : 'bologna'
+    settings.BRAND_TARGET = argv.brand ? argv.brand : process.env.BRAND ? process.env.BRAND : 'ca11'
     settings.BRAND_TARGETS = Object.keys(settings.brands)
     settings.BUILD_ROOT_DIR = path.join(settings.BASE_DIR, 'build')
 

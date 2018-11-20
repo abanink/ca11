@@ -85,7 +85,6 @@ module.exports = function(settings) {
 
     helpers.envify = function(brand) {
         return envify({
-            ANALYTICS_ID: brand.telemetry.analytics_id[settings.BUILD_TARGET],
             APP_NAME: brand.name.production,
             BRAND_TARGET: settings.BRAND_TARGET,
 
@@ -93,17 +92,14 @@ module.exports = function(settings) {
             BUILTIN_AVAILABILITY_ADDONS: brand.plugins.builtin.availability.addons,
             BUILTIN_CONTACTS_I18N: brand.plugins.builtin.contacts.i18n,
             BUILTIN_CONTACTS_PROVIDERS: brand.plugins.builtin.contacts.providers,
-            BUILTIN_USER_ADAPTER: brand.plugins.builtin.user.adapter,
-            BUILTIN_USER_I18N: brand.plugins.builtin.user.i18n,
             CUSTOM_MOD: brand.plugins.custom,
 
             NODE_ENV: settings.NODE_ENV,
             PLATFORM_URL: brand.permissions,
-            PORTAL_NAME: brand.vendor.portal.name,
-            PORTAL_URL: brand.vendor.portal.url,
             PUBLISH_CHANNEL: settings.PUBLISH_CHANNEL,
             SENTRY_DSN: brand.telemetry.sentry.dsn,
-            SIP_ENDPOINT: brand.sip_endpoint,
+            SIG11_ENDPOINT: brand.sig11.endpoint,
+            SIP_ENDPOINT: brand.sip.endpoint,
             STUN: brand.stun,
 
             VENDOR_NAME: brand.vendor.name,
@@ -154,8 +150,8 @@ module.exports = function(settings) {
 
     /**
      * Allow cleaner imports by rewriting commonjs require.
-     *   From: "vialer-js/bg/plugins/user/adapter"
-     *   To: "vialer-js/src/js/bg/plugins/user/adapter"
+     *   From: "ca11/bg/plugins/user/adapter"
+     *   To: "ca11/src/js/bg/plugins/user/adapter"
      *
      * Within the node runtime, the same kind of aliasing is applied
      * using module-alias. See `package.json` for the alias definition.
@@ -163,10 +159,10 @@ module.exports = function(settings) {
      */
     helpers.transform = function(bundler) {
         bundler.transform({global: true}, function(file, opts) {
-            // Do a negative look-ahead to exclude matches that contain `vialer-js/src`.
-            const aliasMatch = /(require\('vialer-js)(?!.*src)./g
+            // Do a negative look-ahead to exclude matches that contain `ca11/src`.
+            const aliasMatch = /(require\('ca11)(?!.*src)./g
             return through(function(buf, enc, next) {
-                this.push(buf.toString('utf8').replace(aliasMatch, 'require(\'vialer-js/src/js/'))
+                this.push(buf.toString('utf8').replace(aliasMatch, 'require(\'ca11/src/js/'))
                 next()
             })
         })

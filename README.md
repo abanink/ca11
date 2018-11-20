@@ -61,4 +61,4 @@ Great! Nice to have you interested in this project. Head over to the [quickstart
 to learn more about how to work with Ca11. Are you interested in contributing or
 would you like to see some feature implemented? Please read our [code of conduct](https://github.com/garage11/ca11/blob/develop/.github/CODE_OF_CONDUCT.md)
 and [contributing guide](https://github.com/garage11/ca11/blob/develop/.github/CONTRIBUTING.md) first.
-Have any non-technical questions? Feel free to [contact us](mailto:info@ca11.io).
+Have any non-technical questions? Feel free to [contact us](mailto:jeroen@garage11.tech).

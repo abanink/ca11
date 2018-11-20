@@ -19,7 +19,7 @@
 
 <pre v-highlightjs><code class="bash"># --ignore-certificate-errors may be useful in certain cases as well.
 chromium --disable-web-security --user-data-dir=~/.chromium-temp
-# Visit localhost:8999 to see the built webview.
+# Visit localhost:3000 to see the built webview.
 </code></pre>
 
     <h2>Build targets</h2>

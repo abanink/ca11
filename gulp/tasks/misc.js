@@ -6,6 +6,7 @@ const path = require('path')
 const connect = require('connect')
 const del = require('del')
 const gulp = require('gulp')
+const nodemon = require('gulp-nodemon')
 const mkdirp = promisify(require('mkdirp'))
 const livereload = require('gulp-livereload')
 const logger = require('gulplog')
@@ -29,7 +30,32 @@ module.exports = function(settings) {
     }
 
 
-    helpers.serveHttp = function({reload = true, mounts = [], port = 8999} = {}) {
+    helpers.serveSig11 = function() {
+        logger.info('Starting SIG11 service')
+        let _nodemon = nodemon({
+            env: {NODE_ENV: settings.NODE_ENV},
+            exec: 'node --inspect',
+            ext: 'js',
+            // Reloads are triggered manually from the appropriate tasks.
+            ignore: [
+                '*.js',
+            ],
+            restartable: true,
+            script: path.join(settings.SRC_DIR, 'js', 'sig11', 'index.js'),
+        })
+
+        _nodemon.on('crash', function() {
+            console.error('Application has crashed!\n Trying to restart in 3 seconds...\n')
+            _nodemon.emit('restart', 3)
+        })
+
+        _nodemon.on('start:child', function() {
+            livereload.changed('app.js')
+        })
+    }
+
+
+    helpers.serveHttp = function({reload = true, mounts = [], port = 3000} = {}) {
         const app = connect()
         app.use(serveStatic(settings.BUILD_DIR))
         app.use((req, res, next) => {
@@ -60,8 +86,8 @@ module.exports = function(settings) {
 
 
     /**
-    * Read the manifest file base and augment it from
-    * the Vialer-js build configuration.
+    * Read the manifest file base and augment it
+    * from the build configuration.
     */
     tasks.manifest = async function miscManifest() {
         const brand = settings.brands[settings.BRAND_TARGET]
@@ -103,8 +129,8 @@ module.exports = function(settings) {
 
     /**
      * Watches files and execute tasks on changes.
-     * Modules starting with `vjs-*` are watched when
-     * they are on the same directory level as vialer-js.
+     * Modules starting with `ca11-*` are watched when
+     * they are on the same directory level.
      * This is due to a Chokidar issue that prevents
      * watching symlinked directories.
      */
@@ -116,6 +142,7 @@ module.exports = function(settings) {
         const test = require('./test')(settings)
 
         helpers.serveHttp()
+        helpers.serveSig11()
 
         if (settings.BUILD_TARGET === 'node') {
             // Node development doesn't have transpilation.
@@ -139,7 +166,7 @@ module.exports = function(settings) {
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'js', 'i18n', '*.js'),
-            path.join(settings.ROOT_DIR, '../', 'vjs-*', 'src', 'js', 'i18n', '*.js'),
+            path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', 'js', 'i18n', '*.js'),
         ], gulp.series(code.tasks.appI18n, helpers.reload('app_i18n.js')))
 
 
@@ -161,19 +188,12 @@ module.exports = function(settings) {
         ], gulp.series(code.tasks.appFg, helpers.reload('app_fg.js')))
 
         gulp.watch([
-            path.join(settings.ROOT_DIR, '../', 'vjs-*', 'src', '**', '*.js'),
+            path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', '**', '*.js'),
         ], gulp.series(
             gulp.parallel(code.tasks.appI18n, code.tasks.appBg, code.tasks.appFg),
             code.tasks.plugins,
             helpers.reload('app_fg_plugins.js'),
         ))
-
-        if (settings.BUILD_WEBEXTENSION.includes(settings.BUILD_TARGET)) {
-            gulp.watch([
-                path.join(settings.SRC_DIR, 'js', 'observer', '**', '*.js'),
-                path.join(settings.SRC_DIR, 'js', 'lib', '**', '*.js'),
-            ], gulp.series(code.tasks.appObserver, helpers.reload('app_observer.js')))
-        }
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'js', 'bg', 'vendor.js'),
@@ -188,25 +208,18 @@ module.exports = function(settings) {
         gulp.watch([
             path.join(settings.SRC_DIR, 'scss', '**', '*.scss'),
             path.join(settings.SRC_DIR, 'components', '**', '*.scss'),
-            path.join(settings.ROOT_DIR, '../', 'vjs-*', 'src', 'components', '**', '*.scss'),
-            `!${path.join(settings.SRC_DIR, 'scss', 'vialer-js', 'observer.scss')}`,
-            `!${path.join(settings.SRC_DIR, 'scss', 'vialer-js', 'vendor.scss')}`,
+            path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', 'components', '**', '*.scss'),
+            `!${path.join(settings.SRC_DIR, 'scss', 'ca11', 'vendor.scss')}`,
         ], {followSymlinks: true}, gulp.series(styles.tasks.app, helpers.reload('app.css')))
 
-
         gulp.watch([
-            path.join(settings.SRC_DIR, 'scss', 'vialer-js', 'observer.scss'),
-        ], gulp.series(styles.tasks.observer, helpers.reload('observer.css')))
-
-
-        gulp.watch([
-            path.join(settings.SRC_DIR, 'scss', 'vialer-js', 'vendor.scss'),
+            path.join(settings.SRC_DIR, 'scss', 'ca11', 'vendor.scss'),
         ], gulp.series(styles.tasks.vendor, helpers.reload('vendor.css')))
 
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'components', '**', '*.vue'),
-            path.join(settings.ROOT_DIR, '../', 'vjs-*', 'src', 'components', '**', '*.vue'),
+            path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', 'components', '**', '*.vue'),
         ], gulp.series(assets.tasks.templates, helpers.reload('templates.js')))
 
 

@@ -95,7 +95,7 @@ module.exports = function(settings) {
     tasks.lint = function testLint(done) {
         const jsFilter = filter('**/*.js', {restore: true})
         const scssFilter = filter('**/*.scss', {restore: true})
-        const secretsFilter = filter('**/.vialer-jsrc*', {restore: true})
+        const secretsFilter = filter('**/.ca11rc*', {restore: true})
 
         return gulp.src([
             'gulpfile.js',
@@ -103,7 +103,7 @@ module.exports = function(settings) {
             'test/**/*.js',
             'tools/**/*.js',
             path.join(settings.SRC_DIR, '**', '*.scss'),
-            '.vialer-jsrc*',
+            '.ca11rc*',
         ])
             .pipe(jsFilter)
             .pipe(eslint())

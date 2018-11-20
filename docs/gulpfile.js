@@ -38,7 +38,7 @@ tasks.files = assets.tasks.files
 
 
 tasks.screens = function screens(done) {
-    logger.info('Generating Vialer-js screens; use gulp -LLLL to show process output')
+    logger.info('Generating screenshots; use gulp -LLLL to show process output')
     const childProcess = spawn('gulp test-browser', {
         cwd: settings.ROOT_DIR,
         env: Object.assign({
@@ -124,7 +124,7 @@ tasks.watch = function watchProject() {
     ], gulp.series(tasks.stylesApp))
 
     gulp.watch([
-        // Watch for changes from Vialer-js App code.
+        // Watch for changes from App code.
         path.join(settings.ROOT_DIR, 'src', 'js', '**', '*.js'),
         path.join(settings.SRC_DIR, 'components', '**', '*.js'),
         path.join(settings.SRC_DIR, 'js', '**', '*.js'),

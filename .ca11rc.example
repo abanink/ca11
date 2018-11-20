@@ -34,7 +34,7 @@ json{
             },
             "permissions": "",
             "sig11": {
-                "endpoint": "ws://localhost:9001"
+                "endpoint": "ws://localhost:8080"
             },
             "sip": {
                 "endpoint": ""
@@ -89,7 +89,7 @@ json{
                     "password": ""
                 },
                 "headless": false,
-                "port": 8999
+                "port": 3000
             },
             "theme": "@garage11/ca11-theme-default",
             "vendor": {

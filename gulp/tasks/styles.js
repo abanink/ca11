@@ -30,7 +30,7 @@ module.exports = function(settings) {
         let includePaths = [
             settings.NODE_DIR,
             // Use a directory up to the project directory,
-            // because we want to expose vialer-js as an import
+            // because we want to expose ca11 as an import
             // prefix in project-related SCSS files.
             path.join(settings.ROOT_DIR, 'src', 'scss'),
         ]
@@ -89,15 +89,7 @@ module.exports = function(settings) {
         return helpers.compile({
             addons,
             debug: !settings.BUILD_OPTIMIZED,
-            entry: './src/scss/vialer-js/app.scss',
-        })
-    }
-
-
-    tasks.observer = function stylesObserver() {
-        return helpers.compile({
-            debug: !settings.BUILD_OPTIMIZED,
-            entry: './src/scss/vialer-js/observer.scss',
+            entry: './src/scss/ca11/app.scss',
         })
     }
 
@@ -105,7 +97,7 @@ module.exports = function(settings) {
     tasks.vendor = function stylesVendor() {
         return helpers.compile({
             debug: false,
-            entry: './src/scss/vialer-js/vendor.scss',
+            entry: './src/scss/ca11/vendor.scss',
         })
     }
 
