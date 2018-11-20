@@ -79,6 +79,8 @@ module.exports = (app) => {
                 // be in dtmf mode at that moment; block the call request.
                 if (!this.mode === 'call') return
                 app.emit('bg:calls:call_create', {callDescription: this.callDescription, start: true, transfer: false})
+                // Clean up the number so it is gone when the keypad reappears after the call.
+                this.callDescription.endpoint = ''
             },
             unpressKey: function() {
                 // No key pressed. Stop playing sound.

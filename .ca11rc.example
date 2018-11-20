@@ -91,6 +91,7 @@ json{
                 "headless": false,
                 "port": 8999
             },
+            "theme": "@garage11/ca11-theme-default",
             "vendor": {
                 "name": "Ca11",
                 "support": {
