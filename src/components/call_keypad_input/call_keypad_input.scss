@@ -1,5 +1,5 @@
-@import "ca11/lib/variables";
-@import "ca11/lib/mixins";
+@import 'ca11/lib/variables';
+@import 'ca11/lib/mixins';
 
 // The default styling is against a white background. The
 // `call-ongoing` class is used to differentiate.
@@ -32,7 +32,7 @@
             text-align: right;
             width: 200px;
 
-            &[disabled="disabled"] {
+            &[disabled='disabled'] {
                 &::placeholder {
                     color: $grey-color-light;
                 }
@@ -68,7 +68,7 @@
             }
         }
 
-        & + .number-input-match {
+        + .number-input-match {
             color: $white;
             height: $spacer * 3;
             line-height: $spacer * 3;

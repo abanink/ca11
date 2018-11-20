@@ -1,5 +1,5 @@
-@import "ca11/lib/variables";
-@import "ca11/lib/mixins";
+@import 'ca11/lib/variables';
+@import 'ca11/lib/mixins';
 
 .component-calls {
     // Push the soundmeter to the bottom.
@@ -13,9 +13,9 @@
     .call-type {
         align-items: center;
         display: flex;
+        font-weight: bold;
         justify-content: center;
         text-align: center;
-        font-weight: bold;
 
         strong {
             font-weight: bold;

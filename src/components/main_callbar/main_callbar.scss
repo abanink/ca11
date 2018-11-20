@@ -1,5 +1,5 @@
-@import "ca11/lib/mixins";
-@import "ca11/lib/variables";
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
 
 // The most upper box containing account info and
 // icon-links to several locations.
@@ -21,7 +21,7 @@
     }
 
 
-    [class^="icon-"] {
+    [class^='icon-'] {
         color: $brand-color;
         &:hover {color: $brand-color;}
     }

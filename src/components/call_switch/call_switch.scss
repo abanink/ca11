@@ -1,5 +1,5 @@
-@import "ca11/lib/mixins";
-@import "ca11/lib/variables";
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
 
 
 // The most upper box containing account info and
@@ -32,7 +32,7 @@
         }
 
         &.hint {
-            @include animation("hint-pulse 1s infinite ease-in-out");
+            @include animation('hint-pulse 1s infinite ease-in-out');
         }
 
         // An existing call object with status `new`.
@@ -70,7 +70,7 @@
         &.state-hangup {
             background: $red-color;
 
-            svg {fill: $white-color}
+            svg {fill: $white-color;}
         }
     }
 }

@@ -6,7 +6,7 @@
 *
 * Modified to fit in the CA11 theme.
 */
-@import "ca11/lib/variables";
+@import 'ca11/lib/variables';
 
 $size-unit: em !default;
 $em-base: 16 !default;
@@ -20,9 +20,9 @@ $em-base: 16 !default;
     }
 }
 
-@import "css-toggle-switch/src/core/functions";
-@import "css-toggle-switch/src/core/shared";
-@import "css-toggle-switch/src/core/toggle";
+@import 'css-toggle-switch/src/core/functions';
+@import 'css-toggle-switch/src/core/shared';
+@import 'css-toggle-switch/src/core/toggle';
 
 
 .switch-toggle {
@@ -34,11 +34,11 @@ $em-base: 16 !default;
     input {
         display: none;
 
-        & + label {
+        + label {
             border-radius: $spacer * 5;
+            margin: 0;
             min-width: 55px;
             padding: 0;
-            margin: 0;
             user-select: none;
 
             &:hover {
@@ -47,7 +47,7 @@ $em-base: 16 !default;
         }
 
         &:checked {
-            & + label {
+            + label {
                 background-color: $brand-accent-color;
                 color: $white-color;
             }
@@ -71,7 +71,7 @@ $em-base: 16 !default;
         border-radius: 100%;
         left: 0;
         top: 0;
-        transition: all .2s ease-out;
+        transition: all 0.2s ease-out;
     }
 
     label {

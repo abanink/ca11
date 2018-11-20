@@ -1,12 +1,13 @@
-@import "ca11/lib/mixins";
-@import "ca11/lib/variables";
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
 
 
 .component-main {
+    border-top: $spacer / 2 solid $brand-color;
     position: relative;
 
     .overlay {
-        animation: grow .3s ease-in-out;
+        animation: grow 0.3s ease-in-out;
         background: $white;
         height: 100vh;
         position: absolute;

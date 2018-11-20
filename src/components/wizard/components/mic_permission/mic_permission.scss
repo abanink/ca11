@@ -1,8 +1,7 @@
-@import "ca11/lib/mixins";
-@import "ca11/lib/variables";
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
 
 .component-wizard-mic-permission {
-
     .component-mic-permission {
         margin-bottom: $spacer;
         margin-top: $spacer * 2;
