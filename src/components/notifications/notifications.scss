@@ -1,5 +1,14 @@
 @import 'ca11/lib/variables';
 
+.extension {
+    .component-notifications {
+        &.sidebar {
+            left: $spacer * 5;
+            width: calc(#{$max-popup-width} - #{$spacer * 5});
+        }
+    }
+}
+
 .component-notifications {
     left: 0;
     position: fixed;
@@ -11,14 +20,14 @@
 
     &.sidebar {
         left: $spacer * 5;
-        width: calc(#{$max-popup-width} - #{$spacer * 5});
+        width: calc(100% - #{$spacer * 5});
     }
 
     .notification {
         align-items: center;
         background: $grey-color-lightest;
         border-radius: 0;
-        border-top: 2px solid $brand-accent-color;
+        border-top: 2px solid $grey-color-light;
         color: $grey-color-dark;
         display: flex;
         flex-direction: row;

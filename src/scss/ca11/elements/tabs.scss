@@ -21,6 +21,10 @@
             a {
                 border-bottom-width: 2px;
                 height: auto;
+
+                svg {
+                    @include icon-size($spacer * 5);
+                }
             }
         }
     }

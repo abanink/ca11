@@ -37,13 +37,13 @@
 
             &.success {
                 &::after {
-                    background: $green-color;
+                    background: $grey-color-darker;
                 }
             }
 
             &.warning {
                 &::after {
-                    background: $red-color;
+                    background: $grey-color-lightest;
                 }
             }
 

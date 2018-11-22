@@ -2,7 +2,8 @@
 @import 'ca11/lib/variables';
 
 .component-main-menubar {
-    background: $grey-color-darkest;
+    background: $grey-color-lightest;
+    border-bottom: 2px solid $brand-color;
 
     .options {
         // Keeps the menubar icons from scrolling with the main content.
@@ -11,8 +12,8 @@
 
         .option {
             align-items: center;
-            background: $grey-color-darkest;
-            color: $white;
+            background: $grey-color-lightest;
+            color: $grey-color-darker;
             display: flex;
             flex-direction: column;
             height: $spacer * 7;

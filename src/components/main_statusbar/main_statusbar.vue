@@ -12,20 +12,20 @@
         </div>
 
         <div class="status-indicator sip tooltip tooltip-right" :data-tooltip="tooltipSip">
-            <icon name="dialer_sip" v-if="!sip.enabled" class="disabled"/>
+            <icon name="phone-sip" v-if="!sip.enabled" class="disabled"/>
             <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
             <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
             <icon name="dnd" v-else-if="dnd"/>
             <icon name="spinner" v-else-if="sip.status === 'loading'" class="spinner"/>
 
-            <icon name="dialer_sip" v-else/>
+            <icon name="phone-sip" v-else/>
         </div>
     </div>
 
 
     <div class="menu-options">
         <div class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
-            <icon class="settings" name="user"/>
+            <icon class="settings" name="settings"/>
         </div>
 
         <!-- Popout link in WebExtension -->

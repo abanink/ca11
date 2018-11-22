@@ -3,7 +3,7 @@
 
 
 .component-main {
-    border-top: $spacer / 2 solid $brand-color;
+    border-top: $spacer / 4 solid $brand-color;
     position: relative;
 
     .overlay {
@@ -29,7 +29,7 @@
     .app-view {
         display: flex;
         flex-direction: column;
-        max-height: $max-popup-height;
+        // max-height: $max-popup-height;
 
         .app-view-top {
             min-height: $spacer * 5;
@@ -37,6 +37,7 @@
 
         .app-view-main {
             align-content: stretch;
+            border-top: 4px solid $grey-color-lighter;
             display: flex;
             flex-direction: row;
             // Show a scrollbar when the content height exceeds the max-height.
@@ -56,14 +57,15 @@
 
                 h1 {
                     color: $brand-color;
-                    font-size: 1rem;
-                    font-weight: 500;
-                    margin-bottom: $spacer * 2;
+                    font-size: 1.3rem;
+                    font-weight: 600;
                 }
 
                 header {
                     .header-line {
                         display: flex;
+                        font-family: 'Rajdhani';
+                        font-weight: 600 !important;
                     }
                 }
             }

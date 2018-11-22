@@ -1,7 +1,7 @@
 <component class="component-main-callbar" :class="{inactive: call.status === 'new'}">
     <div class="status-left">
         <span class="status-indicator">
-            <icon v-if="call.protocol === 'sip'" class="vendor-logo" name="dialer_sip"/>
+            <icon v-if="call.protocol === 'sip'" class="vendor-logo" name="phone-sip"/>
             <icon v-else-if="call.protocol === 'sig11'" class="vendor-logo" name="sig11"/>
         </span>
     </div>

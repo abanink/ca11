@@ -19,7 +19,9 @@
         margin-bottom: 0;
     }
 
-    .label {
+    label {
+        font-family: 'Rajdhani';
+        font-weight: 600;
         width: 100%;
 
         &:not(:last-child) {
@@ -228,13 +230,9 @@
 
 
 .switch[type='checkbox'] {
-    + label {
-        font-weight: 500;
-    }
-
     &:checked + label {
         &::before {
-            background: $brand-accent-color;
+            background: $brand-color;
         }
     }
 }

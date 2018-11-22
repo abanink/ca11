@@ -45,7 +45,7 @@
         </div>
 
         <div class="no-results-indicator" v-else-if="!filteredContacts.length">
-            <div><icon name="softphone"/></div>
+            <div><icon name="contacts"/></div>
             <div class="text cf">{{$t('no {target}', {target: $t('contacts')})}}...</div>
         </div>
 

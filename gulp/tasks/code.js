@@ -192,12 +192,6 @@ module.exports = function(settings) {
     }
 
 
-    tasks.appObserver = async function codeAppObserver(done) {
-        await helpers.compile({entry: './src/js/observer/index.js', name: 'app_observer'})
-        done()
-    }
-
-
     tasks.plugins = function codeAppPlugins(done) {
         const builtin = settings.brands[settings.BRAND_TARGET].plugins.builtin
         const custom = settings.brands[settings.BRAND_TARGET].plugins.custom

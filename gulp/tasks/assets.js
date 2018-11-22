@@ -33,6 +33,7 @@ module.exports = function(settings) {
         const robotoPath = path.join(settings.NODE_DIR, 'roboto-fontface', 'fonts', 'roboto')
         return gulp.src(path.join(robotoPath, '{Roboto-Light.woff2,Roboto-Regular.woff2,Roboto-Medium.woff2}'))
             .pipe(flatten({newPath: './fonts'}))
+            .pipe(addsrc(path.join(settings.THEME_DIR, 'fonts', '*.woff2'), {base: settings.THEME_DIR}))
             .pipe(addsrc(path.join(settings.THEME_DIR, 'img', '{*.icns,*.png,*.jpg,*.gif}'), {base: settings.THEME_DIR}))
             .pipe(addsrc(path.join(settings.THEME_DIR, 'ringtones', '*'), {base: settings.THEME_DIR}))
             .pipe(ifElse(settings.BUILD_OPTIMIZED, imagemin))

@@ -58,6 +58,14 @@ function env({section}) {
         _env.name = 'node'
     }
 
+    try {
+        if ((chrome && chrome.extension) || (browser && browser.extension)) {
+            _env.isExtension = true
+        }
+    } catch (e) {
+        // Catch reference errors.
+    }
+
     if (global.navigator) {
         _env.isBrowser = true
 
@@ -81,14 +89,6 @@ function env({section}) {
             if (_env.isFirefox) $('html').classList.add('firefox')
             if (_env.isExtension) $('html').classList.add('extension')
         }
-    }
-
-    try {
-        if ((chrome && chrome.extension) || (browser && browser.extension)) {
-            _env.isExtension = true
-        }
-    } catch (e) {
-        // Catch reference errors.
     }
 
     try {

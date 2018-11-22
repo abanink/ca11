@@ -43,9 +43,8 @@ gulp.task('code', (done) => {
     ]
     if (settings.BUILD_TARGET === 'electron') {
         runTasks.push(code.tasks.electron)
-    } else if (['chrome', 'firefox'].includes(settings.BUILD_TARGET)) {
-        runTasks.push(code.tasks.appObserver)
     }
+
     return gulp.parallel(runTasks)(done)
 })
 
@@ -100,9 +99,6 @@ gulp.task('sentry-release', publish.tasks.sentryRelease)
 gulp.task('sentry-remove', publish.tasks.sentryRemove)
 gulp.task('styles', (done) => {
     let runTasks = [styles.tasks.app, styles.tasks.vendor]
-    if (settings.BUILD_WEBEXTENSION.includes(settings.BUILD_TARGET)) {
-        runTasks.push(styles.tasks.observer)
-    }
     return gulp.parallel(runTasks)(done)
 })
 
