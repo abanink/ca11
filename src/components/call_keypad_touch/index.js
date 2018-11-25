@@ -36,8 +36,8 @@ module.exports = (app) => {
             },
             protocols: function() {
                 let protocols = [
-                    {value: 'sip', name: 'sip', disabled: !this.sip.enabled},
-                    {value: 'sig11', name: 'sig11', disabled: !this.sig11.enabled}
+                    {disabled: !this.sip.enabled, name: 'sip', value: 'sip'},
+                    {disabled: !this.sig11.enabled, name: 'sig11', value: 'sig11'},
                 ]
                 return protocols
             },
@@ -49,7 +49,6 @@ module.exports = (app) => {
                     classes['call-ongoing'] = true
                 } else if (block === 'number-input') {
                     classes['number-input'] = true
-                    classes[this.display] = true
                 }
                 return classes
             },
@@ -74,25 +73,16 @@ module.exports = (app) => {
                 if (this.callingDisabled) return
                 if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
             },
-            setupCall: function() {
-                // This method is also called on enter. The keypad may
-                // be in dtmf mode at that moment; block the call request.
-                if (!this.mode === 'call') return
-                app.emit('bg:calls:call_create', {callDescription: this.callDescription, start: true, transfer: false})
-                // Clean up the number so it is gone when the keypad reappears after the call.
-                this.callDescription.endpoint = ''
-            },
             unpressKey: function() {
                 // No key pressed. Stop playing sound.
                 window.setTimeout(() => app.sounds.dtmfTone.stop(), 50)
-            }
+            },
         }, app.helpers.sharedMethods()),
         mounted: function() {
             this.$refs.input.focus()
         },
         props: {
             call: {default: null},
-            display: {default: 'expanded', type: String},
             dtmf: {default: false, type: Boolean},
             endpoint: {default: '', type: String},
             mode: {default: 'call', type: String},
@@ -108,7 +98,7 @@ module.exports = (app) => {
             user: 'user',
         },
         watch: {
-            'call.protocol': function(protocol) {
+            'callDescription.protocol': function(protocol) {
                 app.setState({calls: {call: {protocol}}}, {persist: true})
             },
             endpoint: function(endpoint) {

@@ -24,7 +24,7 @@
             <icon class="support-icon" name="phone"/>
             <div class="support-title cf">{{$t('phone')}}</div>
             <div class="support-description cf">{{$t('give us a call')}}:</div>
-            <div class="support-channel link" @click="createCall(vendor.support.phone)">{{vendor.support.phone}}</div>
+            <div class="support-channel link">{{vendor.support.phone}}</div>
         </div>
 
         <div class="support-option">

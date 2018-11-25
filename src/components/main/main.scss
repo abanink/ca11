@@ -42,10 +42,6 @@
             flex-direction: row;
             // Show a scrollbar when the content height exceeds the max-height.
 
-            .app-view-sidebar {
-                width: $spacer * 5;
-            }
-
             .app-view-layer {
                 flex: 1;
                 min-height: $min-popup-height + ($spacer * 5);
@@ -55,7 +51,7 @@
                     padding: $spacer * 3;
                 }
 
-                h1 {
+                .title {
                     color: $brand-color;
                     font-size: 1.3rem;
                     font-weight: 600;
@@ -65,7 +61,7 @@
                     .header-line {
                         display: flex;
                         font-family: 'Rajdhani';
-                        font-weight: 600 !important;
+                        font-weight: 600;
                     }
                 }
             }

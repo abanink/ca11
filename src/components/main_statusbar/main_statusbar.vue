@@ -5,8 +5,6 @@
             <icon name="sig11" v-if="!sig11.enabled" class="disabled"/>
             <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
             <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
-            <icon name="dnd" v-else-if="dnd"/>
-
             <icon name="spinner" v-else-if="sig11.status === 'loading'" class="spinner"/>
             <icon name="sig11" v-else/>
         </div>
@@ -15,15 +13,16 @@
             <icon name="phone-sip" v-if="!sip.enabled" class="disabled"/>
             <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
             <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
-            <icon name="dnd" v-else-if="dnd"/>
             <icon name="spinner" v-else-if="sip.status === 'loading'" class="spinner"/>
-
             <icon name="phone-sip" v-else/>
         </div>
     </div>
 
 
     <div class="menu-options">
+
+        <Availability class="switch" />
+
         <div class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
             <icon class="settings" name="settings"/>
         </div>

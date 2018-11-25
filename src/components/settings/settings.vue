@@ -3,16 +3,16 @@
     <div class="tabs">
         <ul>
             <li :class="classes('tabs', 'general')" @click="setTab('settings', 'general')">
-                <a><span class="icon is-small"><icon name="lock-on"/></span><span class="cf">{{$t('general')}}</span></a>
+                <a><icon name="settings-misc"/><span class="cf">{{$t('general')}}</span></a>
             </li>
             <li :class="classes('tabs', 'devices')" @click="setTab('settings', 'devices', settings.webrtc.enabled)">
-                <a><span class="icon is-small"><icon name="microphone"/></span><span class="cf">{{$t('devices')}}</span></a>
+                <a><icon name="headset_mic"/><span class="cf">{{$t('devices')}}</span></a>
             </li>
             <li :class="classes('tabs', 'network')" @click="setTab('settings', 'network')">
-                <a><span class="icon is-small"><icon name="user"/></span><span class="cf">{{$t('network')}}</span></a>
+                <a><icon name="sig11"/><span class="cf">{{$t('SIG11')}}</span></a>
             </li>
             <li class="test-tab-phone" :class="classes('tabs', 'phone')" @click="setTab('settings', 'phone')">
-                <a><span class="icon is-small"><icon name="phone-sip"/></span><span class="cf">{{$t('phone')}}</span></a>
+                <a><icon name="phone-sip"/><span class="cf">{{$t('SIP')}}</span></a>
             </li>
         </ul>
     </div>
@@ -51,6 +51,16 @@
 
     <!-- Network preferences -->
     <div class="tab" :class="{'is-active': tabs.active === 'network'}">
+        <Field name="sip_enabled" type="checkbox"
+            :label="$t('SIG11 unification')"
+            :model.sync="calls.sig11.enabled"
+            :help="$t('secure peer-to-peer calling over decentralized signalling network SIG11.')"/>
+
+        <Field name="sig11_endpoint" type="text"
+            :label="$t('bootstrap node (WSS)')"
+            :model.sync="calls.sig11.endpoint"
+            placeholder="e.g. wss://websocket.example.org"/>
+
         <Field name="public_key" class="network-public-key" type="textarea"
             :label="$t('public key')"
             :model.sync="user.identity.publicKey"
@@ -64,9 +74,9 @@
     <div class="tab tab-phone" :class="{'is-active': tabs.active === 'phone'}">
 
         <Field name="sip_enabled" type="checkbox"
-            :label="$t('Phone integration')"
+            :label="$t('SIP unification')"
             :model.sync="calls.sip.enabled"
-            :help="$t('Register to a phone network using a VoIP provider. Your VoIP provider must support WSS-SIP and WebRTC.', {name: app.name})"/>
+            :help="$t('telecom network integration using SIP over Secure Websockets and WebRTC.', {name: app.name})"/>
 
         <template v-if="calls.sip.enabled">
         <Field name="sip_endpoint" type="text"

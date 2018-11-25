@@ -37,13 +37,13 @@
 
             &.success {
                 &::after {
-                    background: $grey-color-darker;
+                    background: $brand-color;
                 }
             }
 
             &.warning {
                 &::after {
-                    background: $grey-color-lightest;
+                    background: $grey-color-light;
                 }
             }
 
@@ -63,7 +63,9 @@
 
             .name {
                 color: $grey-color-darkest;
-                font-weight: 500;
+                font-family: 'Rajdhani';
+                font-size: 1.1rem;
+                font-weight: 600;
                 margin-right: $spacer * 2;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -72,7 +74,7 @@
 
             .description {
                 color: $grey-color;
-                font-size: 0.8rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -85,8 +87,9 @@
                 background: $red-color;
                 border-radius: $spacer * 2;
                 color: $white;
-                font-size: 0.7rem;
-                font-weight: 500;
+                font-family: 'Rajdhani';
+                font-size: 0.9rem;
+                font-weight: 600;
                 padding: $spacer / 4 $spacer;
                 text-transform: uppercase;
             }

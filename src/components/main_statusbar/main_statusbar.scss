@@ -6,8 +6,9 @@
 .component-main-statusbar {
     color: $grey-color;
     display: flex;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-family: 'Rajdhani';
+    font-size: 0.9rem;
+    font-weight: 600;
     height: ($spacer * 5);
     justify-content: space-between;
     transition: background 0.5s ease;
@@ -15,42 +16,30 @@
     &.error {
         background: $red-color;
         color: $white-color;
-        .status-indicators .status-indicator svg {fill: $white-color;}
+
+        svg {
+            fill: $white-color;
+        }
     }
 
     &.warning {
-        background: $orange-color;
-        color: $white-color;
-        .status-indicators .status-indicator svg {fill: $white-color;}
+        background: $grey-color-lightest;
+
+        svg {
+            fill: $grey-color;
+        }
     }
 
     &.ok {
         background: $grey-color-lightest;
-        .status-indicators .status-indicator svg {fill: $brand-color;}
-    }
 
-    .status-indicators .status-indicator svg.disabled {fill: $grey-color-light;}
-
-    .vendor {
-        align-items: center;
-        display: flex;
-
-        .vendor-logo {
-            @include icon-size($spacer * 3);
+        svg {
             fill: $brand-color;
-            margin-left: $spacer / 2;
-        }
-
-        .vendor-name {
-            color: $brand-color;
-            font-size: 1rem;
-            line-height: $spacer * 5;
-            padding-left: $spacer;
         }
     }
 
-    &.dnd {
-        background: $red-color;
+    svg.disabled {
+        fill: $grey-color-light;
     }
 
     &.call-active {
@@ -73,24 +62,28 @@
 
         .status-indicator {
             text-align: center;
-            width: $spacer * 5;
+            width: $spacer * 6;
 
             svg {
-                @include icon-size($spacer * 3);
+                @include icon-size($spacer * 4);
             }
         }
     }
 
     // The icon links container at the right top of the popup.
     .menu-options {
+        align-items: center;
         display: flex;
         flex-direction: row;
-        vertical-align: middle;
 
         .option {
             height: $spacer * 5;
             line-height: $spacer * 5;
             padding: 0 $spacer;
+
+            svg {
+                @include icon-size($spacer * 3);
+            }
 
             &.disabled {
                 opacity: 0.3;
@@ -106,6 +99,10 @@
                 color: $brand-color;
                 cursor: pointer;
             }
+        }
+
+        .switch {
+            margin-right: $spacer;
         }
     }
 

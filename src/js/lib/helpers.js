@@ -230,6 +230,13 @@ function helpers(app) {
                 if (!condition) return
                 app.setState({ui: {tabs: {[category]: {active: name}}}}, {encrypt: false, persist: true})
             },
+            setupCall: function(callDescription) {
+                // This method is also called on enter. The keypad may
+                // be in dtmf mode at that moment; block the call request.
+                app.emit('bg:calls:call_create', {callDescription, start: true, transfer: false})
+                // Clean up the number so it is gone when the keypad reappears after the call.
+                callDescription.endpoint = ''
+            },
             translations: function(category, key) {
                 if (!this._translations) this._translations = this.getTranslations()
                 return this._translations[category][key]

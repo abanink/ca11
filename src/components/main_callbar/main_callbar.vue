@@ -18,8 +18,9 @@
             <span class="timer"></span>
         </div>
         <div class="call-info" v-else>
+            <span class="timer" v-if="call.timer.start">{{sessionTime}} - </span>
             <span class="status">{{callStatus}}</span>
-            <span class="timer" v-if="call.timer.start"> {{sessionTime}}</span>
+
         </div>
     </div>
 </component>

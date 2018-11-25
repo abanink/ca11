@@ -236,7 +236,7 @@
         }
 
         &.dial {
-            background: $brand-accent-color;
+            background: $brand-color;
             color: $white;
             &:hover {background: darken($brand-accent-color, 3%);}
         }

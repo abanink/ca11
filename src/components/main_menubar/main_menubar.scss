@@ -3,16 +3,19 @@
 
 .component-main-menubar {
     background: $grey-color-lightest;
-    border-bottom: 2px solid $brand-color;
+    border-right: 4px solid $grey-color-lighter;
 
     .options {
         // Keeps the menubar icons from scrolling with the main content.
-
-        width: $spacer * 5;
+        margin-right: -$spacer / 2;
+        margin-top: -$spacer / 2;
+        position: relative;
+        width: $spacer * 6;
 
         .option {
             align-items: center;
             background: $grey-color-lightest;
+            border-right: $spacer / 2 solid $grey-color-lighter;
             color: $grey-color-darker;
             display: flex;
             flex-direction: column;
@@ -21,28 +24,7 @@
             transition: background 150ms ease-in-out;
 
             svg {
-                @include icon-size($spacer * 3);
-            }
-
-            &.availability {
-                &.available {
-                    path[pid='0'] {fill: $green-color;}
-                    path[pid='1'] {fill: $white;}
-                }
-
-                &.dnd {
-                    path[pid='0'] {
-                        fill: $orange-color;
-                    }
-                    path[pid='1'] {fill: $white;}
-                }
-
-                &.unavailable {
-                    path[pid='0'] {
-                        fill: $orange-color;
-                    }
-                    path[pid='1'] {fill: $white;}
-                }
+                @include icon-size($spacer * 4);
             }
 
             // Unread red-dot on top of the recent icon.
@@ -52,7 +34,7 @@
                 &::after {
                     @include icon-size(14px);
                     animation: bounce 0.5s ease-in-out infinite;
-                    background: $brand-accent-color;
+                    background: $brand-color;
                     border-radius: 50%;
                     bottom: 13px;
                     content: '';
@@ -91,6 +73,7 @@
             &.active,
             &:hover {
                 background: $white;
+                border-right: $spacer / 2 solid $brand-color;
                 cursor: pointer;
                 // Cascading error in Chrome when using svg path selector.
 

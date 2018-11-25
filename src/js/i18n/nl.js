@@ -154,7 +154,7 @@ module.exports = {
     'service unavailable.': 'service niet beschikbaar.',
     'session password': 'sessie wachtwoord',
     'setting up call': 'gesprek opzetten',
-    'settings are updated.': 'instellingen zijn bijgewerkt.',
+    'settings have been updated': 'instellingen zijn bijgewerkt',
     'setup new call': 'zet nieuw gesprek op',
     'SIP provider with support for SIP over websockets and WebRTC.': 'SIP provider met ondersteuning voor SIP over websockets en WebRTC.',
     'SIP server': 'SIP server',

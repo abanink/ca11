@@ -24,7 +24,6 @@ module.exports = (app) => {
                     else classes.unavailable = true
                 } else if (block === 'calls') {
                     classes.disabled = !this.app.online
-                    classes['calls-active'] = this.callOngoing
                 } else if (transferHint) {
                     classes.hint = (this.transferStatus === 'select')
                 }

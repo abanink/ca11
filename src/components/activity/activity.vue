@@ -2,7 +2,7 @@
 
     <header>
         <div class="header-line">
-            <h1 class="uc">{{$t('activity')}}</h1>
+            <div class="title uc">{{$t('activity')}}</div>
             <div class="vertical-devider"></div>
             <div class="content-filters">
                 <div class="filter" :class="classes('filter-reminders')" @click="toggleFilterReminders()">
@@ -20,7 +20,7 @@
     <div class="item-list">
         <div class="no-results-indicator" v-if="!filteredActivity.length">
             <div><icon name="recent"/></div>
-            <div class="text cf">{{$t('no {target}', {target: $t('activity')})}}...</div>
+            <div class="text cf">{{$t('no {target} yet', {target: $t('activity')})}}</div>
         </div>
 
         <div v-else class="activity item" v-for="activity of filteredActivity">

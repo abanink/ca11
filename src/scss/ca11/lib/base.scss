@@ -33,6 +33,7 @@ body {
     // Bulma label class override.
     .label {
         color: $primary-color;
+        font-size: 1.1rem;
         font-weight: 500;
     }
 
@@ -55,6 +56,7 @@ body {
 
     .help {
         display: inline-block;
+        font-size: 0.9rem;
         margin-top: $spacer;
     }
 }

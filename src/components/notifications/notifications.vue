@@ -9,7 +9,7 @@
                 <span class="cf link" v-if="item.link" @click="openUrl(item.link.url)">{{item.link.text}}</span>
             </div>
             <div class="actions">
-                <button class="delete test-delete-notification" @click="close(item)"></button>
+                <icon name="delete" @click="close(item)"/>
             </div>
         </li>
     </transition-group>

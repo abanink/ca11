@@ -2,7 +2,7 @@
     <div v-if="activeCall" class="call-active">
         <div class="call-components">
             <Call v-if="typeof activeCall === 'object'" :call="activeCall"/>
-            <CallKeypadTouch v-else :model.sync="call.endpoint" display="touch" mode="call" :endpoint="call.endpoint"/>
+            <CallKeypadTouch v-else :model.sync="callDescription.endpoint" display="touch" mode="call" :endpoint="call.endpoint"/>
             <CallSwitch :call="activeCall"/>
         </div>
         <Soundmeter class="soundmeter"/>
@@ -22,7 +22,8 @@
         </div>
     </div>
     <div v-else>
-        <CallKeypadTouch :model.sync="call.endpoint" display="touch" mode="call" :endpoint="call.endpoint"/>
+        <Field name="protocol" type="radio-group" :model.sync="callDescription.protocol" :options="protocols"/>
+        <CallKeypadTouch :model.sync="callDescription.endpoint" display="touch" mode="call" :endpoint="callDescription.endpoint"/>
         <Soundmeter class="soundmeter"/>
     </div>
 </component>

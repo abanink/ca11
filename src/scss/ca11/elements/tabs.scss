@@ -21,10 +21,6 @@
             a {
                 border-bottom-width: 2px;
                 height: auto;
-
-                svg {
-                    @include icon-size($spacer * 5);
-                }
             }
         }
     }
@@ -35,6 +31,7 @@
 
         li {
             flex-grow: 1;
+            font-size: 1.1rem;
 
             &.disabled {
                 opacity: 0.3;
@@ -44,15 +41,21 @@
                         cursor: not-allowed;
                     }
                 }
-
             }
         }
     }
 
     a {
         border-bottom-width: $spacer / 4;
+        font-family: 'Rajdhani';
+        font-weight: 600;
         height: $spacer * 7;
         padding: 0.5rem;
+
+        svg {
+            @include icon-size($spacer * 3);
+            margin-right: $spacer;
+        }
     }
 }
 

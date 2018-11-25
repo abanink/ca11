@@ -1,14 +1,15 @@
 .content-filters {
     align-items: flex-start;
     display: flex;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     justify-content: top;
 
     .filter {
         align-items: center;
         color: $grey-color-light;
         display: flex;
-        font-weight: 500;
+        font-family: 'Rajdhani';
+        font-weight: 600;
         justify-content: center;
         margin-right: $spacer;
         user-select: none;

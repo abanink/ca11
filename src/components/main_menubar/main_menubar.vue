@@ -1,5 +1,4 @@
 <component class="component-main-menubar">
-
     <div class="options">
         <div class="option calls test-menubar-calls" :class="classes('calls')" @click="setLayer('calls')" role="button" :aria-labelledby="$t('dialpad')">
              <icon name="dialpad"/>
@@ -13,16 +12,10 @@
             <icon name="contacts"/>
         </div>
 
-        <div class="option availability test-menubar-availability" :class="classes('availability')" @click="setLayer('availability')" role="button" :aria-labelledby="$t('availability')">
-            <icon name="availability"/>
-        </div>
-
         <div v-if="plugin.menubarIcon" class="option" :class="classes(plugin.menubarIcon, plugin.menubarTransferHint)"
             v-for="plugin in customPlugins" @click="setLayer(plugin.menubarIcon)"
             role="button" :aria-labelledby="plugin.name">
             <icon :name="plugin.menubarIcon"/>
         </div>
     </div>
-
-    &nbsp;
 </component>

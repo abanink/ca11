@@ -11,27 +11,30 @@
 
 .component-notifications {
     left: 0;
-    position: fixed;
+    position: absolute;
     z-index: 100000;
 
     &.topbar {
-        top: $spacer * 5;
+        // Must start at the end of the top navigation bar.
+        top: $spacer * 5 + 4px;
     }
 
     &.sidebar {
-        left: $spacer * 5;
-        width: calc(100% - #{$spacer * 5});
+        left: $spacer * 6;
+        width: calc(100% - #{$spacer * 6});
     }
 
     .notification {
         align-items: center;
-        background: $grey-color-lightest;
+        background: $brand-color;
         border-radius: 0;
-        border-top: 2px solid $grey-color-light;
-        color: $grey-color-dark;
+        border-top: 2px solid $grey-color-lightest;
+        color: $grey-color-light;
         display: flex;
         flex-direction: row;
-        height: $spacer * 7;
+        font-family: 'Rajdhani';
+        font-weight: 600;
+        height: $spacer * 5;
         justify-content: space-between;
         margin: 0;
         padding: 0;
@@ -54,7 +57,7 @@
             min-width: $spacer * 6;
 
             svg {
-                fill: $brand-accent-color;
+                fill: $grey-color-lightest;
                 height: $spacer * 3;
                 width: $spacer * 3;
             }
@@ -66,20 +69,22 @@
 
         .actions {
             line-height: $spacer * 6;
+
+            svg {
+                margin-right: $spacer;
+
+                &:hover {
+                    cursor: pointer;
+                    fill: $grey-color-lightest;
+                }
+            }
         }
 
         .delete {
-            margin-left: $spacer;
+            background: $grey-color-lightest;
+            fill: $brand-color;
             margin-right: $spacer;
             vertical-align: middle;
-        }
-
-        .link {
-            font-weight: 500;
-
-            &:hover {
-                cursor: pointer;
-            }
         }
     }
 
@@ -102,5 +107,4 @@
         opacity: 1;
         transition: all 0.5s;
     }
-
 }

@@ -1,11 +1,9 @@
-<component class="component-availability padded">
-    <h1 class="uc">{{$t('availability options')}}</h1>
+<component class="component-availability">
 
     <Field name="dnd_availability" type="checkbox"
         css="is-warning"
         :disabled="!webrtc.enabled"
-        :help="$t('decline all incoming softphone calls.')"
-        :label="$t('do not disturb')"
+        :label="$t('DnD')"
         :model.sync="dnd"/>
 
     <!-- Load additional availability addons. -->

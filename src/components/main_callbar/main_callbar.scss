@@ -5,11 +5,12 @@
 // icon-links to several locations.
 .component-main-callbar {
     align-items: center;
-    background: $brand-accent-color;
+    background: $brand-color;
     color: $white-color;
     display: flex;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-family: 'Rajdhani';
+    font-size: 1rem;
+    font-weight: 600;
     height: ($spacer * 5);
     justify-content: space-between;
     z-index: 100000;
@@ -38,10 +39,10 @@
 
         .status-indicator {
             text-align: center;
-            width: $spacer * 5;
+            width: $spacer * 6;
 
             svg {
-                @include icon-size($spacer * 3);
+                @include icon-size($spacer * 4);
             }
 
             i {
