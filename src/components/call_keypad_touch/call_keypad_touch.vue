@@ -18,9 +18,10 @@
     <div class="keypad">
         <div :class="classes('number-input')">
             <input name="number-input" type="text" ref="input" autocomplete="off" autofocus placeholder="..."
-                @keyup="pressKey()" @keydown="pressKey($event.key)"
+                @keyup="unpress()" @keydown="press($event.key)"
+                :readonly="mode === 'dtmf'"
                 v-bind:value="endpoint" v-on:input="inputChange($event.target.value)"
-                v-on:keyup.enter="setupCall()"/>
+                v-on:keyup.enter="validateCall(description)"/>
 
             <i class="correct" v-if="mode === 'call'" @click="removeLastNumber">
                 <icon name="backspace"/>
@@ -28,54 +29,56 @@
         </div>
         <Soundmeter v-if="!callOngoing" class="soundmeter"/>
 
-        <div class="keys" v-on:keyup.enter="setupCall()">
+        <div class="keys" v-on:keyup.enter="validateCall(description)">
             <div class="key-row">
-                <button class="key test-key-1" @mouseup="unpressKey()" @mousedown="pressKey('1')">
+                <button class="key test-key-1" @mouseup="unpress()" @mousedown="press('1')">
                     1<div class="sub"><icon name="voicemail"/></div/>
                 </button>
-                <button class="key test-key-2" @mouseup="unpressKey()" @mousedown="pressKey('2')">
+                <button class="key test-key-2" @mouseup="unpress()" @mousedown="press('2')">
                     2<div class="sub">ABC</div>
                 </button>
-                <button class="key test-key-3" @mouseup="unpressKey()" @mousedown="pressKey('3')">
+                <button class="key test-key-3" @mouseup="unpress()" @mousedown="press('3')">
                     3<div class="sub">DEF</div>
                 </button>
             </div>
             <div class="key-row">
-                <button class="key test-key-4" @mouseup="unpressKey()" @mousedown="pressKey('4')">
+                <button class="key test-key-4" @mouseup="unpress()" @mousedown="press('4')">
                     4<div class="sub">GHI</div>
                 </button>
-                <button class="key test-key-5" @mouseup="unpressKey()" @mousedown="pressKey('5')">
+                <button class="key test-key-5" @mouseup="unpress()" @mousedown="press('5')">
                     5<div class="sub">JKL</div>
                 </button>
-                <button class="key test-key-6" @mouseup="unpressKey()" @mousedown="pressKey('6')">
+                <button class="key test-key-6" @mouseup="unpress()" @mousedown="press('6')">
                     6<div class="sub">MNO</div>
                 </button>
             </div>
             <div class="key-row">
-                <button class="key test-key-7" @mouseup="unpressKey()" @mousedown="pressKey('7')">
+                <button class="key test-key-7" @mouseup="unpress()" @mousedown="press('7')">
                     7<div class="sub">PQRS</div>
                 </button>
-                <button class="key test-key-8" @mouseup="unpressKey()" @mousedown="pressKey('8')">
+                <button class="key test-key-8" @mouseup="unpress()" @mousedown="press('8')">
                     8<div class="sub">TUV</div>
                 </button>
-                <button class="key test-key-9" @mouseup="unpressKey()" @mousedown="pressKey('9')">
+                <button class="key test-key-9" @mouseup="unpress()" @mousedown="press('9')">
                     9<div class="sub">WXYZ</div>
                 </button>
             </div>
             <div class="key-row">
-                <button class="key function test-key-*" @mouseup="unpressKey()" @mousedown="pressKey('*')">
+                <button class="key function test-key-*" @mouseup="unpress()" @mousedown="press('*')">
                 *
                 </button>
-                <button class="key test-key-0" @mouseup="unpressKey()" @mousedown="pressKey('0')">0<div class="sub">+</div></button>
-                <button class="key function test-key-#" @mouseup="unpressKey()" @mousedown="pressKey('#')">#</button>
+                <button class="key test-key-0" @mouseup="unpress()" @mousedown="press('0')">0<div class="sub">+</div></button>
+                <button class="key function test-key-#" @mouseup="unpress()" @mousedown="press('#')">#</button>
             </div>
         </div>
 
         <!-- Dial actions when not used in combination with a call. -->
         <div class="call-actions" v-if="mode === 'call'">
-            <div class="rounded-button action dial test-call-button" @click="setupCall(description)" :class="{'disabled': !description.endpoint}">
+            <button class="rounded-button action dial test-call-button"
+                :class="{'disabled': !description.endpoint}"
+                @click="validateCall(description)">
                 <icon name="phone"/>
-            </div>
+            </button>
         </div>
     </div>
 

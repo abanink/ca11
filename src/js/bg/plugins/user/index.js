@@ -166,7 +166,7 @@ class PluginUser extends Plugin {
             this.app._languagePresets()
             this.app.api.setupClient(username, this.app.state.user.token)
             this.app.setState({ui: {layer: 'calls'}}, {encrypt: false, persist: true})
-            this.app.notify({icon: 'user', message: this.app.$t('welcome back!'), type: 'info'})
+            this.app.notify({icon: 'user', message: this.app.$t('session unlocked'), type: 'info'})
             this.app.__initServices()
         } catch (err) {
             // Wrong password, resulting in a failure to decrypt.

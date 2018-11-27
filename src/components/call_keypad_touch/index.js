@@ -55,7 +55,7 @@ module.exports = (app) => {
             inputChange: function(newVal) {
                 this.$emit('update:model', newVal)
             },
-            pressKey: function(key) {
+            press: function(key) {
                 if (!allowedKeys.includes(key)) return
                 app.sounds.dtmfTone.play(key)
                 // Force stop playing dtmf sound after x amount of time,
@@ -73,9 +73,14 @@ module.exports = (app) => {
                 if (this.callingDisabled) return
                 if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
             },
-            unpressKey: function() {
+            unpress: function() {
                 // No key pressed. Stop playing sound.
                 window.setTimeout(() => app.sounds.dtmfTone.stop(), 50)
+            },
+            validateCall: function(description) {
+                // Prevents calling without endpoint.
+                if (!description.endpoint) return
+                this.setupCall(description)
             },
         }, app.helpers.sharedMethods()),
         mounted: function() {

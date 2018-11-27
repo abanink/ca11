@@ -213,6 +213,8 @@
     width: 100%;
 
     .rounded-button {
+        border: 2px solid $grey-color-lightest;
+
         svg {
             @include icon-size($spacer * 4);
         }

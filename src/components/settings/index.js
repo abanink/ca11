@@ -34,8 +34,8 @@ module.exports = (app) => {
                 }
 
                 // Disable SIP as selected call protocol when it is disabled.
-                if (!this.calls.sip.enabled && this.calls.call.protocol === 'sip') {
-                    settingsState.calls.call = {protocol: 'sig11'}
+                if (!this.calls.sip.enabled && this.calls.description.protocol === 'sip') {
+                    settingsState.calls.description = {protocol: 'sig11'}
                 }
 
                 app.setState(settingsState, {persist: true})

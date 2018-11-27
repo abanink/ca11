@@ -66,7 +66,7 @@ class PluginCalls extends Plugin {
         */
         this.app.on('bg:calls:call_create', ({callback, description, start}) => {
             // Sanitize the number.
-            if (this.app.state.calls.call.protocol === 'sip') {
+            if (this.app.state.calls.description.protocol === 'sip') {
                 description.endpoint = this.app.utils.sanitizeNumber(description.endpoint)
             }
 

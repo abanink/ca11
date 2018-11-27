@@ -3,10 +3,10 @@
         <input name="number-input" type="text" ref="input" autocomplete="off" autofocus placeholder="..."
             @keyup="pressKey()" @keydown="pressKey($event.key)"
             v-bind:value="endpoint" v-on:input="inputChange($event.target.value)"
-            v-on:keyup.enter="setupCall()"/>
+            v-on:keyup.enter="setupCall(description)"/>
 
         <i class="icon icon-small" :class="{'disabled': !endpoint}"
-            v-on:keyup.enter="keypadAction" @click="setupCall()"><icon name="transfer"/></i>
+            v-on:keyup.enter="keypadAction" @click="setupCall(description)"><icon name="transfer"/></i>
     </div>
 
     <div class="contacts-match">

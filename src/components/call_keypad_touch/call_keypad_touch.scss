@@ -41,14 +41,16 @@
 
             input {
                 @include no-outline;
-                background: transparent;
+
                 border: 0;
                 color: $brand-color;
                 font-size: 1.8rem;
                 font-weight: 500;
-                height: $spacer * 6;
-                padding: 0 40px;
+                height: $spacer * 5;
+                overflow: hidden;
+                padding: 0 $spacer * 5;
                 text-align: center;
+                text-overflow: ellipsis;
                 width: 100%;
 
                 &[disabled='disabled'] {

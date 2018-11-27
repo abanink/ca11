@@ -94,6 +94,7 @@ module.exports = (app) => {
         staticRenderFns: templates.call.s,
         store: {
             calls: 'calls.calls',
+            description: 'calls.description',
         },
     }
 

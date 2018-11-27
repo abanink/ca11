@@ -3,7 +3,7 @@
     <header>
         <div v-if="app.session.active" class="greeting">
             <span v-if="app.session.active === 'new'" class="cf">{{$t('welcome to {name}', {name: app.name})}}</span>
-            <span v-else class="cf">{{$t('welcome back')}} {{app.session.active}}</span>
+            <span v-else class="cf">{{$t('welcome back')}}<br/>{{app.session.active}}</span>
         </div>
         <div v-else class="greeting">
 

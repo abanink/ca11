@@ -1,9 +1,8 @@
 module.exports = (app) => {
-
     const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '#']
 
-    // we detect the mouseup event on the window tag as opposed to the li
-    // tag because otherwise if we release the mouse when not over a button,
+    // Detect the mouseup event on the window tag as opposed to the li
+    // tag, otherwise if we release the mouse when not over a button,
     // the tone will remain playing.
     function stopKeypress() {
         if (app.sounds.dtmfTone.status) {
@@ -69,13 +68,12 @@ module.exports = (app) => {
             },
             removeLastNumber: function() {
                 if (this.callingDisabled) return
-                if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
-            },
-            setupCall: function() {
-                app.emit('bg:calls:call_create', {description: {
-                    endpoint: this.endpoint,
-                    protocol: 'sip',
-                }, start: true, transfer: false})
+                if (this.endpoint) {
+                    this.$emit(
+                        'update:model',
+                        this.description.endpoint.substring(0, this.endpoint.length - 1),
+                    )
+                }
             },
             unpressKey: function() {
                 // No key pressed. Stop playing sound.
