@@ -27,17 +27,14 @@ $em-base: 16 !default;
 
 .switch-toggle {
     background-color: $grey-color-lightest;
-    border-radius: $spacer * 5;
     box-shadow: inset rgba(0, 0, 0, 0.1) 0 1px 0;
-    margin: 0;
 
     input {
         display: none;
 
         + label {
-            border-radius: $spacer * 5;
             margin: 0;
-            min-width: 55px;
+            min-width: $spacer * 6;
             padding: 0;
             user-select: none;
 
@@ -48,7 +45,7 @@ $em-base: 16 !default;
 
         &:checked {
             + label {
-                background-color: $brand-accent-color;
+                background-color: $brand-color;
                 color: $white-color;
             }
         }
@@ -68,7 +65,6 @@ $em-base: 16 !default;
     }
 
     a {
-        border-radius: 100%;
         left: 0;
         top: 0;
         transition: all 0.2s ease-out;
@@ -76,8 +72,9 @@ $em-base: 16 !default;
 
     label {
         color: $grey-color-dark;
-        font-size: 0.8rem;
-        font-weight: 500;
+        font-family: 'Rajdhani';
+        font-size: 0.9rem;
+        font-weight: 600;
         height: $spacer * 4;
         line-height: $spacer * 4;
         padding: 0 $spacer * 2;

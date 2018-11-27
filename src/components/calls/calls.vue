@@ -1,12 +1,14 @@
 <component class="component-calls" :class="classes('component')">
-    <div v-if="activeCall" class="call-active">
+    <CallKeypadTouch v-if="!callOngoing" :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
+    <div v-else class="call-active">
         <div class="call-components">
-            <Call v-if="typeof activeCall === 'object'" :call="activeCall"/>
-            <CallKeypadTouch v-else :model.sync="callDescription.endpoint" display="touch" mode="call" :endpoint="call.endpoint"/>
-            <CallSwitch :call="activeCall"/>
+            <CallKeypadTouch v-if="callActive.status === 'new'" :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
+            <Call v-else :call="callActive"/>
+            <CallSwitch :call="callActive"/>
         </div>
-        <Soundmeter class="soundmeter"/>
     </div>
+
+    <!-- calling service not available -->
     <div v-else-if="!keypadEnabled" class="calls-disabled">
         <icon class="disabled-icon" name="dialpad-off"/>
         <div class="disabled-text">
@@ -21,9 +23,5 @@
             </ul>
         </div>
     </div>
-    <div v-else>
-        <Field name="protocol" type="radio-group" :model.sync="callDescription.protocol" :options="protocols"/>
-        <CallKeypadTouch :model.sync="callDescription.endpoint" display="touch" mode="call" :endpoint="callDescription.endpoint"/>
-        <Soundmeter class="soundmeter"/>
-    </div>
+
 </component>

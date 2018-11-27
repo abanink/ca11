@@ -1,15 +1,16 @@
 <component class="component-main-menubar">
     <div class="options">
+
+        <div class="option contacts test-menubar-contacts" :class="classes('contacts', true)" @click="setLayer('contacts')" role="button" :aria-labelledby="$t('contacts')">
+            <icon name="contacts"/>
+        </div>
+
         <div class="option calls test-menubar-calls" :class="classes('calls')" @click="setLayer('calls')" role="button" :aria-labelledby="$t('dialpad')">
-             <icon name="dialpad"/>
+             <icon name="phone"/>
         </div>
 
         <div class="option activity test-menubar-activity" :class="classes('activity')" @click="setLayer('activity')" role="button" :aria-labelledby="$t('recent activity')">
             <icon name="recent"/>
-        </div>
-
-        <div class="option contacts test-menubar-contacts" :class="classes('contacts', true)" @click="setLayer('contacts')" role="button" :aria-labelledby="$t('contacts')">
-            <icon name="contacts"/>
         </div>
 
         <div v-if="plugin.menubarIcon" class="option" :class="classes(plugin.menubarIcon, plugin.menubarTransferHint)"

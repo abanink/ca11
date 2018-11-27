@@ -51,21 +51,23 @@ class PluginCalls extends Plugin {
          * @property {Boolean} unholdActive - Whether to unhold the activated Call.
          */
         this.app.on('bg:calls:call_activate', ({callId, holdInactive, unholdActive}) => {
-            this.activateCall(this.calls[callId], holdInactive, unholdActive)
+            let call = null
+            if (callId) call = this.calls[callId]
+            this.activateCall(call, holdInactive, unholdActive)
         })
 
         /**
         * Create - and optionally start - a new Call. This is the main
         * event used to start a call with.
         * @event module:ModuleCalls#bg:calls:call_create
-        *  @property {Object} callDescription - Information about the new Call.
-        * @property {String} [callDescription.endpoint] - The endpoint to call.
-        * @property {String} [callDescription.start] - Start calling right away or just create a Call instance.
+        *  @property {Object} description - Information about the new Call.
+        * @property {String} [description.endpoint] - The endpoint to call.
+        * @property {String} [description.start] - Start calling right away or just create a Call instance.
         */
-        this.app.on('bg:calls:call_create', ({callback, callDescription, start}) => {
+        this.app.on('bg:calls:call_create', ({callback, description, start}) => {
             // Sanitize the number.
             if (this.app.state.calls.call.protocol === 'sip') {
-                callDescription.endpoint = this.app.utils.sanitizeNumber(callDescription.endpoint)
+                description.endpoint = this.app.utils.sanitizeNumber(description.endpoint)
             }
 
             // Deal with a blind transfer Call.
@@ -73,11 +75,11 @@ class PluginCalls extends Plugin {
             if (activeOngoingCall && activeOngoingCall.state.transfer.active && activeOngoingCall.state.transfer.type === 'blind') {
                 // Directly transfer the number to the currently activated
                 // call when the active call has blind transfer mode set.
-                activeOngoingCall.transfer(callDescription.endpoint)
+                activeOngoingCall.transfer(description.endpoint)
             } else {
                 // Both a 'regular' new call and an attended transfer call will
                 // create or get a new Call and activate it.
-                let call = this._newCall(callDescription)
+                let call = this._newCall(description)
 
                 // An actual call may only be made when calling is enabled.
                 if (start && !this.app.helpers.callingDisabled()) {
@@ -262,11 +264,12 @@ class PluginCalls extends Plugin {
     */
     _initialState() {
         let state = {
-            call: {
+            calls: {},
+            description: {
                 endpoint: '',
                 protocol: 'sig11',
+                status: 'new',
             },
-            calls: {},
             sig11: {
                 enabled: true,
                 endpoint: process.env.SIG11_ENDPOINT,
@@ -299,16 +302,16 @@ class PluginCalls extends Plugin {
     /**
     * Create and return a new `Call` object based on a
     * call description.
-    * @param {Object} callDescription - New call object.
-    * @param {String} [callDescription.endpoint] - Endpoint to call to.
-    * @param {String} [callDescription.protocol] - Protocol to use.
+    * @param {Object} description - New call object.
+    * @param {String} [description.endpoint] - Endpoint to call to.
+    * @param {String} [description.protocol] - Protocol to use.
     * @returns {Call} - A new or existing Call with status `new`.
     */
-    _newCall(callDescription = null) {
-        let call = this.callFactory(callDescription)
+    _newCall(description = null) {
+        let call = this.callFactory(description)
         this.calls[call.id] = call
         // Set the number and propagate the call state to the foreground.
-        call.state.endpoint = callDescription.endpoint
+        call.state.endpoint = description.endpoint
         call.setState(call.state)
         // Sync the store's reactive properties to the foreground.
         if (!this.app.state.calls.calls[call.id]) {
@@ -401,19 +404,15 @@ class PluginCalls extends Plugin {
         const callIds = Object.keys(this.calls)
 
         if (!call) {
-            // Activate the first found ongoing call when no call is given.
+            // Deactivate all calls.
             for (const callId of callIds) {
-                // Don't select a call that is already closing.
-                if (!['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(this.calls[callId].state.status)) {
-                    call = this.calls[callId]
-                }
+                let _call = this.calls[callId]
+                _call.setState({active: false})
             }
 
-            if (!call) {
-                this.app.logger.debug(`${this}no call to activate!`)
-                return false
-            }
+            return null
         }
+
         for (const callId of Object.keys(this.calls)) {
             let _call = this.calls[callId]
             // A call that is closing. Don't bother changing hold
@@ -455,23 +454,23 @@ class PluginCalls extends Plugin {
             }
         }
 
-        const activeCall = this.findCall({active: true, ongoing: true})
+        const callActive = this.findCall({active: true, ongoing: true})
 
         if (action === 'action-accept-hangup') {
             if (inviteCall) inviteCall.accept()
-            else if (activeCall) activeCall.terminate()
+            else if (callActive) callActive.terminate()
         } else if (action === 'action-decline-new') {
             if (inviteCall) inviteCall.terminate()
-            else if (activeCall) {
+            else if (callActive) {
                 const call = this._newCall()
                 this.activateCall(call, true)
                 this.app.setState({ui: {layer: 'calls'}})
             }
         } else if (action === 'action-hold-active') {
             // Make sure the action isn't provoked on a closing call.
-            if (activeCall) {
-                if (activeCall.state.hold.active) activeCall.unhold()
-                else activeCall.hold()
+            if (callActive) {
+                if (callActive.state.hold.active) callActive.unhold()
+                else callActive.hold()
             }
         }
     }
@@ -490,7 +489,7 @@ class PluginCalls extends Plugin {
         // This call is being cleaned up; move to a different call
         // when this call was the active call.
         if (call.state.active) {
-            let newActiveCall = null
+            let newcallActive = null
             let fallbackCall = null
             for (const callId of Object.keys(this.calls)) {
                 // We are not going to activate the Call we are deleting.
@@ -501,13 +500,13 @@ class PluginCalls extends Plugin {
                     // The fallback Call is a non-specific closing call.
                     if (this.calls[callId]) fallbackCall = this.calls[callId]
                 } else {
-                    newActiveCall = this.calls[callId]
+                    newcallActive = this.calls[callId]
                     break
                 }
             }
 
             // Select the first closing Call when all Calls are closing.
-            if (newActiveCall) this.activateCall(newActiveCall, true, false)
+            if (newcallActive) this.activateCall(newcallActive, true, false)
             else if (fallbackCall) this.activateCall(fallbackCall, true, false)
         }
 

@@ -17,18 +17,8 @@ class PluginAvailability extends Plugin {
     * @param {AppBackground} app - The background application.
     * @param {Array} addons - List of AvailabilityAddon classes.
     */
-    constructor(app, addons) {
+    constructor(app) {
         super(app)
-
-        this.addons = []
-
-        this.app.logger.info(`${this}${addons.length} addon(s) found.`)
-        this.addons = addons.map((Addon) => new Addon(app))
-
-        for (const addon of this.addons) {
-            if (addon._platformData) this.app.on('bg:availability:platform_data', addon._platformData.bind(this))
-            if (addon._updateAvailability) this.app.on('bg:availability:update', addon._updateAvailability.bind(this))
-        }
     }
 
 
@@ -40,26 +30,11 @@ class PluginAvailability extends Plugin {
     */
     _initialState() {
         let adapterState = {}
-        if (this.addons.length) {
-            for (const addon of this.addons) {
-                Object.assign(adapterState, addon._initialState())
-            }
-        }
 
         return Object.assign({
             available: true,
             dnd: false,
         }, adapterState)
-    }
-
-
-    /**
-    * Call for platform data from the provider.
-    */
-    async _platformData() {
-        for (const addon of this.addons) {
-            await addon._platformData()
-        }
     }
 
 
@@ -70,9 +45,6 @@ class PluginAvailability extends Plugin {
     */
     _watchers() {
         let addonWatchers = {}
-        for (const addon of this.addons) {
-            if (addon._watchers) Object.assign(addonWatchers, this.adapter._watchers())
-        }
 
         return Object.assign({
             'store.availability.dnd': (dndEnabled) => {

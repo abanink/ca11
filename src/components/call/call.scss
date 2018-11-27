@@ -72,7 +72,7 @@
             text-align: center;
 
             .rounded-button {
-                background: $white-color;
+                background: $grey-color-lightest;
                 border: 2px solid darken($grey-color-lightest, 5%);
                 color: $grey-color;
                 margin-bottom: $spacer;
@@ -85,12 +85,10 @@
                 &:hover {color: $grey-color;}
 
                 &.active {
-                    border: 2px solid $brand-color;
-                    color: $brand-color;
+                    background: $brand-color;
+                    border: 2px solid $grey-color-lighter;
+                    color: $grey-color-lightest;
 
-                    + p {
-                        color: $grey-color;
-                    }
                 }
 
                 &.disabled {

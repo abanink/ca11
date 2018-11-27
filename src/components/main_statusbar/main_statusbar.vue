@@ -16,12 +16,12 @@
             <icon name="spinner" v-else-if="sip.status === 'loading'" class="spinner"/>
             <icon name="phone-sip" v-else/>
         </div>
+
+        <Availability class="dnd-switch" />
     </div>
 
 
     <div class="menu-options">
-
-        <Availability class="switch" />
 
         <div class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
             <icon class="settings" name="settings"/>
@@ -32,12 +32,12 @@
             <icon class="ext-tab" name="ext-tab"/>
         </div>
 
-        <div class="option" :class="{active: layer === 'about'}" @click="setOverlay('about')">
-            <icon name="help"/>
-        </div>
-
         <div class="option" @click="logout">
             <icon name="logout"/>
+        </div>
+
+        <div class="option" :class="{active: layer === 'about'}" @click="setOverlay('about')">
+            <icon name="help"/>
         </div>
     </div>
 </component>

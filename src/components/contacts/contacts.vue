@@ -46,7 +46,7 @@
 
         <div class="no-results-indicator" v-else-if="!filteredContacts.length">
             <div><icon name="contacts"/></div>
-            <div class="text cf">{{$t('no {target} yet', {target: $t('contacts')})}}</div>
+            <div class="text cf">{{$t('no {target}', {target: $t('contacts')})}}</div>
         </div>
 
         <div v-else class="contact item" v-for="contact in filteredContacts" :class="{'disabled': calls.length}">

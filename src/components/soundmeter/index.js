@@ -18,9 +18,9 @@ module.exports = (app) => {
                 // clear the background
                 canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height)
                 if (meter.checkClipping()) {
-                    canvasContext.fillStyle = '#d9534f'
+                    canvasContext.fillStyle = '#83322b'
                 } else {
-                    canvasContext.fillStyle = '#28ca42'
+                    canvasContext.fillStyle = '#22582a'
                 }
 
                 canvasContext.fillRect(0, 0, meter.volume * canvasElement.width * 2.4, canvasElement.height)

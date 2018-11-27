@@ -10,19 +10,19 @@ const Call = require('./index')
 class CallSIG11 extends Call {
     /**
     * @param {AppBackground} app - The background application.
-    * @param {String|Number|Session} [calldescription] - An endpoint identifier to call to.
+    * @param {String|Number|Session} [description] - An endpoint description to call.
     * @param {Object} [options] - An endpoint identifier to call to.
     * @param {Boolean} [options.active] - Activates this Call in the UI.
     * @param {Boolean} [options.silent] - Setup a Call without interfering with the UI.
     */
-    constructor(app, calldescription, {active, silent} = {}) {
-        super(app, calldescription, {active, silent})
+    constructor(app, description, {active, silent} = {}) {
+        super(app, description, {active, silent})
 
         this.state.protocol = 'sig11'
 
-        if (!calldescription || ['string', 'number'].includes(typeof calldescription)) {
+        if (!description || ['string', 'number'].includes(typeof description)) {
             app.__mergeDeep(this.state, {
-                endpoint: calldescription,
+                endpoint: description,
                 keypad: {mode: 'call'},
                 status: 'new',
                 type: 'outgoing',
@@ -30,7 +30,7 @@ class CallSIG11 extends Call {
         } else {
             // Passing in a session as target means an incoming call.
             app.__mergeDeep(this.state, {keypad: {mode: 'dtmf'}, status: 'invite', type: 'incoming'})
-            this.session = calldescription
+            this.session = description
         }
     }
 

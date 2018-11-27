@@ -57,9 +57,7 @@ class SipCalls {
             if (dnd) declineReason = 'dnd'
             if (!microphoneAccess) declineReason = 'microphone'
             if (!deviceReady) declineReason = 'device'
-        }
-
-        if (callOngoing) {
+        } else if (callOngoing) {
             // All ongoing calls are closing. Accept the call.
             if (callIds.length === closingCalls.length) {
                 acceptCall = true

@@ -5,31 +5,25 @@ module.exports = (app) => {
     const CallSwitch = {
         computed: app.helpers.sharedComputed(),
         methods: Object.assign({
-            activateOrDeleteCall: function(call) {
-                // Remove the new call when clicking on the new Call while
-                // it is active.
-                if (call.active && call.status === 'new') {
-                    app.emit('bg:calls:call_delete', {callId: call.id})
-                } else {
-                    // Otherwise it's just activated.
-                    app.emit('bg:calls:call_activate', {
-                        callId: call.id,
-                        holdInactive: false,
-                        unholdActive: false,
-                    })
-                }
+            activateCall: function(call) {
+                // Otherwise it's just activated.
+                app.emit('bg:calls:call_activate', {
+                    callId: call.id,
+                    holdInactive: false,
+                    unholdActive: false,
+                })
+            },
+            activateNewCall: function() {
+                app.emit('bg:calls:call_activate', {
+                    callId: null,
+                })
             },
             callIcon: function(call) {
-                if (call.status === 'new') {
-                    if (call.active) return 'dialpad'
-                    else return 'dialpad'
-                } else if (['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(call.status)) {
+                if (['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(call.status)) {
                     return 'hang-up'
                 } else {
-                    if (call.hold.active) return 'on-hold'
-                    if (call.type === 'incoming') return 'incoming-call'
-                    else if (call.type === 'outgoing') return 'outgoing-call'
-                    return 'phone'
+                    if (call.hold.active) return 'call-hold'
+                    else return 'call-active'
                 }
             },
             callTitle: function(call) {
@@ -49,25 +43,6 @@ module.exports = (app) => {
                     return text.capitalize()
                 }
             },
-            classes: function(call, block) {
-                let classes = {}
-                if (block === 'call-button') {
-                    classes.active = call.active
-                    if (call.status === 'new') {
-                        classes['new-call'] = true
-                    } else {
-                        if (['create', 'invite'].includes(call.status)) {
-                            classes['state-accept'] = true
-                        } else if (['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(call.status)) {
-                            classes['state-hangup'] = true
-                        } else {
-                            classes['state-accepted'] = true
-                            if (call.transfer.type === 'accept') classes.hint = true
-                        }
-                    }
-                }
-                return classes
-            },
             newCallAllowed: function() {
                 let allowed = true
                 for (let callId of Object.keys(this.calls)) {
@@ -81,13 +56,14 @@ module.exports = (app) => {
                 // This method is also called on enter. The keypad may
                 // be in dtmf mode at that moment; block the call request.
                 if (!this.mode === 'call') return
-                app.emit('bg:calls:call_create', {callDescription: this.call, start: false, transfer: false})
+                app.emit('bg:calls:call_create', {description: this.call, start: false, transfer: false})
             },
         }, app.helpers.sharedMethods()),
         render: templates.call_switch.r,
         staticRenderFns: templates.call_switch.s,
         store: {
             calls: 'calls.calls',
+            description: 'calls.description',
             user: 'user',
         },
     }

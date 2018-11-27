@@ -4,176 +4,169 @@
 // The default styling is against a white background. The
 // `call-ongoing` class is used to differentiate.
 .component-call-keypad-touch {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
     width: 100%;
-    z-index: 1000000;
 
-    .contacts-match {
-        color: $primary-color;
-        font-weight: 500;
-        height: $spacer * 3;
-        text-align: center;
+    header {
+        padding: $spacer * 3;
+        padding-bottom: 0;
+
+        .switch-toggle {
+            margin-top: -$spacer / 2;
+        }
     }
 
-    .number-input {
+    .keypad {
         align-items: center;
-        color: $brand-color;
         display: flex;
-        justify-content: center;
-        max-width: 300px;
-        position: relative;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 100%;
+        z-index: 1000000;
 
-        input {
-            @include no-outline;
-            background: transparent;
-            border: 0;
-            color: $brand-color;
-            font-size: 1.8rem;
+        .contacts-match {
+            color: $primary-color;
             font-weight: 500;
-            height: $spacer * 6;
-            padding: 0 40px;
+            height: $spacer * 3;
             text-align: center;
+        }
+
+        .number-input {
+            align-items: center;
+            color: $brand-color;
+            display: flex;
+            justify-content: center;
+            max-width: 700px;
+            position: relative;
             width: 100%;
 
-            &[disabled='disabled'] {
+            input {
+                @include no-outline;
+                background: transparent;
+                border: 0;
+                color: $brand-color;
+                font-size: 1.8rem;
+                font-weight: 500;
+                height: $spacer * 6;
+                padding: 0 40px;
+                text-align: center;
+                width: 100%;
+
+                &[disabled='disabled'] {
+                    &::placeholder {
+                        color: $grey-color-light;
+                    }
+                }
+
                 &::placeholder {
-                    color: $grey-color-light;
+                    color: $brand-accent-color;
                 }
             }
 
-            &::placeholder {
+            .correct {
                 color: $brand-accent-color;
+                position: absolute;
+                right: 10px;
+
+                &.disabled {
+                    opacity: 0.5;
+
+                    &:hover {
+                        cursor: not-allowed;
+                    }
+                }
+
+                svg {
+                    height: 1.8rem;
+                    width: 1.8rem;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    svg {fill: $brand-color;}
+                }
+            }
+
+            + .number-input-match {
+                color: $grey-color-darker;
+                height: $spacer * 5;
+                line-height: $spacer * 5;
             }
         }
 
-        .correct {
-            color: $brand-accent-color;
-            position: absolute;
-            right: 10px;
+        .soundmeter {
+            background: $grey-color-lightest;
+            max-width: 700px;
+        }
+
+
+        .keys {
+            align-content: center;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 700px;
+            width: 100%;
 
             &.disabled {
                 opacity: 0.5;
 
-                &:hover {
-                    cursor: not-allowed;
-                }
-            }
-
-            svg {
-                height: 1.8rem;
-                width: 1.8rem;
-            }
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-
-        + .number-input-match {
-            color: $grey-color-darker;
-            height: $spacer * 5;
-            line-height: $spacer * 5;
-        }
-    }
-
-
-    .keys {
-        align-content: center;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin-top: $spacer;
-        max-width: 700px;
-        width: 100%;
-
-        &.disabled {
-            opacity: 0.5;
-
-            .key-row {
-                .key {
-                    &:hover {
-                        background: $white;
-                        color: $brand-color;
-                        cursor: not-allowed;
+                .key-row {
+                    .key {
+                        &:hover {
+                            background: $white;
+                            color: $brand-color;
+                            cursor: not-allowed;
+                        }
                     }
                 }
             }
-        }
 
-        .key-row {
-            display: flex;
-            flex-grow: 1;
-            justify-content: center;
-            padding-bottom: 5px;
+            .key-row {
+                display: flex;
+                flex-grow: 1;
+                justify-content: center;
+                // padding-bottom: 5px;
 
-            .key {
-                @include no-outline;
-                background: none;
-                border: 0;
-                break-inside: avoid;
-                color: $brand-color;
-                font-family: 'Rajdhani';
-                font-size: 1.5rem;
-                font-weight: 600;
-                height: 80px;
-                margin: 0;
-                width: 100%;
-
-                &:hover {
-                    background: $grey-color-lightest;
+                .key {
+                    @include no-outline;
+                    background: none;
+                    border: 0;
+                    break-inside: avoid;
                     color: $brand-color;
-                    cursor: pointer;
-                }
-
-                .sub {
-                    font-size: 0.7rem;
-                }
-            }
-        }
-    }
-
-    .rounded-button {
-        svg {
-            @include icon-size($spacer * 4);
-        }
-    }
-
-
-    &.call-ongoing {
-        .number-input {
-            color: $primary-color;
-
-            input {
-                color: $primary-color;
-
-                &::placeholder {
-                    color: $grey-color;
-                }
-            }
-
-        }
-
-        .keys {
-            .key-row {
-                .key {
-                    background: $white-color;
-                    border: 2px solid darken($grey-color-lightest, 5%);
-                    color: $grey-color-dark;
+                    font-family: 'Rajdhani';
+                    font-size: 1.5rem;
+                    font-weight: 600;
+                    height: 80px;
+                    margin: 0;
+                    width: 100%;
 
                     &:hover {
-                        background: $white;
-                        border: 2px solid $brand-color;
+                        background: $grey-color-lightest;
                         color: $brand-color;
+                        cursor: pointer;
+                    }
+
+                    &.function {
+                        color: $grey-color;
+                        font-size: 1.5rem;
+                    }
+
+                    .sub {
+                        color: $grey-color;
+                        font-size: 0.9rem;
                     }
                 }
             }
         }
 
-        .contacts-match {
-            color: $primary-color;
+        .rounded-button {
+            svg {
+                @include icon-size($spacer * 4);
+            }
         }
     }
+
+
+
 }

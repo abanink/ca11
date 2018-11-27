@@ -23,8 +23,8 @@ module.exports = (app) => {
         render: templates.calls.r,
         staticRenderFns: templates.calls.s,
         store: {
-            callDescription: 'calls.call',
             calls: 'calls.calls',
+            description: 'calls.description',
             sig11: 'calls.sig11',
             sip: 'calls.sip',
         },

@@ -37,7 +37,7 @@
 
         <div class="rounded-button-with-text">
             <div class="rounded-button" @click="holdToggle" :class="classes('hold-button')">
-                <icon name="on-hold"/>
+                <icon name="call-hold"/>
             </div>
             <p class="ca">{{$t('on hold')}}</p>
         </div>

@@ -1,23 +1,18 @@
 <component class="component-call-switch">
-
     <!-- First loop through all the active calls -->
-    <div v-if="call.status !== 'new'" :data-tooltip="callTitle(call)" class="call tooltip tooltip-left" :class="classes(call, 'call-button')"
-        v-for="call in calls" @click="activateOrDeleteCall(call)">
+    <div v-if="call.status !== 'new'" v-for="call in calls"
+        @click="activateCall(call)"
+        class="call tooltip tooltip-left"
+        :class="{active: call.active}"
+        :data-tooltip="callTitle(call)">
         <icon :name="callIcon(call)"/>
     </div>
 
     <!-- New call always end up at the bottom, but only if we are already in an accepted call. -->
-    <div v-if="callAccepted && call.status === 'new'" :data-tooltip="callTitle(call)" class="call tooltip tooltip-left" :class="classes(call, 'call-button')"
-        v-for="call in calls" @click="activateOrDeleteCall(call)">
-        <icon :name="callIcon(call)"/>
-    </div>
-
-    <!-- Create new Call button is visible when there are no new calls yet and we are not in an accepted call. -->
-    <div v-if="callAccepted && newCallAllowed()"
-        class="call new-call tooltip tooltip-left"
-        @click="createCall(false, false)"
+    <div @click="activateNewCall()"
+        class="call tooltip tooltip-left"
+        :class="{active: callActive.status === 'new'}"
         :data-tooltip="$t('setup new call').capitalize()">
-        <icon name="dialpad"/>
+        <icon name="phone-add"/>
     </div>
-
 </component>

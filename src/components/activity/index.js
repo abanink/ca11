@@ -5,7 +5,8 @@ module.exports = (app) => {
             filteredActivity: function() {
                 let activity = this.activity.sort(app.utils.sortByMultipleKey(['date'], -1))
                 if (this.filters.reminders) activity = activity.filter((i) => i.remind)
-                if (this.filters.missed) activity = activity.filter((i) => (i.label === 'missed' || i.label === 'unanswered'))
+                if (this.filters.missedIncoming) activity = activity.filter((i) => (i.status === 'missed'))
+                if (this.filters.missedOutgoing) activity = activity.filter((i) => (i.status === 'unanswered'))
                 return activity
             },
         },
@@ -15,23 +16,26 @@ module.exports = (app) => {
                 if (recent.contact) endpoint = this.contacts[recent.contact].endpoints[recent.endpoint].number
                 else endpoint = recent.endpoint
 
-                app.emit('bg:calls:call_create', {callDescription: {endpoint, protocol: 'sip'}, start: true})
+                app.emit('bg:calls:call_create', {description: {endpoint, protocol: 'sip'}, start: true})
             },
             classes: function(block, modifier) {
                 let classes = {}
-                if (block === 'recent-status') {
-                    classes[modifier.status] = true
-                } else if (block === 'remind-button') {
+                if (block === 'remind-button') {
                     if (modifier.remind) classes.active = true
-                } else if (block === 'filter-missed-calls') {
-                    if (this.filters.missed) classes['active-red'] = true
+                } else if (block === 'filter-missed-incoming') {
+                    if (this.filters.missedIncoming) classes.active = true
+                } else if (block === 'filter-missed-outgoing') {
+                    if (this.filters.missedOutgoing) classes.active = true
                 } else if (block === 'filter-reminders') {
-                    if (this.filters.reminders) classes['active-yellow'] = true
+                    if (this.filters.reminders) classes.active = true
                 }
                 return classes
             },
-            toggleFilterMissedCalls: function() {
-                app.setState({activity: {filters: {missed: !app.state.activity.filters.missed}}}, {persist: true})
+            toggleFilterMissedIncoming: function() {
+                app.setState({activity: {filters: {missedIncoming: !app.state.activity.filters.missedIncoming}}}, {persist: true})
+            },
+            toggleFilterMissedOutgoing: function() {
+                app.setState({activity: {filters: {missedOutgoing: !app.state.activity.filters.missedOutgoing}}}, {persist: true})
             },
             toggleFilterReminders: function() {
                 app.setState({activity: {filters: {reminders: !app.state.activity.filters.reminders}}}, {persist: true})
@@ -53,6 +57,17 @@ module.exports = (app) => {
             filters: 'activity.filters',
             tabs: 'ui.tabs.activity',
             user: 'user',
+        },
+        watch: {
+            // Updating all activity items after one changed
+            // activity item is a bit inefficient, but fine
+            // for now. Optimize this later.
+            activity: {
+                deep: true,
+                handler: function(activity) {
+                    app.setState({activity: {activity}}, {persist: true})
+                },
+            },
         },
     }
 }

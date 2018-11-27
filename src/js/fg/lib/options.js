@@ -15,18 +15,12 @@ module.exports = (function() {
         },
     }
 
-    let availabilityPlugin = options.plugins.builtin.find((i) => i.name === 'availability')
-
     if (env.isNode) {
         const rc = require('rc')
         let settings = {}
         rc('ca11', settings)
-        const BRAND = process.env.BRAND ? process.env.BRAND : 'ca11'
-        const brand = settings.brands[BRAND]
-        availabilityPlugin.addons = brand.plugins.builtin.availability.addons
     } else {
         // Load modules through envify replacement.
-        availabilityPlugin.addons = process.env.BUILTIN_AVAILABILITY_ADDONS
         options.plugins.custom = process.env.CUSTOM_MOD
     }
 

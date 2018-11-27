@@ -89,7 +89,6 @@ module.exports = function(settings) {
             BRAND_TARGET: settings.BRAND_TARGET,
 
             BUILD_VERBOSE: settings.BUILD_VERBOSE,
-            BUILTIN_AVAILABILITY_ADDONS: brand.plugins.builtin.availability.addons,
             BUILTIN_CONTACTS_I18N: brand.plugins.builtin.contacts.i18n,
             BUILTIN_CONTACTS_PROVIDERS: brand.plugins.builtin.contacts.providers,
             CUSTOM_MOD: brand.plugins.custom,

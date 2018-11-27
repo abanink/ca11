@@ -17,13 +17,14 @@ function helpers(app) {
     const closingStatus = ['answered_elsewhere', 'request_terminated', 'callee_busy', 'bye']
     let _helpers = {}
 
-    _helpers.activeCall = function() {
-        let activeCall = null
+    _helpers.callActive = function() {
+        let callActive = this.description
+
         for (const id of Object.keys(this.calls)) {
-            if (this.calls[id].active) activeCall = this.calls[id]
+            if (this.calls[id].active) callActive = this.calls[id]
         }
 
-        return activeCall
+        return callActive
     }
 
 
@@ -128,7 +129,7 @@ function helpers(app) {
                 dialing_a: $t('dialing phone A'),
                 dialing_b: $t('dialing phone B'),
                 invite: $t('incoming call'),
-                request_terminated: $t('connection interrupted'),
+                request_terminated: $t('busy here'),
             },
             callingDisabled: {
                 device: $t('audio device settings - invalid audio device').capitalize(),
@@ -230,12 +231,10 @@ function helpers(app) {
                 if (!condition) return
                 app.setState({ui: {tabs: {[category]: {active: name}}}}, {encrypt: false, persist: true})
             },
-            setupCall: function(callDescription) {
-                // This method is also called on enter. The keypad may
-                // be in dtmf mode at that moment; block the call request.
-                app.emit('bg:calls:call_create', {callDescription, start: true, transfer: false})
+            setupCall: function(description) {
+                app.emit('bg:calls:call_create', {description, start: true, transfer: false})
                 // Clean up the number so it is gone when the keypad reappears after the call.
-                callDescription.endpoint = ''
+                description.endpoint = ''
             },
             translations: function(category, key) {
                 if (!this._translations) this._translations = this.getTranslations()
@@ -254,8 +253,8 @@ function helpers(app) {
     */
     _helpers.sharedComputed = function() {
         return {
-            activeCall: _helpers.activeCall,
             callAccepted: _helpers.callAccepted,
+            callActive: _helpers.callActive,
             callingDisabled: _helpers.callingDisabled,
             callOngoing: _helpers.callOngoing,
             callsReady: _helpers.callsReady,

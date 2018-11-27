@@ -19,19 +19,9 @@
             margin-right: $spacer / 2;
         }
 
-        &.active-green {
+        &.active {
             color: $brand-color;
-            svg {color: $green-color;}
-        }
-
-        &.active-red {
-            color: $brand-color;
-            svg {color: $red-color;}
-        }
-
-        &.active-yellow {
-            color: $brand-color;
-            svg {color: $yellow-color;}
+            svg {fill: $brand-color;}
         }
 
         &:hover {

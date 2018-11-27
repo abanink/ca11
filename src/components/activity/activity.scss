@@ -13,18 +13,22 @@
     .activity {
         align-items: center;
         display: flex;
-        justify-content: space-between;
-        margin-bottom: $spacer * 2;
-        position: relative;
+        justify-content: flex-start;
+        margin-bottom: $spacer * 1.5;
 
         .activity-icon {
             align-items: center;
             display: flex;
+            flex: 0 0 0;
             justify-content: left;
             padding: $spacer;
             position: relative;
             width: $spacer * 6;
-            z-index: 100;
+
+            &::after {
+                background: $grey-color-lightest;
+                border: 1px solid $grey-color-lighter;
+            }
 
             &::after {
                 @include icon-size($spacer * 4);
@@ -41,35 +45,26 @@
                 }
             }
 
-            &.warning {
-                &::after {
-                    background: $grey-color-light;
-                }
-            }
-
             svg {
                 @include icon-size($spacer * 2);
-                color: $white;
+                color: $brand-color;
                 z-index: 100;
             }
         }
 
         .activity-info {
             display: flex;
-            flex: 1;
+            flex: 10 0 auto;
             flex-direction: column;
             // Required to have ellipsis text overflow on .name.
             min-width: 0;
+            padding-left: $spacer * 2.5;
 
             .name {
                 color: $grey-color-darkest;
                 font-family: 'Rajdhani';
-                font-size: 1.1rem;
+                font-size: 1.2rem;
                 font-weight: 600;
-                margin-right: $spacer * 2;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
 
             .description {
@@ -79,19 +74,20 @@
         }
 
         .activity-label {
-            align-items: center;
-            display: flex;
-            justify-content: left;
+            background: $grey-color-lightest;
+            border: 1px solid $grey-color-lighter;
+            border-radius: $spacer * 4;
+            color: $brand-color;
+            flex: 1 1 150px;
+            font-family: 'Rajdhani';
+            font-weight: 600;
+            padding: $spacer / 2 $spacer;
+            text-align: center;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
 
-            span {
-                background: $red-color;
-                border-radius: $spacer * 2;
-                color: $white;
-                font-family: 'Rajdhani';
-                font-size: 0.9rem;
-                font-weight: 600;
-                padding: $spacer / 4 $spacer;
-                text-transform: uppercase;
+            &::placeholder {
+                color: $brand-color;
             }
         }
     }

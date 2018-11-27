@@ -25,7 +25,7 @@
                 user-select: none;
 
                 svg {
-                    @include icon-size($spacer * 3);
+                    @include icon-size($spacer * 3.25);
                 }
 
                 &.green {
@@ -58,9 +58,19 @@
                     }
                 }
 
+                &.active {
+                    color: $brand-color;
+
+                    &:hover {
+                        color: $brand-color;
+                    }
+                }
+
                 &:hover {
-                    color: $white-color;
+                    color: $brand-color;
                     cursor: pointer;
+
+
                 }
             }
         }

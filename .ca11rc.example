@@ -13,13 +13,6 @@ json{
             },
             "plugins": {
                 "builtin": {
-                    "availability": {
-                        "addons": {
-                            "bg": [],
-                            "fg": [],
-                            "i18n": []
-                        }
-                    },
                     "contacts": {
                         "i18n": [],
                         "providers": []

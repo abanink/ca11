@@ -4,6 +4,7 @@
 // The most upper box containing account info and
 // icon-links to several locations.
 .component-main-statusbar {
+    background: $grey-color-lightest;
     color: $grey-color;
     display: flex;
     font-family: 'Rajdhani';
@@ -13,29 +14,16 @@
     justify-content: space-between;
     transition: background 0.5s ease;
 
-    &.error {
-        background: $red-color;
-        color: $white-color;
-
-        svg {
-            fill: $white-color;
-        }
+    &.error .status-indicators svg {
+        fill: $red-color;
     }
 
-    &.warning {
-        background: $grey-color-lightest;
-
-        svg {
-            fill: $grey-color;
-        }
+    &.warning .status-indicators svg {
+        fill: $red-color;
     }
 
-    &.ok {
-        background: $grey-color-lightest;
-
-        svg {
-            fill: $brand-color;
-        }
+    &.ok .status-indicators svg {
+        fill: $green-color;
     }
 
     svg.disabled {
@@ -68,6 +56,11 @@
                 @include icon-size($spacer * 4);
             }
         }
+
+
+        .dnd-switch {
+            margin-left: $spacer * 3;
+        }
     }
 
     // The icon links container at the right top of the popup.
@@ -99,10 +92,6 @@
                 color: $brand-color;
                 cursor: pointer;
             }
-        }
-
-        .switch {
-            margin-right: $spacer;
         }
     }
 

@@ -27,6 +27,7 @@ module.exports = (app) => {
         staticRenderFns: templates.main.s,
         store: {
             calls: 'calls.calls',
+            description: 'calls.description',
             layer: 'ui.layer',
             overlay: 'ui.overlay',
             telemetry: 'settings.telemetry',

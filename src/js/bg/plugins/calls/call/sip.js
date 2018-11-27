@@ -10,27 +10,27 @@ const Call = require('./index')
 class CallSIP extends Call {
     /**
     * @param {AppBackground} app - The background application.
-    * @param {Object} [callDescription] - SIP call description.
+    * @param {Object} [description] - SIP call description.
     * @param {Boolean} [options.active] - Activates this Call in the UI.
     * @param {Boolean} [options.silent] - Setup a Call without interfering with the UI.
     */
-    constructor(app, callDescription, {active, silent} = {}) {
-        super(app, callDescription, {active, silent})
+    constructor(app, description, {active, silent} = {}) {
+        super(app, description, {active, silent})
         this.state.protocol = 'sip'
 
         // Created from an invite means that the session is
         // already there, e.g. this is an incoming call.
-        if (callDescription.session) {
+        if (description.session) {
             // Passing in a session as target means an incoming call.
             app.__mergeDeep(this.state, {
                 status: 'invite',
                 type: 'incoming',
             })
-            this.session = callDescription.session
+            this.session = description.session
         } else {
             // Passing in no target or a number means an outgoing call.
             app.__mergeDeep(this.state, {
-                endpoint: callDescription.endpoint,
+                endpoint: description.endpoint,
                 status: 'new', type: 'outgoing',
             })
         }
@@ -46,7 +46,7 @@ class CallSIP extends Call {
         // Try to get caller info from the RPID first; e.g. this was a reinvite.
         let rpid = this.session.transaction.request.getHeader('Remote-Party-Id')
         if (rpid) {
-            rpid = this._parseRpid(srpid)
+            rpid = this._parseRpid(rpid)
             Object.assign(this.state, rpid)
         } else {
             this.state.endpoint = this.session.remoteIdentity.uri.user

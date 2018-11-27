@@ -12,15 +12,12 @@
     <Login v-if="!user.authenticated"/>
     <Wizard v-else-if="!wizard.completed && user.authenticated"/>
     <div v-else class="app-view">
-        <MainStatusBar v-if="!callOngoing" class="app-view-top"/>
-
-        <template v-for="call in calls">
-            <MainCallBar v-if="callOngoing && call.active" :call="call" class="app-view-top"/>
-        </template>
+        <MainCallBar v-if="callOngoing && callActive" class="app-view-top" :call="callActive"/>
+        <MainStatusBar v-else class="app-view-top"/>
 
         <div class="app-view-main">
             <MainMenuBar class="app-view-sidebar"/>
-            <!-- Dynamic component rendered based on layer name. -->
+            <!-- Dynamic component rendered from layer name -->
             <component v-bind:is="layer" class="app-view-layer"/>
         </div>
     </div>

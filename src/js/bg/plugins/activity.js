@@ -23,15 +23,15 @@ class PluginActivity extends Plugin {
 
         this.app.on('bg:calls:call_rejected', ({call}) => {
             // Not answered.
-            let label
-            if (call.type === 'outgoing') label = 'unanswered'
-            else label = 'missed'
+            let status
+            if (call.type === 'outgoing') status = 'unanswered'
+            else status = 'missed'
 
             let activity = {
-                label,
-                status: 'warning',
-                type: `${call.type}-call`,
+                status,
+                type: `call-missed-${call.type}`,
             }
+
             const contact = this.app.helpers.matchContact(call.endpoint)
             if (contact) Object.assign(activity, contact)
             else activity.endpoint = call.endpoint
@@ -40,8 +40,8 @@ class PluginActivity extends Plugin {
 
         this.app.on('bg:calls:call_ended', ({call}) => {
             let activity = {
-                status: 'success',
-                type: `${call.type}-call`,
+                status: 'finished',
+                type: `call-${call.type}`,
             }
 
             const contact = this.app.helpers.matchContact(call.endpoint)
@@ -60,7 +60,8 @@ class PluginActivity extends Plugin {
         return {
             activity: [],
             filters: {
-                missed: false,
+                missedIncoming: false,
+                missedOutgoing: false,
                 reminders: false,
             },
             unread: false,

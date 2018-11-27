@@ -12,12 +12,12 @@ class Call {
      * and set initial state. This state is shared by the UI of
      * AppForeground and the backend of AppBackground.
      * @param {AppBackground} app - The background application.
-     * @param {String} calldescription - A target endpoint to call. Typically a number.
+     * @param {String} description - An endpoint description to call.
      * @param {Object} [options] - New Call options.
      * @param {Boolean} [options.active] - Activate this Call in the UI.
      * @param {Boolean} [options.silent] - Setup Call without notifying the UI.
      */
-    constructor(app, calldescription, {active, silent} = {}) {
+    constructor(app, description, {active, silent} = {}) {
         this.app = app
         this.plugin = app.plugins.calls
         this.silent = silent

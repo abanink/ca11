@@ -6,11 +6,8 @@ const Plugin = require('ca11/lib/plugin')
 * @memberof AppBackground.plugins
 */
 class PluginAvailability extends Plugin {
-    constructor(app, addons) {
+    constructor(app) {
         super(app)
-
-        this.addons = addons.map((Addon) => new Addon(app))
-        this.app.logger.info(`${this}${addons.length} addon(s) found.`)
     }
 
 

@@ -143,12 +143,13 @@ video {
         align-self: center;
 
         svg {
-            @include icon-size($spacer * 6);
+            @include icon-size($spacer * 8);
         }
 
         &.text {
-            font-size: 1.4rem;
-            font-style: italic;
+            font-family: 'Rajdhani';
+            font-size: 2rem;
+            font-weight: 500;
             margin-top: $spacer;
         }
     }

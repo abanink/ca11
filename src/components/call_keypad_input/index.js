@@ -36,8 +36,8 @@ module.exports = (app) => {
             },
             protocols: function() {
                 let protocols = [
-                    {value: 'sip', name: 'sip', disabled: !this.sip.enabled},
-                    {value: 'sig11', name: 'sig11', disabled: !this.sig11.enabled}
+                    {disabled: !this.sip.enabled, name: 'sip', value: 'sip'},
+                    {disabled: !this.sig11.enabled, name: 'sig11', value: 'sig11'},
                 ]
                 return protocols
             },
@@ -72,7 +72,7 @@ module.exports = (app) => {
                 if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
             },
             setupCall: function() {
-                app.emit('bg:calls:call_create', {callDescription: {
+                app.emit('bg:calls:call_create', {description: {
                     endpoint: this.endpoint,
                     protocol: 'sip',
                 }, start: true, transfer: false})
@@ -80,7 +80,7 @@ module.exports = (app) => {
             unpressKey: function() {
                 // No key pressed. Stop playing sound.
                 window.setTimeout(() => app.sounds.dtmfTone.stop(), 50)
-            }
+            },
         }, app.helpers.sharedMethods()),
         mounted: function() {
             this.$refs.input.focus()
@@ -93,8 +93,8 @@ module.exports = (app) => {
         render: templates.call_keypad_input.r,
         staticRenderFns: templates.call_keypad_input.s,
         store: {
-            callDescription: 'calls.call',
             contacts: 'contacts.contacts',
+            description: 'calls.description',
             sig11: 'calls.sig11',
             sip: 'calls.sip',
         },
@@ -105,7 +105,7 @@ module.exports = (app) => {
             endpoint: function(endpoint) {
                 if (this.callingDisabled) return
                 let cleanedNumber = endpoint
-                if (this.callDescription.protocol === 'sip') {
+                if (this.description.protocol === 'sip') {
                     cleanedNumber = app.utils.sanitizeNumber(endpoint)
                 }
                 this.$emit('update:model', cleanedNumber)

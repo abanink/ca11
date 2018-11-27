@@ -5,18 +5,19 @@
 // The most upper box containing account info and
 // icon-links to several locations.
 .component-call-switch {
-    background: $white-tint-color-light;
-    width: $spacer * 5;
+    background: $grey-color-lightest;
+    border-left: $spacer / 2 solid $grey-color-lighter;
+
+    width: $spacer * 6;
     z-index: 10000;
 
     .call {
-        @include icon-size($spacer * 5);
+        @include icon-size($spacer * 6);
         align-items: center;
-        background: $white-tint-color-dark;
-        border-left: 1px solid $grey-color-lightest;
-        border-top: 1px solid $grey-color-lightest;
+        border-left: $spacer / 2 solid $grey-color-lighter;
         display: flex;
         justify-content: center;
+        margin-left: -$spacer / 2;
 
         &:hover {
             background: $white-tint-color-bright;
@@ -27,6 +28,7 @@
         }
 
         svg {
+            @include icon-size($spacer * 3.5);
             fill: $primary-color;
             margin-left: -1px;
         }
@@ -35,42 +37,10 @@
             @include animation('hint-pulse 1s infinite ease-in-out');
         }
 
-        // An existing call object with status `new`.
-        &.new-call {
-            background: $green-color;
-            svg {fill: $white-color;}
-
-            &.active {
-                background: $red-color;
-                svg {fill: $white-color;}
-            }
-        }
-
-        &.state-accepted {
-            background: $grey-color-dark;
-
-            svg {fill: $white-color;}
-
-            &.active {
-                background: $brand-color;
-                cursor: pointer;
-
-                svg {fill: $white-color;}
-            }
-        }
-
-
-        &.state-accept {
-            background: $green-color;
-
-            svg {fill: $white-color;}
-
-        }
-
-        &.state-hangup {
-            background: $red-color;
-
-            svg {fill: $white-color;}
+        &.active {
+            background: $white-color;
+            border-left: $spacer / 2 solid $brand-color;
+            svg {fill: $brand-color;}
         }
     }
 }

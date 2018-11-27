@@ -34,11 +34,9 @@
         </Field>
 
         <Field name="telemetry_enabled" type="checkbox"
-            :label="$t('telemetry')"
+            :label="$t('exception telemetry')"
             :model.sync="settings.telemetry.enabled"
-            :help="$t('we are able to improve the {name} faster, when you allow us to process anonymized data about usage statistics and application errors for analysis.', {name: app.name})"/>
-
-
+            :help="$t('allow us to process anonymized application errors to improve {name}.', {name: app.name})"/>
     </div>
 
 
@@ -52,9 +50,9 @@
     <!-- Network preferences -->
     <div class="tab" :class="{'is-active': tabs.active === 'network'}">
         <Field name="sip_enabled" type="checkbox"
-            :label="$t('SIG11 unification')"
+            :label="$t('enable SIG11 protocol')"
             :model.sync="calls.sig11.enabled"
-            :help="$t('secure peer-to-peer calling over decentralized signalling network SIG11.')"/>
+            :help="$t('decentralized calling on the SIG11 network.')"/>
 
         <Field name="sig11_endpoint" type="text"
             :label="$t('bootstrap node (WSS)')"
@@ -62,7 +60,7 @@
             placeholder="e.g. wss://websocket.example.org"/>
 
         <Field name="public_key" class="network-public-key" type="textarea"
-            :label="$t('public key')"
+            :label="$t('public identity')"
             :model.sync="user.identity.publicKey"
             :help="$t('automatically unlock your session after restart.')"
             placeholder=''
@@ -74,9 +72,9 @@
     <div class="tab tab-phone" :class="{'is-active': tabs.active === 'phone'}">
 
         <Field name="sip_enabled" type="checkbox"
-            :label="$t('SIP unification')"
+            :label="$t('enable SIP protocol')"
             :model.sync="calls.sip.enabled"
-            :help="$t('telecom network integration using SIP over Secure Websockets and WebRTC.', {name: app.name})"/>
+            :help="$t('centralized calling on telecom networks using SIP over Secure Websockets.', {name: app.name})"/>
 
         <template v-if="calls.sip.enabled">
         <Field name="sip_endpoint" type="text"

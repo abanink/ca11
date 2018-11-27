@@ -36,8 +36,8 @@ module.exports = (app) => {
             },
             protocols: function() {
                 let protocols = [
-                    {disabled: !this.sip.enabled, name: 'sip', value: 'sip'},
-                    {disabled: !this.sig11.enabled, name: 'sig11', value: 'sig11'},
+                    {disabled: !this.sip.enabled, name: 'SIP', value: 'sip'},
+                    {disabled: !this.sig11.enabled, name: 'SIG11', value: 'sig11'},
                 ]
                 return protocols
             },
@@ -91,20 +91,21 @@ module.exports = (app) => {
         render: templates.call_keypad_touch.r,
         staticRenderFns: templates.call_keypad_touch.s,
         store: {
-            callDescription: 'calls.call',
+            calls: 'calls.calls',
             contacts: 'contacts.contacts',
+            description: 'calls.description',
             sig11: 'calls.sig11',
             sip: 'calls.sip',
             user: 'user',
         },
         watch: {
-            'callDescription.protocol': function(protocol) {
-                app.setState({calls: {call: {protocol}}}, {persist: true})
+            'description.protocol': function(protocol) {
+                app.setState({calls: {description: {protocol}}}, {persist: true})
             },
             endpoint: function(endpoint) {
                 if (this.callingDisabled) return
                 let cleanedNumber = endpoint
-                if (this.callDescription.protocol === 'sip') {
+                if (this.description.protocol === 'sip') {
                     cleanedNumber = app.utils.sanitizeNumber(endpoint)
                 }
                 this.$emit('update:model', cleanedNumber)
