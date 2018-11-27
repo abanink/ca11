@@ -1,13 +1,13 @@
 <component class="component-main-callbar">
-    <div class="status-left" v-if="call.status !== 'new'">
+    <div class="status-left">
         <span class="status-indicator">
             <icon v-if="call.protocol === 'sip'" class="vendor-logo" name="phone-sip"/>
             <icon v-else-if="call.protocol === 'sig11'" class="vendor-logo" name="sig11"/>
         </span>
     </div>
-    <div class="in-call-info" v-if="call.status !== 'new'">
+    <div class="in-call-info">
         <div class="caller-status" v-if="call.status === 'new'">
-            {{call.keypad.endpoint}}
+            {{call.endpoint}}
         </div>
         <div class="caller-status" v-else>
             <template v-if="call.displayName">{{call.displayName}}</template>

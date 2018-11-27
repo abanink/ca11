@@ -12,9 +12,13 @@
         </div>
     </div>
 
+    <!-- DTMF keypad -->
+    <div v-if="call.keypad.active">
+        <CallKeypadTouch mode="dtmf" :model.sync="call.keypad.endpoint" :call="call" :endpoint="call.keypad.endpoint"/>
+    </div>
+
     <!-- Call options like transfer ops, on-hold and keypad -->
     <div class="call-options" v-if="['accepted'].includes(call.status)">
-
         <div class="rounded-button-with-text">
             <div class="rounded-button" @click="muteToggle" :class="classes('mute-button')">
                 <icon name="mute"/>
@@ -50,6 +54,8 @@
         </div>
     </div>
 
+    <Soundmeter class="soundmeter"/>
+
     <!-- Show only when transfer is active and the call is still active -->
     <div class="transfer-options" v-if="call.transfer.active && ['accepted'].includes(call.status)">
         <div class="transfer-buttons">
@@ -63,10 +69,6 @@
         <div class="transfer-text cf">{{$t('select a transfer recipient')}}:</div>
         <!-- Transfer keypad -->
         <CallKeypadInput mode="call" :model.sync="description.endpoint" :endpoint="description.endpoint"/>
-    </div>
-    <!-- DTMF keypad -->
-    <div v-if="call.keypad.active">
-        <CallKeypadTouch mode="dtmf" :model.sync="call.keypad.endpoint" :call="call" :endpoint="call.keypad.endpoint"/>
     </div>
 
     <div class="call-actions" v-if="!call.hangup.disabled">
