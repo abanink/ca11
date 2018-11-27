@@ -1,8 +1,8 @@
 {
   "name": "@garage11/ca11",
-  "productName": "ca11",
+  "productName": "CA11",
   "version": "1.0.0",
-  "description": "Unified WebRTC softphone and decentralized communication platform.",
+  "description": "Free unified WebRTC communication platform",
   "engines": {
     "node": ">=8.0.0"
   },
