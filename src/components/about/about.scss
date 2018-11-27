@@ -12,12 +12,14 @@
             text-align: center;
 
             .version-logo {
-                @include icon-size($spacer * 5);
+                @include icon-size($spacer * 6);
                 margin-bottom: $spacer;
             }
 
             .version-name {
-                font-weight: 500;
+                font-family: 'Rajdhani';
+                font-size: 1.2rem;
+                font-weight: 600;
                 margin-bottom: $spacer * 2;
             }
         }
@@ -43,7 +45,9 @@
 
             .support-title {
                 color: $brand-accent-color;
-                font-size: 1rem;
+                font-family: 'Rajdhani';
+                font-size: 1.1rem;
+                font-weight: 600;
             }
 
             .support-description {
@@ -52,6 +56,8 @@
 
             .support-channel {
                 color: $brand-color;
+                font-family: 'Rajdhani';
+                font-weight: 600;
             }
 
             &:hover {

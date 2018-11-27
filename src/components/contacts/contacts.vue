@@ -5,13 +5,13 @@
             <div class="title uc">{{$t('contacts')}}</div>
             <div class="vertical-devider"></div>
             <div class="content-filters">
+                <div class="filter" :class="classes('filter-online')" @click="toggleFilterOnline()">
+                    <icon name="online"/>
+                    <span class="cf">{{$t('online')}}</span>
+                </div>
                 <div class="filter" :class="classes('filter-favorites')" @click="toggleFilterFavorites()">
                     <icon name="star"/>
                     <span class="cf">{{$t('favorites')}}</span>
-                </div>
-                <div class="filter" :class="classes('filter-online')" @click="toggleFilterOnline()">
-                    <icon name="softphone"/>
-                    <span class="cf">{{$t('online')}}</span>
                 </div>
             </div>
         </div>

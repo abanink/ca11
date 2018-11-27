@@ -62,9 +62,9 @@ module.exports = (app) => {
                 } else if (block === 'favorite-button') {
                     classes.active = modifier
                 } else if (block === 'filter-favorites') {
-                    classes['active-yellow'] = this.filters.favorites
+                    classes.active = this.filters.favorites
                 } else if (block === 'filter-online') {
-                    classes['active-green'] = this.filters.online
+                    classes.active = this.filters.online
                 }
                 return classes
             },

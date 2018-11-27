@@ -6,13 +6,13 @@
         display: flex;
 
         input {
-            margin-right: $spacer * 2;
+            margin-right: $spacer;
         }
 
         .display-mode {
             display: flex;
             flex-direction: column;
-            height: 36px;
+            height: $spacer * 5;
             justify-content: center;
 
             &:hover {
@@ -26,7 +26,7 @@
             }
 
             svg {
-                @include icon-size($spacer * 4);
+                @include icon-size($spacer * 5);
                 color: $grey-color-light;
                 padding-left: $spacer;
             }

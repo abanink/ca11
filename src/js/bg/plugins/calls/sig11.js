@@ -29,7 +29,7 @@ class Sig11Calls {
             })
 
             await this.pc.setRemoteDescription(data.sdp)
-            const answer = await this.pc.createAnswer()
+            await this.pc.createAnswer()
         }
     }
 
@@ -45,7 +45,7 @@ class Sig11Calls {
         this.app.logger.info(`${this}connecting to sig11 network at ${endpoint}`)
         document.cookie = `identity=${this.app.state.user.identity.publicKey}`
 
-        this.ws = new WebSocket(endpoint, 'sig11')
+        this.ws = new WebSocket(`wss://${endpoint}`, 'sig11')
         this.ws.onopen = this._onOpen.bind(this)
         this.ws.onclose = this._onClose.bind(this)
     }

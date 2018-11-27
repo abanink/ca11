@@ -409,15 +409,13 @@ class PluginCalls extends Plugin {
                 let _call = this.calls[callId]
                 _call.setState({active: false})
             }
-
-            return null
         }
 
         for (const callId of Object.keys(this.calls)) {
             let _call = this.calls[callId]
             // A call that is closing. Don't bother changing hold
             // and active state properties.
-            if (call.id === callId) {
+            if (call && call.id === callId) {
                 call.setState({active: true})
                 // Only unhold calls that are in the right state.
                 if (unholdOwn && _call.state.status === 'accepted') {

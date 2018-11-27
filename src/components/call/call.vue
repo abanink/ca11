@@ -64,14 +64,14 @@
         <CallKeypadInput :model.sync="call.keypad.endpoint" mode="call" :endpoint="call.keypad.endpoint"/>
     </div>
     <!-- Show attended/blind transfer option and a dense keypad when transfer is active and the call is still active -->
-    <div class="new-call" v-if="call.status === 'new' || call.keypad.active">
+    <div v-if="call.keypad.active">
         <CallKeypadTouch :model.sync="call.keypad.endpoint" mode="dtmf" :call="call" :endpoint="call.keypad.endpoint"/>
     </div>
 
     <div class="call-actions" v-if="!call.hangup.disabled">
         <div class="rounded-button action decline test-button-terminate" v-if="callCanTerminate"
             @click="callTerminate(call)">
-            <icon name="hang-up"/>
+            <icon name="call-end"/>
         </div>
 
         <div class="rounded-button action accept test-button-accept" v-if="call.status === 'invite'" @click="callAccept(call)">

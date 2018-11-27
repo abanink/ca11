@@ -7,19 +7,18 @@
             padding-bottom: 0;
 
             .component-device-picker {
-                margin-bottom: $spacer * 2;
                 margin-top: $spacer * 2;
                 text-align: left;
 
                 .field {
                     .control {
                         width: 100%;
+
+                        .select {
+                            width: 100%;
+                        }
                     }
                 }
-            }
-
-            .progress {
-                margin-bottom: $spacer * 2;
             }
         }
     }

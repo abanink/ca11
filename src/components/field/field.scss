@@ -3,6 +3,11 @@
 
 @import './radio-group';
 
+.input,
+.textarea {
+    height: $spacer * 5;
+}
+
 // Bulma form field with some small modifications.
 .field-password,
 .field-text {

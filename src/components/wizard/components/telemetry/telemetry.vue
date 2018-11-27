@@ -3,12 +3,12 @@
 
     <div class="step-description">
         <span class="cf">
-            {{$t('by automatically tracking errors that might occur in {name}, you\'re directly contributing to {name}\'s quality and stability.', {name: app.name})}}
+            {{$t('{name} can log application exceptions automatically to Sentry. This semi-anonimized data helps improving {name}\'s stability and quality. Issue data is removed after being fixed.', {name: app.name})}}
         </span>
         <span class="cf">
-            {{$t('do you want to help?')}}
+            {{$t('do you want to help improve {name}?', {name: app.name})}}
         </span>
-        <em class="help cf">{{$t('you can always change your decision afterwards from the privacy settings.')}}</em>
+        <em class="help cf">{{$t('you can always change your decision afterwards in Settings.')}}</em>
         <br/>
     </div>
 

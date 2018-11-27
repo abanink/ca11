@@ -8,11 +8,15 @@
         align-items: center;
         display: flex;
         flex-direction: column;
+        margin: 0 auto;
+        max-width: 600px;
         text-align: center;
 
         > header {
             color: $brand-color;
+            font-family: 'Rajdhani';
             font-size: 1.8rem;
+            font-weight: 600;
         }
 
         .step-description {
@@ -33,13 +37,14 @@
         display: flex;
         justify-content: center;
         margin-bottom: $spacer * 3;
+        margin-top: $spacer * 3;
 
         .step-hl {
+            @include icon-size($spacer * 1.5);
             background: $grey-color-light;
             border-radius: 50%;
-            height: $spacer;
-            margin-right: $spacer;
-            width: $spacer;
+            margin-right: $spacer * 1.5;
+
 
             &.active {
                 background: $brand-color;

@@ -20,7 +20,7 @@ module.exports = (app) => {
             },
             callIcon: function(call) {
                 if (['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(call.status)) {
-                    return 'hang-up'
+                    return 'call-end'
                 } else {
                     if (call.hold.active) return 'call-hold'
                     else return 'call-active'

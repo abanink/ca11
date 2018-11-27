@@ -4,7 +4,7 @@
         <div class="greeting">{{greeting}}</div>
         <p class="welcome-message cf">
             <span v-if="!app.session.available.length || app.session.active === 'new' || user.status === 'login'" class="cf">
-                {{$t('{name} is a decentralized platform that allows you to easily and securely communicate with other people.', {name: vendor.name})}}
+                {{$t('{name} is free WebRTC communication software that allows you to communicate with other people.', {name: vendor.name})}}
                 <span class="cf">{{$t('sounds good? Begin using {name} by starting a new session.', {name: app.name})}}</span>
             </span>
             <span v-if="!app.session.active && app.session.available.length" class="cf">
