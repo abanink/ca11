@@ -174,7 +174,7 @@ class PluginUser extends Plugin {
                 ui: {layer: 'login'},
                 user: {authenticated: false},
             }, {encrypt: false, persist: true})
-            const message = this.app.$t('failed to unlock session; check your password.')
+            const message = this.app.$t('failed to unlock session; please check your password')
             this.app.notify({icon: 'warning', message, type: 'danger'})
         } finally {
             this.app.setState({user: {status: null}})

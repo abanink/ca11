@@ -35,8 +35,7 @@ module.exports = (app) => {
                             } else tooltip.sip = this.$t('registered')
 
                             tooltip.sip += ` (${this.sip.account.selected.username})`
-                        }
-                        else {
+                        } else {
                             classes.error = true
                             if (this.sip.status === 'disconnected') tooltip.sip = this.$t('disconnected')
                             else tooltip.sip = this.$t(this.sip.status) // Handle unknown status.
@@ -51,8 +50,7 @@ module.exports = (app) => {
                                 classes.warning = true
                                 tooltip.sig11 = this.$t('do not disturb')
                             } else tooltip.sig11 = this.$t('registered')
-                        }
-                        else {
+                        } else {
                             classes.error = true
                             if (this.sig11.status === 'disconnected') tooltip.sig11 = this.$t('disconnected')
                             else tooltip.sig11 = this.$t(this.sig11.status) // Handle unknown status.

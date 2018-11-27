@@ -12,11 +12,12 @@
 .component-notifications {
     left: 0;
     position: absolute;
+    width: 100%;
     z-index: 100000;
 
     &.topbar {
         // Must start at the end of the top navigation bar.
-        top: $spacer * 5 + 4px;
+        top: $spacer * 5;
     }
 
     &.sidebar {
@@ -34,7 +35,7 @@
         flex-direction: row;
         font-family: 'Rajdhani';
         font-weight: 600;
-        height: $spacer * 6;
+        height: $spacer * 7;
         justify-content: space-between;
         margin: 0;
         padding: 0;

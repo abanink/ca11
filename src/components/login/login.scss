@@ -2,6 +2,8 @@
 @import 'ca11/lib/variables';
 
 .component-login {
+    margin: 0 auto;
+    max-width: 700px;
     padding: $spacer * 4;
 
     header {
@@ -10,18 +12,21 @@
 
         .greeting {
             color: $brand-color;
+            font-family: 'Rajdhani';
             font-size: 1.8rem;
+            font-weight: 600;
         }
+    }
 
-        .welcome-message {
-            color: $grey-color;
-            padding-bottom: $spacer * 3;
-            padding-top: $spacer * 2;
+    .welcome-message {
+        color: $grey-color-darker;
+        max-width: 70%;
+        padding-bottom: $spacer;
+        padding-top: $spacer * 2;
 
-            .session-name {
-                color: $brand-color;
-                font-style: italic;
-            }
+        .session-name {
+            color: $brand-color;
+            font-style: italic;
         }
     }
 
@@ -31,22 +36,13 @@
 
     footer {
         color: $grey-color;
-        font-size: 0.75rem;
-        margin-top: $spacer;
+        font-size: 0.8rem;
         text-align: center;
-
-        .forgot-pw {
-            margin-bottom: $spacer;
-
-            a {
-                color: $grey-color;
-            }
-        }
 
         svg {
             color: $brand-color;
             margin-top: -2px;
-            padding: 0 ($spacer / 3);
+            padding: 0 ($spacer / 6);
             width: $spacer * 2.5;
 
             &:hover {
@@ -100,7 +96,7 @@
             }
 
             .icon-remove svg {
-                @include icon-size($spacer * 1.5);
+                @include icon-size($spacer * 2.5);
 
                 &:hover {
                     color: $brand-color;

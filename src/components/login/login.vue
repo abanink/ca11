@@ -1,19 +1,25 @@
 <component class="component-login" tabindex="-1" v-on:keyup.enter="login">
 
     <header>
-        <div class="greeting">{{greeting}}</div>
-        <p class="welcome-message cf">
-            <span v-if="!app.session.available.length || app.session.active === 'new' || user.status === 'login'" class="cf">
-                {{$t('{name} is free WebRTC communication software that allows you to communicate with other people.', {name: vendor.name})}}
-                <span class="cf">{{$t('sounds good? Begin using {name} by starting a new session.', {name: app.name})}}</span>
-            </span>
-            <span v-if="!app.session.active && app.session.available.length" class="cf">
-                {{$t('continue with an existing session')}}:
-            </span>
+        <div v-if="app.session.active" class="greeting">
+            <span v-if="app.session.active === 'new'" class="cf">{{$t('welcome to {name}', {name: app.name})}}</span>
+            <span v-else class="cf">{{$t('welcome back')}} {{app.session.active}}</span>
+        </div>
+        <div v-else class="greeting">
 
-            <span v-else-if="app.session.active" class="cf">
-                {{$t('enter the password for session')}}:</br>
-                <span class="session-name">{{app.session.active}}</span>
+            <span class="cf">{{greeting}}</span>
+        </div>
+        <p class="welcome-message cf">
+            <span class="cf">
+                <template v-if="!app.session.active && app.session.available.length">
+                {{$t('continue with an existing user session')}}
+                </template>
+                <template v-else-if="app.session.active === 'new'">
+                {{$t('a session is used to protect and encapsulate your local data; all data remains on your computer.')}}</br>
+                </template>
+                <template v-else>
+                {{$t('unlock your session with the session secret')}}
+                </template>
             </span>
         </p>
     </header>
@@ -22,13 +28,13 @@
     <div v-if="!app.session.available.length || app.session.active === 'new' || user.status === 'login'">
         <!-- Only show the username field with a 'new' session. -->
         <Field name="username" type="text" autocomplete="off"
-            :autofocus="true" :label="$t('your screen name')" :model.sync="user.username"
-            :placeholder="$t('your screen name on the SIG11 network')"
+            :autofocus="true" :label="$t('session name')" :model.sync="user.username"
+            :placeholder="$t('used to identify your session with')"
             :validation="$v.user.username"/>
 
         <Field name="password" type="password"
-            :label="$t('session password')" :model.sync="password"
-            :placeholder="$t('protect your personal settings with a password', {name: vendor.name})"
+            :label="$t('session lock secret')" :model.sync="password"
+            :placeholder="$t('this secret is used to unlock the session')"
             :validation="$v.password"/>
 
         <div class="buttons is-centered">
@@ -41,8 +47,8 @@
     <div v-else-if="app.session.active && app.session.active !== 'new'">
         <!-- Do not publish browser test screenshots without a password field. This would leak test credentials. -->
         <Field name="password" type="password"
-            :label="$t('password')" :model.sync="password"
-            :placeholder="$t('enter your password')"
+            :label="$t('session lock secret')" :model.sync="password"
+            :placeholder="$t('this secret is used to unlock the session')"
             :validation="$v.password"/>
 
         <div class="buttons is-centered">
@@ -57,19 +63,23 @@
             <i class="icon-session" @click="selectSession(session)"><icon name="user"/></i>
             <div class="description" @click="selectSession(session)">{{session}}</div>
             <i class="icon-remove status-indicator tooltip tooltip-left" :data-tooltip="$t('remove session').capitalize()" @click="removeSession(session)">
-                <icon name="close"/>
+                <icon name="delete"/>
             </i>
         </div>
-        <div class="new-session-text cf">
-            {{$t('or login with a different account')}}:
+        <div class="welcome-message">
+            <span class="cf">{{$t('or create a new user session')}}</span>
         </div>
         <div class="session new-session" @click="newSession()">
-            <i class="icon-session"><icon class="icon-session" name="plus"/></i>
-            <div class="description cf">{{$t('new session')}}</div>
+            <i class="icon-session"><icon class="icon-session" name="user-add"/></i>
+            <div class="description cf">{{$t('add session')}}</div>
         </div>
     </div>
 
     <footer>
-        <div class="help-message cf">{{$t('need help?')}}<br/><span class="cf">{{$t('click on the')}}</span><i @click="setOverlay('about')"><icon name="help"/></i>{{$t('icon')}}</div>
+        <div class="help-message cf">
+            {{$t('need help?')}}<br/>
+            <span class="cf">{{$t('click on the')}}</span>
+            <i @click="setOverlay('about')"><icon name="help"/></i>{{$t('icon')}}
+        </div>
     </footer>
 </component>
