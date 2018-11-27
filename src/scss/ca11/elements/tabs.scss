@@ -31,7 +31,6 @@
 
         li {
             flex-grow: 1;
-            font-size: 1.1rem;
 
             &.disabled {
                 opacity: 0.3;
@@ -46,11 +45,10 @@
     }
 
     a {
-        border-bottom-width: $spacer / 4;
+        border-bottom-width: $spacer / 2;
         font-family: 'Rajdhani';
-        font-weight: 600;
+        font-weight: 500;
         height: $spacer * 7;
-        padding: 0.5rem;
 
         svg {
             @include icon-size($spacer * 3);

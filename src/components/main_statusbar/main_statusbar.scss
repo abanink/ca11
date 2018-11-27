@@ -14,21 +14,11 @@
     justify-content: space-between;
     transition: background 0.5s ease;
 
-    &.error .status-indicators svg {
-        fill: $red-color;
-    }
+    &.error .status-indicators svg {fill: $red-color;}
+    &.warning .status-indicators svg {fill: $red-color;}
+    &.ok .status-indicators svg {fill: $green-color;}
 
-    &.warning .status-indicators svg {
-        fill: $red-color;
-    }
-
-    &.ok .status-indicators svg {
-        fill: $green-color;
-    }
-
-    svg.disabled {
-        fill: $grey-color-light;
-    }
+    svg.disabled {fill: $grey-color-light;}
 
     &.call-active {
         background: $green-color;
@@ -53,7 +43,7 @@
             width: $spacer * 6;
 
             svg {
-                @include icon-size($spacer * 4);
+                @include icon-size($spacer * 3.5);
             }
         }
 

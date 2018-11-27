@@ -447,7 +447,9 @@ class AppBackground extends App {
 
         if (sessionId === 'active') {
             sessionId = session.active ? session.active : null
-            this.logger.debug(`${this}active session found: "${sessionId}"`)
+
+            if (sessionId) this.logger.debug(`${this}active session found: "${sessionId}"`)
+            else sessionId = 'new'
         }
 
         if (logout) {

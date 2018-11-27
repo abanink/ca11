@@ -24,7 +24,7 @@
             transition: background 150ms ease-in-out;
 
             svg {
-                @include icon-size($spacer * 4);
+                @include icon-size($spacer * 3.5);
             }
 
             // Unread red-dot on top of the recent icon.

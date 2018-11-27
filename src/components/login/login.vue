@@ -18,6 +18,7 @@
                 {{$t('a session is used to protect and encapsulate your local data; all data remains on your computer.')}}</br>
                 </template>
                 <template v-else>
+                ACITVE: {{app.session.active}}<br/>
                 {{$t('unlock your session with the session secret')}}
                 </template>
             </span>

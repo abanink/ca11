@@ -49,7 +49,7 @@
 
     <!-- Network preferences -->
     <div class="tab" :class="{'is-active': tabs.active === 'network'}">
-        <Field name="sip_enabled" type="checkbox"
+        <Field name="sig11_enabled" type="checkbox"
             :label="$t('enable SIG11 protocol')"
             :model.sync="calls.sig11.enabled"
             :help="$t('decentralized calling on the SIG11 network.')"/>
