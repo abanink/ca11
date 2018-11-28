@@ -44,13 +44,13 @@
     <div class="control has-icons-right">
         <input :type="visible ? 'text' : 'password'" :class="classes('input')"
             @input="updateModel($event)" :value="model"
-            :id="name" :name="name" :placeholder="placeholder.capitalize()" :disabled="disabled"/>
+            :id="name" :name="name" :placeholder="placeholder" :disabled="disabled"/>
+        <ul class="validation-message help is-danger" :class="{hide: !invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></ul>
         <span :class="{visible}" class="icon is-small is-right" @click="toggleVisible()">
             <icon name="eye"/>
         </span>
     </div>
     <em class="help cf" v-if="help">{{help}}</em>
-    <span class="validation-message help is-danger" :class="{hide: !invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></span>
 </div>
 
 
@@ -82,7 +82,7 @@
         <slot name="select-extra"></slot>
     </div>
     <em class="help cf" v-if="help">{{help}}</em>
-    <span v-if="invalidFieldValue && validationMessage" class="validation-message is-danger" v-html="validationMessage"></span>
+    <ul v-if="invalidFieldValue && validationMessage" class="validation-message is-danger" v-html="validationMessage"></ul>
     <slot name="select-after"></slot>
 </div>
 
@@ -114,7 +114,7 @@
         <slot name="select-extra"></slot>
     </div>
     <em class="help cf" v-if="help">{{help}}</em>
-    <span v-if="invalidFieldValue && validationMessage" class="validation-message is-danger" v-html="validationMessage"></span>
+    <ul v-if="invalidFieldValue && validationMessage" class="validation-message is-danger" v-html="validationMessage"></ul>
     <slot name="select-after"></slot>
 </div>
 
@@ -124,10 +124,11 @@
     <div class="control">
         <input type="text" :class="classes('input')"
             @input="updateModel($event)" :readonly="readonly" :value="model"
-            :id="name" :name="name" :placeholder="placeholder.capitalize()" :disabled="disabled" :autofocus="autofocus"/>
+            :id="name" :name="name" :placeholder="placeholder" :disabled="disabled" :autofocus="autofocus"/>
+        <ul class="validation-message help is-danger" :class="{hide: !invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></ul>
     </div>
     <em class="help cf" v-if="help">{{help}}</em>
-    <span class="validation-message help is-danger" :class="{hide: !invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></span>
+
 </div>
 
 
@@ -135,5 +136,5 @@
     <label class="label ca" :class="classes('label')" :for="name">{{label}}</label>
     <textarea class="textarea" v-on:input="updateModel($event)" :readonly="readonly" :value="model"
          :id="name" :name="name" :placeholder="placeholder" :disabled="disabled">{{model}}</textarea>
-    <span class="validation-message help is-danger" :class="{hide: !invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></span>
+    <ul class="validation-message help is-danger" :class="{hide: !invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></ul>
 </div>

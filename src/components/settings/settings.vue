@@ -8,10 +8,10 @@
             <li :class="classes('tabs', 'devices')" @click="setTab('settings', 'devices', settings.webrtc.enabled)">
                 <a><icon name="headset_mic"/><span class="cf">{{$t('devices')}}</span></a>
             </li>
-            <li :class="classes('tabs', 'network')" @click="setTab('settings', 'network')">
+            <li :class="classes('tabs', 'sig11')" @click="setTab('settings', 'sig11')">
                 <a><icon name="sig11"/><span class="cf">{{$t('SIG11')}}</span></a>
             </li>
-            <li class="test-tab-phone" :class="classes('tabs', 'phone')" @click="setTab('settings', 'phone')">
+            <li class="test-tab-phone" :class="classes('tabs', 'sip')" @click="setTab('settings', 'sip')">
                 <a><icon name="phone-sip"/><span class="cf">{{$t('SIP')}}</span></a>
             </li>
         </ul>
@@ -36,7 +36,7 @@
         <Field name="telemetry_enabled" type="checkbox"
             :label="$t('exception telemetry')"
             :model.sync="settings.telemetry.enabled"
-            :help="$t('allow us to process anonymized application errors to improve {name}.', {name: app.name})"/>
+            :help="$t('allow us to store anonymized application errors to improve {name}.', {name: app.name})"/>
     </div>
 
 
@@ -47,17 +47,19 @@
     </div>
 
 
-    <!-- Network preferences -->
-    <div class="tab" :class="{'is-active': tabs.active === 'network'}">
+    <!-- SIG11 preferences -->
+    <div class="tab" :class="{'is-active': tabs.active === 'sig11'}">
         <Field name="sig11_enabled" type="checkbox"
             :label="$t('enable SIG11 protocol')"
-            :model.sync="calls.sig11.enabled"
-            :help="$t('decentralized calling on the SIG11 network.')"/>
+            :model.sync="calls.sig11.toggled"
+            :help="$t('decentralized calling on overlay network SIG11.')"/>
 
+        <template v-if="calls.sig11.toggled">
         <Field name="sig11_endpoint" type="text"
-            :label="$t('bootstrap node (WSS)')"
+            :label="$t('parent node (WSS)')"
             :model.sync="calls.sig11.endpoint"
-            placeholder="e.g. wss://websocket.example.org"/>
+            placeholder="websocket.sig11.example.org"
+            :validation="$v.calls.sig11.endpoint"/>
 
         <Field name="public_key" class="network-public-key" type="textarea"
             :label="$t('public identity')"
@@ -65,37 +67,35 @@
             :help="$t('automatically unlock your session after restart.')"
             placeholder=''
             :readonly="true"/>
+        </template>
     </div>
 
 
-    <!-- Phone preferences -->
-    <div class="tab tab-phone" :class="{'is-active': tabs.active === 'phone'}">
-
+    <!-- SIP preferences -->
+    <div class="tab tab-phone" :class="{'is-active': tabs.active === 'sip'}">
         <Field name="sip_enabled" type="checkbox"
             :label="$t('enable SIP protocol')"
-            :model.sync="calls.sip.enabled"
-            :help="$t('centralized calling on telecom networks using SIP over Secure Websockets.', {name: app.name})"/>
+            :model.sync="calls.sip.toggled"
+            :help="$t('centralized calling on telecom SIP networks using Secure Websockets.', {name: app.name})"/>
 
-        <template v-if="calls.sip.enabled">
+        <template v-if="calls.sip.toggled">
         <Field name="sip_endpoint" type="text"
             :label="$t('SIP domain (WSS)')"
             :model.sync="calls.sip.endpoint"
-            placeholder="e.g. wss://websocket.example.org"/>
+            placeholder="sip.websocket.example.org"
+            :validation="$v.calls.sip.endpoint"/>
 
         <!-- Only show the username field with a 'new' session. -->
         <Field name="sip_username" type="text"
-            :label="$t('SIP username')" :model.sync="calls.sip.account.selected.username"
-            :placeholder="$t('account@example.org')"/>
+            :label="$t('SIP Extension')" :model.sync="calls.sip.account.selected.username"
+            :placeholder="$t('411')"
+            :validation="$v.calls.sip.account.selected.username"/>
 
         <Field name="sip_password" type="password"
             :label="$t('SIP password')" :model.sync="calls.sip.account.selected.password"
-            :placeholder="$t('enter your password')"/>
+            :placeholder="$t('SIP account secret')"
+            :validation="$v.calls.sip.account.selected.password"/>
         </template>
-
-        <Field v-if="user.developer" name="audio_post_processing" type="select"
-            :label="$t('audio post-processing')"
-            :model.sync="settings.webrtc.media.type.selected"
-            :options="settings.webrtc.media.type.options"/>
     </div>
 
 

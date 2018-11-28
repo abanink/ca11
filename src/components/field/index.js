@@ -26,7 +26,6 @@ module.exports = (app) => {
              */
             invalidFieldValue: function() {
                 if (!this.validation) return null
-                if (!this.validation.$dirty) return null
                 // Validation for `requiredIf` depends on the state of other
                 // fields. Therefor don't use the $dirty check on this field,
                 // but go straight for the $invalid state.
@@ -42,33 +41,33 @@ module.exports = (app) => {
              * @returns {Array} - An array of translated error messages.
              */
             validationMessage: function() {
-                let err = []
+                let errors = []
                 const v = this.validation
 
-                if (!v) return err
+                if (!v) return ''
 
                 if (v.customValid === false) {
-                    err.push(this.$t(v.$params.customValid.message).capitalize())
+                    errors.push(this.$t(v.$params.customValid.message).capitalize())
                 }
 
                 if (v.domain === false) {
-                    err.push(this.$t('fill in a valid domain.').capitalize())
+                    errors.push(this.$t('valid domain name is required').capitalize())
                 }
 
                 if (v.email === false) {
-                    err.push(this.$t('fill in a valid email address.').capitalize())
+                    errors.push(this.$t('valid email address is required').capitalize())
                 }
 
                 if (v.maxLength === false) {
-                    err.push(this.$t(
-                        'fill in a value no longer than {max} characters.', {
+                    errors.push(this.$t(
+                        'fill in a value no longer than {max} characters', {
                             max: v.$params.maxLength.max,
                         }).capitalize()
                     )
                 }
 
                 if (v.minLength === false) {
-                    err.push(this.$t(
+                    errors.push(this.$t(
                         'fill in a value of at least {min} characters.', {
                             min: v.$params.minLength.min,
                         }).capitalize()
@@ -76,32 +75,35 @@ module.exports = (app) => {
                 }
 
                 if (v.numeric === false) {
-                    err.push(this.$t('fill in a valid number.').capitalize())
+                    errors.push(this.$t('valid number is required').capitalize())
                 }
 
                 if (v.must_be_unique === false) {
-                    err.push(this.$t('fill in a unique value.').capitalize())
+                    errors.push(this.$t('unique value is required').capitalize())
                 }
 
                 if (v.required === false) {
-                    err.push(this.$t('this field is required.').capitalize())
+                    errors.push(this.$t('value is required').capitalize())
                 }
 
                 if (v.requiredIf === false) {
-                    err.push(this.$t('this field is required.').capitalize())
+                    errors.push(this.$t('value is required').capitalize())
                 }
 
                 if (v.sameAs === false) {
-                    err.push(this.$t('field "{fieldName}" must have the same value.', {
+                    errors.push(this.$t('field "{fieldName}" must have the same value', {
                         fieldName: v.$params.sameAs.eq,
                     }).capitalize())
                 }
 
                 if (v.url === false) {
-                    err.push(this.$t('fill in a valid url.').capitalize())
+                    errors.push(this.$t('valid url is required').capitalize())
                 }
 
-                return err.join('</br>')
+                let validationHtml = ''
+                for (const error of errors) {validationHtml += `<li>${error}</li>`}
+
+                return validationHtml
             },
         },
         data: function() {

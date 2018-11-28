@@ -30,6 +30,16 @@
     }
 }
 
+@mixin bullet($color) {
+    background: $color;
+    border-radius: 100%;
+    content: '';
+    display: inline-block;
+    height: $spacer;
+    margin-right: 5px;
+    width: $spacer;
+}
+
 @mixin icon-size($size) {
     height: $size;
     width: $size;

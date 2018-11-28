@@ -1,6 +1,6 @@
 module.exports = (app) => {
 
-    // const v = Vuelidate.validators
+    const v = Vuelidate.validators
 
     /**
     * @memberof fg.components
@@ -17,15 +17,18 @@ module.exports = (app) => {
             },
             save: function(e) {
                 let settings = app.utils.copyObject(this.settings)
-
+                console.log("SIP ENABLED", app.state.calls.sip.toggled)
                 let settingsState = {
                     availability: {dnd: false},
                     calls: {
+                        sig11: {
+                            enabled: app.state.calls.sig11.toggled,
+                        },
                         sip: {
                             account: {
                                 selected: app.state.calls.sip.account.selected,
                             },
-                            enabled: app.state.calls.sip.enabled,
+                            enabled: app.state.calls.sip.toggled,
                             endpoint: app.state.calls.sip.endpoint,
                         },
                     },
@@ -33,7 +36,7 @@ module.exports = (app) => {
                     settings,
                 }
 
-                // Disable SIP as selected call protocol when it is disabled.
+                // Switch back to SIG11 as defautl call protocol when SIP is disabled.
                 if (!this.calls.sip.enabled && this.calls.description.protocol === 'sip') {
                     settingsState.calls.description = {protocol: 'sig11'}
                 }
@@ -50,7 +53,7 @@ module.exports = (app) => {
             },
         }, app.helpers.sharedMethods()),
         mounted: async function() {
-            // Immediatly triger validation on the fields.
+            // Immediatly trigger validation on the fields.
             this.$v.$touch()
         },
         render: templates.settings.r,
@@ -70,22 +73,37 @@ module.exports = (app) => {
         },
         validations: function() {
             let validations = {
-                // settings: {
-                //     sip: {
-                //         endpoint: {
-                //             uri: {
-                //                 domain: app.helpers.validators.domain,
-                //                 required: v.required,
-                //             },
-                //         },
-                //     },
-                // },
+                calls: {
+                    sig11: {
+                        endpoint: {
+                            requiredIf: v.requiredIf(() => this.calls.sig11.toggled),
+                        },
+                    },
+                    sip: {
+                        account: {
+                            selected: {
+                                password: {
+                                    requiredIf: v.requiredIf(() => this.calls.sip.toggled),
+                                },
+                                username: {
+                                    requiredIf: v.requiredIf(() => this.calls.sip.toggled),
+                                },
+                            },
+                        },
+                        endpoint: {
+                            requiredIf: v.requiredIf(() => this.calls.sip.toggled),
+                        },
+                    },
+                },
             }
-            // Add the validation that is shared with step_voipaccount, but
-            // only if the user is supposed to choose between account options.
-            // if (this.calls.sip.account.selection) {
-            //     validations.settings.sip.account = app.helpers.sharedValidations.bind(this)().settings.sip.account
-            // }
+
+            if (this.calls.sip.toggled) {
+                validations.calls.sip.endpoint.domain = app.helpers.validators.domain
+            }
+
+            if (this.calls.sig11.toggled) {
+                validations.calls.sig11.endpoint.domain = app.helpers.validators.domain
+            }
 
             return validations
         },

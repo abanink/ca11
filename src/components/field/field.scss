@@ -12,13 +12,14 @@
 .field-password,
 .field-text {
     &:not(:last-child) {
-        margin-bottom: 0;
+        margin-bottom: $spacer * 2;
     }
 }
 
 .field {
     align-items: flex-start;
     justify-content: left;
+    position: relative;
 
     &:last-child {
         margin-bottom: 0;
@@ -42,13 +43,41 @@
         width: 100%;
     }
 
-    .validation-message {
+    ul.validation-message {
+        display: none;
+    }
+
+
+    // Only show validation message when the field is focussed.
+    input:focus + ul.validation-message {
         // Make sure it doesn't collapse when there is no message.
-        color: $red-color;
-        font-size: 0.75rem;
+        background: $white-color;
+        border: 1px solid $grey-color-lighter;
+        border-radius: $spacer / 2;
+        border-top: 0;
+        box-shadow: -1px 1px 4px rgba($grey-color-darker, 0.7);
+        color: $grey-color;
+        display: block;
+        font-family: 'Rajdhani';
+        font-size: 0.8rem;
+        font-weight: 600;
         margin: 0;
-        margin-top: $spacer / 4;
+        margin-top: $spacer * 5;
+        // Keep the box height intact while the message disappears.
+        min-height: $spacer * 3;
+
+        position: absolute;
         transition: opacity 0.5s ease;
+        z-index: 10000;
+
+        li {
+            height: $spacer * 3;
+            padding: $spacer / 2 $spacer;
+
+            &::before {@include bullet($red-color);}
+        }
+
+
 
         &.hide {
             opacity: 0;
@@ -78,7 +107,8 @@
                 width: 100%;
 
                 &:focus {
-                    border: 1px solid $brand-accent-color;
+                    border: 1px solid $brand-color;
+                    box-shadow: 0 0 1px 1px $brand-color;
                 }
             }
 
@@ -123,7 +153,7 @@
 
                 &:active,
                 &:focus {
-                    border: 1px solid lighten($brand-color, 20%);
+                    box-shadow: 0 0 2px 1px inset $red-color;
                 }
             }
         }
@@ -223,8 +253,8 @@
 
         &:focus,
         &:active {
-            border: 1px solid $brand-accent-color;
-            box-shadow: 0 0 1px 1px $brand-accent-color;
+            border: 1px solid $brand-color;
+            box-shadow: 0 0 1px 1px $brand-color;
         }
 
         &[type='password'],

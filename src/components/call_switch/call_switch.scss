@@ -28,7 +28,7 @@
         }
 
         svg {
-            @include icon-size($spacer * 3.5);
+            @include icon-size($spacer * 3);
             fill: $primary-color;
             margin-left: -1px;
         }

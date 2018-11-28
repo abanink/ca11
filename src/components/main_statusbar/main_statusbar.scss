@@ -18,7 +18,7 @@
     &.warning .status-indicators svg {fill: $red-color;}
     &.ok .status-indicators svg {fill: $green-color;}
 
-    svg.disabled {fill: $grey-color-light;}
+    .status-indicators svg.disabled {fill: $grey-color-light;}
 
     &.call-active {
         background: $green-color;
