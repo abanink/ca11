@@ -12,7 +12,7 @@
                 <a><icon name="sig11"/><span class="cf">{{$t('SIG11')}}</span></a>
             </li>
             <li class="test-tab-phone" :class="classes('tabs', 'sip')" @click="setTab('settings', 'sip')">
-                <a><icon name="phone-sip"/><span class="cf">{{$t('SIP')}}</span></a>
+                <a><icon name="protocol-sip"/><span class="cf">{{$t('SIP')}}</span></a>
             </li>
         </ul>
     </div>

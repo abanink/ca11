@@ -36,8 +36,22 @@
         }
     }
 
+    .item-context,
+    .item {
+        input {
+            border: 1px solid transparent;
+            padding: $spacer / 2;
+            // Editable inputs.
+            &:not([readonly]) {
+                border: 1px dashed $grey-color-lighter;
+            }
+        }
+    }
 
     .item {
+        margin-bottom: $spacer;
+        padding: $spacer / 2;
+
         .item-info {
             display: flex;
             flex: 1;
@@ -65,14 +79,6 @@
         &:hover {
             .item-options {
                 display: flex;
-            }
-        }
-
-        input {
-            border: 1px solid transparent;
-            // Editable inputs.
-            &:not([readonly]) {
-                border: 1px dashed $grey-color-lighter;
             }
         }
     }
@@ -109,11 +115,7 @@
 
     // A selected item can have extra space beneath.
     .item-context {
-        .context-options {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-        }
+        margin-bottom: $spacer / 2;
 
         .no-items {
             color: $grey-color;
@@ -121,6 +123,50 @@
             font-weight: 600;
             padding: $spacer;
             width: 100%;
+        }
+
+        .context-item {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: $spacer / 4;
+            padding-left: 0;
+
+            .context-item-icon {
+                @include icon-size($spacer * 4);
+                border: 1px dashed transparent;
+                color: $grey-color;
+                margin: 0 $spacer;
+                padding: $spacer / 2 0;
+                text-align: center;
+                width: $spacer * 5;
+
+                &.writable {
+                    border: 1px dashed $grey-color-lighter;
+
+                    :hover {
+                        cursor: pointer;
+                        fill: $brand-color;
+                    }
+                }
+            }
+
+            input.name {
+                color: $grey-color-darker;
+                flex: 1;
+            }
+
+            .context-item-options {
+                align-items: center;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                margin: 0 $spacer;
+                // min-width: 100px;
+
+                svg {
+                    @include icon-size($spacer * 2.5);
+                }
+            }
         }
 
     }

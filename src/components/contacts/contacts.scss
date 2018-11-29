@@ -8,10 +8,8 @@
         flex-wrap: wrap;
 
         .contact {
-            border: 1px solid transparent;
-
             &.selected {
-                border: 1px dotted $grey-color-lighter;
+                box-shadow: 0 0 5px rgba($grey-color-darkest, 0.5);
             }
         }
 
@@ -19,8 +17,11 @@
             align-items: center;
             display: flex;
             justify-content: space-between;
-            margin: $spacer 0;
             position: relative;
+
+            &:hover {
+                cursor: pointer !important;
+            }
 
             .avatar-state {
                 align-items: center;
@@ -59,12 +60,6 @@
                     font-size: 0.9rem;
                 }
             }
-
-            .contact-specials {
-                .favorite {
-                    color: $brand-color;
-                }
-            }
         }
 
 
@@ -75,20 +70,13 @@
 
                 .avatar-state {
                     align-items: center;
-
                     display: flex;
                     justify-content: left;
-                    margin-right: $spacer;
+                    margin-right: $spacer / 2;
                     position: relative;
 
-                    .endpoint-status-icon {
-                        bottom: 0;
-                        position: absolute;
-                        right: $spacer / 4;
-                    }
-
                     .placeholder {
-                        @include icon-size($spacer * 5);
+                        @include icon-size($spacer * 6);
                         background: $grey-color-lightest;
                         border-radius: 50%;
                         color: $grey-color-light;

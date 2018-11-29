@@ -2,19 +2,19 @@
 
     <div class="status-indicators">
         <div class="status-indicator sig11 tooltip tooltip-right" :data-tooltip="tooltipSig11">
-            <icon name="sig11" v-if="!sig11.enabled" class="disabled"/>
+            <icon name="protocol-sig11" v-if="!sig11.enabled" class="disabled"/>
             <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
             <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
             <icon name="spinner" v-else-if="sig11.status === 'loading'" class="spinner"/>
-            <icon name="sig11" v-else/>
+            <icon name="protocol-sig11" v-else/>
         </div>
 
         <div class="status-indicator sip tooltip tooltip-right" :data-tooltip="tooltipSip">
-            <icon name="phone-sip" v-if="!sip.enabled" class="disabled"/>
+            <icon name="protocol-sip" v-if="!sip.enabled" class="disabled"/>
             <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
             <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
             <icon name="spinner" v-else-if="sip.status === 'loading'" class="spinner"/>
-            <icon name="phone-sip" v-else/>
+            <icon name="protocol-sip" v-else/>
         </div>
 
         <Availability class="dnd-switch" />

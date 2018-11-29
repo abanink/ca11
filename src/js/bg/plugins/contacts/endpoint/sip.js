@@ -63,8 +63,7 @@ class EndpointSip extends Endpoint {
 
 
     /**
-    * Subscribe to the SIP server. Use a subscription delay
-    * to prevent the server from being hammered.
+    * Subscribe to the SIP server.
     * @returns {Promise} - Resolves when ready.
     */
     subscribe() {

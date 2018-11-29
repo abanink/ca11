@@ -1,8 +1,8 @@
 <component class="component-main-callbar">
     <div class="status-left">
         <span class="status-indicator">
-            <icon v-if="call.protocol === 'sip'" class="vendor-logo" name="phone-sip"/>
-            <icon v-else-if="call.protocol === 'sig11'" class="vendor-logo" name="sig11"/>
+            <icon v-if="call.protocol === 'sip'" class="vendor-logo" name="protocol-sip"/>
+            <icon v-else-if="call.protocol === 'sig11'" class="vendor-logo" name="protocol-sig11"/>
         </span>
     </div>
     <div class="in-call-info">

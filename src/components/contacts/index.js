@@ -46,6 +46,7 @@ module.exports = (app) => {
         methods: Object.assign({
             addContact: function() {
                 let newContact = {
+                    endpoints: {},
                     favorite: false,
                     id: shortid(),
                     name: 'unnamed',
@@ -61,7 +62,10 @@ module.exports = (app) => {
             addEndpoint: function(contact) {
                 let endpoint = {
                     id: shortid(),
-                    type: 'sip',
+                    name: 'unnamed',
+                    protocol: 'sip',
+                    subscribe: false,
+                    target: '',
                 }
 
                 app.setState(endpoint, {
@@ -126,6 +130,24 @@ module.exports = (app) => {
                     persist: true,
                 })
             },
+            deleteEndpoint: function(contact, endpoint) {
+                app.setState(null, {
+                    action: 'delete',
+                    path: `contacts.contacts.${contact.id}.endpoints.${endpoint.id}`,
+                    persist: true,
+                })
+            },
+            toggleEndpointProtocol: function(contact, endpoint) {
+                if (!this.editMode) return
+
+                if (endpoint.protocol === 'sip') endpoint.protocol = 'sig11'
+                else endpoint.protocol = 'sip'
+                app.setState(endpoint, {
+                    action: 'upsert',
+                    path: `contacts.contacts.${contact.id}.endpoints.${endpoint.id}`,
+                    persist: true,
+                })
+            },
             toggleFavorite: function(contact) {
                 app.setState({favorite: !contact.favorite}, {path: `contacts.contacts.${contact.id}`, persist: true})
             },
@@ -136,15 +158,18 @@ module.exports = (app) => {
                 app.setState({contacts: {filters: {online: !this.filters.online}}}, {persist: true})
             },
             /**
-             * Only one contact at a time can be in
-             * a selected state.
+             * One contact at a time is in a selected state.
+             * Contact is not passed with v-click-outside
+             * and doesn't need to be.
              * @param {Object} contact The Contact's state.
+             * @param {Boolean} select Selects or deselects Contact.
              */
-            toggleSelectContact: function(contact) {
+            toggleSelectContact: function(contact, select = true) {
                 for (const _contact of Object.values(this.contacts)) {
                     if (contact.id !== _contact.id) _contact.selected = false
                 }
-                contact.selected = !contact.selected
+
+                if (select) contact.selected = select
                 app.setState({contacts: {contacts: this.contacts}}, {persist: true})
             },
         }, app.helpers.sharedMethods()),

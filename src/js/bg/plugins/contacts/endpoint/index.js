@@ -3,11 +3,7 @@
 */
 
 /**
-* An Endpoint is a medium that a Contact has to be contacted with.
-* A Contact can have multiple Endpoints. This is the base for
-* transport-specific implementations (like SIP). The endpoint is
-* also responsible for dealing with presence information.
-*
+* An Endpoint is a way to connect to a Contact.
 */
 class Endpoint {
     /**
@@ -20,12 +16,12 @@ class Endpoint {
         this.id = state.id
 
         this.state = {
-            active: state.active,
             id: state.id,
             name: state.name,
-            number: state.endpoint,
+            number: state.number,
+            protocol: state.protocol,
+            pubkey: state.pubkey,
             status: state.status,
-            ua: state.ua,
         }
 
         this.setState(this.state)
