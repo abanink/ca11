@@ -31,7 +31,7 @@
             <div class="activity-icon" :class="classes('recent-status', activity)">
                 <icon :name="activity.type"/>
             </div>
-            <div class="activity-info">
+            <div class="item-info">
                 <div class="name" v-if="activity.contact">
                     {{contacts[activity.contact].name}}
                 </div>

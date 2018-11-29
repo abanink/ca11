@@ -1,0 +1,28 @@
+.action-bar {
+    display: flex;
+
+    .action {
+        height: $spacer * 5;
+
+        &:hover {
+            cursor: pointer;
+
+            svg {
+                fill: $brand-color;
+            }
+        }
+
+        &.active {
+            svg {
+                color: $brand-color;
+            }
+        }
+
+        svg {
+            @include icon-size($spacer * 5);
+            color: $grey-color-light;
+            padding-left: $spacer;
+        }
+
+    }
+}

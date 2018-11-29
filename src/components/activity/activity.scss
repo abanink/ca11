@@ -52,7 +52,7 @@
             }
         }
 
-        .activity-info {
+        .item-info {
             display: flex;
             flex: 10 0 auto;
             flex-direction: column;
@@ -60,12 +60,6 @@
             min-width: 0;
             padding-left: $spacer * 2.5;
 
-            .name {
-                color: $grey-color-darkest;
-                font-family: 'Rajdhani';
-                font-size: 1.2rem;
-                font-weight: 600;
-            }
 
             .description {
                 color: $grey-color;

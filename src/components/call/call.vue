@@ -3,7 +3,7 @@
     <video ref="local-video" class="call-local-video"></video>
 
     <div class="call-info" v-if="(!call.keypad.active || call.keypad.display === 'dense') && !['new'].includes(call.status)">
-        <icon class="contact-avatar" name="user"/>
+        <icon class="contact-avatar" name="contact"/>
         <div class="info-number">{{call.endpoint}}</div>
         <div class="info-name" v-if="call.displayName">{{call.displayName}}</div>
         <div class="info-status">
@@ -21,7 +21,7 @@
     <div class="call-options" v-if="['accepted'].includes(call.status)">
         <div class="rounded-button-with-text">
             <div class="rounded-button" @click="muteToggle" :class="classes('mute-button')">
-                <icon name="mute"/>
+                <icon name="mic-off"/>
             </div>
             <p class="ca">{{$t('mute')}}</p>
         </div>

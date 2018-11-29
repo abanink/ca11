@@ -2,85 +2,85 @@
 // hovering over the item.
 
 .item-list {
+    .item-options {
+        display: flex;
+    }
+
+    .item-option {
+        align-items: center;
+        background: none;
+        border: 0;
+        color: $grey-color-light;
+        display: flex;
+        justify-content: center;
+        margin-left: $spacer / 2;
+        padding: 0;
+        transition: color ease-in-out 0.1s;
+        user-select: none;
+
+        svg {
+            @include icon-size($spacer * 3.25);
+        }
+
+        &.active {
+            color: $brand-color;
+
+            &:hover {
+                color: $brand-color;
+            }
+        }
+
+        &:hover {
+            color: $brand-color;
+            cursor: pointer;
+        }
+    }
+
+
     .item {
+        .item-info {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            // Required to have ellipsis text overflow on .name.
+            min-width: 0;
+
+            .name {
+                color: $grey-color-darkest;
+                flex: 1;
+                font-family: 'Rajdhani';
+                font-size: 1.2rem;
+                font-weight: 600;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .description {
+                color: $grey-color-light;
+                font-size: 0.9rem;
+            }
+        }
+
         &:hover {
             .item-options {
                 display: flex;
             }
         }
 
-        .item-options {
-            display: flex;
-
-            .item-option {
-                align-items: center;
-                background: none;
-                border: 0;
-                color: $grey-color-lighter;
-                display: flex;
-                justify-content: center;
-                margin-left: $spacer / 2;
-                padding: 0;
-                transition: color ease-in-out 0.1s;
-                user-select: none;
-
-                svg {
-                    @include icon-size($spacer * 3.25);
-                }
-
-                &.green {
-                    &[disabled] {
-                        color: $grey-color-lightest;
-
-                        &:hover {
-                            color: $grey-color-lightest;
-                            cursor: not-allowed;
-                        }
-                    }
-
-                    &:hover {
-                        color: $green-color;
-                    }
-                }
-
-                &.grey {
-                    &.active {
-                        color: $yellow-color;
-
-                        &:hover {
-                            color: $yellow-color;
-                        }
-                    }
-
-                    // Suggests going to an active state.
-                    &:hover {
-                        color: lighten($yellow-color, 20%);
-                    }
-                }
-
-                &.active {
-                    color: $brand-color;
-
-                    &:hover {
-                        color: $brand-color;
-                    }
-                }
-
-                &:hover {
-                    color: $brand-color;
-                    cursor: pointer;
-
-
-                }
+        input {
+            border: 1px solid transparent;
+            // Editable inputs.
+            &:not([readonly]) {
+                border: 1px dashed $grey-color-lighter;
             }
         }
     }
 
-    &.dense {
+    &.x-3 {
         .item {
             .item-options {
                 .item-option {
-                    background: none;
                     margin-left: 0;
                     padding: $spacer / 4;
 
@@ -93,8 +93,7 @@
         }
     }
 
-
-    &.regular {
+    &.x-2 {
         .item {
             .item-options {
                 margin-right: $spacer;
@@ -108,4 +107,21 @@
         }
     }
 
+    // A selected item can have extra space beneath.
+    .item-context {
+        .context-options {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        .no-items {
+            color: $grey-color;
+            font-family: 'Rajdhani';
+            font-weight: 600;
+            padding: $spacer;
+            width: 100%;
+        }
+
+    }
 }

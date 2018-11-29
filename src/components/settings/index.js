@@ -17,12 +17,13 @@ module.exports = (app) => {
             },
             save: function(e) {
                 let settings = app.utils.copyObject(this.settings)
-                console.log("SIP ENABLED", app.state.calls.sip.toggled)
+
                 let settingsState = {
                     availability: {dnd: false},
                     calls: {
                         sig11: {
                             enabled: app.state.calls.sig11.toggled,
+                            toggled: app.state.calls.sig11.toggled,
                         },
                         sip: {
                             account: {
@@ -30,6 +31,7 @@ module.exports = (app) => {
                             },
                             enabled: app.state.calls.sip.toggled,
                             endpoint: app.state.calls.sip.endpoint,
+                            toggled: app.state.calls.sip.toggled,
                         },
                     },
                     language: this.language,

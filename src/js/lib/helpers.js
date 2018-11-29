@@ -236,6 +236,9 @@ function helpers(app) {
                 // Clean up the number so it is gone when the keypad reappears after the call.
                 description.endpoint = ''
             },
+            toggleEditMode: function() {
+                app.setState({app: {editMode: !app.state.app.editMode}}, {persist: true})
+            },
             translations: function(category, key) {
                 if (!this._translations) this._translations = this.getTranslations()
                 return this._translations[category][key]

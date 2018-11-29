@@ -20,7 +20,7 @@
         :validation="$v.settings.webrtc.devices.sinks.headsetOutput.valid">
         <button slot="select-extra" class="ringtone-play button is-link select-button"
             :disabled="playing.headsetOutput" @click="playSound('busyTone', 'headsetOutput')">
-            <span class="icon is-small"><icon name="ring"/></span>
+            <span class="icon is-small"><icon name="call-active"/></span>
         </button>
     </Field>
 
@@ -33,7 +33,7 @@
 
         <button slot="select-extra" class="ringtone-play button is-link select-button"
             :disabled="playing.ringOutput" @click="playSound('ringTone', 'ringOutput')">
-            <span class="icon is-small"><icon name="ring"/></span>
+            <span class="icon is-small"><icon name="call-active"/></span>
         </button>
     </Field>
 
@@ -44,7 +44,7 @@
 
         <button slot="select-extra" class="ringtone-play button is-link select-button"
             :disabled="playing.ringOutput" @click="playSound('ringTone', 'ringOutput')">
-            <span class="icon is-small"><icon name="ring"/></span>
+            <span class="icon is-small"><icon name="call-active"/></span>
         </button>
     </Field>
 </component>

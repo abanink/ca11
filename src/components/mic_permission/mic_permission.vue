@@ -34,7 +34,7 @@
                     {{$t('click on the microphone access button to open {name} in a browser tab. The permission can be adjusted from there.', {name: app.name})}}
                 </span>
                 <button class="button" @click="openPopoutView">
-                    <span class="icon is-small"><icon name="microphone"/></span>
+                    <span class="icon is-small"><icon name="mic"/></span>
                     <span class="cf">{{$t('microphone access')}}</span>
                 </button>
             </div>

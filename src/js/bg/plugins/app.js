@@ -83,6 +83,7 @@ class PluginApp extends Plugin {
     */
     _initialState() {
         return {
+            editMode: false,
             installed: true,
             name: process.env.APP_NAME,
             notifications: [],

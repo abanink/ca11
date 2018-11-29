@@ -243,34 +243,26 @@ class AppBackground extends App {
             return null
         }
 
-        // Apply the change to the current watched state object.
+        // Apply the state change to the active store.
         super.__mergeState({action, encrypt, path, persist, state})
-
         if (!persist) return null
 
-        // Apply the state changes to the store cache.
+        // Apply the changes to the cached store.
         let storeState
         if (!encrypt) storeState = this.store.cache.unencrypted
         else storeState = this.store.cache.encrypted
-        if (!path) this.__mergeDeep(storeState, state)
-        else {
-            path = path.split('.')
-            const _ref = path.reduce((o, i)=>o[i], storeState)
-            this.__mergeDeep(_ref, state)
-        }
+        super.__mergeState({action, encrypt, path, persist, source: storeState, state})
 
-        const frozenState = this.utils.copyObject(storeState)
-
+        // We can safely write synchronously to localstorage.
         if (!encrypt) {
-            // We can safely write to localstorage, because these
-            // writes are performed synchronously.
-            this.store.set(`${storeEndpoint}/state`, frozenState)
+            this.store.set(`${storeEndpoint}/state`, storeState)
             return null
         }
 
-
-        // Defer the encrypted write action to a queue, because it is
-        // async but needs to be processed in order nevertheless.
+        // The encrypted write action is deferred to writing a snapshot
+        // from a queue. All async write actions still need to be
+        // processed in order.
+        const frozenState = this.utils.copyObject(storeState)
         return new Promise((resolve, reject) => {
             this.__writeQueue.push({
                 action: (item) => this.__writeEncryptedState({item, reject, resolve, state: frozenState}),

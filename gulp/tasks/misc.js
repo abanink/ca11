@@ -163,6 +163,13 @@ module.exports = function(settings) {
             ], gulp.series(misc.tasks.manifest, helpers.reload('app_fg.js')))
         }
 
+        gulp.watch([
+            path.join(settings.SRC_DIR, 'svg', '*.svg'),
+        ], gulp.series(
+            assets.tasks.icons,
+            code.tasks.vendorFg,
+            helpers.reload('vendor_fg.js')
+        ))
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'js', 'i18n', '*.js'),

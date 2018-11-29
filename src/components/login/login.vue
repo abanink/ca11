@@ -6,7 +6,6 @@
             <span v-else class="cf">{{$t('welcome back')}}<br/>{{app.session.active}}</span>
         </div>
         <div v-else class="greeting">
-
             <span class="cf">{{greeting}}</span>
         </div>
         <p class="welcome-message cf">
@@ -15,10 +14,9 @@
                 {{$t('continue with an existing user session')}}
                 </template>
                 <template v-else-if="app.session.active === 'new'">
-                {{$t('a session is used to protect and encapsulate your local data; all data remains on your computer.')}}</br>
+                {{$t('a local session is created to protect and encapsulate your personal data; everything remains encrypted on your computer.')}}</br>
                 </template>
                 <template v-else>
-                ACITVE: {{app.session.active}}<br/>
                 {{$t('unlock your session with the session secret')}}
                 </template>
             </span>
@@ -61,7 +59,7 @@
     <!-- Session picker that presents available sessions to choose from.-->
     <div class="sessions" v-else-if="app.session.available.length && !app.session.active">
         <div v-for="session in app.session.available" class="session">
-            <i class="icon-session" @click="selectSession(session)"><icon name="user"/></i>
+            <i class="icon-session" @click="selectSession(session)"><icon name="contact"/></i>
             <div class="description" @click="selectSession(session)">{{session}}</div>
             <i class="icon-remove status-indicator tooltip tooltip-left" :data-tooltip="$t('remove session').capitalize()" @click="removeSession(session)">
                 <icon name="delete"/>
@@ -71,7 +69,7 @@
             <span class="cf">{{$t('or create a new user session')}}</span>
         </div>
         <div class="session new-session" @click="newSession()">
-            <i class="icon-session"><icon class="icon-session" name="user-add"/></i>
+            <i class="icon-session"><icon class="icon-session" name="contact-add"/></i>
             <div class="description cf">{{$t('add session')}}</div>
         </div>
     </div>

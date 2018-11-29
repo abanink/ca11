@@ -50,7 +50,7 @@ class PluginContacts extends Plugin {
     _initialState() {
         return {
             contacts: {},
-            displayMode: 'lean',
+            displayMode: 1,
             filters: {
                 favorites: false,
                 online: true, // Hide contacts that don't have registered endpoints.
@@ -83,6 +83,7 @@ class PluginContacts extends Plugin {
     */
     _restoreState(moduleStore) {
         let contacts = moduleStore.contacts
+
         if (this.app.vm) {
             // The user unlocks; start with an empty placeholder
             // and rebuild the contacts from reinitializing Contact

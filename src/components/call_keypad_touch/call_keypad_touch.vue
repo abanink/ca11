@@ -8,11 +8,6 @@
                 <Field name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
             </div>
         </div>
-        <div class="header-line contacts-options">
-            <div class="field field-text">
-
-            </div>
-        </div>
     </header>
 
     <div class="keypad">
@@ -23,7 +18,7 @@
                 v-bind:value="endpoint" v-on:input="inputChange($event.target.value)"
                 v-on:keyup.enter="validateCall(description)"/>
 
-            <i class="correct" v-if="mode === 'call'" @click="removeLastNumber">
+            <i v-if="mode === 'call'" class="correct" @click="removeLastNumber">
                 <icon name="backspace"/>
             </i>
         </div>

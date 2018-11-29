@@ -199,31 +199,36 @@ class App extends Skeleton {
     * @param {Object} options - Options to pass.
     * @param {String} [options.action=upsert] - The merge action: upsert|delete|replace.
     * @param {Boolean} [options.encrypt=true] - Whether to persist to the encrypted part of the store.
-    * @param {String} options.path - Path to the store parts to merge into.
-    * @param {String} [options.persist=false] - Whether to persist this state change.
+    * @param {String} [options.path=null] - The path.to.the.store.item to merge.
+    * @param {Boolean} [options.persist=false] - Whether to persist this state change.
+    *  @param {String} [options.source=null] - Merge into a custom object instead of the default store.
     * @param {Object} state - An object to merge into the store.
     */
-    __mergeState({action = 'upsert', encrypt = true, path = null, persist = false, state}) {
+    __mergeState({action = 'upsert', encrypt = true, path = null, persist = false, source = null, state}) {
+        let stateSource
+        if (source) stateSource = source
+        else stateSource = this.state
+
         if (!path) {
-            this.__mergeDeep(this.state, state)
+            this.__mergeDeep(stateSource, state)
             return
         }
 
         path = path.split('.')
         if (action === 'upsert') {
-            let _ref = this.__getKeyPath(this.state, path)
+            let _ref = this.__getKeyPath(stateSource, path)
             // Needs to be created first.
             if (typeof _ref === 'undefined') {
-                this.__setKeyPath(this.state, path, state)
+                this.__setKeyPath(stateSource, path, state)
             } else {
-                _ref = path.reduce((o, i)=>o[i], this.state)
+                _ref = path.reduce((o, i)=>o[i], stateSource)
                 this.__mergeDeep(_ref, state)
             }
         } else if (action === 'delete') {
-            const _ref = path.slice(0, path.length - 1).reduce((o, i)=>o[i], this.state)
+            const _ref = path.slice(0, path.length - 1).reduce((o, i)=>o[i], stateSource)
             this.vm.$delete(_ref, path[path.length - 1])
         } else if (action === 'replace') {
-            const _ref = path.slice(0, path.length - 1).reduce((o, i)=>o[i], this.state)
+            const _ref = path.slice(0, path.length - 1).reduce((o, i)=>o[i], stateSource)
             this.vm.$set(_ref, path[path.length - 1], state)
         } else {
             throw new Error(`invalid path action for __mergeState: ${action}`)
