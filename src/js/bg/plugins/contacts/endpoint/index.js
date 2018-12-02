@@ -15,14 +15,7 @@ class Endpoint {
         this.contact = contact
         this.id = state.id
 
-        this.state = {
-            id: state.id,
-            name: state.name,
-            number: state.number,
-            protocol: state.protocol,
-            pubkey: state.pubkey,
-            status: state.status,
-        }
+        this.state = state
 
         this.setState(this.state)
     }

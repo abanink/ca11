@@ -50,14 +50,9 @@ class PluginContacts extends Plugin {
     _initialState() {
         return {
             contacts: {},
-            displayMode: 1,
             filters: {
                 favorites: false,
                 online: true, // Hide contacts that don't have registered endpoints.
-            },
-            search: {
-                disabled: false,
-                input: '',
             },
             status: null,
         }

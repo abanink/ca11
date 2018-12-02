@@ -3,11 +3,31 @@ module.exports = (app) => {
     return {
         computed: {
             filteredActivity: function() {
-                let activity = this.activity.sort(app.utils.sortByMultipleKey(['date'], -1))
-                if (this.filters.reminders) activity = activity.filter((i) => i.remind)
-                if (this.filters.missedIncoming) activity = activity.filter((i) => (i.status === 'missed'))
-                if (this.filters.missedOutgoing) activity = activity.filter((i) => (i.status === 'unanswered'))
-                return activity
+                let activities = this.activity.sort(app.utils.sortByMultipleKey(['date'], -1))
+                if (this.filters.reminders) activities = activities.filter((i) => i.remind)
+                if (this.filters.missedIncoming) activities = activities.filter((i) => (i.status === 'missed'))
+                if (this.filters.missedOutgoing) activities = activities.filter((i) => (i.status === 'unanswered'))
+
+                let searchQuery = this.search.input.toLowerCase()
+
+                if (searchQuery) {
+                    activities = activities.filter((i) => {
+                        let match = false
+                        const contact = this.contacts[i.contact]
+                        // Search on contact name.
+                        if (i.contact) match = contact.name.toLowerCase().includes(searchQuery)
+                        // Search on contact endpoint number.
+                        if (!match && contact && contact.endpoints[i.endpoint]) {
+                            match = contact.endpoints[i.endpoint].number.includes(searchQuery)
+                        } else {
+                            // Search on activity endpoint.
+                            match = i.endpoint.includes(searchQuery)
+                        }
+                        return match
+                    })
+                }
+
+                return activities
             },
         },
         methods: Object.assign({
@@ -28,7 +48,7 @@ module.exports = (app) => {
                     if (this.filters.missedOutgoing) classes.active = true
                 } else if (block === 'filter-reminders') {
                     if (this.filters.reminders) classes.active = true
-                }
+                } else if (block === 'item-list') classes[`x-${this.displayMode}`] = true
                 return classes
             },
             toggleFilterMissedIncoming: function() {
@@ -54,7 +74,10 @@ module.exports = (app) => {
         store: {
             activity: 'activity.activity',
             contacts: 'contacts.contacts',
+            displayMode: 'app.displayMode',
+            editMode: 'app.editMode',
             filters: 'activity.filters',
+            search: 'app.search',
             tabs: 'ui.tabs.activity',
             user: 'user',
         },

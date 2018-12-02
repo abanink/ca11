@@ -193,6 +193,9 @@ function helpers(app) {
 
     _helpers.sharedMethods = function() {
         return Object.assign({
+            changeDisplay: function() {
+                app.setState({app: {displayMode: this.displayMode % 3 + 1}}, {persist: true})
+            },
             closeOverlay: function() {
                 app.setState({ui: {overlay: null}})
             },

@@ -50,7 +50,7 @@ module.exports = (app) => {
                     favorite: false,
                     id: shortid(),
                     name: 'unnamed',
-                    selected: true,
+                    selected: false,
                 }
 
                 app.setState(newContact, {
@@ -63,7 +63,9 @@ module.exports = (app) => {
                 let endpoint = {
                     id: shortid(),
                     name: 'unnamed',
+                    number: '',
                     protocol: 'sip',
+                    pubkey: '',
                     subscribe: false,
                     target: '',
                 }
@@ -74,27 +76,18 @@ module.exports = (app) => {
                     persist: true,
                 })
             },
-            /**
-            * Call the Contact on its first available endpoint.
-            * @param {Contact} contact - The contact to call.
-            */
-            callContact: function(contact) {
-                for (const id of Object.keys(contact.endpoints)) {
-                    if (contact.endpoints[id].status === 'available') {
-                        this.createCall(contact.endpoints[id].number)
-                        break
-                    }
-                }
-            },
-            changeDisplay: function() {
-                this.displayMode = this.displayMode % 3 + 1
-                app.setState({contacts: {displayMode: this.displayMode}}, {persist: true})
+            callEndpoint: function(contact, endpoint) {
+                // Make a description.
+                this.setupCall({
+                    endpoint: endpoint.protocol === 'sip' ? endpoint.number : endpoint.pubkey,
+                    protocol: endpoint.protocol,
+                    status: 'new',
+                })
             },
             classes: function(block, modifier = null) {
                 let classes = {}
-                if (block === 'item-list') {
-                    classes[`x-${this.displayMode}`] = true
-                } else if (block === 'favorite-button') {
+                if (block === 'item-list') classes[`x-${this.displayMode}`] = true
+                else if (block === 'favorite-button') {
                     classes.active = modifier
                 } else if (block === 'filter-favorites') {
                     classes.active = this.filters.favorites
@@ -172,16 +165,20 @@ module.exports = (app) => {
                 if (select) contact.selected = select
                 app.setState({contacts: {contacts: this.contacts}}, {persist: true})
             },
+            toggleSubscribe: function(contact, endpoint) {
+                endpoint.subscribe = !endpoint.subscribe
+                app.setState({contacts: {contacts: this.contacts}}, {persist: true})
+            },
         }, app.helpers.sharedMethods()),
         render: templates.contacts.r,
         staticRenderFns: templates.contacts.s,
         store: {
             calls: 'calls.calls',
             contacts: 'contacts.contacts',
-            displayMode: 'contacts.displayMode',
+            displayMode: 'app.displayMode',
             editMode: 'app.editMode',
             filters: 'contacts.filters',
-            search: 'contacts.search',
+            search: 'app.search',
             status: 'contacts.status',
             user: 'user',
         },
