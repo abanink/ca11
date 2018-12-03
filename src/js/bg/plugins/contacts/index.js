@@ -52,7 +52,7 @@ class PluginContacts extends Plugin {
             contacts: {},
             filters: {
                 favorites: false,
-                online: true, // Hide contacts that don't have registered endpoints.
+                online: false,
             },
             status: null,
         }
@@ -128,7 +128,6 @@ class PluginContacts extends Plugin {
         for (const contact of Object.values(this.contacts)) {
             if (contact && ['registered', 'connected'].includes(this.app.state.calls.sip.status)) {
                 for (const endpoint of Object.values(contact.endpoints)) {
-                    console.log(endpoint)
                     if (endpoint.subscription) {
                         endpoint.presence.subscribe()
                     }

@@ -40,8 +40,7 @@
 
 
     <div class="item-list" :class="classes('item-list')">
-
-        <div class="no-results-indicator" v-if="!Object.keys(filteredContacts).length">
+        <div class="no-results-indicator" v-if="!filteredContacts.length">
             <div><icon name="contacts"/></div>
             <div class="text cf">{{$t('no {target}', {target: $t('contacts')})}}</div>
         </div>

@@ -2,7 +2,7 @@
 
     <header class="header-bar">
         <div class="filter-line">
-            <div class="header-bar-title uc">{{$t('activity')}}</div>
+            <div class="header-bar-title uc">{{$t('activities')}}</div>
             <div class="content-filters">
                 <div class="filter" :class="classes('filter-missed-incoming')" @click="toggleFilterMissedIncoming()">
                     <icon name="call-missed-incoming"/>

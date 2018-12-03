@@ -251,6 +251,7 @@ class AppBackground extends App {
         let storeState
         if (!encrypt) storeState = this.store.cache.unencrypted
         else storeState = this.store.cache.encrypted
+
         super.__mergeState({action, encrypt, path, persist, source: storeState, state})
 
         // We can safely write synchronously to localstorage.

@@ -52,6 +52,7 @@ class App extends Skeleton {
             if (!obj || !obj.hasOwnProperty(keypath[0])) return undefined
             return obj[keypath[0]]
         } else {
+            if (!obj) return undefined
             return this.__getKeyPath(obj[keypath[0]], keypath.slice(1))
         }
     }
@@ -252,6 +253,7 @@ class App extends Skeleton {
             if (!obj[keypath[0]]) this.vm.$set(obj, keypath[0], value)
             return obj[keypath[0]]
         } else {
+            if (!obj[keypath[0]]) obj[keypath[0]] = {}
             return this.__setKeyPath(obj[keypath[0]], keypath.slice(1), value)
         }
     }

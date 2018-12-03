@@ -72,11 +72,11 @@ class PluginActivity extends Plugin {
     * @param {String} [activity] - Endpoint to link to the activity.
     */
     addActivity(activity) {
-        let activities = this.app.state.activity.activity
         activity.date = new Date().getTime()
         activity.id = shortid.generate()
         activity.remind = false
 
+        let activities = this.app.state.activities.activities
         activities.unshift(activity)
 
         if (activities.length > MAX_ACTIVITIES) {
