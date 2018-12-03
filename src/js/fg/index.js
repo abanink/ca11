@@ -40,7 +40,7 @@ class AppForeground extends App {
         this.components = {
             About: require('../../components/about'),
             AccountPicker: require('../../components/account_picker'),
-            Activity: require('../../components/activity'),
+            Activities: require('../../components/activities'),
             Availability: require('../../components/availability'),
             Call: require('../../components/call'),
             CallKeypadInput: require('../../components/call_keypad_input'),

@@ -10,7 +10,7 @@ module.exports = (function() {
         env,
         plugins: {
             builtin: [
-                {module: require('../plugins/activity'), name: 'activity'},
+                {module: require('../plugins/activities'), name: 'activities'},
                 {module: require('../plugins/app'), name: 'app'},
                 {
                     addons: null,

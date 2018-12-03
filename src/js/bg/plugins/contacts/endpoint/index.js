@@ -14,7 +14,6 @@ class Endpoint {
         this.app = contact.app
         this.contact = contact
         this.id = state.id
-
         this.state = state
 
         this.setState(this.state)

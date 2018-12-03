@@ -1,4 +1,4 @@
-<component class="component-activity padded">
+<component class="component-activities padded">
 
     <header class="header-bar">
         <div class="filter-line">
@@ -43,16 +43,16 @@
     </header>
 
     <div class="item-list" :class="classes('item-list')">
-        <div class="no-results-indicator" v-if="!filteredActivity.length">
+        <div class="no-results-indicator" v-if="!filteredActivities.length">
             <div><icon name="recent"/></div>
             <div class="text cf">{{$t('no {target}', {target: $t('activity')})}}</div>
         </div>
 
-        <div v-else v-for="activity of filteredActivity" class="item-container activity" >
+        <div v-else v-for="activity of filteredActivities" class="item-container activity">
             <div class="item">
 
                 <div class="item-header" :class="classes('recent-status', activity)">
-                    <icon class="item-icon" :name="activity.type"/>
+                    <icon class="item-icon" :name="activity.icon"/>
                 </div>
 
                 <div class="item-info">
@@ -61,7 +61,7 @@
                             {{activity.contact.name}}
                           </div>
                         <div class="item-tag" v-else>
-                            {{activity.endpoint}}
+                            {{activity.description.endpoint}}
                         </div>
 
                         <input v-if="activity.remind" class="activity-label" type="text" v-model="activity.label" :placeholder="$t(activity.status)" />
@@ -70,7 +70,7 @@
                             <button v-if="!editMode" class="item-option" :class="classes('remind-button', activity)" v-on:click="toggleReminder(activity)">
                                 <icon name="idea"/>
                             </button>
-                            <button v-if="!editMode" class="item-option" v-on:click="callRecent(activity)">
+                            <button v-if="!editMode" class="item-option" v-on:click="callEndpoint(activity)">
                                 <icon name="phone"/>
                             </button>
                             <button v-if="editMode" @click.stop="deleteActivity(activity)" class="item-option">
@@ -80,17 +80,7 @@
                     </div>
 
                     <div class="item-description">
-                        <template v-if="activity.contact && activity.contact.endpoints[activity.endpoint]">
-                            {{activity.endpoints[activity.endpoint].number}}
-                        </template>
-                        <template v-else>
-                            <!-- Reference may be broken -->
-                            {{activity.endpoint}}
-                        </template>
-
-                        - {{activity.date | fuzzydate}}
-
-
+                        {{activity.description.endpoint}} - {{activity.date | fuzzydate}}
                     </div>
                 </div>
             </div>

@@ -16,8 +16,8 @@ module.exports = (app) => {
                 // this logic if other kind of blocks are required.
                 classes.active = (this.layer === block)
 
-                if (block === 'activity') {
-                    classes.unread = this.unread
+                if (block === 'activities') {
+                    classes.unread = this.activities.unread
                 } else if (block === 'availability') {
                     if (this.dnd) classes.dnd = true
                     else if (this.available) classes.available = true
@@ -35,11 +35,11 @@ module.exports = (app) => {
         render: templates.main_menubar.r,
         staticRenderFns: templates.main_menubar.s,
         store: {
+            activities: 'activities',
             app: 'app',
             available: 'availability.available',
             dnd: 'availability.dnd',
             layer: 'ui.layer',
-            unread: 'activity.unread',
         },
     }
 

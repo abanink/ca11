@@ -88,9 +88,6 @@ class PluginUI extends Plugin {
             },
             overlay: null,
             tabs: {
-                activity: {
-                    active: 'recent',
-                },
                 settings: {
                     active: 'general',
                 },

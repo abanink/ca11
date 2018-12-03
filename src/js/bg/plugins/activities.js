@@ -22,15 +22,13 @@ class PluginActivity extends Plugin {
         super(app)
 
         this.app.on('bg:calls:call_rejected', ({call}) => {
-            // Not answered.
-            let status
-            if (call.type === 'outgoing') status = 'unanswered'
-            else status = 'missed'
-
             let activity = {
-                endpoint: call.endpoint,
-                status,
-                type: `call-missed-${call.type}`,
+                description: {
+                    endpoint: call.endpoint,
+                    protocol: call.protocol,
+                },
+                icon: `call-missed-${call.type}`,
+                status: call.type === 'outgoing' ? 'unanswered' : 'missed',
             }
 
             this.addActivity(activity)
@@ -38,9 +36,12 @@ class PluginActivity extends Plugin {
 
         this.app.on('bg:calls:call_ended', ({call}) => {
             let activity = {
-                endpoint: call.endpoint,
+                description: {
+                    endpoint: call.endpoint,
+                    protocol: call.protocol,
+                },
+                icon: `call-${call.type}`,
                 status: 'finished',
-                type: `call-${call.type}`,
             }
 
             this.addActivity(activity)
@@ -54,7 +55,7 @@ class PluginActivity extends Plugin {
     */
     _initialState() {
         return {
-            activity: [],
+            activities: [],
             filters: {
                 missedIncoming: false,
                 missedOutgoing: false,
@@ -66,42 +67,31 @@ class PluginActivity extends Plugin {
 
 
     /**
-    * And an activity entry. Use an `endpointId` when the activity
-    * comes from an existing Contact Endpoint. Use a `number` when
-    * the activity is Callable. Use the title directly otherwise.
-    * @param {String} [contact] - Contact to link to the activity.
-    * @param {String} [endpoint] - Endpoint to link to the activity.
-    * @param {String} [label] - Label next to the activity.
-    * @param {String} [number] - Number in case of no existing endpoint.
-    * @param {String} type - Maps to a svgicon.
+    * Adds some default attributes to an activity and
+    * does some additional bookkeeping.
+    * @param {String} [activity] - Endpoint to link to the activity.
     */
-    addActivity({contact = null, endpoint = null, label = '', number = null, status = 'success', type = 'incoming'}) {
-        let activity = this.app.state.activity.activity
-        activity.unshift({
-            contact,
-            date: new Date().getTime(),
-            endpoint,
-            id: shortid.generate(),
-            label,
-            number,
-            remind: false,
-            status,
-            type,
-        })
+    addActivity(activity) {
+        let activities = this.app.state.activity.activity
+        activity.date = new Date().getTime()
+        activity.id = shortid.generate()
+        activity.remind = false
 
-        if (activity.length > MAX_ACTIVITIES) {
+        activities.unshift(activity)
+
+        if (activities.length > MAX_ACTIVITIES) {
             // Check which discarded activities are reminders first.
-            let reminders = activity.slice(MAX_ACTIVITIES).filter((i) => i.remind)
+            let reminders = activities.slice(MAX_ACTIVITIES).filter((i) => i.remind)
             // Slice the list of activities and add the reminders at the end.
-            activity = activity.slice(0, MAX_ACTIVITIES).concat(reminders)
+            activities = activities.slice(0, MAX_ACTIVITIES).concat(reminders)
         }
 
         // New activity is added. Mark it as unread when the current layer
         // is not set on `activity`. The unread property is deactivated again
         // when the activity component mounts.
         this.app.setState({
-            activity: {
-                activity,
+            activities: {
+                activities,
                 unread: this.app.state.ui.layer !== 'activity',
             },
         }, {persist: true})

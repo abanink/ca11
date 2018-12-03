@@ -68,6 +68,7 @@ class EndpointSip extends Endpoint {
     */
     subscribe() {
         return new Promise((resolve, reject) => {
+            this.app.logger.info(`${this} subscribe ${this.endpoint.state.id}@ca11.io`)
             this.subscription = this.app.plugins.calls.ua.subscribe(`${this.endpoint.state.id}@ca11.io`, 'dialog')
             this.subscription.on('notify', (notification) => {
                 const status = this._statusFromDialog(notification)

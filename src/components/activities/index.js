@@ -2,15 +2,15 @@ module.exports = (app) => {
 
     return {
         computed: {
-            filteredActivity: function() {
-                let activities = this.activity.sort(app.utils.sortByMultipleKey(['date'], -1))
+            filteredActivities: function() {
+                let activities = this.activities.sort(app.utils.sortByMultipleKey(['date'], -1))
                 if (this.filters.reminders) activities = activities.filter((i) => i.remind)
                 if (this.filters.missedIncoming) activities = activities.filter((i) => (i.status === 'missed'))
                 if (this.filters.missedOutgoing) activities = activities.filter((i) => (i.status === 'unanswered'))
 
                 // Dynamically mix in contact information.
                 activities = activities.map((i) => {
-                    const contactInfo = app.helpers.matchContact(i.endpoint)
+                    const contactInfo = app.helpers.matchContact(i.description.endpoint)
                     if (contactInfo) i.contact = this.contacts[contactInfo.contact]
                     else i.contact = null
                     return i
@@ -21,15 +21,15 @@ module.exports = (app) => {
                 if (searchQuery) {
                     activities = activities.filter((i) => {
                         let match = false
-                        // Search on contact name.
-                        if (i.contact) match = i.contact.name.toLowerCase().includes(searchQuery)
-                        // Search on contact endpoint number.
-                        if (!match && i.contact && i.contact.endpoints[i.endpoint]) {
-                            match = i.contact.endpoints[i.endpoint].number.includes(searchQuery)
-                        } else {
-                            // Search on activity endpoint.
-                            match = i.endpoint.includes(searchQuery)
+                        // Search on contact name and on contact endpoint.
+                        if (i.contact) {
+                            match = i.contact.name.toLowerCase().includes(searchQuery)
+                            if (!match && i.contact.endpoints[i.endpoint]) {
+                                match = i.contact.endpoints[i.endpoint].number.includes(searchQuery)
+                            }
                         }
+                        // Search on contact endpoint number.
+                        if (!match) match = i.endpoint.includes(searchQuery)
                         return match
                     })
                 }
@@ -38,12 +38,11 @@ module.exports = (app) => {
             },
         },
         methods: Object.assign({
-            callRecent: function(recent) {
-                let endpoint
-                if (recent.contact) endpoint = this.contacts[recent.contact].endpoints[recent.endpoint].number
-                else endpoint = recent.endpoint
-
-                app.emit('bg:calls:call_create', {description: {endpoint, protocol: 'sip'}, start: true})
+            callEndpoint: function(activity) {
+                app.emit('bg:calls:call_create', {
+                    description: activity.description,
+                    start: true,
+                })
             },
             classes: function(block, modifier) {
                 let classes = {}
@@ -59,53 +58,55 @@ module.exports = (app) => {
                 return classes
             },
             deleteActivities: function() {
-                app.setState({activity: {activity: []}}, {persist: true})
+                app.setState({activities: {activities: []}}, {persist: true})
             },
             deleteActivity: function(activity) {
                 app.setState(null, {
                     action: 'delete',
-                    path: `activity.activity.${this.activity.findIndex(i => i.id === activity.id)}`,
+                    path: `activities.activities.${this.activities.findIndex(i => i.id === activity.id)}`,
                     persist: true,
                 })
             },
             toggleFilterMissedIncoming: function() {
-                app.setState({activity: {filters: {missedIncoming: !app.state.activity.filters.missedIncoming}}}, {persist: true})
+                const missedIncoming = !app.state.activities.filters.missedIncoming
+                app.setState({activities: {filters: {missedIncoming}}}, {persist: true})
             },
             toggleFilterMissedOutgoing: function() {
-                app.setState({activity: {filters: {missedOutgoing: !app.state.activity.filters.missedOutgoing}}}, {persist: true})
+                const missedOutgoing = !app.state.activities.filters.missedOutgoing
+                app.setState({activities: {filters: {missedOutgoing}}}, {persist: true})
             },
             toggleFilterReminders: function() {
-                app.setState({activity: {filters: {reminders: !app.state.activity.filters.reminders}}}, {persist: true})
+                const reminders = !app.state.activities.filters.reminders
+                app.setState({activities: {filters: {reminders}}}, {persist: true})
             },
             toggleReminder: function(activity) {
                 activity.remind = !activity.remind
-                app.setState(activity, {path: `activity.activity.${this.activity.findIndex(i => i.id === activity.id)}`, persist: true})
+                app.setState(activity, {path: `activities.activities.${this.activities.findIndex(i => i.id === activity.id)}`, persist: true})
             },
         }, app.helpers.sharedMethods()),
         mounted: function() {
             // Mark activity as read as soon the component is opened.
-            app.setState({activity: {unread: false}}, {persist: true})
+            app.setState({activities: {unread: false}}, {persist: true})
         },
-        render: templates.activity.r,
-        staticRenderFns: templates.activity.s,
+        render: templates.activities.r,
+        staticRenderFns: templates.activities.s,
         store: {
-            activity: 'activity.activity',
+            activities: 'activities.activities',
             contacts: 'contacts.contacts',
             displayMode: 'app.displayMode',
             editMode: 'app.editMode',
-            filters: 'activity.filters',
+            filters: 'activities.filters',
             search: 'app.search',
-            tabs: 'ui.tabs.activity',
             user: 'user',
         },
         watch: {
             // Updating all activity items after one changed
             // activity item is a bit inefficient, but fine
             // for now. Optimize this later.
-            activity: {
+            activities: {
                 deep: true,
-                handler: function(activity) {
-                    app.setState({activity: {activity}}, {persist: true})
+                handler: function(activities) {
+                    app.setState({activities: {activities}}, {persist: true})
                 },
             },
         },

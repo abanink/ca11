@@ -1,16 +1,28 @@
 <component class="component-main-menubar">
     <div class="options">
 
-        <div class="option contacts test-menubar-contacts" :class="classes('contacts', true)" @click="setLayer('contacts')" role="button" :aria-labelledby="$t('contacts')">
+        <div :aria-labelledby="$t('recent activity')"
+            class="option activity test-menubar-activity"
+            :class="classes('activities')"
+            role="button"
+            @click="setLayer('activities')" >
+            <icon name="recent"/>
+        </div>
+
+        <div :aria-labelledby="$t('contacts')"
+            :class="classes('contacts', true)"
+            class="option contacts test-menubar-contacts"
+            role="button"
+            @click="setLayer('contacts')">
             <icon name="contacts"/>
         </div>
 
-        <div class="option calls test-menubar-calls" :class="classes('calls')" @click="setLayer('calls')" role="button" :aria-labelledby="$t('dialpad')">
+        <div :aria-labelledby="$t('dialpad')"
+            :class="classes('calls')"
+            class="option calls test-menubar-calls"
+            @click="setLayer('calls')"
+            role="button">
              <icon name="phone"/>
-        </div>
-
-        <div class="option activity test-menubar-activity" :class="classes('activity')" @click="setLayer('activity')" role="button" :aria-labelledby="$t('recent activity')">
-            <icon name="recent"/>
         </div>
 
         <div v-if="plugin.menubarIcon" class="option" :class="classes(plugin.menubarIcon, plugin.menubarTransferHint)"
