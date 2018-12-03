@@ -12,6 +12,7 @@
 
     .item-container {
         margin-bottom: $spacer;
+        padding: $spacer / 4;
 
         &.selected {
             box-shadow: 0 0 5px rgba($grey-color-darkest, 0.5);
@@ -63,14 +64,18 @@
 
     .item-context,
     .item {
-        .name {
+        .item-tag {
             align-items: center;
             display: flex;
             padding: $spacer / 2;
+
+            .activity-label {
+                flex: 100px 100px 1;
+            }
         }
 
         // Editable inputs.
-        input.name {
+        input.item-tag {
             border: 1px solid transparent;
 
             &:not([readonly]) {
@@ -98,16 +103,19 @@
                 align-items: center;
                 display: flex;
 
-                .name {
+                .item-tag {
                     color: $grey-color-darker;
-                    flex: 1;
+                    display: inline-block;
+                    flex: 4 1 auto;
                     font-family: 'Rajdhani';
                     font-size: 1.2rem;
                     font-weight: 600;
                     height: $spacer * 3;
+                    justify-content: space-between;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
+                    width: 100%;
                 }
             }
 
@@ -170,7 +178,7 @@
                 }
             }
 
-            input.name {
+            input.item-tag {
                 background: none;
                 color: $grey-color-darker;
                 flex: 1;
@@ -188,6 +196,10 @@
     }
 
     &.x-1 {
+        .context-item-icon {
+            width: $spacer * 6;
+        }
+
         .item-container {
             width: 100%;
         }
@@ -199,23 +211,16 @@
             }
         }
 
-        .context-item-icon {
-            margin: 0 $spacer;
-            width: $spacer * 4;
-        }
+
     }
 
     &.x-2 {
+        .context-item-icon {
+            width: $spacer * 4.5;
+        }
+
         .item-container {
             width: 50%;
-        }
-
-        svg {
-            @include icon-size($spacer * 3);
-        }
-
-        .context-item-icon {
-            width: $spacer * 4;
         }
 
         .item-header {
@@ -230,11 +235,27 @@
                 bottom: -$spacer / 4;
             }
         }
+
+        svg {
+            @include icon-size($spacer * 3);
+        }
     }
 
     &.x-3 {
+        .context-item-icon {
+            width: $spacer * 3.5;
+        }
+
         .item-container {
             width: calc(100% / 3);
+        }
+
+        .item-info {
+            .item-handle {
+                .item-tag {
+                    font-size: 1rem;
+                }
+            }
         }
 
         svg {

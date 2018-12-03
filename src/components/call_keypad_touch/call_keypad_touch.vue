@@ -1,12 +1,11 @@
 <component class="component-call-keypad-touch" tabindex="-1">
 
-    <header v-if="callActive.status === 'new'">
-        <div class="header-line">
-            <div class="title uc">{{$t('calls')}}</div>
-            <div class="vertical-devider"></div>
-            <div class="content-filters">
-                <Field name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
-            </div>
+    <header class="header-bar" v-if="callActive.status === 'new'">
+        <div class="filter-line">
+            <div class="header-bar-title uc">{{$t('calls')}}</div>
+        </div>
+        <div class="action-line">
+            <Field name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
         </div>
     </header>
 

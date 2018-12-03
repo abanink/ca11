@@ -1,9 +1,8 @@
 <component class="component-contacts padded">
 
-    <header>
-        <div class="header-line filter-bar">
-            <div class="title uc">{{$t('contacts')}}</div>
-            <div class="vertical-devider"></div>
+    <header class="header-bar">
+        <div class="filter-line">
+            <div class="header-bar-title uc">{{$t('contacts')}}</div>
             <div class="content-filters">
                 <div class="filter" :class="classes('filter-online')" @click="toggleFilterOnline()">
                     <icon name="online"/>
@@ -15,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div class="header-line action-bar">
+        <div class="action-line">
             <div class="field field-text search">
                 <div class="control">
                     <input class="input" autofocus type="input"
@@ -52,13 +51,13 @@
             class="item-container contact" :class="{selected: contact.selected}">
 
             <div class="item">
-                <div v-if="displayMode < 3" class="item-header">
+                <div class="item-header">
                     <icon class="item-icon" name="contact"/>
                 </div>
 
                 <div class="item-info">
                     <div class="item-handle">
-                        <input class="name" :readonly="!editMode" type="text" v-model="contact.name"/>
+                        <input class="item-tag" :readonly="!editMode" type="text" v-model="contact.name"/>
 
                         <div class="item-options">
                             <button v-if="!editMode" @click.stop="toggleFavorite(contact)" class="item-option" :class="classes('favorite-button', contact.favorite)">
@@ -96,7 +95,7 @@
                 <div v-else v-for="endpoint in contact.endpoints" class="context-item" :class="{writable: editMode}">
 
                     <span class="context-item-icon">
-                        <icon v-if="editMode":name="`protocol-${endpoint.protocol}`"
+                        <icon v-if="editMode" :name="`protocol-${endpoint.protocol}`"
                             :class="endpoint.status"
                             @click.stop="toggleEndpointProtocol(contact, endpoint)"/>
                         <icon v-else :name="`protocol-${endpoint.protocol}`"
@@ -106,13 +105,13 @@
 
                     <input v-if="endpoint.protocol === 'sip'"
                         v-model="endpoint.number"
-                        class="name"
+                        class="item-tag"
                         :readonly="!editMode"
                         :placeholder="$t('extension or phonenumber').capitalize()"
                         type="text"/>
                     <input v-else-if="endpoint.protocol === 'sig11'"
                         v-model="endpoint.pubkey"
-                        class="name"
+                        class="item-tag"
                         :readonly="!editMode"
                         :placeholder="$t('public key').capitalize()"
                         type="text"/>

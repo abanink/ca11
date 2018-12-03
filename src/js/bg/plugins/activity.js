@@ -8,7 +8,7 @@ const Plugin = require('ca11/lib/plugin')
 
 // Cap the maximum amount of stored activities, so the
 // localStorage won't be grinded to a halt.
-const MAX_ACTIVITIES = 20
+const MAX_ACTIVITIES = 50
 
 /**
 * Main entrypoint for Activity.
@@ -28,25 +28,21 @@ class PluginActivity extends Plugin {
             else status = 'missed'
 
             let activity = {
+                endpoint: call.endpoint,
                 status,
                 type: `call-missed-${call.type}`,
             }
 
-            const contact = this.app.helpers.matchContact(call.endpoint)
-            if (contact) Object.assign(activity, contact)
-            else activity.endpoint = call.endpoint
             this.addActivity(activity)
         })
 
         this.app.on('bg:calls:call_ended', ({call}) => {
             let activity = {
+                endpoint: call.endpoint,
                 status: 'finished',
                 type: `call-${call.type}`,
             }
 
-            const contact = this.app.helpers.matchContact(call.endpoint)
-            if (contact) Object.assign(activity, contact)
-            else activity.endpoint = call.endpoint
             this.addActivity(activity)
         })
     }

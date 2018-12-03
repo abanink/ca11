@@ -1,9 +1,8 @@
 <component class="component-activity padded">
 
-    <header>
-        <div class="header-line filter-bar">
-            <div class="title uc">{{$t('activity')}}</div>
-            <div class="vertical-devider"></div>
+    <header class="header-bar">
+        <div class="filter-line">
+            <div class="header-bar-title uc">{{$t('activity')}}</div>
             <div class="content-filters">
                 <div class="filter" :class="classes('filter-missed-incoming')" @click="toggleFilterMissedIncoming()">
                     <icon name="call-missed-incoming"/>
@@ -19,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="header-line action-bar">
+        <div class="action-line">
             <div class="field field-text search">
                 <div class="control">
                     <input class="input" autofocus type="input"
@@ -37,7 +36,7 @@
                 <icon name="edit"/>
             </div>
 
-            <div v-if="editMode" class="action" @click.stop="addContact()">
+            <div v-if="editMode" class="action" @click.stop="deleteActivities()">
                 <icon name="delete"/>
             </div>
         </div>
@@ -58,39 +57,42 @@
 
                 <div class="item-info">
                     <div class="item-handle">
-                        <div class="name" v-if="activity.contact">
-                            {{contacts[activity.contact].name}}
-                            <span v-if="contacts[activity.contact].endpoints[activity.endpoint]">
-                                - {{contacts[activity.contact].endpoints[activity.endpoint].number}}
-                            </span>
-                            <span v-else>
-                                <!-- Reference may be broken -->
-                                {{activity.endpoint}}
-                            </span>
+                        <div class="item-tag" v-if="activity.contact">
+                            {{activity.contact.name}}
+                          </div>
+                        <div class="item-tag" v-else>
+                            {{activity.endpoint}}
                         </div>
-                        <div class="name" v-else>{{activity.endpoint}}</div>
+
+                        <input v-if="activity.remind" class="activity-label" type="text" v-model="activity.label" :placeholder="$t(activity.status)" />
 
                         <div class="item-options">
-                            <button class="item-option" :class="classes('remind-button', activity)" v-on:click="toggleReminder(activity)">
+                            <button v-if="!editMode" class="item-option" :class="classes('remind-button', activity)" v-on:click="toggleReminder(activity)">
                                 <icon name="idea"/>
                             </button>
-                            <button class="item-option" v-on:click="callRecent(activity)">
+                            <button v-if="!editMode" class="item-option" v-on:click="callRecent(activity)">
                                 <icon name="phone"/>
+                            </button>
+                            <button v-if="editMode" @click.stop="deleteActivity(activity)" class="item-option">
+                                <icon name="delete"/>
                             </button>
                         </div>
                     </div>
 
                     <div class="item-description">
-                        {{activity.date | fuzzydate}}
+                        <template v-if="activity.contact && activity.contact.endpoints[activity.endpoint]">
+                            {{activity.endpoints[activity.endpoint].number}}
+                        </template>
+                        <template v-else>
+                            <!-- Reference may be broken -->
+                            {{activity.endpoint}}
+                        </template>
+
+                        - {{activity.date | fuzzydate}}
+
+
                     </div>
                 </div>
-
-
-
-                <input class="activity-label" v-if="activity.remind" type="text" v-model="activity.label" :placeholder="$t(activity.status)" />
-
-
-
             </div>
         </div>
     </div>
