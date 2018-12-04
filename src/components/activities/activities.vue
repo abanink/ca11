@@ -4,6 +4,10 @@
         <div class="filter-line">
             <div class="header-bar-title uc">{{$t('activities')}}</div>
             <div class="content-filters">
+                <div class="filter" :class="classes('filter-reminders')" @click="toggleFilterReminders()">
+                    <icon name="idea"/>
+                    <span class="cf">{{$t('reminders')}}</span>
+                </div>
                 <div class="filter" :class="classes('filter-missed-incoming')" @click="toggleFilterMissedIncoming()">
                     <icon name="call-missed-incoming"/>
                     <span class="cf">{{$t('missed')}}</span>
@@ -11,10 +15,6 @@
                 <div class="filter" :class="classes('filter-missed-outgoing')" @click="toggleFilterMissedOutgoing()">
                     <icon name="call-missed-outgoing"/>
                     <span class="cf">{{$t('unanswered')}}</span>
-                </div>
-                <div class="filter" :class="classes('filter-reminders')" @click="toggleFilterReminders()">
-                    <icon name="idea"/>
-                    <span class="cf">{{$t('reminders')}}</span>
                 </div>
             </div>
         </div>

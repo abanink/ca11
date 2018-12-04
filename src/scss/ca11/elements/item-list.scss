@@ -6,6 +6,22 @@
     flex-flow: row wrap;
     flex-wrap: wrap;
 
+    button {
+        &:hover {
+            cursor: pointer;
+            svg {fill: $brand-color;}
+        }
+
+        &[disabled] {
+            svg {fill: $grey-color-light;}
+
+            &:hover {
+                cursor: not-allowed;
+                svg {fill: $grey-color-lighter;}
+            }
+        }
+    }
+
     svg {
         @include icon-size($spacer * 3.5);
     }
@@ -167,14 +183,25 @@
             }
 
             .context-item-icon {
+                align-items: center;
+                background: none;
                 border: 1px dashed transparent;
                 color: $grey-color;
+                display: flex;
+                justify-content: center;
                 margin-right: $spacer / 2;
                 text-align: center;
 
-                :hover {
+                &:hover {
                     cursor: pointer;
-                    fill: $brand-color;
+                    svg {fill: $brand-color;}
+                }
+
+                &[disabled] {
+                    &:hover {
+                        cursor: not-allowed;
+                        svg {fill: $grey-color-lighter;}
+                    }
                 }
             }
 
@@ -182,6 +209,7 @@
                 background: none;
                 color: $grey-color-darker;
                 flex: 1;
+                padding: $spacer;
                 width: 100%;
             }
 

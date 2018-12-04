@@ -1,45 +1,33 @@
-/**
-* The Contacts module is currently vendor-specific,
-* but is supposed to be a generic way of dealing with
-* a user's contact-options. Therefor a Contact can have
-* multiple endpoints, which are ways to contact the Contact.
-* An endpoint can be a CallSip or other class inheriting from
-* the base Call class.
-* @module ModuleContacts
-*/
-const Contact = require('./contact')
 const Plugin = require('ca11/lib/plugin')
 
 
 /**
-* Main entrypoint for Contacts.
+* Contacts plugin takes care of managing
+* Contacts, Endpoints and Presence.
 * @memberof AppBackground.plugins
 */
 class PluginContacts extends Plugin {
     /**
     * @param {AppBackground} app - The background application.
-    * @param {Array} providers - ContactProvider classes used to sync Contacts with.
     */
-    constructor(app, providers) {
+    constructor(app) {
         super(app)
 
-        // Holds Contact instances, not Contact state.
-        this.contacts = {}
-        this.providers = []
-
-        for (const Provider of providers) {
-            this.providers.push(new Provider(this))
+        this.subscriptions = {}
+        this.presence = {
+            sig11: require('./presence/sig11')(app, this),
+            sip: require('./presence/sip')(app, this),
         }
-
-        this.app.on('bg:user:logged_out', () => {
-            this.contacts = {}
-            this.app.setState({}, {action: 'replace', path: 'contacts.contacts'})
-        })
 
         // Start subscribing to presence info after being registered.
         this.app.on('calls:connected', () => {
-            this.subscribeContacts()
+            this.subscribeAll()
         })
+
+        this.app.on('bg:contacts:subscribe', ({contact, endpoint}) => this.subscribe(contact, endpoint))
+        this.app.on('bg:contacts:subscribe-all', () => this.subscribeAll(true))
+        this.app.on('bg:contacts:unsubscribe', ({contact, endpoint}) => this.unsubscribe(contact, endpoint))
+        this.app.on('bg:contacts:unsubscribe-all', () => this.unsubscribeAll(true))
     }
 
 
@@ -52,53 +40,15 @@ class PluginContacts extends Plugin {
             contacts: {},
             filters: {
                 favorites: false,
-                online: false,
+                presence: false,
             },
             status: null,
         }
     }
 
 
-    /**
-    * Load all endpoint data from the vendor platform API and mix
-    * and update existing or create new conctacts.
-    */
-    async _platformData() {
-        for (const provider of this.providers) {
-            await provider._platformData()
-        }
-    }
-
-
-    /**
-    * State that is bound to a Class is more complicated to
-    * restore when Vue & Vue-stash are already initialized.
-    * This happens when a user unlocks.
-    * @param {Object} moduleStore - Root property for this module.
-    */
-    _restoreState(moduleStore) {
-        let contacts = moduleStore.contacts
-
-        if (this.app.vm) {
-            // The user unlocks; start with an empty placeholder
-            // and rebuild the contacts from reinitializing Contact
-            // instaces.
-            if (moduleStore.contacts) {
-                // Keep the contacts from being restored in the store.
-                contacts = JSON.parse(JSON.stringify(moduleStore.contacts))
-                moduleStore.contacts = {}
-            }
-        }
-
-        if (contacts) {
-            for (const id of Object.keys(contacts)) {
-                if (!this.contacts[id]) {
-                    this.contacts[id] = new Contact(this.app, contacts[id])
-                }
-            }
-        }
-
-        Object.assign(moduleStore, {status: 'ready'})
+    _ready() {
+        this.state = this.app.state.contacts
     }
 
 
@@ -107,30 +57,38 @@ class PluginContacts extends Plugin {
     * updating it.
     */
     resetEndpointsStatus() {
-        for (const contact of Object.values(this.contacts)) {
+        for (const contact of Object.values(this.state.contacts)) {
             for (const endpoint of Object.values(contact.endpoints)) {
-                if (endpoint.presence) {
-                    endpoint.setState({status: 'unavailable'})
-                }
+                this.app.setState({status: 'not-set'}, {
+                    action: 'upsert',
+                    path: `contacts.contacts.${contact.id}.endpoints.${endpoint.id}`,
+                    persist: true,
+                })
             }
         }
     }
 
 
+    subscribe(contact, endpoint) {
+        if (endpoint.protocol === 'sip') {
+            this.app.logger.info(`${this}subscribe sip endpoint ${endpoint.number}`)
+            this.presence.sip.subscribe(contact, endpoint)
+        }
+    }
+
+
     /**
-    * Subscribe here, so we are able to wait before a subscription
-    * is completed until going to the next. This prevents the platform
-    * server from being hammered.
+    * Subscribe all endpoints with subscription indication
+    * or to all endpoints when using override.
+    * @param {Boolean} override - Override endpoint subscription indication.
     */
-    subscribeContacts() {
+    subscribeAll(override = false) {
         this.resetEndpointsStatus()
         this.app.logger.info(`${this}updating contact endpoint presence status`)
-        for (const contact of Object.values(this.contacts)) {
-            if (contact && ['registered', 'connected'].includes(this.app.state.calls.sip.status)) {
-                for (const endpoint of Object.values(contact.endpoints)) {
-                    if (endpoint.subscription) {
-                        endpoint.presence.subscribe()
-                    }
+        for (const contact of Object.values(this.state.contacts)) {
+            for (const endpoint of Object.values(contact.endpoints)) {
+                if (endpoint.subscribe || override) {
+                    this.presence.sip.subscribe(contact, endpoint)
                 }
             }
         }
@@ -143,6 +101,30 @@ class PluginContacts extends Plugin {
     */
     toString() {
         return `${this.app}[contacts] `
+    }
+
+
+    unsubscribe(contact, endpoint) {
+        if (endpoint.protocol === 'sip') {
+            this.app.logger.info(`${this}unsubscribe sip endpoint ${endpoint.number}`)
+            this.presence.sip.unsubscribe(contact, endpoint)
+        }
+    }
+
+
+    /**
+    * Unsubscribe all endpoints with subscription indication
+    * or from all endpoints when using override.
+    * @param {Boolean} override - Override endpoint subscription indication.
+    */
+    unsubscribeAll(override = false) {
+        for (const contact of Object.values(this.state.contacts)) {
+            for (const endpoint of Object.values(contact.endpoints)) {
+                if (endpoint.subscribe || override) {
+                    this.presence.sip.unsubscribe(contact, endpoint)
+                }
+            }
+        }
     }
 }
 

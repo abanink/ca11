@@ -29,7 +29,7 @@ module.exports = (app) => {
                             }
                         }
                         // Search on contact endpoint number.
-                        if (!match) match = i.endpoint.includes(searchQuery)
+                        if (!match) match = i.description.endpoint.includes(searchQuery)
                         return match
                     })
                 }
