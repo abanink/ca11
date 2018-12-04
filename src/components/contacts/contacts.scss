@@ -8,6 +8,34 @@
                 cursor: pointer;
             }
         }
+
+        .context-item-icon {
+            &.available {
+                svg {
+                    fill: $green-color;
+                }
+            }
+
+            &.busy {
+                svg {
+                    fill: $red-color;
+                }
+            }
+
+            &.failed {
+                background: $red-color;
+
+                svg {
+                    fill: $white-color;
+                }
+            }
+
+            &.not-set {
+                svg {
+                    fill: $grey-color;
+                }
+            }
+        }
     }
 }
 
@@ -18,26 +46,21 @@
     border-radius: 50%;
     margin-right: $spacer / 1.5;
 
-
-    &.unregistered {
-        path[pid='0'] {fill: $grey-color-light;}
-        path[pid='1'] {fill: $grey-color-lightest;}
-    }
-
-    &.unavailable,
-    &.no-results {
-        path[pid='0'] {fill: $grey-color;}
-        path[pid='1'] {fill: $white;}
+    &.available {
+        background: $green-color;
     }
 
     &.busy {
-        path[pid='0'] {fill: $red-color;}
-        path[pid='1'] {fill: $white;}
+        background: $red-color;
     }
 
-    &.available {
-        path[pid='0'] {fill: $green-color;}
-        path[pid='1'] {fill: $white;}
+    &.failed {
+        background: $grey-color-lightest;
+        border: 1px solid $red-color;
+    }
+
+    &.not-set {
+        background: $grey-color-lighter;
     }
 
     &.ringing {

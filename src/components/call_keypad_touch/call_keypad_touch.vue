@@ -3,9 +3,9 @@
     <header class="header-bar" v-if="callActive.status === 'new'">
         <div class="filter-line">
             <div class="header-bar-title uc">{{$t('calls')}}</div>
-        </div>
-        <div class="action-line">
-            <Field name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
+            <div class="content-filters">
+                <Field name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
+            </div>
         </div>
     </header>
 

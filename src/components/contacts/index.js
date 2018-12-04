@@ -1,50 +1,57 @@
 module.exports = (app) => {
+    const PRESENCE_STATUS = ['available', 'busy']
+
     /**
     * @memberof fg.components
     */
     const Contact = {
         computed: Object.assign({
             filteredContacts: function() {
+                let contacts = Object.entries(this.contacts).map((i) => i[1])
+
+                if (this.filters.favorites) contacts = contacts.filter((i) => i.favorite)
+                if (this.filters.presence) {
+                    contacts = contacts.filter((i) => {
+                        for (const entrypoint of Object.values(i.endpoints)) {
+                            if (PRESENCE_STATUS.includes(entrypoint.status)) {
+                                return true
+                            }
+                        }
+                        return false
+                    })
+                }
+
                 let searchQuery = this.search.input.toLowerCase()
-                let contacts = []
-                // let _registeredContacts = []
-                // let _unregisteredContacts = []
+                if (searchQuery) {
+                    contacts = contacts.filter((i) => {
+                        let match = false
+                        // Search on contact name and on contact endpoint.
+                        match = i.name.toLowerCase().includes(searchQuery)
 
-                for (const contactId of Object.keys(this.contacts)) {
-                    const contact = this.contacts[contactId]
-                    // Filter favorites only.
-                    if (this.filters.favorites && !contact.favorite) continue
-                    if (this.filters.online) {
-                        if (!this.contactIsRegistered(contact)) continue
-                    }
-
-                    const name = contact.name.toLowerCase()
-                    if (name.includes(searchQuery)) {
-                        // First try to match on the name.
-                        contacts.push(contact)
-                        // if (this.contactIsRegistered(contact)) _registeredContacts.push(contact)
-                        // else _unregisteredContacts.push(contact)
-                    } else {
-                        // Try to match on the endpoint's number.
-                        for (const endpointId of Object.keys(contact.endpoints)) {
-                            if (String(contact.endpoints[endpointId].number).includes(searchQuery)) {
-                                contacts.push(contact)
-                                // if (this.contactIsRegistered(contact)) _registeredContacts.push(contact)
-                                // else _unregisteredContacts.push(contact)
+                        for (const endpoint of Object.values(i.endpoints)) {
+                            if (endpoint.number.includes(searchQuery)) {
+                                match = true
                                 break
                             }
                         }
-                    }
+
+                        return match
+                    })
                 }
 
-                // First show the registered accounts; then the unregistered ones.
-                // _registeredContacts = _registeredContacts.sort(app.utils.sortByMultipleKey(['name']))
-                // _unregisteredContacts = _unregisteredContacts.sort(app.utils.sortByMultipleKey(['name']))
                 return contacts
             },
         }, app.helpers.sharedComputed()),
+        data: function() {
+            return {
+                subscribeAll: false,
+            }
+        },
         methods: Object.assign({
             addContact: function() {
+                // Make sure all filter are off when adding a new Contact.
+                app.setState({contacts: {filters: {favorites: false, presence: false}}}, {persist: true})
+
                 let newContact = {
                     endpoints: {},
                     favorite: false,
@@ -62,12 +69,11 @@ module.exports = (app) => {
             addEndpoint: function(contact) {
                 let endpoint = {
                     id: shortid(),
-                    name: 'unnamed',
                     number: '',
                     protocol: 'sip',
                     pubkey: '',
+                    status: 'unavailable',
                     subscribe: false,
-                    target: '',
                 }
 
                 app.setState(endpoint, {
@@ -91,8 +97,8 @@ module.exports = (app) => {
                     classes.active = modifier
                 } else if (block === 'filter-favorites') {
                     classes.active = this.filters.favorites
-                } else if (block === 'filter-online') {
-                    classes.active = this.filters.online
+                } else if (block === 'filter-presence') {
+                    classes.active = this.filters.presence
                 }
                 return classes
             },
@@ -105,16 +111,6 @@ module.exports = (app) => {
                 }
 
                 return isReady
-            },
-            contactIsRegistered: function(contact) {
-                let isRegistered = false
-                for (const id of Object.keys(contact.endpoints)) {
-                    if (contact.endpoints[id].status !== 'unregistered') {
-                        isRegistered = true
-                    }
-                }
-
-                return isRegistered
             },
             deleteContact: function(contact) {
                 app.setState(null, {
@@ -129,6 +125,11 @@ module.exports = (app) => {
                     path: `contacts.contacts.${contact.id}.endpoints.${endpoint.id}`,
                     persist: true,
                 })
+            },
+            endpointActive: function(endpoint) {
+                if (endpoint.number && endpoint.protocol === 'sip') return true
+                else if (endpoint.pubkey && endpoint.protocol === 'sig11') return true
+                return false
             },
             toggleEndpointProtocol: function(contact, endpoint) {
                 if (!this.editMode) return
@@ -147,8 +148,8 @@ module.exports = (app) => {
             toggleFilterFavorites: function() {
                 app.setState({contacts: {filters: {favorites: !this.filters.favorites}}}, {persist: true})
             },
-            toggleFilterOnline: function() {
-                app.setState({contacts: {filters: {online: !this.filters.online}}}, {persist: true})
+            toggleFilterPresence: function() {
+                app.setState({contacts: {filters: {presence: !this.filters.presence}}}, {persist: true})
             },
             /**
              * One contact at a time is in a selected state.
@@ -166,8 +167,17 @@ module.exports = (app) => {
                 app.setState({contacts: {contacts: this.contacts}}, {persist: true})
             },
             toggleSubscribe: function(contact, endpoint) {
-                endpoint.subscribe = !endpoint.subscribe
-                app.setState({contacts: {contacts: this.contacts}}, {persist: true})
+                if (!endpoint.subscribe) {
+                    app.emit('bg:contacts:subscribe', {contact, endpoint})
+                } else {
+                    app.emit('bg:contacts:unsubscribe', {contact, endpoint})
+                }
+            },
+            toggleSubscribeAll: function() {
+                this.subscribeAll = !this.subscribeAll
+
+                if (this.subscribeAll) app.emit('bg:contacts:subscribe-all')
+                else app.emit('bg:contacts:unsubscribe-all')
             },
         }, app.helpers.sharedMethods()),
         render: templates.contacts.r,

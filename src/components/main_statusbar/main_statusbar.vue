@@ -23,13 +23,13 @@
 
     <div class="menu-options">
 
-        <div class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
-            <icon class="settings" name="settings"/>
-        </div>
-
         <!-- Popout link in WebExtension -->
         <div class="option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
             <icon class="ext-tab" name="ext-tab"/>
+        </div>
+
+        <div class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
+            <icon class="settings" name="settings"/>
         </div>
 
         <div class="option" @click="logout">
