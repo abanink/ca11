@@ -175,6 +175,7 @@ class SipCalls {
         const username = this.app.state.calls.sip.account.selected.username
         // Overwrite the existing instance with a new one every time.
         // SIP.js doesn't handle resetting configuration well.
+
         this.ua = new SIP.UA({
             authorizationUser: username,
             autostart: false,
@@ -192,6 +193,7 @@ class SipCalls {
                 peerConnectionOptions: {
                     rtcConfiguration: {
                         iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
+                        // sdpSemantics: 'unified-plan',
                     },
                 },
             },

@@ -4,6 +4,7 @@
 // The default styling is against a white background. The
 // `call-ongoing` class is used to differentiate.
 .component-call-keypad-touch {
+    flex: 1;
     width: 100%;
 
     header {

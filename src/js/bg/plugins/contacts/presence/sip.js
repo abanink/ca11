@@ -11,7 +11,7 @@ module.exports = function(app, module) {
             let xmlDoc = parser ? parser.parseFromString(notification.request.body, 'text/xml') : null
             window.xml = xmlDoc
             let status = 'available'
-            if (xmlDoc.getElementsByTagName('ep:busy').length) status = 'busy'
+            if (xmlDoc.getElementsByTagName('rpid:on-the-phone').length) status = 'busy'
             return status
         },
 
@@ -46,6 +46,7 @@ module.exports = function(app, module) {
                 // Register notify event.
                 module.subscriptions[endpoint.id].on('notify', (notification) => {
                     const status = this._statusFromXml(notification)
+
                     app.setState({status, subscribe: true}, {
                         action: 'upsert',
                         path: `contacts.contacts.${contact.id}.endpoints.${endpoint.id}`,

@@ -16,6 +16,7 @@
     width: 100%;
 
     .content-filters {
+        align-items: center;
         display: flex;
         font-size: 0.9rem;
 
@@ -26,6 +27,7 @@
             font-family: 'Rajdhani';
             font-weight: 600;
             justify-content: center;
+            margin-bottom: 0;
             margin-right: $spacer;
             user-select: none;
             vertical-align: middle;

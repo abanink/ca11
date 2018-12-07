@@ -73,6 +73,9 @@ module.exports = (app) => {
                 if (this.callingDisabled) return
                 if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
             },
+            toggleVideo: function() {
+                app.setState({calls: {description: {video: !this.description.video}}}, {persist: true})
+            },
             unpress: function() {
                 // No key pressed. Stop playing sound.
                 window.setTimeout(() => app.sounds.dtmfTone.stop(), 50)

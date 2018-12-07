@@ -4,8 +4,9 @@
 .component-calls {
     // Push the soundmeter to the bottom.
     display: flex;
-    flex-direction: column;
-
+    flex: 1;
+    flex-direction: row;
+    // width: 100%;
     .call-type {
         align-items: center;
         display: flex;
@@ -29,6 +30,7 @@
     .call-active {
         display: flex;
         flex-direction: column;
+        width: 100%;
 
         .call-components {
             display: flex;
@@ -69,5 +71,4 @@
             width: 100%;
         }
     }
-
 }

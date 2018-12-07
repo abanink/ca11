@@ -83,10 +83,6 @@ module.exports = (app) => {
                 app.emit('bg:calls:transfer_toggle', {callId: this.call.id})
             },
         },
-        mounted: function() {
-            this.$refs['local-video'].src = window.URL.createObjectURL(app.localStream)
-            this.$refs['local-video'].play()
-        },
         props: {
             call: {default: null},
         },

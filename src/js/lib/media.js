@@ -68,9 +68,11 @@ class Media {
                     googNoiseSuppression: false,
                     googTypingNoiseDetection: false,
                 },
+                video: this.app.state.calls.description.video,
             },
             AUDIO_PROCESSING: {
                 audio: {},
+                video: this.app.state.calls.description.video,
             },
         }
 
@@ -130,6 +132,7 @@ class Media {
 
         try {
             this.app.localStream = await navigator.mediaDevices.getUserMedia(this._getUserMediaFlags())
+            this.app.emit('local-stream-ready')
             if (this.app.env.section.fg && !this.app.env.isExtension) {
                 this.app.apps.bg.localStream = this.app.localStream
             }

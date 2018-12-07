@@ -136,10 +136,38 @@ class CallSIP extends Call {
         this.remoteStream = new MediaStream()
 
         this.pc = this.session.sessionDescriptionHandler.peerConnection
-        this.pc.getReceivers().forEach((receiver) => this.remoteStream.addTrack(receiver.track))
+        // Audio/Video coming from PBX.
+        this.pc.getReceivers().forEach((receiver) => {
+            if (receiver.track.kind === 'audio') {
+                this.remoteStream.addTrack(receiver.track)
+                this.tracks.audio[receiver.track.id] = receiver
+            } else if (receiver.track.kind === 'video') {
+                this.tracks.video[receiver.track.id] = receiver
+                this.remoteStream.addTrack(receiver.track)
+
+            }
+
+            if (['audio', 'video'].includes(receiver.track.kind)) {
+                this.app.setState({
+                    muted: false,
+                }, {path: `calls.calls.${this.id}.tracks.${receiver.track.kind}.${receiver.track.id}`})
+            }
+
+        })
         this.app.media.remoteVideo.srcObject = this.remoteStream
 
-        this.pc.getSenders().forEach((sender) => this.localStream.addTrack(sender.track))
+        this.pc.getSenders().forEach((sender) => {
+            // This may be a track(RTCRtpSender) or dtmf(RTCDTMFSender) property.]
+            if (!sender.track) return
+            if (sender.track.kind === 'audio') {
+                this.localStream.addTrack(sender.track)
+            } else {
+                if (sender.track.kind === 'video') {
+                    this.localStream.addTrack(sender.track)
+                }
+            }
+
+        })
         this.app.media.localVideo.srcObject = this.localStream
     }
 

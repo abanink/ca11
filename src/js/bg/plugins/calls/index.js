@@ -269,6 +269,7 @@ class PluginCalls extends Plugin {
                 endpoint: '',
                 protocol: 'sig11',
                 status: 'new',
+                video: true,
             },
             sig11: {
                 enabled: true,

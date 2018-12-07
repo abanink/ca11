@@ -21,6 +21,10 @@ class Call {
         this.app = app
         this.plugin = app.plugins.calls
         this.silent = silent
+        this.tracks = {
+            audio: {},
+            video: {},
+        }
 
         this._started = false
 
@@ -75,6 +79,10 @@ class Call {
             timer: {
                 current: null,
                 start: null,
+            },
+            tracks: {
+                audio: {},
+                video: {},
             },
             transfer: {
                 active: false,

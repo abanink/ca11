@@ -58,6 +58,7 @@ class AppForeground extends App {
             Notifications: require('../../components/notifications'),
             Settings: require('../../components/settings'),
             Soundmeter: require('../../components/soundmeter'),
+            VideoStrip: require('../../components/video_strip'),
             Wizard: require('../../components/wizard'),
         }
 

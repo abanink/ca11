@@ -4,7 +4,11 @@
         <div class="filter-line">
             <div class="header-bar-title uc">{{$t('calls')}}</div>
             <div class="content-filters">
-                <Field name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
+                <Field class="filter" name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
+                <div class="filter" :class="{active: description.video}" @click="toggleVideo()">
+                    <icon name="cam"/>
+                    <span class="cf">{{$t('video')}}</span>
+                </div>
             </div>
         </div>
     </header>

@@ -23,6 +23,7 @@ module.exports = (app) => {
                     calls: {
                         sig11: {
                             enabled: app.state.calls.sig11.toggled,
+                            endpoint: app.state.calls.sig11.endpoint,
                             toggled: app.state.calls.sig11.toggled,
                         },
                         sip: {
@@ -100,11 +101,11 @@ module.exports = (app) => {
             }
 
             if (this.calls.sip.toggled) {
-                validations.calls.sip.endpoint.domain = app.helpers.validators.domain
+                validations.calls.sip.endpoint.domainOrIp = v.or(v.ipAddress, app.helpers.validators.domain)
             }
 
             if (this.calls.sig11.toggled) {
-                validations.calls.sig11.endpoint.domain = app.helpers.validators.domain
+                validations.calls.sig11.endpoint.domainOrIp = v.or(v.ipAddress, app.helpers.validators.domain)
             }
 
             return validations
