@@ -6,18 +6,17 @@
 // icon-links to several locations.
 .component-call-switch {
     background: $grey-color-lightest;
-    border-left: $spacer / 2 solid $grey-color-lighter;
-
-    width: $spacer * 6;
-    z-index: 10000;
+    border-right: $spacer / 2 solid $grey-color-lighter;
+    display: flex;
+    width: 100%;
+    z-index: 10000000;
 
     .call {
         @include icon-size($spacer * 6);
         align-items: center;
-        border-left: $spacer / 2 solid $grey-color-lighter;
+        border-right: $spacer / 2 solid $grey-color-lighter;
         display: flex;
         justify-content: center;
-        margin-left: -$spacer / 2;
 
         &:hover {
             background: $white-tint-color-bright;
@@ -39,7 +38,7 @@
 
         &.active {
             background: $white-color;
-            border-left: $spacer / 2 solid $brand-color;
+            border-right: $spacer / 2 solid $brand-color;
             svg {fill: $brand-color;}
         }
     }

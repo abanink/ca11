@@ -92,7 +92,7 @@ class CallSIG11 extends Call {
         const offer = await this.pc.createOffer()
         this.pc.setLocalDescription(offer)
 
-        this.plugin.sig11Calls.ws.send(JSON.stringify({
+        this.plugin.sig11.ws.send(JSON.stringify({
             node: this.state.endpoint,
             sdp: this.pc.localDescription,
         }))

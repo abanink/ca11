@@ -1,0 +1,17 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.component-media-stream {
+    // border-left: $spacer / 2 solid $grey-color-lighter;
+    // display: flex;
+    // flex-direction: column;
+    // height: 100px;
+    // width: 150px;
+    // min-width: 50px;
+
+    video {
+        background: $grey-color-lighter;
+        display: block;
+        width: 100%;
+    }
+}

@@ -4,9 +4,10 @@
 .component-calls {
     // Push the soundmeter to the bottom.
     display: flex;
-    flex: 1;
+    flex: 5 1 auto;
     flex-direction: row;
-    // width: 100%;
+    width: 100%;
+
     .call-type {
         align-items: center;
         display: flex;
@@ -34,7 +35,7 @@
 
         .call-components {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: space-between;
             width: 100%;
         }
@@ -70,5 +71,9 @@
             text-align: center;
             width: 100%;
         }
+    }
+
+    .call-controls {
+        display: flex;
     }
 }

@@ -16,6 +16,7 @@
 */
 function env({section}) {
     let _env = {
+        isAndroid: false,
         isBrowser: false,
         isChrome: false,
         isEdge: false,
@@ -42,6 +43,7 @@ function env({section}) {
 
     if (global.document) {
         ua = navigator.userAgent.toLowerCase()
+        _env.isAndroid = ua.includes('android')
 
         if (ua.includes('edge')) {
             _env.isEdge = true

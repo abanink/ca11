@@ -100,14 +100,6 @@ module.exports = (app) => {
                 },
             }
 
-            if (this.calls.sip.toggled) {
-                validations.calls.sip.endpoint.domainOrIp = v.or(v.ipAddress, app.helpers.validators.domain)
-            }
-
-            if (this.calls.sig11.toggled) {
-                validations.calls.sig11.endpoint.domainOrIp = v.or(v.ipAddress, app.helpers.validators.domain)
-            }
-
             return validations
         },
     }

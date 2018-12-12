@@ -1,14 +1,19 @@
 <component class="component-calls" :class="classes('component')">
     <template v-if="!callOngoing">
         <CallKeypadTouch :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
-        <VideoStrip v-if="description.video"/>
+        <MediaStrip v-if="description.video"/>
     </template>
     <div v-else class="call-active">
-        <div class="call-components">
-            <CallKeypadTouch v-if="callActive.status === 'new'" :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
-            <Call v-else :call="callActive"/>
+        <div v-if="callActive.status === 'new'">
             <CallSwitch :call="callActive"/>
-            <VideoStrip :call="callActive"/>
+            <CallKeypadTouch :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
+        </div>
+        <div v-else class="call-components">
+            <CallSwitch :call="callActive"/>
+            <div class="call-controls">
+                <Call :call="callActive"/>
+                <MediaStrip :call="callActive"/>
+            </div>
         </div>
     </div>
 

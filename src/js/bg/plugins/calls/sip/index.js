@@ -1,3 +1,7 @@
+// Custom SIP.js description handler.
+const SessionDescriptionHandler = require('./sdh')
+
+
 class SipCalls {
 
     constructor(callsPlugin) {
@@ -188,12 +192,15 @@ class SipCalls {
             noanswertimeout: 60,
             password: this.app.state.calls.sip.account.selected.password,
             register: true,
+            sessionDescriptionHandlerFactory: (session, options) => {
+                return SessionDescriptionHandler.defaultFactory(session, options)
+            },
             sessionDescriptionHandlerFactoryOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
                 peerConnectionOptions: {
                     rtcConfiguration: {
                         iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
-                        // sdpSemantics: 'unified-plan',
+                        sdpSemantics: 'plan-b',
                     },
                 },
             },
@@ -204,7 +211,7 @@ class SipCalls {
                 // Don't allow unencrypted websocket connections.
                 wsServers: `wss://${this.app.state.calls.sip.endpoint}`,
             },
-            uri: `${username}@${this.app.state.calls.sip.endpoint}`,
+            uri: `${username}@${this.app.state.calls.sip.endpoint.split('/')[0]}`,
             userAgentString: this._userAgent(),
         })
 

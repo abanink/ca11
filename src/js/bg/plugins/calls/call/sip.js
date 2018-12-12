@@ -84,7 +84,7 @@ class CallSIP extends Call {
         * call module's invite handler.
         */
         this.session.on('failed', (message) => {
-            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.plugin.sipCalls.ua)
+            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.plugin.sip.ua)
             let reason = message.getHeader('Reason')
             if (reason) {
                 reason = this._parseHeader(reason).get('text')
@@ -130,45 +130,28 @@ class CallSIP extends Call {
      * SIP.js event handler that takes care of adding
      * tracks to a stream and binding them to the video
      * elements.
+     * @param {RTCTrackEvent} e - Contains the added track from RTCPeerConnection.
      */
-    _onTrackAdded() {
-        this.localStream = new MediaStream()
-        this.remoteStream = new MediaStream()
-
+    _onTrackAdded(e) {
         this.pc = this.session.sessionDescriptionHandler.peerConnection
-        // Audio/Video coming from PBX.
-        this.pc.getReceivers().forEach((receiver) => {
-            if (receiver.track.kind === 'audio') {
-                this.remoteStream.addTrack(receiver.track)
-                this.tracks.audio[receiver.track.id] = receiver
-            } else if (receiver.track.kind === 'video') {
-                this.tracks.video[receiver.track.id] = receiver
-                this.remoteStream.addTrack(receiver.track)
+        const remoteStreamId = e.track.id
 
-            }
+        if (!this.streams[remoteStreamId]) {
+            this.streams[remoteStreamId] = new MediaStream()
+            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
+            this.streams[remoteStreamId].addTrack(e.track)
+        }
 
-            if (['audio', 'video'].includes(receiver.track.kind)) {
-                this.app.setState({
-                    muted: false,
-                }, {path: `calls.calls.${this.id}.tracks.${receiver.track.kind}.${receiver.track.id}`})
-            }
+        for (const stream of Object.values(this.streams)) {
+            console.log(stream)
+        }
 
-        })
-        this.app.media.remoteVideo.srcObject = this.remoteStream
 
-        this.pc.getSenders().forEach((sender) => {
-            // This may be a track(RTCRtpSender) or dtmf(RTCDTMFSender) property.]
-            if (!sender.track) return
-            if (sender.track.kind === 'audio') {
-                this.localStream.addTrack(sender.track)
-            } else {
-                if (sender.track.kind === 'video') {
-                    this.localStream.addTrack(sender.track)
-                }
-            }
-
-        })
-        this.app.media.localVideo.srcObject = this.localStream
+        this.app.setState({
+            id: remoteStreamId,
+            kind: e.track.kind,
+            muted: false,
+        }, {path: `calls.calls.${this.id}.streams.${remoteStreamId}`})
     }
 
 
@@ -177,16 +160,16 @@ class CallSIP extends Call {
     */
     _outgoing() {
         super._outgoing()
-        this.session = this.plugin.sipCalls.ua.invite(`sip:${this.state.endpoint}@${this.app.state.calls.sip.endpoint}`, {
+        const uri = `sip:${this.state.endpoint}@${this.app.state.calls.sip.endpoint.split('/')[0]}`
+        this.session = this.plugin.sip.ua.invite(uri, {
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
             },
         })
 
         this.setState({stats: {callId: this.session.request.call_id}})
-
         // Handle connecting streams to the appropriate video element.
-        this.session.on('trackAdded', this._onTrackAdded.bind(this))
+        this.session.on('track', this._onTrackAdded.bind(this))
 
         // Notify user about the new call being setup.
         this.session.on('accepted', (data) => {
@@ -291,7 +274,7 @@ class CallSIP extends Call {
         super.accept()
 
         // Handle connecting streams to the appropriate video element.
-        this.session.on('trackAdded', this._onTrackAdded.bind(this))
+        this.session.on('track', this._onTrackAdded.bind(this))
         this.session.accept({
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),

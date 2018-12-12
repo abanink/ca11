@@ -21,11 +21,8 @@ class Call {
         this.app = app
         this.plugin = app.plugins.calls
         this.silent = silent
-        this.tracks = {
-            audio: {},
-            video: {},
-        }
-
+        // References to MediaStream objects related to this call.
+        this.streams = {}
         this._started = false
 
         this.busyTone = app.sounds.busyTone
@@ -76,13 +73,10 @@ class Call {
                 callId: null,
             },
             status: null,
+            streams: {},
             timer: {
                 current: null,
                 start: null,
-            },
-            tracks: {
-                audio: {},
-                video: {},
             },
             transfer: {
                 active: false,
@@ -144,12 +138,15 @@ class Call {
         else outputSink = devices.sinks.headsetOutput.id
 
         this.app.logger.debug(`${this}change sink of remote video element to ${outputSink}`)
-        try {
-            await this.app.media.remoteVideo.setSinkId(outputSink)
-        } catch (err) {
-            const message = this.app.$t('failed to set output device!')
-            this.app.notify({icon: 'warning', message, type: 'danger'})
-            console.error(err)
+        // Chrome Android doesn't have setSinkId.
+        if (this.app.media.fallback.remote.setSinkId) {
+            try {
+                await this.app.media.fallback.remote.setSinkId(outputSink)
+            } catch (err) {
+                const message = this.app.$t('failed to set output device!')
+                this.app.notify({icon: 'warning', message, type: 'danger'})
+                console.error(err)
+            }
         }
     }
 
@@ -263,6 +260,12 @@ class Call {
         if (this.state.status === 'bye') {
             this.app.emit('bg:calls:call_ended', {call: this.state}, true)
         }
+
+        for (const streamId of Object.keys(this.streams)) {
+            this.app.logger.debug(`${this}removing stream ${streamId}`)
+            delete this.app.media.streams[streamId]
+        }
+
 
         // Stop the Call interval timer.
         clearInterval(this.timerId)

@@ -3,7 +3,6 @@
 
 
 .component-main {
-    border-top: $spacer / 2 solid $brand-color;
     position: relative;
 
     .overlay {
@@ -11,7 +10,6 @@
         background: $white;
         position: absolute;
         width: 100%;
-        z-index: 10000000000;
 
         .close-button {
             position: absolute;
@@ -36,15 +34,16 @@
 
         .app-view-main {
             align-content: stretch;
-            border-top: 4px solid $grey-color-lighter;
             display: flex;
+            flex: 1;
             flex-direction: row;
+            // z-index: 100000000;
             // Show a scrollbar when the content height exceeds the max-height.
 
             .app-view-layer {
                 flex: 1;
                 min-height: $min-popup-height + ($spacer * 5);
-                overflow-y: auto;
+                // overflow-y: auto;
 
                 &.padded {
                     padding: $spacer * 3;

@@ -52,7 +52,9 @@ class BusyTone {
                 sink = this.app.state.settings.webrtc.devices.sinks.headsetOutput
             }
         }
-        this.audio.setSinkId(sink.id)
+
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
 
         const gainNode = context.createGain()
         gainNode.connect(this.dest)
@@ -127,7 +129,8 @@ class DtmfTone {
             }
         }
 
-        this.audio.setSinkId(sink.id)
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
 
         const frequencyPair = this.frequencies[key]
         this.freq1 = frequencyPair.f1
@@ -227,7 +230,8 @@ class RingbackTone {
             }
         }
 
-        this.audio.setSinkId(sink.id)
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
 
         let freq1, freq2
         const gainNode = context.createGain()
@@ -296,7 +300,9 @@ class RingTone extends EventEmitter {
         if (!sink) {
             sink = this.app.state.settings.webrtc.devices.sinks.ringOutput
         }
-        this.audio.setSinkId(sink.id)
+
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
         // Loop the sound.
         if (loop) {
             this.audio.addEventListener('ended', () => {

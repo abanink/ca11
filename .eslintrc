@@ -37,6 +37,7 @@
         "EventEmitter": true,
         "MarkdownIt": true,
         "Raven": true,
+        "sdpInterop": true,
         "SIP": true,
         "Vuelidate": true,
         "resizeSensor": true
@@ -191,7 +192,7 @@
         "quotes": [1, "single"],
         "radix": 0,
         "require-yield": 0,
-        "semi": 0,
+        "semi": [2, "never"],
         "semi-spacing": [2, {"before": false, "after": true}],
         "sort-class-members/sort-class-members": [2, {
             "order": [

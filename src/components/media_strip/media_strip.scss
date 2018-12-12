@@ -1,0 +1,26 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.media-strip {
+    border-left: $spacer / 4 solid $grey-color-lightest;
+
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: 150px;
+    min-width: 75px;
+
+    .component-media-stream {
+        align-items: center;
+        background: $grey-color-darkest;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+
+        video {
+            width: 100%;
+        }
+    }
+}

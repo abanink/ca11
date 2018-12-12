@@ -13,6 +13,11 @@ class Media {
     constructor(app) {
         this.app = app
 
+        // Plays audio when no video can be shown due to an
+        // absent foreground DOM.
+        this.fallback = {local: null, remote: null}
+        this.streams = {}
+
         if (!this.app.env.isBrowser) return
 
         // Create audio/video elements in a browser-like environment.
@@ -21,33 +26,33 @@ class Media {
         // used to attach the remote WebRTC stream to.
 
         if (this.app.env.isExtension) {
-            this.__createVideoElements()
+            this.__createFallbackMedia()
         } else {
             if (this.app.env.section.bg) {
-                this.__createVideoElements()
+                this.__createFallbackMedia()
             } else {
-                this.localVideo = document.querySelector('video#local')
-                this.remoteVideo = document.querySelector('video#remote')
+                this.fallback.local = document.querySelector('video#local')
+                this.fallback.remote = document.querySelector('video#remote')
             }
         }
 
-        document.body.prepend(this.localVideo)
-        document.body.prepend(this.remoteVideo)
+        document.body.prepend(this.fallback.local)
+        document.body.prepend(this.fallback.remote)
     }
 
 
-    __createVideoElements() {
-        this.localVideo = document.createElement('video')
-        this.localVideo.setAttribute('id', 'local')
-        this.localVideo.muted = true
+    __createFallbackMedia() {
+        this.fallback.local = document.createElement('video')
+        this.fallback.local.setAttribute('id', 'local')
+        this.fallback.local.muted = true
 
-        this.remoteVideo = document.createElement('video')
-        this.remoteVideo.setAttribute('id', 'remote')
+        this.fallback.remote = document.createElement('video')
+        this.fallback.remote.setAttribute('id', 'remote')
 
         // Trigger play automatically. This is required for any audio
         // to play during a call.
-        this.remoteVideo.addEventListener('canplay', () => this.remoteVideo.play())
-        this.localVideo.addEventListener('canplay', () => this.localVideo.play())
+        this.fallback.local.addEventListener('canplay', () => this.fallback.local.play())
+        this.fallback.remote.addEventListener('canplay', () => this.fallback.remote.play())
     }
 
 
@@ -131,15 +136,18 @@ class Media {
         }
 
         try {
-            this.app.localStream = await navigator.mediaDevices.getUserMedia(this._getUserMediaFlags())
+            await navigator.mediaDevices.getUserMedia(this._getUserMediaFlags())
             this.app.emit('local-stream-ready')
+
+            // Share streams between bg and fg when in the same context.
             if (this.app.env.section.fg && !this.app.env.isExtension) {
-                this.app.apps.bg.localStream = this.app.localStream
+                this.app.apps.bg.media.streams = this.streams
             }
             if (!this.app.state.settings.webrtc.media.permission) {
                 this.app.setState({settings: {webrtc: {media: {permission: true}}}})
             }
         } catch (err) {
+            console.log(err)
             // There are no devices at all. Spawn a warning.
             if (err.message === 'Requested device not found') {
                 if (this.app.env.section.fg) {

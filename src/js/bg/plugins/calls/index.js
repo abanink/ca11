@@ -28,8 +28,8 @@ class PluginCalls extends Plugin {
         // This flag indicates whether a reconnection attempt will be
         // made when the websocket connection is gone.
 
-        this.sig11Calls = new Sig11Calls(this)
-        this.sipCalls = new SipCalls(this)
+        this.sig11 = new Sig11Calls(this)
+        this.sip = new SipCalls(this)
 
         this.reconnect = true
         // The default connection timeout to start with.
@@ -476,7 +476,7 @@ class PluginCalls extends Plugin {
 
 
     connect() {
-        this.sipCalls.connect()
+        this.sip.connect()
     }
 
 
@@ -519,7 +519,7 @@ class PluginCalls extends Plugin {
 
 
     disconnect(reconnect = true){
-        this.sipCalls.disconnect(reconnect)
+        this.sip.disconnect(reconnect)
     }
 
 

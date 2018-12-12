@@ -5,14 +5,17 @@
 // icon-links to several locations.
 .component-main-statusbar {
     background: $grey-color-lightest;
+    border-bottom: $spacer / 2 solid $grey-color-lighter;
+    border-top: $spacer / 2 solid $brand-color;
     color: $grey-color;
     display: flex;
     font-family: 'Rajdhani';
     font-size: 0.9rem;
     font-weight: 600;
-    height: ($spacer * 5);
+    height: ($spacer * 6);
     justify-content: space-between;
     transition: background 0.5s ease;
+    z-index: 100;
 
     &.error .status-indicators svg {fill: $red-color;}
     &.warning .status-indicators svg {fill: $red-color;}

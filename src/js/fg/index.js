@@ -54,11 +54,12 @@ class AppForeground extends App {
             MainCallBar: require('../../components/main_callbar'),
             MainMenuBar: require('../../components/main_menubar'),
             MainStatusBar: require('../../components/main_statusbar'),
+            MediaStream: require('../../components/media_stream'),
+            MediaStrip: require('../../components/media_strip'),
             MicPermission: require('../../components/mic_permission'),
             Notifications: require('../../components/notifications'),
             Settings: require('../../components/settings'),
             Soundmeter: require('../../components/soundmeter'),
-            VideoStrip: require('../../components/video_strip'),
             Wizard: require('../../components/wizard'),
         }
 

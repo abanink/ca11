@@ -162,7 +162,7 @@ class AppBackground extends App {
             user: {authenticated: true},
         }, {encrypt: false, persist: true})
 
-        this.plugins.calls.sig11Calls.connect()
+        this.plugins.calls.sig11.connect()
 
 
         // Set the default layer if it's still set to login.

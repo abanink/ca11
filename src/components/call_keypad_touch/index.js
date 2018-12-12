@@ -87,7 +87,8 @@ module.exports = (app) => {
             },
         }, app.helpers.sharedMethods()),
         mounted: function() {
-            this.$refs.input.focus()
+            // Only focus on desktop.
+            if (!this.env.isAndroid) this.$refs.input.focus()
         },
         props: {
             call: {default: null},
@@ -102,6 +103,7 @@ module.exports = (app) => {
             calls: 'calls.calls',
             contacts: 'contacts.contacts',
             description: 'calls.description',
+            env: 'env',
             sig11: 'calls.sig11',
             sip: 'calls.sip',
             user: 'user',
