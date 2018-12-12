@@ -3,19 +3,19 @@
 
 .component-main-menubar {
     background: $grey-color-lightest;
-    border-right: 4px solid $grey-color-lighter;
+    border-right: 4px solid transparent;
+    z-index: 100;
 
     .options {
         // Keeps the menubar icons from scrolling with the main content.
         margin-right: -$spacer / 2;
-        margin-top: -$spacer / 2;
         position: relative;
         width: $spacer * 6;
 
         .option {
             align-items: center;
             background: $grey-color-lightest;
-            border-right: $spacer / 2 solid $grey-color-lighter;
+            border-right: $spacer / 2 solid transparent;
             color: $grey-color-darker;
             display: flex;
             flex-direction: column;

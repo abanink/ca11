@@ -1,7 +1,6 @@
 .header-bar {
     .header-bar-title {
         color: $brand-color;
-        flex: 1;
         font-family: 'Rajdhani';
         font-size: 1.4rem;
         font-weight: 600;
@@ -33,20 +32,26 @@
             vertical-align: middle;
 
             svg {
-                @include icon-size($spacer * 3);
+                @include icon-size($spacer * 4);
                 background: $grey-color-lightest;
+                border: 2px solid $grey-color-lighter;
                 border-radius: 50%;
                 padding: $spacer / 2;
             }
 
             span {
+                display: none;
                 margin-left: $spacer / 2;
                 overflow: hidden;
             }
 
             &.active {
                 color: $grey-color;
-                svg {fill: $brand-color;}
+
+                svg {
+                    border: 2px solid $brand-color;
+                    fill: $brand-color;
+                }
             }
 
             &:hover {

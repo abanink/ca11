@@ -4,15 +4,21 @@
         <div class="filter-line">
             <div class="header-bar-title uc">{{$t('activities')}}</div>
             <div class="content-filters">
-                <div class="filter" :class="classes('filter-reminders')" @click="toggleFilterReminders()">
+                <div class="filter tooltip tooltip-bottom" :class="classes('filter-reminders')"
+                    @click="toggleFilterReminders()"
+                    :data-tooltip="$t('reminders').capitalize()">
                     <icon name="idea"/>
                     <span class="cf">{{$t('reminders')}}</span>
                 </div>
-                <div class="filter" :class="classes('filter-missed-incoming')" @click="toggleFilterMissedIncoming()">
+                <div class="filter tooltip tooltip-bottom" :class="classes('filter-missed-incoming')"
+                    @click="toggleFilterMissedIncoming()"
+                    :data-tooltip="$t('missed').capitalize()">
                     <icon name="call-missed-incoming"/>
-                    <span class="cf">{{$t('missed')}}</span>
+                    <span class="cf hide">{{$t('missed')}}</span>
                 </div>
-                <div class="filter" :class="classes('filter-missed-outgoing')" @click="toggleFilterMissedOutgoing()">
+                <div class="filter tooltip tooltip-bottom" :class="classes('filter-missed-outgoing')"
+                    @click="toggleFilterMissedOutgoing()"
+                    :data-tooltip="$t('unanswered').capitalize()">
                     <icon name="call-missed-outgoing"/>
                     <span class="cf">{{$t('unanswered')}}</span>
                 </div>

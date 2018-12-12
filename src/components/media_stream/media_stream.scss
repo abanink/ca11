@@ -2,16 +2,27 @@
 @import 'ca11/lib/variables';
 
 .component-media-stream {
-    // border-left: $spacer / 2 solid $grey-color-lighter;
-    // display: flex;
-    // flex-direction: column;
-    // height: 100px;
-    // width: 150px;
-    // min-width: 50px;
+    background: $grey-color-lightest;
+    border-bottom: 4px solid $white;
+    display: flex;
+    padding: calc(100% / 3);
+    position: relative;
+
+    svg {
+        @include icon-size($spacer * 5);
+        position: absolute;
+    }
+
+    audio {
+
+        // background: $grey-color;
+        // width: 100%;
+    }
 
     video {
-        background: $grey-color-lighter;
         display: block;
-        width: 100%;
+        max-height: 100%;
+        padding: $spacer / 4;
+        position: absolute;
     }
 }

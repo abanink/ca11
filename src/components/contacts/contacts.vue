@@ -4,11 +4,15 @@
         <div class="filter-line">
             <div class="header-bar-title uc">{{$t('contacts')}}</div>
             <div class="content-filters">
-                <div class="filter" :class="classes('filter-favorites')" @click="toggleFilterFavorites()">
+                <div class="filter tooltip tooltip-bottom" :class="classes('filter-favorites')"
+                    @click="toggleFilterFavorites()"
+                    :data-tooltip="$t('favorites').capitalize()">
                     <icon name="star"/>
                     <span class="cf">{{$t('favorites')}}</span>
                 </div>
-                <div class="filter" :class="classes('filter-presence')" @click="toggleFilterPresence()">
+                <div class="filter tooltip tooltip-bottom" :class="classes('filter-presence')"
+                    @click="toggleFilterPresence()"
+                    :data-tooltip="$t('presence').capitalize()">
                     <icon name="presence"/>
                     <span class="cf">{{$t('presence')}}</span>
                 </div>

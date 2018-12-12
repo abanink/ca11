@@ -6,8 +6,8 @@
 // icon-links to several locations.
 .component-call-switch {
     background: $grey-color-lightest;
-    border-right: $spacer / 2 solid $grey-color-lighter;
     display: flex;
+    flex-direction: row-reverse;
     width: 100%;
     z-index: 10000000;
 

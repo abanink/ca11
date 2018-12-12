@@ -145,12 +145,22 @@ class CallSIP extends Call {
         for (const stream of Object.values(this.streams)) {
             console.log(stream)
         }
-
+        // console.log('MUTED', e.track.muted, e.track)
+        e.track.onunmute = () => {
+            this.app.setState({
+                muted: false,
+            }, {path: `calls.calls.${this.id}.streams.${remoteStreamId}`})
+        }
+        e.track.onmute = () => {
+            this.app.setState({
+                muted: true,
+            }, {path: `calls.calls.${this.id}.streams.${remoteStreamId}`})
+        }
 
         this.app.setState({
             id: remoteStreamId,
             kind: e.track.kind,
-            muted: false,
+            muted: e.track.muted,
         }, {path: `calls.calls.${this.id}.streams.${remoteStreamId}`})
     }
 

@@ -9509,27 +9509,10 @@ scss-tokenizer@^0.2.3:
   dependencies:
     sdp-transform "1.5.*"
 
-sdp-interop@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.npmjs.org/sdp-interop/-/sdp-interop-0.1.13.tgz#353bb77d2162a33e786b77284199e132e28eb6d4"
-  integrity sha512-jxOtdFY2CCQoAnWFMfsp0W19oKkFIToybgHQhGp/0CsyE72Yv0vIx/+mQldp6QV++ffcGXZfOtIgleH4kzfRhQ==
-  dependencies:
-    sdp-transform "2.3.0"
-
 sdp-transform@1.5.*:
   version "1.5.3"
   resolved "http://registry.npmjs.org/sdp-transform/-/sdp-transform-1.5.3.tgz#8a6d0f8bd699ce3abc310ba4b1cde598928a0816"
   integrity sha1-im0Pi9aZzjq8MQuksc3lmJKKCBY=
-
-sdp-transform@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.npmjs.org/sdp-transform/-/sdp-transform-2.3.0.tgz#57a9575942041d8577a869d7c74d4c3a0bd888f6"
-  integrity sha1-V6lXWUIEHYV3qGnXx01MOgvYiPY=
-
-sdp-transform@2.4.x:
-  version "2.4.1"
-  resolved "http://registry.npmjs.org/sdp-transform/-/sdp-transform-2.4.1.tgz#3d1aa89045ea4fb20f688dd1e64934224b5d791a"
-  integrity sha512-dCReSJ6NtCW6goKkKBEHcIknBS1pKejnMw+S3p3jl0PALPFrbjbreCyQ+CABtFxl2GXD2/05+C2q2gZP23dUWQ==
 
 seek-bzip@^1.0.3:
   version "1.0.5"

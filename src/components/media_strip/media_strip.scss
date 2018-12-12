@@ -2,8 +2,7 @@
 @import 'ca11/lib/variables';
 
 .media-strip {
-    border-left: $spacer / 4 solid $grey-color-lightest;
-
+    background: $grey-color-lightest;
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
@@ -13,11 +12,13 @@
 
     .component-media-stream {
         align-items: center;
-        background: $grey-color-darkest;
         display: flex;
         justify-content: center;
         width: 100%;
 
+        &:first-child {
+            border-top: $spacer / 2 solid $white-color;
+        }
 
         video {
             width: 100%;

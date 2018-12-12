@@ -5,7 +5,7 @@
 // icon-links to several locations.
 .component-main-statusbar {
     background: $grey-color-lightest;
-    border-bottom: $spacer / 2 solid $grey-color-lighter;
+    border-bottom: $spacer / 2 solid transparent;
     border-top: $spacer / 2 solid $brand-color;
     color: $grey-color;
     display: flex;

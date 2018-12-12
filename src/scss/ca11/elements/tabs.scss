@@ -29,7 +29,7 @@
     }
 
     a {
-        border-bottom-width: $spacer / 2;
+        border-bottom: $spacer / 2 solid $grey-color-lightest;
         font-family: 'Rajdhani';
         font-weight: 600;
         height: $spacer * 7;

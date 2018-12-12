@@ -4,11 +4,13 @@
         <div class="filter-line">
             <div class="header-bar-title uc">{{$t('calls')}}</div>
             <div class="content-filters">
-                <Field class="filter" name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
-                <div class="filter" :class="{active: description.video}" @click="toggleVideo()">
-                    <icon name="cam"/>
-                    <span class="cf">{{$t('video')}}</span>
+                <div class="filter tooltip tooltip-bottom" :class="{active: description.video}"
+                @click="toggleVideo()"
+                :data-tooltip="$t('toggle streams').capitalize()">
+                    <icon name="cast_connected"/>
+                    <span class="cf">{{$t('toggle streams')}}</span>
                 </div>
+                <Field class="filter" name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
             </div>
         </div>
     </header>
