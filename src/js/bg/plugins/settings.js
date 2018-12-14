@@ -51,6 +51,7 @@ class PluginSettings extends Plugin {
                 enabled: true,
                 media: {
                     permission: true,
+                    stream: {id: null, kind: 'audio'},
                     type: {
                         options: [
                             {id: 'AUDIO_NOPROCESSING', name: this.app.$t('disabled')},

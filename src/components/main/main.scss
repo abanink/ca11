@@ -3,6 +3,7 @@
 
 
 .component-main {
+    border-top: $spacer / 2 solid $brand-color;
     position: relative;
 
     .overlay {

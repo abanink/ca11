@@ -1,28 +1,38 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.component-media-stream {
-    background: $grey-color-lightest;
-    border-bottom: 4px solid $white;
+.media-container {
+    background: $grey-color-light;
+    border: 2px solid $grey-color-lighter;
     display: flex;
+    overflow: hidden;
     padding: calc(100% / 3);
     position: relative;
 
+    &.selected {
+        border: $spacer / 4 solid $brand-color;
+    }
+
+    span {
+        position: absolute;
+    }
+}
+
+
+.component-media-stream {
     svg {
         @include icon-size($spacer * 5);
         position: absolute;
     }
 
-    audio {
-
-        // background: $grey-color;
-        // width: 100%;
-    }
 
     video {
         display: block;
         max-height: 100%;
+        // Stretch the video to fit in its container.
+        object-fit: cover;
         padding: $spacer / 4;
         position: absolute;
+        width: 100%;
     }
 }

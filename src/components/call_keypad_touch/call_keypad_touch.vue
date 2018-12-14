@@ -6,9 +6,9 @@
             <div class="content-filters">
                 <div class="filter tooltip tooltip-bottom" :class="{active: description.video}"
                 @click="toggleVideo()"
-                :data-tooltip="$t('toggle streams').capitalize()">
+                :data-tooltip="$t('toggle stream view').capitalize()">
                     <icon name="cast_connected"/>
-                    <span class="cf">{{$t('toggle streams')}}</span>
+                    <span class="cf">{{$t('toggle stream view')}}</span>
                 </div>
                 <Field class="filter" name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
             </div>

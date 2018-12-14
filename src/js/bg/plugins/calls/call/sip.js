@@ -127,41 +127,56 @@ class CallSIP extends Call {
 
 
     /**
-     * SIP.js event handler that takes care of adding
-     * tracks to a stream and binding them to the video
-     * elements.
+     * Asterisk always returns only one (mixed) audio
+     * track; and one or more video tracks, depending
+     * on whether video contraints requested video.
+     * The audio track is grouped with the first available
+     * video track.
      * @param {RTCTrackEvent} e - Contains the added track from RTCPeerConnection.
      */
     _onTrackAdded(e) {
         this.pc = this.session.sessionDescriptionHandler.peerConnection
         const remoteStreamId = e.track.id
 
-        if (!this.streams[remoteStreamId]) {
-            this.streams[remoteStreamId] = new MediaStream()
-            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
-            this.streams[remoteStreamId].addTrack(e.track)
-        }
-
-        for (const stream of Object.values(this.streams)) {
-            console.log(stream)
-        }
-        // console.log('MUTED', e.track.muted, e.track)
-        e.track.onunmute = () => {
-            this.app.setState({
-                muted: false,
-            }, {path: `calls.calls.${this.id}.streams.${remoteStreamId}`})
-        }
-        e.track.onmute = () => {
-            this.app.setState({
-                muted: true,
-            }, {path: `calls.calls.${this.id}.streams.${remoteStreamId}`})
-        }
-
-        this.app.setState({
+        // State of the stream.
+        const stream = {
             id: remoteStreamId,
             kind: e.track.kind,
             muted: e.track.muted,
-        }, {path: `calls.calls.${this.id}.streams.${remoteStreamId}`})
+            selected: false,
+        }
+
+        const path = `calls.calls.${this.id}.streams.${remoteStreamId}`
+
+        if (e.track.kind === 'audio') {
+            this.audioStreamId = remoteStreamId
+
+            this.streams[remoteStreamId] = new MediaStream()
+            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
+            this.streams[remoteStreamId].addTrack(e.track)
+            this.app.setState(stream, {path})
+            // Keep an eye on track state changes.
+
+            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+            e.track.onended = () => {this._cleanupStream(remoteStreamId)}
+        } else {
+            // Add to the existing audio stream.
+            if (!this.audioStreamAdded) {
+                this.streams[this.audioStreamId].addTrack(e.track)
+                this.audioStreamAdded = true
+            } else {
+                // Create a new stream for video.
+                this.streams[remoteStreamId] = new MediaStream()
+                this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
+                this.streams[remoteStreamId].addTrack(e.track)
+
+                this.app.setState(stream, {path})
+                e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+                e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+                e.track.onended = () => {this._cleanupStream(remoteStreamId)}
+            }
+        }
     }
 
 
@@ -282,7 +297,6 @@ class CallSIP extends Call {
     */
     accept() {
         super.accept()
-
         // Handle connecting streams to the appropriate video element.
         this.session.on('track', this._onTrackAdded.bind(this))
         this.session.accept({

@@ -9,15 +9,17 @@
     flex-wrap: wrap;
     max-width: 150px;
     min-width: 75px;
+    padding: $spacer / 2;
 
-    .component-media-stream {
+    .media-container {
         align-items: center;
         display: flex;
         justify-content: center;
+        margin-bottom: $spacer / 2;
         width: 100%;
 
-        &:first-child {
-            border-top: $spacer / 2 solid $white-color;
+        &.local {
+            margin-bottom: $spacer * 2;
         }
 
         video {

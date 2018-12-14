@@ -1,0 +1,52 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.component-call-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: $spacer;
+
+    .rounded-button-with-text {
+        padding: $spacer / 2;
+        text-align: center;
+
+        .rounded-button {
+            background: $grey-color-lightest;
+            border: 2px solid $grey-color-lighter;
+            color: $grey-color;
+            margin-bottom: $spacer / 2;
+            padding: $spacer * 2;
+            user-select: none;
+
+            svg {
+                @include icon-size($spacer * 3);
+            }
+
+            &:hover {color: $grey-color;}
+
+            &.active {
+                background: $brand-color;
+                border: 2px solid $grey-color-lighter;
+                color: $grey-color-lightest;
+            }
+
+            &.disabled {
+                background: rgba($grey-color-lighter, 0.2);
+                color: rgba($grey-color, 0.2);
+                cursor: not-allowed;
+
+                + p {
+                    color: $grey-color-lighter;
+                }
+            }
+        }
+
+        p {
+            color: lighten($grey-color, 15%);
+            font-size: 0.9rem;
+            font-weight: 500;
+            user-select: none;
+        }
+    }
+}

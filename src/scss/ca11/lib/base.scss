@@ -153,8 +153,7 @@ video {
 
 ::-webkit-scrollbar-track {
     background: $grey-color-lighter;
-    border-right: 2px solid $brand-color;
-    border-top: 2px solid transparent;
+    border-top: 4px solid $brand-color;
 }
 
 ::-webkit-scrollbar-thumb {

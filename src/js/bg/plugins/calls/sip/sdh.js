@@ -325,6 +325,7 @@ SessionDescriptionHandler.prototype = Object.create(SIP.SessionDescriptionHandle
             const description = await this.createOfferOrAnswer(options.RTCOfferOptions, modifiers)
             let desc = new RTCSessionDescription(description)
             description.sdp = this.observer.interop.toUnifiedPlan(desc).sdp
+
             this.emit('getDescription', description)
             return {
                 body: description.sdp,
@@ -388,6 +389,7 @@ SessionDescriptionHandler.prototype = Object.create(SIP.SessionDescriptionHandle
                 description.sdp = description.sdp.replace(/a=sendrecv\r\n/g, 'a=sendonly\r\n')
                 description.sdp = description.sdp.replace(/a=recvonly\r\n/g, 'a=inactive\r\n')
             }
+
             return Promise.resolve(description)
         },
         writable: true,

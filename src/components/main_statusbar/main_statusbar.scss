@@ -5,8 +5,6 @@
 // icon-links to several locations.
 .component-main-statusbar {
     background: $grey-color-lightest;
-    border-bottom: $spacer / 2 solid transparent;
-    border-top: $spacer / 2 solid $brand-color;
     color: $grey-color;
     display: flex;
     font-family: 'Rajdhani';
@@ -63,8 +61,8 @@
         flex-direction: row;
 
         .option {
-            height: $spacer * 5;
-            line-height: $spacer * 5;
+            height: $spacer * 6;
+            line-height: $spacer * 6;
             padding: 0 $spacer;
 
             svg {

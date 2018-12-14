@@ -200,6 +200,8 @@ class SipCalls {
                 peerConnectionOptions: {
                     rtcConfiguration: {
                         iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
+                        // Chrome's unified-plan doesn't work with Asterisk yet;
+                        // instead plan-b with sdp-interop-sl is used.
                         sdpSemantics: 'plan-b',
                     },
                 },

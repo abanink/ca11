@@ -8,13 +8,15 @@
     background: $grey-color-lightest;
     display: flex;
     flex-direction: row-reverse;
+    margin-left: $spacer / 2;
+    padding-right: $spacer / 2;
     width: 100%;
     z-index: 10000000;
 
     .call {
         @include icon-size($spacer * 6);
         align-items: center;
-        border-right: $spacer / 2 solid $grey-color-lighter;
+        border-left: $spacer / 2 solid $grey-color-lighter;
         display: flex;
         justify-content: center;
 
@@ -38,7 +40,7 @@
 
         &.active {
             background: $white-color;
-            border-right: $spacer / 2 solid $brand-color;
+            border-left: $spacer / 2 solid $brand-color;
             svg {fill: $brand-color;}
         }
     }

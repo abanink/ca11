@@ -101,13 +101,23 @@ class Call {
 
 
     /**
+     * Remove a track that is ended from remote.
+     * @param {MediaStreamTrack} streamId - Id of the stream to clean up.
+     */
+    _cleanupStream(streamId) {
+        const path = `calls.calls.${this.id}.streams.${streamId}`
+        this.app.setState(null, {action: 'delete', path})
+        delete this.app.media.streams[streamId]
+    }
+
+
+    /**
      * Generic UI and state-related logic for an outgoing call.
      * Note: first set the endpoint and displayName in the parent,
      * before calling this super.
      */
     _incoming() {
         this.setState(this.state)
-
         // Signal the user about the incoming call.
         if (!this.silent) {
             this.app.setState({ui: {layer: 'calls', menubar: {event: 'ringing'}}})
@@ -263,7 +273,7 @@ class Call {
 
         for (const streamId of Object.keys(this.streams)) {
             this.app.logger.debug(`${this}removing stream ${streamId}`)
-            delete this.app.media.streams[streamId]
+            this._cleanupStream(streamId)
         }
 
 
