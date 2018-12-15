@@ -4,32 +4,40 @@
 Take me to the [quickstart guide](https://ca11.io/topics/quickstart)
 
 
-# The CA11 project
-CA11 is a free communication software project being developed by
-tech company [Garage11](https://garage11.tech). Its purpose is to
-give people access to **easy-to-use**, **enjoyable**, **free** and **secure** communication. Its goal is to outperform closed CPaaS services with an
-open webbased communication solution that also protects people's
-privacy in the process.
+# CA11
+CA11 is a free software project being developed by [Garage11](https://garage11.tech). 
+Its purpose is to raise the bar of today's communication tools in terms of being open, 
+privacy-aware and ubiquitous.
 
-CA11 may be interesting to people who like a unified communication
-experience that enhances their availability. It does this by combining
-SIP-based telecom and decentralized p2p calling into one accessable webbased software project that runs on many JavaScript-enabled platforms. CA11 runs as a WebExtension, a PWA and as an Electron app. Node.js support is implemented partially. The project is written as a readable environment-agnostic ES2017 codebase that applies a simple but powerful reactive data-oriented design based on [Vue.js](https://vuejs.org/). This architecture allows it to develop at a
-very fast pace while keeping the code maintainable.
+CA11 may be appealing to VoIP-providers who want a headstart in offering their customers a well-designed 
+unified communication experience, by building upon a solid, open and extendable software foundation.
+CA11 integrates well with modern WebRTC-enabled SIP infrastructure. It uses the [SIP-over-websockets](https://tools.ietf.org/html/rfc7118) protocol as signalling layer and secure DTLS-SRTP(WebRTC) for media streaming, 
+making CA11 a full-blown webbased SIP-softphone that can tap into all features a PBX has to offer, like: dialplans,
+PSTN connectivity, on-hold, transfers, waiting music, queues, IVRs, callgroups and (SFU video) conference calls.
+
+CA11 may be interesting for businesses who want a powerful and easy-to-use replacement 
+for their hardphones. CA11 is easy to integrate with webbased CRM software and can be 
+integrated in a company website, adding a powerful and approachable 
+communication channel for potential customers to your company.
+
+Consumers may enjoy p2p calling over WebRTC using the decentralized SIG11 signalling network, 
+which has better privacy protection through e2e encryption. Worldwide communication over this network 
+is free, doesn't require accounts and has the best possible audio and video quality. 
+SIG11 is rather an ambitious project and is still in an early phase. 
+
+Developers may like CA11 because the project is written as a readable environment-agnostic ES2017 codebase 
+that applies a simple but powerful reactive data-oriented design based on [Vue.js](https://vuejs.org/). This architecture allows CA11 to be developed at a very fast pace while keeping the code maintainable and easy to adapt. 
+The project is aimed to be webbased and to be runnable on many JavaScript-enabled platforms. CA11 runs as a 
+WebExtension, a PWA and as an Electron app. Node.js support is implemented partially. 
 
 
-## SIG11
-CA11 makes use of modern WebRTC-enabled PBX software like Asterisk.
-It connects to a PBX using [SIP-over-websockets](https://tools.ietf.org/html/rfc7118)
-and DTLS-SRTP(WebRTC) to tap into PBX features like: dialplans,
-PSTN connectivity, on-hold, waiting music, transfers, queues, IVRs, callgroups,
-conference calls, and recently SFU video-conferencing with Asterisk 16.
+## SIG11?
+WebRTC in itself is peer-to-peer, but still requires a signalling channel to setup connections with.
+This channel can be a protocol like SIP or a proprietary service that takes care of this. This situation raises 
+privacy concerns and is a bad thing for free communication in general. 
 
-On the other hand, CA11 integrates decentralized p2p calling over WebRTC,
-because p2p calling is beneficial to users. It has better privacy protection(e2e encryption), worldwide communication is free and it has in most cases the best audio and video quality. This approach works as long both parties use a shared signalling medium to establish the p2p connection.
-
-Yet, nowadays we still mostly depend on proprietary services to setup these communication
-channels for us. These services exist, because WebRTC requires a mediator to signal both
-parties about their connection setup terms. This raises privacy concerns and is a bad thing for free communication in general. People's communication options are being limited to these proprietary platforms, while - technically - anyone could be able to communicate freely to anyone else, without having to rely on platform X or Y. That is what SIG11 is about, in a nutshell. It envisions a secure, decentralized signalling network and protocol that communication platforms like CA11 can apply, with the purpose to provide user-friendly, free and secure communication to people.
+Proprietary services have no interest in extending people's communication options outside of their own communication 
+platform, while - technically - anyone could be able to communicate freely to anyone else, without having to rely on platform X or Y. That is what the SIG11 project is about in a nutshell. It envisions a secure, decentralized signalling network and protocol that communication tools like CA11 apply, with the purpose to provide user-friendly, free and secure communication to everyone.
 
 
 ## Want to learn more?
