@@ -3,27 +3,19 @@
 
 .media-strip {
     background: $grey-color-lightest;
+    border-left: $spacer / 2 solid $grey-color-lightest;
     display: flex;
-    flex: 1 1 auto;
     flex-direction: column;
     flex-wrap: wrap;
-    max-width: 150px;
-    min-width: 75px;
+    max-width: 100px;
+    min-width: 100px;
     padding: $spacer / 2;
 
     .media-container {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        margin-bottom: $spacer / 2;
-        width: 100%;
+        border: $spacer / 2 solid $grey-color-lightest;
 
-        &.local {
-            margin-bottom: $spacer * 2;
-        }
-
-        video {
-            width: 100%;
+        &.selected {
+            box-shadow: 0 0 $spacer $grey-color-darkest;
         }
     }
 }

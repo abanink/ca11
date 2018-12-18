@@ -4,61 +4,19 @@
 .component-call {
     color: $primary-color;
     display: flex;
-    flex: 1;
-    flex-direction: column;
+    flex-direction: row;
+
+    margin-left: $spacer / 2;
     min-height: 350px;
-    padding: $spacer * 2;
-    padding-bottom: 0;
+    width: 100%;
     z-index: 1000;
 
-
-    .call-local-video {
-        background: #fff;
-        display: block;
-        height: calc(100% - #{$spacer * 5});
-        left: $spacer * 5;
-        margin-left: auto;
-        margin-right: auto;
-        object-fit: fill;
-        opacity: 0.08;
-        position: absolute;
-        top: $spacer * 5;
-        width: calc(100% - #{$spacer * 5});
-        z-index: -1;
+    .call-control {
+        background: $grey-color-light;
+        position: relative;
+        width: 100%;
     }
 
-    .call-info {
-        font-weight: 400;
-        text-align: center;
-
-        .contact-avatar {
-            @include icon-size($spacer * 10);
-            background: $brand-color;
-            border: 2px solid $white-tint-color-light;
-            border-radius: 50%;
-            color: $white-color;
-            margin-bottom: $spacer;
-            padding: $spacer;
-            z-index: 100;
-        }
-
-        .info-name {
-            font-size: 1.2rem;
-        }
-
-        .info-number {
-            font-size: 1.6rem;
-            font-weight: 500;
-        }
-
-        .info-status {
-            color: $grey-color;
-            font-size: 1rem;
-            font-weight: 500;
-            margin-top: $spacer / 2;
-        }
-        .info-timer {font-size: 1rem;}
-    }
 
     .soundmeter {
         background: $grey-color-lightest;
@@ -66,71 +24,6 @@
         margin: 0 auto;
         margin-top: $spacer;
         max-width: 350px;
-    }
-
-
-
-    .transfer-options {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin-top: $spacer;
-
-        .transfer-buttons {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            margin-bottom: $spacer * 1.5;
-            width: 100%;
-
-            .transfer-button {
-                background: $grey-color-lightest;
-                border: $spacer / 4 solid $grey-color-lighter;
-                border-radius: $spacer / 2;
-                font-family: 'Rajdhani';
-                font-size: 0.9rem;
-                font-weight: 600;
-                line-height: $spacer * 4;
-                margin: 0 $spacer;
-                padding: 0 $spacer;
-                text-align: center;
-                width: 130px;
-
-                &.active,
-                &:hover {
-                    cursor: pointer;
-                }
-
-                &.active {
-                    border: 2px solid $brand-color;
-                    color: $brand-color;
-                    cursor: default;
-                }
-
-
-                &.disabled {
-                    opacity: 0.5;
-
-                    &:hover {
-                        background: none;
-                        color: $white;
-                        cursor: not-allowed;
-                    }
-                }
-            }
-        }
-
-        .transfer-text {
-            color: $grey-color-dark;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: $spacer;
-            text-align: center;
-        }
-
-        .transfer-keypad {
-            text-align: center;
-        }
     }
 }
 

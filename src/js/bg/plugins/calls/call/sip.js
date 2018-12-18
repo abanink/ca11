@@ -62,7 +62,6 @@ class CallSIP extends Call {
         })
 
         this.session.on('bye', (e) => {
-            this.busyTone.play()
             if (e.getHeader('X-Asterisk-Hangupcausecode') === '58') {
                 this.app.notify({
                     icon: 'warning',
@@ -142,12 +141,16 @@ class CallSIP extends Call {
         const stream = {
             id: remoteStreamId,
             kind: e.track.kind,
-            muted: e.track.muted,
+            local: false,
+            muted: true,
             selected: false,
+            visible: false,
         }
 
         const path = `calls.calls.${this.id}.streams.${remoteStreamId}`
 
+        // There is always only one audio track coming from the PBX.
+        // Associate this audio track with the other tracks.
         if (e.track.kind === 'audio') {
             this.audioStreamId = remoteStreamId
 
@@ -161,21 +164,16 @@ class CallSIP extends Call {
             e.track.onmute = () => {this.app.setState({muted: true}, {path})}
             e.track.onended = () => {this._cleanupStream(remoteStreamId)}
         } else {
-            // Add to the existing audio stream.
-            if (!this.audioStreamAdded) {
-                this.streams[this.audioStreamId].addTrack(e.track)
-                this.audioStreamAdded = true
-            } else {
-                // Create a new stream for video.
-                this.streams[remoteStreamId] = new MediaStream()
-                this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
-                this.streams[remoteStreamId].addTrack(e.track)
+            // Create a new stream for video.
+            this.streams[remoteStreamId] = new MediaStream()
+            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
+            this.streams[remoteStreamId].addTrack(e.track)
+            stream.audio = this.audioStreamId
 
-                this.app.setState(stream, {path})
-                e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
-                e.track.onmute = () => {this.app.setState({muted: true}, {path})}
-                e.track.onended = () => {this._cleanupStream(remoteStreamId)}
-            }
+            this.app.setState(stream, {path})
+            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+            e.track.onended = () => {this._cleanupStream(remoteStreamId)}
         }
     }
 
@@ -203,7 +201,6 @@ class CallSIP extends Call {
 
         // Reset call state when the other halve hangs up.
         this.session.on('bye', (e) => {
-            this.busyTone.play()
             this.setState({status: 'bye'})
             this._stop({message: this.translations[this.state.status]})
         })
@@ -218,7 +215,7 @@ class CallSIP extends Call {
         */
         this.session.on('progress', (e) => {
             if ([180, 181, 182, 183].includes(e.status_code)) {
-                this.ringbackTone.play()
+                this.app.sounds.ringbackTone.play()
             }
         })
 
@@ -230,7 +227,6 @@ class CallSIP extends Call {
 
         this.session.on('failed', (message) => {
             this.app.logger.info(`${this}call declined: ${message.status_code}/${this.state.stats.callId}`)
-            this.busyTone.play()
 
             if (message.status_code === 480) {
                 // Temporarily Unavailable; Callee currently unavailable.

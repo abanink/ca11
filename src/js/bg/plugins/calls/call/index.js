@@ -27,8 +27,7 @@ class Call {
 
         this.busyTone = app.sounds.busyTone
         this.translations = app.helpers.getTranslations().call
-        this.ringtone = app.sounds.ringTone
-        this.ringbackTone = app.sounds.ringbackTone
+
 
         this.id = shortid.generate()
         /**
@@ -128,7 +127,7 @@ class Call {
                 title: this.translations.invite,
             })
 
-            this.ringtone.play()
+            this.app.sounds.ringTone.play({loop: true})
             this.plugin.activateCall(this, true)
         }
     }
@@ -209,8 +208,8 @@ class Call {
             if (this.state.displayName) message += `:${this.state.displayName}`
         }
         this._started = true
-        this.ringbackTone.stop()
-        this.ringtone.stop()
+        this.app.sounds.ringbackTone.stop()
+        this.app.sounds.ringTone.stop()
         this.setState({
             status: 'accepted',
             timer: {
@@ -241,8 +240,9 @@ class Call {
      * @param {String} [options.message] - Force a notification message.
      * @param {Number} options.timeout - Postpone resetting the call state for the duration of 3 busy tones.
      */
-    _stop({force = false, message = '', timeout = 2750} = {}) {
+    _stop({force = false, message = '', timeout = 0} = {}) {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
+
         if (this.silent) {
             this.plugin.deleteCall(this)
             return
@@ -253,8 +253,9 @@ class Call {
             if (this.state.displayName) message += `:${this.state.displayName}`
         }
         // Stop all call state sounds that may still be playing.
-        this.ringbackTone.stop()
-        this.ringtone.stop()
+        this.app.sounds.ringbackTone.stop()
+        this.app.sounds.ringTone.stop()
+        this.app.sounds.callEnd.play()
 
         if (force) {
             if (this.state.status === 'callee_busy') {
@@ -271,11 +272,11 @@ class Call {
             this.app.emit('bg:calls:call_ended', {call: this.state}, true)
         }
 
+        // Remove the streams that are associated with this call.
         for (const streamId of Object.keys(this.streams)) {
             this.app.logger.debug(`${this}removing stream ${streamId}`)
             this._cleanupStream(streamId)
         }
-
 
         // Stop the Call interval timer.
         clearInterval(this.timerId)

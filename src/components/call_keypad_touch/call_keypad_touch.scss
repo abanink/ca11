@@ -4,6 +4,7 @@
 // The default styling is against a white background. The
 // `call-ongoing` class is used to differentiate.
 .component-call-keypad-touch {
+    background: $white-color;
     flex: 1;
     width: 100%;
 
@@ -39,6 +40,7 @@
             input {
                 @include no-outline;
 
+                background: none;
                 border: 0;
                 color: $brand-color;
                 font-size: 1.8rem;

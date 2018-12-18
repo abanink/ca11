@@ -3,7 +3,20 @@ module.exports = (app) => {
     * @memberof fg.components
     */
     const Options = {
+        computed: {
+            // If the current call is in transfer mode.
+            callCanTerminate: function() {
+                if (!['accepted', 'create', 'invite'].includes(this.call.status)) return false
+                return true
+            },
+        },
         methods: {
+            callAccept: function(call) {
+                app.emit('bg:calls:call_accept', {callId: call.id})
+            },
+            callTerminate: function(call) {
+                app.emit('bg:calls:call_terminate', {callId: call.id})
+            },
             classes: function(block) {
                 let classes = {}
 

@@ -12,7 +12,6 @@
             <CallSwitch :call="callActive"/>
             <div class="call-controls">
                 <Call :call="callActive"/>
-                <MediaStrip :call="callActive"/>
             </div>
         </div>
     </div>

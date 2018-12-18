@@ -72,11 +72,12 @@ module.exports = (app) => {
                 }
 
                 if (v.minLength === false) {
-                    errors.push(this.$t(
-                        'fill in a value of at least {min} characters.', {
-                            min: v.$params.minLength.min,
-                        }).capitalize()
-                    )
+                    console.log(v)
+                    // errors.push(this.$t(
+                    //     'fill in a value of at least {min} characters.', {
+                    //         min: v.$params.minLength.min,
+                    //     }).capitalize()
+                    // )
                 }
 
                 if (v.numeric === false) {

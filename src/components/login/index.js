@@ -23,6 +23,7 @@ module.exports = (app) => {
                         username: this.user.username,
                     })
                 } else {
+                    console.log("EMIT UNLOCK")
                     app.emit('bg:user:unlock', {
                         password: this.password,
                         username: this.app.session.active,

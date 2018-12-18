@@ -52,6 +52,7 @@ module.exports = (app) => {
             permission: 'settings.webrtc.media.permission',
             ringtones: 'settings.ringtones',
             settings: 'settings',
+            stream: 'settings.webrtc.media.stream',
             user: 'user',
             vendor: 'app.vendor',
         },

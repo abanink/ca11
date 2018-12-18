@@ -1,3 +1,65 @@
-.component-call-transfer {
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
 
+.component-call-transfer {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-top: $spacer;
+
+    .transfer-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: $spacer * 1.5;
+        width: 100%;
+
+        .transfer-button {
+            background: $grey-color-lightest;
+            border: $spacer / 4 solid $grey-color-lighter;
+            border-radius: $spacer / 2;
+            font-family: 'Rajdhani';
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: $spacer * 4;
+            margin: 0 $spacer;
+            padding: 0 $spacer;
+            text-align: center;
+            width: 130px;
+
+            &.active,
+            &:hover {
+                cursor: pointer;
+            }
+
+            &.active {
+                border: 2px solid $brand-color;
+                color: $brand-color;
+                cursor: default;
+            }
+
+
+            &.disabled {
+                opacity: 0.5;
+
+                &:hover {
+                    background: none;
+                    color: $white;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+    .transfer-text {
+        color: $grey-color-dark;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-bottom: $spacer;
+        text-align: center;
+    }
+
+    .transfer-keypad {
+        text-align: center;
+    }
 }

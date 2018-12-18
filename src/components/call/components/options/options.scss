@@ -2,45 +2,46 @@
 @import 'ca11/lib/variables';
 
 .component-call-options {
+    align-items: center;
+    background: $grey-color-lighter;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: $spacer;
 
-    .rounded-button-with-text {
-        padding: $spacer / 2;
+    .option {
+        background: $grey-color-lightest;
+        border: 0;
+        color: $grey-color;
+        margin-right: $spacer;
+        padding: $spacer * 1.5;
         text-align: center;
+        user-select: none;
 
-        .rounded-button {
-            background: $grey-color-lightest;
-            border: 2px solid $grey-color-lighter;
-            color: $grey-color;
-            margin-bottom: $spacer / 2;
-            padding: $spacer * 2;
-            user-select: none;
+        svg {
+            @include icon-size($spacer * 4);
+        }
 
-            svg {
-                @include icon-size($spacer * 3);
-            }
+        &:hover {
+            color: $brand-color;
+            cursor: pointer;
+        }
 
-            &:hover {color: $grey-color;}
+        &.active {
+            background: $white-color;
+            // border: 2px solid $grey-color-lighter;
+            color: $brand-color;
+        }
 
-            &.active {
-                background: $brand-color;
-                border: 2px solid $grey-color-lighter;
-                color: $grey-color-lightest;
-            }
+        &[disabled] {
+            background: rgba($grey-color-lighter, 0.2);
+            color: rgba($grey-color, 0.2);
+            cursor: not-allowed;
 
-            &.disabled {
-                background: rgba($grey-color-lighter, 0.2);
-                color: rgba($grey-color, 0.2);
-                cursor: not-allowed;
-
-                + p {
-                    color: $grey-color-lighter;
-                }
+            + p {
+                color: $grey-color-lighter;
             }
         }
+
 
         p {
             color: lighten($grey-color, 15%);

@@ -17,6 +17,7 @@ module.exports = (app) => {
             },
             save: function(e) {
                 let settings = app.utils.copyObject(this.settings)
+                delete settings.webrtc.media
 
                 let settingsState = {
                     availability: {dnd: false},
@@ -39,7 +40,7 @@ module.exports = (app) => {
                     settings,
                 }
 
-                // Switch back to SIG11 as defautl call protocol when SIP is disabled.
+                // Switch back to SIG11 as default call protocol when SIP is disabled.
                 if (!this.calls.sip.enabled && this.calls.description.protocol === 'sip') {
                     settingsState.calls.description = {protocol: 'sig11'}
                 }

@@ -140,7 +140,7 @@ class Media {
             const stream = await navigator.mediaDevices.getUserMedia(flags)
             this.streams[stream.id] = stream
 
-            this.app.emit('local-stream-ready')
+            this.app.emit('local-stream-ready', {streamId: stream.id})
 
             // Share streams between bg and fg when in the same context.
             if (this.app.env.section.fg && !this.app.env.isExtension) {
@@ -149,18 +149,20 @@ class Media {
 
             // This stream is not part of a particular call. That is
             // why it has a separate reference.
-            this.app.setState({settings: {webrtc: {media: {
+            const media = {
                 permission: true,
                 stream: {
                     id: stream.id,
                     kind: flags.video ? 'video' : 'audio',
                     muted: true,
                     selected: false,
+                    visible: true,
                 },
-            }}}})
+            }
+            this.app.setState({settings: {webrtc: {media}}})
 
         } catch (err) {
-            console.log(err)
+            console.error(err)
             // There are no devices at all. Spawn a warning.
             if (err.message === 'Requested device not found') {
                 if (this.app.env.section.fg) {
