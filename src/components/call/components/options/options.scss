@@ -2,33 +2,40 @@
 @import 'ca11/lib/variables';
 
 .component-call-options {
-    align-items: center;
-    background: $grey-color-lighter;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    background: $white-color;
+    border-bottom: $spacer / 2 solid $white-color;
+    border-top: $spacer / 2 solid $white-color;
 
     .option {
         background: $grey-color-lightest;
         border: 0;
+        border-right: $spacer / 2 solid $grey-color-lighter;
         color: $grey-color;
-        margin-right: $spacer;
-        padding: $spacer * 1.5;
+        padding: $spacer * 2 0;
         text-align: center;
         user-select: none;
+        width: 100%;
+
+
 
         svg {
-            @include icon-size($spacer * 4);
+            @include icon-size($spacer * 3);
+
+            @media screen and (min-width: $breakpoint-mobile) {
+                @include icon-size($spacer * 4);
+            }
         }
 
-        &:hover {
+        &:not([disabled]):hover {
+            background: $white-color;
+            border-right: $spacer / 2 solid $brand-color;
             color: $brand-color;
             cursor: pointer;
         }
 
         &.active {
             background: $white-color;
-            // border: 2px solid $grey-color-lighter;
+            border-right: $spacer / 2 solid $brand-color;
             color: $brand-color;
         }
 

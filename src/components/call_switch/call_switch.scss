@@ -5,25 +5,28 @@
 // The most upper box containing account info and
 // icon-links to several locations.
 .component-call-switch {
-    background: $grey-color-lighter;
-    border-right: $spacer / 2 solid $grey-color-lighter;
+    background: $grey-color-lightest;
+    border-bottom: $spacer / 8 solid $grey-color-lighter;
     display: flex;
     flex-direction: row-reverse;
+    margin-bottom: $spacer / 2;
     margin-left: $spacer / 2;
     padding-right: $spacer / 2;
     width: 100%;
     z-index: 10000000;
 
     .call {
-        @include icon-size($spacer * 6);
+        @include icon-size($spacer * 6.25);
+
         align-items: center;
-        border-bottom: $spacer / 2 solid $grey-color-lightest;
+        // border: $spacer / 2 solid $grey-color-lightest;
+        border-right: $spacer / 2 solid transparent;
         display: flex;
         justify-content: center;
 
         &:hover {
             background: $white-tint-color-bright;
-            border-bottom: $spacer / 2 solid $brand-color;
+            border-right: $spacer / 2 solid $brand-color;
 
             svg {
                 fill: $brand-color;
@@ -42,7 +45,7 @@
 
         &.active {
             background: $white-color;
-            border-bottom: $spacer / 2 solid $brand-color;
+            border-right: $spacer / 2 solid $brand-color;
             svg {fill: $brand-color;}
         }
     }

@@ -4,7 +4,6 @@
 .media-container {
     background: $grey-color-light;
     display: grid;
-    margin-bottom: $spacer / 2;
 
     // Maintain 16/9 aspect ratio for this container.
     &::before {
@@ -24,6 +23,7 @@
         display: none;
     }
 
+    video,
     .content {
         align-items: center;
         color: $grey-color-dark;
@@ -39,6 +39,7 @@
 
 
 .component-media-stream {
+    overflow: hidden;
     // svg {
     //     @include icon-size($spacer * 5);
     //     position: absolute;
@@ -49,6 +50,7 @@
         display: grid;
         grid-area: 1 / 1 / 2 / 2;
         height: 100%;
+        object-fit: cover;
     }
 
     // .soundmeter {

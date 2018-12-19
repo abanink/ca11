@@ -29,8 +29,9 @@ $grey-color-light: lighten($grey-color, 25%);
 $grey-color-lighter: lighten($grey-color, 35%);
 $grey-color-lightest: lighten($grey-color, 40%);
 
-$width-mobile: 599px;
-$width-tablet: 600px;
+$breakpoint-mobile: 600px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 992px;
 
 $white-tint-color-dark: lighten($grey-color, 44%);
 $white-tint-color-light: lighten($grey-color, 45%);
@@ -53,5 +54,3 @@ $family-primary: 'Roboto';
 $fa-font-path: $font-path;
 $text: $primary-color;
 
-
-$width-desktop: 1024px;

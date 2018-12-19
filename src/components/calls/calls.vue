@@ -1,23 +1,6 @@
 <component class="component-calls" :class="classes('component')">
-    <template v-if="!callOngoing">
-        <CallKeypadTouch :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
-        <MediaStrip v-if="description.video"/>
-    </template>
-    <div v-else class="call-active">
-        <div v-if="callActive.status === 'new'">
-            <CallSwitch :call="callActive"/>
-            <CallKeypadTouch :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
-        </div>
-        <div v-else class="call-components">
-            <CallSwitch :call="callActive"/>
-            <div class="call-controls">
-                <Call :call="callActive"/>
-            </div>
-        </div>
-    </div>
-
-    <!-- calling service not available -->
-    <div v-else-if="!keypadEnabled" class="calls-disabled">
+    <!-- calling disabled -->
+    <div v-if="!keypadEnabled" class="call-disabled">
         <icon class="disabled-icon" name="dialpad-off"/>
         <div class="disabled-text">
             <span class="cf">{{$t('service unavailable.')}}</span><br/>
@@ -30,5 +13,24 @@
                 </li>
             </ul>
         </div>
+    </div>
+
+    <!-- a call is ongoing -->
+    <div v-else-if="callOngoing" class="call-active">
+        <CallSwitch :call="callActive"/>
+        <CallKeypadTouch
+            v-if="callActive.status === 'new'"
+            display="touch"
+            mode="call"
+            :endpoint="description.endpoint"
+            :model.sync="description.endpoint"
+        />
+        <Call v-else :call="callActive"/>
+    </div>
+
+    <!-- starting without any active call -->
+    <div class="call-new" v-else>
+        <CallKeypadTouch :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
+        <MediaStrip v-if="description.video"/>
     </div>
 </component>

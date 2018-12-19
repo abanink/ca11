@@ -1,21 +1,31 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.media-strip {
+.component-media-strip {
     background: $grey-color-lightest;
-    border-left: $spacer / 2 solid $grey-color-lightest;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    max-width: 100px;
-    min-width: 100px;
-    padding: $spacer / 2;
+    margin-left: $spacer / 2;
+    width: $spacer * 6;
+
+    @media screen and (min-width: $breakpoint-mobile) {
+        width: $spacer * 12;
+    }
+
+    @media screen and (min-width: $breakpoint-desktop) {
+        width: $spacer * 20;
+    }
 
     .media-container {
-        border: $spacer / 2 solid $grey-color-lightest;
+        border-right: $spacer / 2 solid $grey-color-lighter;
+
+        &:hover {
+            cursor: pointer;
+        }
 
         &.selected {
-            box-shadow: 0 0 $spacer $grey-color-darkest;
+            // box-shadow: 0 0 $spacer #000;
+            border-right: $spacer / 2 solid $brand-color;
         }
     }
 }

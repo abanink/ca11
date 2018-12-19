@@ -2,21 +2,10 @@
 @import 'ca11/lib/variables';
 
 .component-call {
+    border-left: $spacer / 2 solid $white-color;
     color: $primary-color;
     display: flex;
-    flex-direction: row;
-
-    margin-left: $spacer / 2;
-    min-height: 350px;
     width: 100%;
-    z-index: 1000;
-
-    .call-control {
-        background: $grey-color-light;
-        position: relative;
-        width: 100%;
-    }
-
 
     .soundmeter {
         background: $grey-color-lightest;

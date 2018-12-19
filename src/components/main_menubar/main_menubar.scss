@@ -13,13 +13,13 @@
         .option {
             align-items: center;
             background: $grey-color-lightest;
-            border-left: $spacer / 2 solid transparent;
+            border-left: $spacer / 2 solid $grey-color-lighter;
             color: $grey-color-darker;
             display: flex;
             flex-direction: column;
             height: $spacer * 7;
             justify-content: center;
-            transition: background 150ms ease-in-out;
+            transition: border-color 150ms ease-in-out;
 
             svg {
                 @include icon-size($spacer * 3.5);

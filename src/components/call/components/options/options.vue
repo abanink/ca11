@@ -7,36 +7,59 @@
         <p class="ca">{{$t('mute')}}</p>
     </div> -->
 
-    <button v-if="callCanTerminate" class="option" @click="callTerminate(call)">
-        <icon name="call-end"/>
-    </button>
-
-    <button v-if="call.status === 'invite'" class="option" @click="callAccept(call)">
+    <button
+        v-if="call.status === 'invite'"
+        class="option tooltip tooltip-left" @click="callAccept(call)"
+        :data-tooltip="$t('accept call').capitalize()"
+    >
         <icon name="phone"/>
     </button>
 
-    <template v-if="call.status === 'accepted'">
+    <button
+        class="option tooltip tooltip-left"
+        :class="classes('dialpad-button')"
+        :data-tooltip="$t('toggle keypad').capitalize()"
+        :disabled="call.status !== 'accepted'"
+        @click="keypadToggle"
+    >
+        <icon name="dialpad"/>
+    </button>
 
     <button
-        v-if="call.transfer.type !== 'accept'"
-        @click="transferToggle"
-        class="option"
-        :class="classes('transfer-button')"
+        class="option tooltip tooltip-left"
+        :class="classes('hold-button')"
+        :data-tooltip="$t('toggle on-hold').capitalize()"
         :disabled="call.status !== 'accepted'"
+        @click="holdToggle"
     >
-        <icon name="transfer"/>
-    </button>
-    <button class="option" v-else @click="transferFinalize" :disabled="call.status !== 'accepted'">
-        <icon name="merge"/>
-    </button>
-
-    <button class="option" @click="holdToggle" :class="classes('hold-button')" :disabled="call.status !== 'accepted'">
         <icon name="call-hold"/>
     </button>
 
-    <button class="option" @click="keypadToggle" :class="classes('dialpad-button')" :disabled="call.status !== 'accepted'">
-        <icon name="dialpad"/>
+    <button
+        v-if="call.transfer.type !== 'accept'"
+        class="option tooltip tooltip-left"
+        :class="classes('transfer-button')"
+        :data-tooltip="$t('toggle transfer').capitalize()"
+        :disabled="call.status !== 'accepted'"
+        @click="transferToggle"
+    >
+        <icon name="transfer"/>
     </button>
-    </template>
+    <button
+        v-else @click="transferFinalize"
+        class="option tooltip tooltip-left"
+        :data-tooltip="$t('complete transfer').capitalize()"
+        :disabled="call.status !== 'accepted'">
+        <icon name="merge"/>
+    </button>
+
+    <button
+        v-if="callCanTerminate"
+        class="option tooltip tooltip-left"
+        @click="callTerminate(call)"
+        :data-tooltip="$t('end call').capitalize()"
+    >
+        <icon name="call-end"/>
+    </button>
 
 </component>

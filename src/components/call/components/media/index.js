@@ -3,11 +3,11 @@ module.exports = (app) => {
     * @memberof fg.components
     */
     const Media = {
-        computed: {
+        computed: Object.assign({
             selectedStreams: function() {
                 return Object.values(this.call.streams).filter((i) => i.selected)
             },
-        },
+        }, app.helpers.sharedComputed()),
         methods: {
             classes: function(block) {
                 const classes = {}

@@ -1,4 +1,6 @@
-<component class="media-strip">
+<component class="component-media-strip">
+
+
     <!-- The local stream -->
     <MediaStream v-if="stream.id" :stream="stream" class="local" />
     <div v-else class="media-container loading">
@@ -6,6 +8,8 @@
             <icon name="spinner" class="spinner"/>
         </div>
     </div>
+
+    <CallOptions v-if="call" :call="call"/>
 
      <!-- Call information during a call. Hide when the keypad takes too muchs space. -->
     <template v-if="call">

@@ -1,5 +1,6 @@
 <component class="component-call-switch">
     <!-- First loop through all the active calls -->
+
     <div v-if="call.status !== 'new'" v-for="call in calls"
         @click="activateCall(call)"
         class="call tooltip tooltip-left"

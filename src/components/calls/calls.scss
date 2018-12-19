@@ -28,20 +28,19 @@
         }
     }
 
+    .call-new {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+
     .call-active {
         display: flex;
         flex-direction: column;
         width: 100%;
-
-        .call-components {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 100%;
-        }
     }
 
-    .calls-disabled {
+    .call-disabled {
         align-items: center;
         color: $grey-color-lighter;
         display: flex;
