@@ -1,4 +1,4 @@
-<component class="component-main" id="app">
+<component class="c-main" id="app">
     <!-- Force the telemetry window to show up -->
     <Notifications :class="classes('notifications')"/>
 
@@ -9,16 +9,17 @@
         <component v-bind:is="overlay"/>
     </div>
 
+    <CallStatus
+        v-if="callOngoing && callActive"
+        class="main-status"
+        :call="callActive"
+    />
+    <MainStatus v-else class="main-status"/>
+
     <Login v-if="!user.authenticated"/>
     <Wizard v-else-if="!wizard.completed && user.authenticated"/>
-    <div v-else class="app-view">
-        <MainCallBar v-if="callOngoing && callActive" class="app-view-top" :call="callActive"/>
-        <MainStatusBar v-else class="app-view-top"/>
 
-        <div class="app-view-main">
-            <MainMenuBar class="app-view-sidebar"/>
-            <!-- Dynamic component rendered from layer name -->
-            <component v-bind:is="layer" class="app-view-layer"/>
-        </div>
-    </div>
+    <MainMenu v-if="wizard.completed && user.authenticated" class="main-menu"/>
+    <!-- Dynamic component from layer name -->
+    <component v-if="wizard.completed && user.authenticated" :is="layer" class="main-content"/>
 </component>

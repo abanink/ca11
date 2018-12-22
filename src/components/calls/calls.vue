@@ -1,4 +1,5 @@
-<component class="component-calls" :class="classes('component')">
+<component class="c-calls" :class="classes('component')">
+
     <!-- calling disabled -->
     <div v-if="!keypadEnabled" class="call-disabled">
         <icon class="disabled-icon" name="dialpad-off"/>
@@ -15,22 +16,17 @@
         </div>
     </div>
 
-    <!-- a call is ongoing -->
-    <div v-else-if="callOngoing" class="call-active">
-        <CallSwitch :call="callActive"/>
-        <CallKeypadTouch
-            v-if="callActive.status === 'new'"
-            display="touch"
-            mode="call"
-            :endpoint="description.endpoint"
-            :model.sync="description.endpoint"
-        />
-        <Call v-else :call="callActive"/>
-    </div>
-
+    <CallsSwitcher :call="callActive"/>
+    <Call v-if="callActive.id" :call="callActive"/>
     <!-- starting without any active call -->
-    <div class="call-new" v-else>
-        <CallKeypadTouch :model.sync="description.endpoint" display="touch" mode="call" :endpoint="description.endpoint"/>
-        <MediaStrip v-if="description.video"/>
-    </div>
+    <DialerTouch
+        v-else
+        display="touch"
+        mode="call"
+        :endpoint="description.endpoint"
+        :model.sync="description.endpoint"
+    />
+
+
+    <MediaControls v-if="ui.strip" :call="callActive"/>
 </component>

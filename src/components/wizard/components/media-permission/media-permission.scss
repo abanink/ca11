@@ -1,0 +1,14 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.c-wizard-media-permission {
+    .component-mic-permission {
+        margin-top: $spacer * 2;
+    }
+
+    .after-permission-text {
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+
+}

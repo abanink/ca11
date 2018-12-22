@@ -1,6 +1,8 @@
 module.exports = (app) => {
-
-    return {
+    /**
+    * @memberof fg.components
+    */
+    const Activities = {
         computed: {
             filteredActivities: function() {
                 let activities = this.activities.sort(app.utils.sortByMultipleKey(['date'], -1))
@@ -111,4 +113,6 @@ module.exports = (app) => {
             },
         },
     }
+
+    return Activities
 }

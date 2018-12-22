@@ -176,8 +176,6 @@ class AppBackground extends App {
         if (vault.store && !vault.key) {
             await this.crypto.storeVaultKey()
         }
-        // Get a fresh reference to the media permission on unlock.
-        if (this.env.isExtension) this.media.poll()
 
         this.emit('bg:user-unlocked', {}, true)
     }

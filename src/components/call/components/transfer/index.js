@@ -2,7 +2,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const Transfer = {
+    const CallTransfer = {
         methods: {
             classes: function(block) {
                 let classes = {}
@@ -28,5 +28,5 @@ module.exports = (app) => {
         },
     }
 
-    return Transfer
+    return CallTransfer
 }

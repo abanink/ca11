@@ -1,0 +1,115 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.c-media-permission {
+    .mic-popout-notice {
+        font-size: 0.8rem;
+        font-style: italic;
+        margin-bottom: $spacer;
+    }
+
+    .mic-details {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        position: relative;
+
+        &.popup {
+            margin-bottom: $spacer * 5;
+        }
+
+
+        .disabled,
+        .checked {
+            @include icon-size($spacer * 3.5);
+            margin-left: $spacer * 3;
+            position: absolute;
+            z-index: 100;
+        }
+
+        .checked {
+            fill: $green-color;
+        }
+
+        .disabled {
+            fill: $red-color;
+        }
+
+        .icon {
+            @include icon-size($spacer * 3);
+            align-items: center;
+            border-radius: 50%;
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-right: $spacer;
+
+            svg {
+                @include icon-size($spacer * 1.5);
+            }
+        }
+
+        .browser-bar {
+            align-items: center;
+            background: $grey-color-lightest;
+            border-bottom-right-radius: $spacer * 2.5;
+            border-top-right-radius: $spacer * 2.5;
+            display: flex;
+            height: $spacer * 5;
+            justify-content: center;
+            margin-bottom: $spacer * 2;
+            vertical-align: middle;
+            width: $spacer * 8;
+
+            .cam {
+                @include icon-size($spacer * 4);
+                fill: $black;
+            }
+
+            &.cam-disabled {
+                .cam {
+                    path[pid='1'] {fill: $white-color;}
+                    rect[pid='2'] {fill: $red-color;}
+                }
+            }
+
+            &.cam-enabled {
+                position: relative;
+            }
+        }
+
+        button {
+            color: $grey-color-darker;
+            margin-top: $spacer * 2;
+
+            .icon {
+                fill: $grey-color-darkest;
+            }
+        }
+    }
+
+    .permission-message {
+        color: $grey-color-darker;
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding-bottom: $spacer;
+
+        &.no-permission {
+            color: $grey-color-darker;
+            margin-bottom: $spacer;
+
+            .icon {
+                background: $red-color;
+
+                svg {
+                    fill: $white-color;
+                }
+            }
+        }
+    }
+
+    .instruction {
+        font-size: 0.9rem;
+        font-style: italic;
+    }
+}

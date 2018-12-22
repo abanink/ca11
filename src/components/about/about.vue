@@ -1,4 +1,4 @@
-<component class="component-about">
+<component class="c-about">
     <div class="about">
         <div class="about-version">
             <icon name="logo" class="version-logo" :original="true"/>

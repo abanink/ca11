@@ -20,7 +20,7 @@ module.exports = (app) => {
     }
 
     app.components.WizardDevices = Vue.component('WizardDevices', require('./components/devices')(app, shared))
-    app.components.WizardMicPermission = Vue.component('WizardMicPermission', require('./components/mic_permission')(app, shared))
+    app.components.WizardMediaPermission = Vue.component('WizardMediaPermission', require('./components/media-permission')(app, shared))
     app.components.WizardTelemetry = Vue.component('WizardTelemetry', require('./components/telemetry')(app, shared))
     app.components.WizardWelcome = Vue.component('WizardWelcome', require('./components/welcome')(app, shared))
     /**

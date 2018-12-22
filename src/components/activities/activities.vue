@@ -1,4 +1,4 @@
-<component class="component-activities padded">
+<component class="c-activities padded">
 
     <header class="header-bar">
         <div class="filter-line">

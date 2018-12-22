@@ -1,0 +1,97 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+
+.c-main-status {
+    background: $grey-color-lightest;
+    color: $grey-color;
+
+    .status-indicators {
+        // Don't wrap but put dots at the end if it doesn't fit.
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        white-space: nowrap;
+
+        svg.disabled {fill: $grey-color-light;}
+
+        .status-indicator {
+            text-align: center;
+            width: $spacer * 6;
+
+            svg {
+                @include icon-size($spacer * 3.5);
+            }
+        }
+
+        .dnd-switch {
+            margin-left: $spacer * 3;
+        }
+    }
+
+    // The icon links container at the right top of the popup.
+    .menu-options {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+
+        .option {
+            height: $spacer * 6;
+            line-height: $spacer * 6;
+            padding: 0 $spacer;
+
+            svg {
+                @include icon-size($spacer * 3);
+            }
+
+            &.disabled {
+                opacity: 0.3;
+
+                &:hover {
+                    cursor: default;
+                }
+            }
+
+            &.active,
+            &:hover {
+                background: $white;
+                color: $brand-color;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+
+// Shared between c-main-status and c-call-status.
+.main-status {
+    display: flex;
+    font-family: 'Rajdhani';
+    font-size: 0.9rem;
+    font-weight: 600;
+    height: ($spacer * 6);
+    justify-content: space-between;
+    transition: background 0.5s ease;
+    z-index: 100;
+
+    &.error .status-indicators svg {fill: $red-color;}
+    &.warning .status-indicators svg {fill: $red-color;}
+    &.ok .status-indicators svg {fill: $green-color;}
+
+    [class^='icon-'] {
+        &:hover {
+            color: $brand-color;
+        }
+    }
+
+    .in-call-info {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+    }
+
+    .call-info {
+        margin-right: $spacer;
+    }
+}

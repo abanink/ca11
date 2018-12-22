@@ -1,4 +1,4 @@
-<component class="component-settings">
+<component class="c-settings">
 
     <div class="tabs">
         <ul>
@@ -42,8 +42,8 @@
 
     <!-- Device settings -->
     <div class="tab" :class="{'is-active': tabs.active === 'devices'}">
-        <DevicePicker v-if="settings.webrtc.media.permission"/>
-        <MicPermission v-else/>
+        <DeviceControls v-if="settings.webrtc.media.permission"/>
+        <MediaPermission v-else/>
     </div>
 
 

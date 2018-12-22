@@ -1,9 +1,9 @@
-<component class="component-wizard-devices">
+<component class="c-wizard-devices">
     <header class="ca">{{$t('audio settings')}}</header>
 
     <div class="step-description">
         <span class="cf">{{$t('make sure your headset is properly connected and inspect the audio device settings below:')}}</span>
-        <DevicePicker/>
+        <DeviceControls/>
     </div>
 
     <slot name="progress"></slot>

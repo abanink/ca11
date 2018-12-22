@@ -1,12 +1,21 @@
 @import 'ca11/lib/variables';
 @import 'ca11/lib/mixins';
 
-.component-calls {
-    // Push the soundmeter to the bottom.
-    display: flex;
-    flex: 5 1 auto;
-    flex-direction: row;
-    width: 100%;
+.c-calls {
+    .c-dialer-touch {
+        grid-column: content / 2;
+        grid-row: content / 6;
+    }
+
+    .c-media-controls {
+        grid-column: sidebar;
+        grid-row: subnav / 6;
+    }
+
+    .c-call-switcher {
+        grid-column: content / 2;
+        grid-row: subnav;
+    }
 
     .call-type {
         align-items: center;
@@ -26,12 +35,6 @@
                 cursor: pointer;
             }
         }
-    }
-
-    .call-new {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
     }
 
     .call-active {

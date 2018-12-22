@@ -1,9 +1,9 @@
-<component class="component-wizard-telemetry">
+<component class="c-wizard-telemetry">
     <header class="ca">{{$t('telemetry')}}</header>
 
     <div class="step-description">
         <span class="cf">
-            {{$t('{name} can log application exceptions automatically to Sentry. This semi-anonimized data helps improving {name}\'s stability and quality. Issue data is removed after being fixed.', {name: app.name})}}
+            {{$t('{name} can log application errors automatically. This anonimized data helps improving {name}\'s stability and quality. Issue data is removed after being fixed.', {name: app.name})}}
         </span>
         <span class="cf">
             {{$t('do you want to help improve {name}?', {name: app.name})}}

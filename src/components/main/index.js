@@ -1,4 +1,6 @@
 module.exports = (app) => {
+    app.components.MainMenu = Vue.component('MainMenu', require('./components/menu')(app))
+    app.components.MainStatus = Vue.component('MainStatus', require('./components/status')(app))
     /**
     * @memberof fg.components
     */

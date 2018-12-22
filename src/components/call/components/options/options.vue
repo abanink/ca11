@@ -1,4 +1,4 @@
-<component class="component-call-options">
+<component class="c-call-options">
 
     <!-- <div class="option">
         <div class="rounded-button" @click="muteToggle" :class="classes('mute-button')">
@@ -6,6 +6,18 @@
         </div>
         <p class="ca">{{$t('mute')}}</p>
     </div> -->
+
+
+    <!-- place new call button -->
+    <button
+        v-if="!call.id"
+        :disabled="!description.endpoint"
+        class="option tooltip tooltip-left" @click="placeCall(description)"
+        :data-tooltip="$t('place call').capitalize()"
+    >
+        <icon name="phone"/>
+    </button>
+
 
     <button
         v-if="call.status === 'invite'"
@@ -15,7 +27,7 @@
         <icon name="phone"/>
     </button>
 
-    <button
+    <button v-if="call.id"
         class="option tooltip tooltip-left"
         :class="classes('dialpad-button')"
         :data-tooltip="$t('toggle keypad').capitalize()"
@@ -25,7 +37,7 @@
         <icon name="dialpad"/>
     </button>
 
-    <button
+    <button v-if="call.id"
         class="option tooltip tooltip-left"
         :class="classes('hold-button')"
         :data-tooltip="$t('toggle on-hold').capitalize()"
@@ -36,7 +48,7 @@
     </button>
 
     <button
-        v-if="call.transfer.type !== 'accept'"
+        v-if="call.id && call.transfer.type !== 'accept'"
         class="option tooltip tooltip-left"
         :class="classes('transfer-button')"
         :data-tooltip="$t('toggle transfer').capitalize()"
@@ -46,7 +58,7 @@
         <icon name="transfer"/>
     </button>
     <button
-        v-else @click="transferFinalize"
+        v-else-if="call.id" @click="transferFinalize"
         class="option tooltip tooltip-left"
         :data-tooltip="$t('complete transfer').capitalize()"
         :disabled="call.status !== 'accepted'">
@@ -54,7 +66,7 @@
     </button>
 
     <button
-        v-if="callCanTerminate"
+        v-if="call.id && callCanTerminate"
         class="option tooltip tooltip-left"
         @click="callTerminate(call)"
         :data-tooltip="$t('end call').capitalize()"

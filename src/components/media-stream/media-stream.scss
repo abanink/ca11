@@ -1,0 +1,67 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.media-stream {
+    background: $grey-color-light;
+    display: grid;
+    overflow: hidden;
+    position: relative;
+
+    video {
+        background: none;
+        display: grid;
+        grid-area: 1 / 1 / 2 / 2;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    // Maintain 16/9 aspect ratio for this container.
+    &::before {
+        content: url("data:image/svg+xml,%3Csvg viewBox='0 0 4 3' xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E");
+        display: block;
+        grid-area: 1 / 1 / 2 / 2;
+        line-height: 0;
+    }
+
+    &.loading {
+        svg {
+            @include icon-size($spacer * 4);
+        }
+    }
+
+    audio,
+    video,
+    .content {
+        align-items: center;
+        color: $grey-color-dark;
+        display: grid;
+        font-family: 'Rajdhani';
+        font-weight: 600;
+        grid-area: 1 / 1 / 2 / 2;
+        height: inherit;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+
+
+        svg {
+            @include icon-size($spacer * 4);
+            fill: $grey-color;
+            margin-right: $spacer / 2;
+        }
+    }
+
+    .actions {
+        background: rgba($grey-color-darkest, 0.4);
+        bottom: 0;
+        padding: $spacer / 2;
+        position: absolute;
+        width: 100%;
+
+        svg {
+            @include icon-size($spacer * 4);
+            fill: $white-color;
+            margin-right: $spacer / 2;
+        }
+    }
+}

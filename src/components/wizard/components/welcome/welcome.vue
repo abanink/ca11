@@ -1,4 +1,4 @@
-<component class="component-wizard-welcome">
+<component class="c-wizard-welcome">
     <header class="cf">{{greeting}}!</header>
 
     <div class="step-description">

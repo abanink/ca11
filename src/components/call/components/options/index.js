@@ -2,7 +2,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const Options = {
+    const CallOptions = {
         computed: {
             // If the current call is in transfer mode.
             callCanTerminate: function() {
@@ -10,7 +10,7 @@ module.exports = (app) => {
                 return true
             },
         },
-        methods: {
+        methods: Object.assign({
             callAccept: function(call) {
                 app.emit('bg:calls:call_accept', {callId: call.id})
             },
@@ -50,6 +50,11 @@ module.exports = (app) => {
             muteToggle: function() {
                 app.emit('bg:calls:mute_toggle', {callId: this.call.id})
             },
+            placeCall: function(description) {
+                // Prevents calling without endpoint.
+                if (!description.endpoint) return
+                this.setupCall(description)
+            },
             transferFinalize: function() {
                 app.emit('bg:calls:transfer_finalize', {callId: this.call.id})
             },
@@ -57,11 +62,14 @@ module.exports = (app) => {
                 if (this.call.transfer.disabled) return
                 app.emit('bg:calls:transfer_toggle', {callId: this.call.id})
             },
-        },
+        }, app.helpers.sharedMethods()),
         props: ['call'],
         render: templates.call_options.r,
         staticRenderFns: templates.call_options.s,
+        store: {
+            description: 'calls.description',
+        },
     }
 
-    return Options
+    return CallOptions
 }

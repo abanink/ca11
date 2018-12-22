@@ -60,7 +60,7 @@ class Media {
     * Return the getUserMedia flags based on the user's settings.
     * @returns {Object} - Supported flags for getUserMedia.
     */
-    _getUserMediaFlags() {
+    _getUserMediaFlags({audio = true, video = true} = {}) {
         const presets = {
             AUDIO_NOPROCESSING: {
                 audio: {
@@ -73,11 +73,11 @@ class Media {
                     googNoiseSuppression: false,
                     googTypingNoiseDetection: false,
                 },
-                video: this.app.state.calls.description.video,
+                video,
             },
             AUDIO_PROCESSING: {
                 audio: {},
-                video: this.app.state.calls.description.video,
+                video,
             },
         }
 
@@ -101,21 +101,24 @@ class Media {
     * performance loss.
     */
     poll() {
+        this.app.logger.debug(`${this}media poller started`)
         this.intervalId = setInterval(async() => {
             // Only do this when being authenticated; e.g. when there
             // is an active state container around.
             if (this.app.state.user.authenticated) {
                 try {
-                    await this.query()
+                    const stream = await this.query()
                     if (this.app.env.section.bg && !this.app.devices.cached) {
                         await this.app.devices.verifySinks()
                     }
                     // Disable this poller as soon we got permission.
-                    if (this.app.state.settings.webrtc.media.permission) {
+                    if (stream) {
+                        this.app.logger.debug(`${this}media poller stopped (approved)`)
                         clearInterval(this.intervalId)
                     }
                 } catch (err) {
                     console.error(err)
+                    this.app.logger.debug(`${this}media poller stopped (exception: ${err})`)
                     // An exception means something else than a lack of permission.
                     clearInterval(this.intervalId)
                 }
@@ -125,58 +128,101 @@ class Media {
 
 
     /**
-    * Silently try to initialize media access, unless the error is not
-    * related to a lack of permission.
+    * Query for an audio, video or display stream.
+    * @param {String} type - The type of media to aqcuire.
+    * @returns {MediaStream} - When succesfully requested a stream; null otherwise.
     */
-    async query() {
-        // Check media permission at the start of the bg/fg.
-        if (this.app.env.isNode) {
-            this.app.setState({settings: {webrtc: {media: {permission: false}}}})
-            return
+    async query(type = null) {
+        if (this.app.env.isNode) return null
+
+        if (!type) type = this.app.state.settings.webrtc.media.stream.type
+
+        const streamId = this.app.state.settings.webrtc.media.stream[type].id
+        // Reuse an existing stream.
+        let stream = this.streams[streamId]
+
+        if (!stream) {
+            try {
+                const flags = this._getUserMediaFlags({audio: true, video: type === 'video' ? true : false})
+                const userMedia = await navigator.mediaDevices.getUserMedia(flags)
+                for (const track of userMedia.getTracks()) {
+                    track.onended = (e) => {
+
+                    }
+                }
+
+                if (type === 'display') {
+                    // getDisplayMedia in Chrome doesn't support audio yet; add the audiotrack from
+                    // userMedia to the MediaStream so Asterisk won't bail the stream.
+                    let audio = await userMedia.getAudioTracks()[0]
+                    stream = await navigator.getDisplayMedia({audio: false, video: true})
+                    for (const track of stream.getTracks()) {
+                        track.onended = (e) => {
+                            const stateStream = {display: {id: null}}
+                            // Unset the stream id.
+                            this.app.setState({settings: {webrtc: {media: {stream: stateStream}}}})
+
+                            // Switch to audio type when the display stream is current selected.
+                            type = this.app.state.settings.webrtc.media.stream.type
+                            if (type === 'display') this.query('audio')
+                        }
+                    }
+
+                    stream.addTrack(audio)
+                } else {
+                    stream = userMedia
+                }
+            } catch (err) {
+                console.error(err)
+                // There are no devices at all. Spawn a warning.
+                if (err.message === 'Requested device not found') {
+                    if (this.app.env.section.fg) {
+                        this.app.notify({icon: 'warning', message: this.app.$t('no audio devices found.'), type: 'warning'})
+                    }
+                    throw new Error(err)
+                }
+
+                // This error also may be triggered when there are no devices
+                // at all. The browser sometimes has issues finding any devices.
+                this.app.setState({settings: {webrtc: {media: {permission: false}}}})
+            }
         }
 
-        try {
-            const flags = this._getUserMediaFlags()
-            const stream = await navigator.mediaDevices.getUserMedia(flags)
-            this.streams[stream.id] = stream
+        if (!stream) return null
 
-            this.app.emit('local-stream-ready', {streamId: stream.id})
+        this.streams[stream.id] = stream
+        // Share streams between bg and fg when in the same context.
+        if (this.app.env.section.fg && !this.app.env.isExtension) {
+            this.app.apps.bg.media.streams = this.streams
+        }
 
-            // Share streams between bg and fg when in the same context.
-            if (this.app.env.section.fg && !this.app.env.isExtension) {
-                this.app.apps.bg.media.streams = this.streams
-            }
-
-            // This stream is not part of a particular call. That is
-            // why it has a separate reference.
-            const media = {
-                permission: true,
-                stream: {
-                    id: stream.id,
-                    kind: flags.video ? 'video' : 'audio',
+        // This stream is not part of a particular call. That is
+        // why it has a separate reference.
+        const media = {
+            permission: true,
+            stream: {
+                type,
+                [type]: {
                     muted: true,
                     selected: false,
                     visible: true,
                 },
-            }
-            this.app.setState({settings: {webrtc: {media}}})
-
-        } catch (err) {
-            console.error(err)
-            // There are no devices at all. Spawn a warning.
-            if (err.message === 'Requested device not found') {
-                if (this.app.env.section.fg) {
-                    this.app.notify({icon: 'warning', message: this.app.$t('no audio devices found.'), type: 'warning'})
-                }
-                throw new Error(err)
-            }
-
-            // This error also may be triggered when there are no devices
-            // at all. The browser sometimes has issues finding any devices.
-            if (this.app.state.settings.webrtc.media.permission) {
-                this.app.setState({settings: {webrtc: {media: {permission: false}}}})
-            }
+            },
         }
+
+        this.app.setState({settings: {webrtc: {media}}}, {persist: true})
+        // (!) The stream id is NEVER persisted
+        this.app.setState({settings: {webrtc: {media: {stream: {[type]: {id: stream.id}}}}}})
+        return stream
+    }
+
+
+    /**
+    * Representats this Class name in logging.
+    * @returns {String} - The identifier to use.
+    */
+    toString() {
+        return '[bg] [media] '
     }
 }
 

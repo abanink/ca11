@@ -193,6 +193,7 @@ class SipCalls {
             password: this.app.state.calls.sip.account.selected.password,
             register: true,
             sessionDescriptionHandlerFactory: (session, options) => {
+                options.app = this.app
                 return SessionDescriptionHandler.defaultFactory(session, options)
             },
             sessionDescriptionHandlerFactoryOptions: {

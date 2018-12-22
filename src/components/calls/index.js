@@ -1,4 +1,5 @@
 module.exports = (app) => {
+    app.components.CallsSwitcher = Vue.component('CallsSwitcher', require('./components/switcher')(app))
     /**
     * @memberof fg.components
     */
@@ -27,6 +28,7 @@ module.exports = (app) => {
             description: 'calls.description',
             sig11: 'calls.sig11',
             sip: 'calls.sip',
+            ui: 'ui',
         },
     }
 

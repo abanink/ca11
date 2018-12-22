@@ -1,4 +1,4 @@
-<component class="component-call-transfer">
+<component class="c-call-transfer">
     <div class="transfer-options">
         <div class="transfer-buttons">
             <div class="transfer-button ca" :class="classes('attended-button')" @click="transferMode('attended')">
@@ -10,6 +10,6 @@
         </div>
         <div class="transfer-text cf">{{$t('select a transfer recipient')}}:</div>
 
-        <CallKeypadInput mode="call" :model.sync="description.endpoint" :endpoint="description.endpoint"/>
+        <DialerInput mode="call" :model.sync="description.endpoint" :endpoint="description.endpoint"/>
     </div>
 </component>

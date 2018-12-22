@@ -2,10 +2,41 @@
 @import 'ca11/lib/variables';
 
 
-.component-main {
+.c-main {
     border-top: $spacer / 2 solid $brand-color;
+    display: grid;
     flex: 1;
+    grid-template-columns: [menu] 50px [content] auto;
+    grid-template-rows:
+        [status] 50px
+        [content] auto
+        [footer] 50px;
+    height: 100vh;
     position: relative;
+    width: 100vw;
+
+    .main-menu {
+        grid-column: menu;
+        grid-row: content / 6;
+    }
+
+    .main-status {
+        grid-column: menu / 4;
+        grid-row: status;
+    }
+
+    .main-content {
+        display: grid;
+        // Position in the main grid.
+        grid-column: content / 4;
+        grid-row: content / 6;
+
+        // Define a grid for the main content.
+        grid-template-columns: [content] auto [sidebar] 100px;
+        grid-template-rows:
+            [subnav] 50px
+            [content] auto;
+    }
 
     .overlay {
         animation: grow 0.3s ease-in-out;
@@ -21,49 +52,6 @@
             &:hover {
                 color: $brand-color;
                 cursor: pointer;
-            }
-        }
-    }
-
-    .app-view {
-        display: flex;
-        flex-direction: column;
-        // max-height: $max-popup-height;
-
-        .app-view-top {
-            min-height: $spacer * 5;
-        }
-
-        .app-view-main {
-            align-content: stretch;
-            display: flex;
-            flex: 1;
-            flex-direction: row;
-            // z-index: 100000000;
-            // Show a scrollbar when the content height exceeds the max-height.
-
-            .app-view-layer {
-                flex: 1;
-                min-height: $min-popup-height + ($spacer * 5);
-                // overflow-y: auto;
-
-                &.padded {
-                    padding: $spacer * 3;
-                }
-
-                .title {
-                    color: $brand-color;
-                    font-size: 1.3rem;
-                    font-weight: 600;
-                }
-
-                header {
-                    .header-line {
-                        display: flex;
-                        font-family: 'Rajdhani';
-                        font-weight: 600;
-                    }
-                }
             }
         }
     }

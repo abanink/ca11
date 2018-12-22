@@ -1,0 +1,13 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.media-preview {
+    background: #00f;
+    display: flex;
+    height: 60px;
+    width: 100%;
+
+    .media-container {
+        width: 100px;
+    }
+}
