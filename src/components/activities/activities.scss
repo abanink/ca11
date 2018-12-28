@@ -1,41 +1,23 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.component-activities {
-    width: 100%;
+.c-activities {
+    .activity-label {
+        background: $grey-color-lightest;
+        border: 1px solid $grey-color-lighter;
+        border-radius: $spacer * 4;
+        color: $brand-color;
+        flex: 1 1 auto;
+        font-family: 'Rajdhani';
+        font-weight: 600;
+        padding: $spacer / 4;
+        text-align: center;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        width: 100%;
 
-    .item-list {
-        &.x-1 {
-            .activity-label {
-                padding: $spacer / 2;
-            }
-        }
-
-        &.x-2,
-        &.x-3 {
-            .activity-label {
-                padding: $spacer / 4;
-            }
-        }
-    }
-
-    .activity {
-        .activity-label {
-            background: $grey-color-lightest;
-            border: 1px solid $grey-color-lighter;
-            border-radius: $spacer * 4;
+        &::placeholder {
             color: $brand-color;
-            flex: 1 1 auto;
-            font-family: 'Rajdhani';
-            font-weight: 600;
-            text-align: center;
-            text-overflow: ellipsis;
-            text-transform: uppercase;
-            width: 100%;
-
-            &::placeholder {
-                color: $brand-color;
-            }
         }
     }
 }

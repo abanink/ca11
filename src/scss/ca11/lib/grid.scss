@@ -1,0 +1,103 @@
+// All grid divisions are defined n, instead of being scattered
+// across component files. This makes it easier to comprehend
+// the whole layout.
+
+.c-main {
+    display: grid;
+    grid-template-areas:
+        'main-status main-status main-status'
+        'main-menu main-content media-controls';
+    grid-template-columns: $mobile-space-unit-4 1fr $mobile-space-unit-4; // menu content
+    grid-template-rows: $mobile-space-unit-4 1fr; // status content
+
+    .c-media-controls {
+        grid-area: media-controls;
+    }
+
+    .main-menu {
+        grid-area: main-menu;
+        // Make space for main-content-header's negative
+        // left margin.
+        margin-top: $mobile-space-unit-4;
+    }
+
+    .main-status {
+        grid-area: main-status;
+    }
+
+    .main-content {
+        display: grid;
+        grid-area: main-content;
+        grid-template-areas:
+            'main-content-header'
+            'main-content-base';
+        grid-template-rows: $mobile-space-unit-4 fit-content(100%);
+        justify-items: start;
+
+        .main-content-header {
+            grid-area: main-content-header;
+
+            .header-icon {
+                height: $mobile-space-unit-4;
+                margin-left: -$mobile-space-unit-4;
+                width: $mobile-space-unit-4;
+            }
+        }
+
+        .main-content-base {
+            grid-area: main-content-base;
+        }
+
+        &.c-settings {
+            grid-column-end: media-controls;
+            grid-column-start: main-content;
+            grid-template-rows: 70px fit-content(100%);
+        }
+
+        &.c-calls {
+            .media-preview {
+                grid-area: main-content-header;
+            }
+
+            .media-view {
+                grid-area: main-content-base;
+            }
+        }
+    }
+}
+
+
+@media screen and (min-width: $breakpoint-mobile) {
+    .c-main {
+        grid-template-columns: $tablet-space-unit-4 1fr $tablet-space-unit-4; // menu content
+
+        .main-content {
+            grid-template-rows: $tablet-space-unit-3 fit-content(100%);
+
+            .main-content-header {
+                .header-icon {
+                    height: $tablet-space-unit-3;
+                    margin-left: -$tablet-space-unit-4;
+                    width: $tablet-space-unit-4;
+                }
+
+            }
+
+        }
+
+        .main-menu {
+            margin-top: $tablet-space-unit-3;
+        }
+    }
+
+}
+
+.c-wizard {
+    grid-area: main-content;
+}
+
+.c-login {
+    grid-area: main-content;
+}
+
+

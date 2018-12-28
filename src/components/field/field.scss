@@ -214,6 +214,10 @@ textarea {
         user-select: none;
         vertical-align: middle;
 
+        &::before {
+            background: $grey-color-light;
+        }
+
     }
 }
 

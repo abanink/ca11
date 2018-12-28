@@ -1,92 +1,43 @@
-/*
-* CSS TOGGLE SWITCH
-*
-* Ionuț Colceriu - ghinda.net
-* https://github.com/ghinda/css-toggle-switch
-*
-* Modified to fit in the CA11 theme.
-*/
 @import 'ca11/lib/variables';
 
-$size-unit: em !default;
-$em-base: 16 !default;
-
-
-@mixin clearfix {
-    &::after {
-        clear: both;
-        content: '';
-        display: table;
-    }
-}
-
-@import 'css-toggle-switch/src/core/functions';
-@import 'css-toggle-switch/src/core/shared';
-@import 'css-toggle-switch/src/core/toggle';
-
-
-.switch-toggle {
-    background-color: $grey-color-lightest;
-    box-shadow: inset rgba(0, 0, 0, 0.1) 0 1px 0;
-
+.field-radio-group {
     input {
-        display: none;
+        border: 0;
+        height: 0;
+        overflow: hidden;
+        position: absolute !important;
+        width: 0;
 
-        + label {
-            margin: 0;
-            min-width: $spacer * 6;
-            padding: 0;
-            user-select: none;
-
-            &:hover {
-                cursor: pointer;
-            }
+        &:checked + label {
+            background: $brand-color;
+            color: $white-color;
         }
-
-        &:checked {
-            + label {
-                background-color: $brand-color;
-                color: $white-color;
-            }
-        }
-
-        &:disabled + label {
-            color: $grey-color-lighter;
-
-            &:hover {
-                cursor: not-allowed;
-            }
-        }
-
-        &:focus + label {
-            background-color: $brand-accent-color;
-            outline: none;
-        }
-    }
-
-    a {
-        left: 0;
-        top: 0;
-        transition: all 0.2s ease-out;
     }
 
     label {
-        color: $grey-color-dark;
+        background: $grey-color-lightest;
+        color: rgba(0, 0, 0, 0.6);
+        display: inline-block;
         font-family: 'Rajdhani';
         font-size: 0.9rem;
         font-weight: 600;
         height: $spacer * 4;
         line-height: $spacer * 4;
-        padding: 0 $spacer * 2;
         text-align: center;
-        vertical-align: middle;
-    }
+        text-shadow: none;
+        transition: all 0.2s ease-in-out;
+        width: $spacer * 7;
 
+        &:first-of-type {
+            border-right: 0;
+        }
 
-    &.switch-toggle {
-        a {
-            background-color: $brand-accent-color;
-            transition: all 0.12s ease-out;
+        &:last-of-type {
+            border-left: 0;
+        }
+
+        &:hover {
+            cursor: pointer;
         }
     }
 }

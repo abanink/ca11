@@ -1,15 +1,14 @@
-json{
+{
     "brands": {
         "ca11": {
-            "bootstrap_endpoint": "wss://localhost:9001",
             "colors": {
-                "brand-color": "#35141f",
-                "brand-accent-color": "#00b8e5",
-                "green-color": "#28ca42",
-                "grey-color": "#888",
+                "brand-color": "#601111",
+                "brand-accent-color": "#888888",
+                "green-color": "#508654",
+                "grey-color": "#808d93",
                 "orange-color": "#f98644",
                 "primary-color": "#3c3c50",
-                "red-color": "#da534F"
+                "red-color": "#a75147"
             },
             "plugins": {
                 "builtin": {
@@ -21,13 +20,13 @@ json{
                 "custom": {}
             },
             "name": {
-                "alpha": "Ca11-alpha",
-                "beta": "Ca11-beta",
-                "production": "Ca11"
+                "alpha": "CA11-alpha",
+                "beta": "CA11-beta",
+                "production": "CA11"
             },
             "permissions": "",
             "sig11": {
-                "endpoint": "ws://localhost:8080"
+                "endpoint": "sig11.dev.ca11.io"
             },
             "sip": {
                 "endpoint": ""
@@ -67,30 +66,30 @@ json{
             },
             "tests": {
                 "alice": {
-                    "endpoint": "",
-                    "username": "",
-                    "password": ""
+                    "endpoint": "sip.dev.ca11.io",
+                    "username": "1000",
+                    "password": "unsecurepassword"
                 },
                 "bob": {
-                    "endpoint": "",
-                    "username": "",
-                    "password": ""
+                    "endpoint": "sip.dev.ca11.io",
+                    "username": "2000",
+                    "password": "unsecurepassword"
                 },
                 "charlie": {
-                    "endpoint": "",
-                    "username": "",
-                    "password": ""
+                    "endpoint": "sip.dev.ca11.io",
+                    "username": "3000",
+                    "password": "unsecurepassword"
                 },
                 "headless": false,
                 "port": 3000
             },
             "theme": "@garage11/ca11-theme-default",
             "vendor": {
-                "name": "Ca11",
+                "name": "CA11",
                 "support": {
                     "email": "",
                     "phone": "",
-                    "website": "https://ca11.io"
+                    "website": ""
                 }
             }
         }

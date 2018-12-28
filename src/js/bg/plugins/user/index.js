@@ -1,8 +1,6 @@
 /**
 * The User module deals with everything that requires some
-* form of authentication. It is currently very tighly coupled
-* with the VoIPGRID vendor, but in theory should be able to deal
-* with other authentication backends.
+* form of authentication.
 * @module ModuleUser
 */
 const Plugin = require('ca11/lib/plugin')
@@ -102,7 +100,6 @@ class PluginUser extends Plugin {
 
         try {
             // Connect to Ca11 backend by initializing network.
-
             await this.app.__initSession({password})
             this.app._watchersActivate()
 
@@ -118,6 +115,7 @@ class PluginUser extends Plugin {
             this.app._languagePresets()
 
         } catch (err) {
+            console.error(err)
             this.app.notify({icon: 'warning', message: this.app.$t('failed to login; please check your credentials.'), type: 'warning'})
         } finally {
             this.app.setState({user: {status: null}})

@@ -21,13 +21,13 @@ class Call {
         this.app = app
         this.plugin = app.plugins.calls
         this.silent = silent
-
+        // References to MediaStream objects related to this call.
+        this.streams = {}
         this._started = false
 
         this.busyTone = app.sounds.busyTone
         this.translations = app.helpers.getTranslations().call
-        this.ringtone = app.sounds.ringTone
-        this.ringbackTone = app.sounds.ringbackTone
+
 
         this.id = shortid.generate()
         /**
@@ -72,6 +72,7 @@ class Call {
                 callId: null,
             },
             status: null,
+            streams: {},
             timer: {
                 current: null,
                 start: null,
@@ -99,13 +100,23 @@ class Call {
 
 
     /**
+     * Remove a track that is ended from remote.
+     * @param {MediaStreamTrack} streamId - Id of the stream to clean up.
+     */
+    _cleanupStream(streamId) {
+        const path = `calls.calls.${this.id}.streams.${streamId}`
+        this.app.setState(null, {action: 'delete', path})
+        delete this.app.media.streams[streamId]
+    }
+
+
+    /**
      * Generic UI and state-related logic for an outgoing call.
      * Note: first set the endpoint and displayName in the parent,
      * before calling this super.
      */
     _incoming() {
         this.setState(this.state)
-
         // Signal the user about the incoming call.
         if (!this.silent) {
             this.app.setState({ui: {layer: 'calls', menubar: {event: 'ringing'}}})
@@ -116,7 +127,7 @@ class Call {
                 title: this.translations.invite,
             })
 
-            this.ringtone.play()
+            this.app.sounds.ringTone.play({loop: true})
             this.plugin.activateCall(this, true)
         }
     }
@@ -136,12 +147,15 @@ class Call {
         else outputSink = devices.sinks.headsetOutput.id
 
         this.app.logger.debug(`${this}change sink of remote video element to ${outputSink}`)
-        try {
-            await this.app.media.remoteVideo.setSinkId(outputSink)
-        } catch (err) {
-            const message = this.app.$t('failed to set output device!')
-            this.app.notify({icon: 'warning', message, type: 'danger'})
-            console.error(err)
+        // Chrome Android doesn't have setSinkId.
+        if (this.app.media.fallback.remote.setSinkId) {
+            try {
+                await this.app.media.fallback.remote.setSinkId(outputSink)
+            } catch (err) {
+                const message = this.app.$t('failed to set output device!')
+                this.app.notify({icon: 'warning', message, type: 'danger'})
+                console.error(err)
+            }
         }
     }
 
@@ -194,8 +208,8 @@ class Call {
             if (this.state.displayName) message += `:${this.state.displayName}`
         }
         this._started = true
-        this.ringbackTone.stop()
-        this.ringtone.stop()
+        this.app.sounds.ringbackTone.stop()
+        this.app.sounds.ringTone.stop()
         this.setState({
             status: 'accepted',
             timer: {
@@ -226,8 +240,9 @@ class Call {
      * @param {String} [options.message] - Force a notification message.
      * @param {Number} options.timeout - Postpone resetting the call state for the duration of 3 busy tones.
      */
-    _stop({force = false, message = '', timeout = 2750} = {}) {
+    _stop({force = false, message = '', timeout = 0} = {}) {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
+
         if (this.silent) {
             this.plugin.deleteCall(this)
             return
@@ -238,8 +253,9 @@ class Call {
             if (this.state.displayName) message += `:${this.state.displayName}`
         }
         // Stop all call state sounds that may still be playing.
-        this.ringbackTone.stop()
-        this.ringtone.stop()
+        this.app.sounds.ringbackTone.stop()
+        this.app.sounds.ringTone.stop()
+        this.app.sounds.callEnd.play()
 
         if (force) {
             if (this.state.status === 'callee_busy') {
@@ -254,6 +270,12 @@ class Call {
         // An ongoing call is closed. Signal listeners like activity about it.
         if (this.state.status === 'bye') {
             this.app.emit('bg:calls:call_ended', {call: this.state}, true)
+        }
+
+        // Remove the streams that are associated with this call.
+        for (const streamId of Object.keys(this.streams)) {
+            this.app.logger.debug(`${this}removing stream ${streamId}`)
+            this._cleanupStream(streamId)
         }
 
         // Stop the Call interval timer.

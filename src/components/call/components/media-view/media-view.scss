@@ -1,0 +1,36 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.c-call-media-view {
+    flex: 1;
+    width: 100%;
+
+    .media-view {
+        background: $grey-color-lightest;
+        display: grid;
+        flex: 1;
+        margin: $spacer / 2;
+        padding: $spacer / 2;
+
+        .c-media-stream {
+            border: $spacer / 2 solid $white-color;
+
+            video {
+                background: none;
+            }
+        }
+
+        .placeholder {
+            background: $grey-color-lighter;
+            border: $spacer / 2 dashed $grey-color-light;
+            color: $grey-color-dark;
+            font-family: 'Rajdhani';
+            font-weight: 600;
+            text-align: center;
+
+            svg {
+                @include icon-size($spacer * 6);
+            }
+        }
+    }
+}

@@ -83,7 +83,6 @@ class PluginApp extends Plugin {
     */
     _initialState() {
         return {
-            displayMode: 1,
             editMode: false,
             installed: true,
             name: process.env.APP_NAME,

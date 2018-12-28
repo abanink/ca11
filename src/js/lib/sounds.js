@@ -52,7 +52,9 @@ class BusyTone {
                 sink = this.app.state.settings.webrtc.devices.sinks.headsetOutput
             }
         }
-        this.audio.setSinkId(sink.id)
+
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
 
         const gainNode = context.createGain()
         gainNode.connect(this.dest)
@@ -127,7 +129,8 @@ class DtmfTone {
             }
         }
 
-        this.audio.setSinkId(sink.id)
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
 
         const frequencyPair = this.frequencies[key]
         this.freq1 = frequencyPair.f1
@@ -227,7 +230,8 @@ class RingbackTone {
             }
         }
 
-        this.audio.setSinkId(sink.id)
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
 
         let freq1, freq2
         const gainNode = context.createGain()
@@ -279,24 +283,25 @@ class RingbackTone {
 /**
 * Play a pre-delivered ogg-file as ringtone.
 */
-class RingTone extends EventEmitter {
+class Sound extends EventEmitter {
 
     constructor(app) {
         super()
         if (app.env.isNode) return
         this.app = app
-        this.audio = new Audio(`ringtones/${app.state.settings.ringtones.selected.name}`)
-        this.audio.addEventListener('ended', this.playEnd.bind(this))
     }
 
 
-    play(loop = true, sink) {
+    play({loop = false, sink = null} = {}) {
         this.loop = loop
 
-        if (!sink) {
-            sink = this.app.state.settings.webrtc.devices.sinks.ringOutput
-        }
-        this.audio.setSinkId(sink.id)
+        if (!this.played) this.audio.addEventListener('ended', this.playEnd.bind(this))
+        this.played = true
+
+        if (!sink) sink = this.app.state.settings.webrtc.devices.sinks.ringOutput
+
+        // Chrome Android doesn't have setSinkId.
+        if (this.audio.setSinkId) this.audio.setSinkId(sink.id)
         // Loop the sound.
         if (loop) {
             this.audio.addEventListener('ended', () => {
@@ -328,6 +333,34 @@ class RingTone extends EventEmitter {
     }
 }
 
+
+class ButtonTone extends Sound {
+    constructor(app) {
+        super(app)
+        this.audio = new Audio('audio/button.ogg')
+    }
+}
+
+
+class CallEnd extends Sound {
+    constructor(app) {
+        super(app)
+        this.audio = new Audio('audio/call-end.ogg')
+    }
+}
+
+
+class RingTone extends Sound {
+    constructor(app) {
+        super(app)
+        this.audio = new Audio(`audio/ringtones/${app.state.settings.ringtones.selected.name}`)
+    }
+}
+
+
+
+
+
 module.exports = class Sounds {
 
     constructor(app) {
@@ -338,5 +371,7 @@ module.exports = class Sounds {
         this.dtmfTone = new DtmfTone(app)
         this.ringbackTone = new RingbackTone(app)
         this.ringTone = new RingTone(app)
+        this.buttonTone = new ButtonTone(app)
+        this.callEnd = new CallEnd(app)
     }
 }

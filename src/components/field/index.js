@@ -54,6 +54,11 @@ module.exports = (app) => {
                     errors.push(this.$t('valid domain name is required').capitalize())
                 }
 
+                if (v.domainOrIp === false) {
+                    errors.push(this.$t('valid domain name or ip-address is required').capitalize())
+                }
+
+
                 if (v.email === false) {
                     errors.push(this.$t('valid email address is required').capitalize())
                 }
@@ -67,11 +72,12 @@ module.exports = (app) => {
                 }
 
                 if (v.minLength === false) {
-                    errors.push(this.$t(
-                        'fill in a value of at least {min} characters.', {
-                            min: v.$params.minLength.min,
-                        }).capitalize()
-                    )
+                    console.log(v)
+                    // errors.push(this.$t(
+                    //     'fill in a value of at least {min} characters.', {
+                    //         min: v.$params.minLength.min,
+                    //     }).capitalize()
+                    // )
                 }
 
                 if (v.numeric === false) {
@@ -101,7 +107,7 @@ module.exports = (app) => {
                 }
 
                 let validationHtml = ''
-                for (const error of errors) {validationHtml += `<li>${error}</li>`}
+                for (const error of errors) {validationHtml += `<li><icon name="warning"/>${error}</li>`}
 
                 return validationHtml
             },

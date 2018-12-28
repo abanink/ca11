@@ -35,7 +35,7 @@ module.exports = function(settings) {
             .pipe(flatten({newPath: './fonts'}))
             .pipe(addsrc(path.join(settings.THEME_DIR, 'fonts', '*.woff2'), {base: settings.THEME_DIR}))
             .pipe(addsrc(path.join(settings.THEME_DIR, 'img', '{*.icns,*.png,*.jpg,*.gif}'), {base: settings.THEME_DIR}))
-            .pipe(addsrc(path.join(settings.THEME_DIR, 'ringtones', '*'), {base: settings.THEME_DIR}))
+            .pipe(addsrc(path.join(settings.THEME_DIR, 'audio', '**', '*'), {base: settings.THEME_DIR}))
             .pipe(ifElse(settings.BUILD_OPTIMIZED, imagemin))
             .pipe(ifElse(settings.BUILD_TARGET === 'electron', () => {
                 return addsrc(path.join(settings.ROOT_DIR, 'package.json'))

@@ -1,0 +1,78 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.c-media-stream {
+    background: $grey-color-darkest;
+    display: grid;
+    position: relative;
+
+    // Maintain 16/9 aspect ratio for this container.
+    &::before {
+        content: url("data:image/svg+xml,%3Csvg viewBox='0 0 4 3' xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E");
+        display: block;
+        grid-area: 1 / 1 / 2 / 2;
+        line-height: 0;
+    }
+
+    .media-stream-icon {
+        fill: $grey-color-darker;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+    }
+
+    audio,
+    video,
+    .content {
+        align-items: center;
+        color: $grey-color-dark;
+        display: grid;
+        font-family: 'Rajdhani';
+        font-weight: 600;
+        grid-area: 1 / 1 / 2 / 2;
+        height: 100%;
+        justify-content: center;
+        position: relative;
+        width: 100%;
+
+        svg {
+            @include icon-size($spacer * 4);
+            fill: $grey-color;
+            margin-right: $spacer / 2;
+        }
+    }
+
+
+    &.loading {
+        svg {
+            @include icon-size($spacer * 4);
+        }
+    }
+
+    .single-action {
+        align-items: flex-end;
+        background: rgba($grey-color-darkest, 0.6);
+        display: flex;
+        height: 100%;
+        justify-content: flex-end;
+        padding-right: $spacer / 2;
+
+        position: absolute;
+
+        width: 100%;
+        z-index: 10000000000000000;
+
+        svg {
+            @include icon-size($spacer * 2.5);
+            @media screen and (min-width: $breakpoint-mobile) {
+                @include icon-size($spacer * 4);
+            }
+
+            fill: $white-color;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

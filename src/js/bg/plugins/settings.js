@@ -51,6 +51,30 @@ class PluginSettings extends Plugin {
                 enabled: true,
                 media: {
                     permission: true,
+                    stream: {
+                        audio: {
+                            id: null,
+                            kind: 'audio',
+                            muted: false,
+                            selected: false,
+                            visible: true,
+                        },
+                        display: {
+                            id: null,
+                            kind: 'display',
+                            muted: false,
+                            selected: false,
+                            visible: true,
+                        },
+                        type: 'video', // Switch between audio, display and video stream.
+                        video: {
+                            id: null,
+                            kind: 'video',
+                            muted: false,
+                            selected: false,
+                            visible: true,
+                        },
+                    },
                     type: {
                         options: [
                             {id: 'AUDIO_NOPROCESSING', name: this.app.$t('disabled')},
@@ -68,7 +92,7 @@ class PluginSettings extends Plugin {
                     options: [
                         {name: 'WizardWelcome'},
                         {name: 'WizardTelemetry'},
-                        {name: 'WizardMicPermission'},
+                        {name: 'WizardMediaPermission'},
                         {name: 'WizardDevices'},
                     ],
                     selected: {name: 'WizardWelcome'},

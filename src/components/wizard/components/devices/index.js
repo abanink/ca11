@@ -10,7 +10,7 @@ module.exports = (app, shared) => {
         },
         computed: Object.assign({
             stepValid: function() {
-                return this.permission
+                return this.media.permission
             },
         }, app.helpers.sharedComputed()),
 
@@ -27,8 +27,8 @@ module.exports = (app, shared) => {
         store: {
             app: 'app',
             devices: 'settings.webrtc.devices',
+            media: 'settings.webrtc.media',
             options: 'settings.wizard.steps.options',
-            permission: 'settings.webrtc.media.permission',
             selected: 'settings.wizard.steps.selected',
         },
 

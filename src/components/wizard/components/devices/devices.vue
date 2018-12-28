@@ -1,9 +1,12 @@
-<component class="component-wizard-devices">
+<component class="c-wizard-devices">
     <header class="ca">{{$t('audio settings')}}</header>
 
     <div class="step-description">
         <span class="cf">{{$t('make sure your headset is properly connected and inspect the audio device settings below:')}}</span>
-        <DevicePicker/>
+        <DeviceControls
+            v-if="media.stream[media.stream.type].id && media.permission"
+            :stream="media.stream[media.stream.type]"
+        />
     </div>
 
     <slot name="progress"></slot>

@@ -17,12 +17,14 @@ module.exports = (app) => {
             },
             save: function(e) {
                 let settings = app.utils.copyObject(this.settings)
+                delete settings.webrtc.media
 
                 let settingsState = {
                     availability: {dnd: false},
                     calls: {
                         sig11: {
                             enabled: app.state.calls.sig11.toggled,
+                            endpoint: app.state.calls.sig11.endpoint,
                             toggled: app.state.calls.sig11.toggled,
                         },
                         sip: {
@@ -38,7 +40,7 @@ module.exports = (app) => {
                     settings,
                 }
 
-                // Switch back to SIG11 as defautl call protocol when SIP is disabled.
+                // Switch back to SIG11 as default call protocol when SIP is disabled.
                 if (!this.calls.sip.enabled && this.calls.description.protocol === 'sip') {
                     settingsState.calls.description = {protocol: 'sig11'}
                 }
@@ -67,6 +69,7 @@ module.exports = (app) => {
             devices: 'settings.webrtc.devices',
             env: 'env',
             language: 'language',
+            media: 'settings.webrtc.media',
             ringtones: 'settings.ringtones',
             settings: 'settings',
             tabs: 'ui.tabs.settings',
@@ -97,14 +100,6 @@ module.exports = (app) => {
                         },
                     },
                 },
-            }
-
-            if (this.calls.sip.toggled) {
-                validations.calls.sip.endpoint.domain = app.helpers.validators.domain
-            }
-
-            if (this.calls.sig11.toggled) {
-                validations.calls.sig11.endpoint.domain = app.helpers.validators.domain
             }
 
             return validations

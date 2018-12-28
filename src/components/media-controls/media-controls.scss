@@ -1,0 +1,24 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+
+.c-media-controls {
+    background: $grey-color-lightest;
+    z-index: 100;
+
+    .c-media-stream {
+        height: $mobile-space-unit-4;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+    }
+
+    @media screen and (min-width: $breakpoint-mobile) {
+        .c-media-stream {
+            height: $tablet-space-unit-3;
+        }
+    }
+}
+

@@ -62,7 +62,6 @@ class CallSIP extends Call {
         })
 
         this.session.on('bye', (e) => {
-            this.busyTone.play()
             if (e.getHeader('X-Asterisk-Hangupcausecode') === '58') {
                 this.app.notify({
                     icon: 'warning',
@@ -84,7 +83,7 @@ class CallSIP extends Call {
         * call module's invite handler.
         */
         this.session.on('failed', (message) => {
-            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.plugin.sipCalls.ua)
+            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.plugin.sip.ua)
             let reason = message.getHeader('Reason')
             if (reason) {
                 reason = this._parseHeader(reason).get('text')
@@ -127,20 +126,55 @@ class CallSIP extends Call {
 
 
     /**
-     * SIP.js event handler that takes care of adding
-     * tracks to a stream and binding them to the video
-     * elements.
+     * Asterisk always returns only one (mixed) audio
+     * track; and one or more video tracks, depending
+     * on whether video contraints requested video.
+     * The audio track is grouped with the first available
+     * video track.
+     * @param {RTCTrackEvent} e - Contains the added track from RTCPeerConnection.
      */
-    _onTrackAdded() {
-        this.localStream = new MediaStream()
-        this.remoteStream = new MediaStream()
-
+    _onTrackAdded(e) {
         this.pc = this.session.sessionDescriptionHandler.peerConnection
-        this.pc.getReceivers().forEach((receiver) => this.remoteStream.addTrack(receiver.track))
-        this.app.media.remoteVideo.srcObject = this.remoteStream
+        const remoteStreamId = e.track.id
 
-        this.pc.getSenders().forEach((sender) => this.localStream.addTrack(sender.track))
-        this.app.media.localVideo.srcObject = this.localStream
+        // State of the stream.
+        const stream = {
+            id: remoteStreamId,
+            kind: e.track.kind,
+            local: false,
+            muted: true,
+            selected: false,
+            visible: false,
+        }
+
+        const path = `calls.calls.${this.id}.streams.${remoteStreamId}`
+
+        // There is always only one audio track coming from the PBX.
+        // Associate this audio track with the other tracks.
+        if (e.track.kind === 'audio') {
+            this.audioStreamId = remoteStreamId
+
+            this.streams[remoteStreamId] = new MediaStream()
+            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
+            this.streams[remoteStreamId].addTrack(e.track)
+            this.app.setState(stream, {path})
+            // Keep an eye on track state changes.
+
+            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+            e.track.onended = () => {this._cleanupStream(remoteStreamId)}
+        } else {
+            // Create a new stream for video.
+            this.streams[remoteStreamId] = new MediaStream()
+            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
+            this.streams[remoteStreamId].addTrack(e.track)
+            stream.audio = this.audioStreamId
+
+            this.app.setState(stream, {path})
+            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+            e.track.onended = () => {this._cleanupStream(remoteStreamId)}
+        }
     }
 
 
@@ -149,16 +183,16 @@ class CallSIP extends Call {
     */
     _outgoing() {
         super._outgoing()
-        this.session = this.plugin.sipCalls.ua.invite(`sip:${this.state.endpoint}@${this.app.state.calls.sip.endpoint}`, {
+        const uri = `sip:${this.state.endpoint}@${this.app.state.calls.sip.endpoint.split('/')[0]}`
+        this.session = this.plugin.sip.ua.invite(uri, {
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
             },
         })
 
         this.setState({stats: {callId: this.session.request.call_id}})
-
         // Handle connecting streams to the appropriate video element.
-        this.session.on('trackAdded', this._onTrackAdded.bind(this))
+        this.session.on('track', this._onTrackAdded.bind(this))
 
         // Notify user about the new call being setup.
         this.session.on('accepted', (data) => {
@@ -167,7 +201,6 @@ class CallSIP extends Call {
 
         // Reset call state when the other halve hangs up.
         this.session.on('bye', (e) => {
-            this.busyTone.play()
             this.setState({status: 'bye'})
             this._stop({message: this.translations[this.state.status]})
         })
@@ -182,7 +215,7 @@ class CallSIP extends Call {
         */
         this.session.on('progress', (e) => {
             if ([180, 181, 182, 183].includes(e.status_code)) {
-                this.ringbackTone.play()
+                this.app.sounds.ringbackTone.play()
             }
         })
 
@@ -194,7 +227,6 @@ class CallSIP extends Call {
 
         this.session.on('failed', (message) => {
             this.app.logger.info(`${this}call declined: ${message.status_code}/${this.state.stats.callId}`)
-            this.busyTone.play()
 
             if (message.status_code === 480) {
                 // Temporarily Unavailable; Callee currently unavailable.
@@ -261,9 +293,8 @@ class CallSIP extends Call {
     */
     accept() {
         super.accept()
-
         // Handle connecting streams to the appropriate video element.
-        this.session.on('trackAdded', this._onTrackAdded.bind(this))
+        this.session.on('track', this._onTrackAdded.bind(this))
         this.session.accept({
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),

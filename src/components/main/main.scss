@@ -1,17 +1,48 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
+@import './main-content-header';
 
-.component-main {
+
+.c-main {
     border-top: $spacer / 2 solid $brand-color;
-    position: relative;
+    height: 100vh;
+    padding-right: $spacer / 2;
+    width: 100vw;
 
-    .overlay {
+    .padded {
+        padding: $spacer;
+    }
+
+    .main-content {
+        // border-left: $spacer / 4 solid $white-color;
+
+        .main-content-base {
+            border-right: $spacer / 4 solid $white-color;
+            overflow-y: scroll;
+            width: 100%;
+        }
+    }
+
+    .main-status-leave-to,
+    .main-status-enter {
+        transform: translateY(-$mobile-space-unit-4);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .main-status-leave,
+    .main-status-enter-to {
+        transform: translateY(0);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .main-overlay {
         animation: grow 0.3s ease-in-out;
         background: $white;
+        height: 100vh;
         position: absolute;
         width: 100%;
-        z-index: 10000000000;
+        z-index: 100000000;
 
         .close-button {
             position: absolute;
@@ -24,46 +55,18 @@
             }
         }
     }
+}
 
-    .app-view {
-        display: flex;
-        flex-direction: column;
-        // max-height: $max-popup-height;
 
-        .app-view-top {
-            min-height: $spacer * 5;
-        }
+@media screen and (min-width: $breakpoint-mobile) {
+    .padded {
+        padding: $spacer * 2;
+    }
 
-        .app-view-main {
-            align-content: stretch;
-            border-top: 4px solid $grey-color-lighter;
-            display: flex;
-            flex-direction: row;
-            // Show a scrollbar when the content height exceeds the max-height.
+}
 
-            .app-view-layer {
-                flex: 1;
-                min-height: $min-popup-height + ($spacer * 5);
-                overflow-y: auto;
-
-                &.padded {
-                    padding: $spacer * 3;
-                }
-
-                .title {
-                    color: $brand-color;
-                    font-size: 1.3rem;
-                    font-weight: 600;
-                }
-
-                header {
-                    .header-line {
-                        display: flex;
-                        font-family: 'Rajdhani';
-                        font-weight: 600;
-                    }
-                }
-            }
-        }
+@media screen and (min-width: $breakpoint-tablet) {
+    .padded {
+        padding: $spacer * 3;
     }
 }

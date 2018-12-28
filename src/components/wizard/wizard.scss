@@ -1,8 +1,13 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.component-wizard {
+.c-wizard {
     padding: $spacer * 3;
+
+    // Center fields.
+    .field .control {
+        justify-content: center;
+    }
 
     .step {
         align-items: center;

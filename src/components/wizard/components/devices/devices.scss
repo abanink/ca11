@@ -1,7 +1,7 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.component-wizard-devices {
+.c-wizard-devices {
     &.step {
         .step-description {
             padding-bottom: 0;
@@ -22,6 +22,4 @@
             }
         }
     }
-
-
 }

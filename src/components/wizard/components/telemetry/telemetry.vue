@@ -1,14 +1,14 @@
-<component class="component-wizard-telemetry">
+<component class="c-wizard-telemetry">
     <header class="ca">{{$t('telemetry')}}</header>
 
     <div class="step-description">
         <span class="cf">
-            {{$t('{name} can log application exceptions automatically to Sentry. This semi-anonimized data helps improving {name}\'s stability and quality. Issue data is removed after being fixed.', {name: app.name})}}
+            {{$t('{name} uses Sentry error tracking. This helps us to respond better to potential stability issues in {name}. Logged exceptions are semi-anonimized and are removed after the issue is fixed.', {name: app.name})}}
         </span>
         <span class="cf">
-            {{$t('do you want to help improve {name}?', {name: app.name})}}
+            {{$t('do you want to enable error tracking?', {name: app.name})}}
         </span>
-        <em class="help cf">{{$t('you can always change your decision afterwards in Settings.')}}</em>
+        <em class="help cf">{{$t('you can always change this choice afterwards in Settings.')}}</em>
         <br/>
     </div>
 

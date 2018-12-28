@@ -4,7 +4,7 @@
     "at-rule-blacklist": ["debug"],
     "at-rule-no-unknown": null,
     "at-rule-no-vendor-prefix": true,
-    "block-no-empty": true,
+    "block-no-empty": null,
     "block-opening-brace-space-before": "always",
     "color-hex-case": "lower",
     "color-hex-length": "short",
@@ -30,7 +30,7 @@
     "function-url-quotes": "always",
     "indentation": 4,
     "length-zero-no-unit": true,
-    "max-nesting-depth": [6,
+    "max-nesting-depth": [7,
       {
         "ignoreAtRules": [
           "each",
@@ -96,7 +96,7 @@
       }
     ],
     "selector-list-comma-newline-after": "always",
-    "selector-max-compound-selectors": 6,
+    "selector-max-compound-selectors": 7,
     "selector-max-id": 0,
     "selector-no-qualifying-type": null,
     "selector-no-vendor-prefix": true,

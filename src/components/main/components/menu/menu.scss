@@ -1,0 +1,95 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+.c-main-menu {
+    background: $grey-color-lightest;
+    border-top: $spacer / 2 solid $white-color;
+    z-index: 100;
+
+    .options {
+        // Keeps the menubar icons from scrolling with the main content.
+
+        .option {
+            align-items: center;
+            background: $grey-color-lightest;
+            border-right: $spacer / 2 solid $grey-color-lightest;
+            color: $grey-color-darker;
+            display: flex;
+            flex-direction: column;
+            height: $spacer * 6;
+            justify-content: center;
+            transition: border-color 150ms ease-in-out;
+
+            svg {
+                @include icon-size($spacer * 3.5);
+            }
+
+            // Unread red-dot on top of the recent icon.
+            &.unread {
+                position: relative;
+
+                &::after {
+                    @include icon-size(14px);
+                    animation: bounce 0.5s ease-in-out infinite;
+                    background: $brand-color;
+                    border-radius: 50%;
+                    bottom: 13px;
+                    content: '';
+                    left: 3px;
+                    position: absolute;
+                    z-index: 10;
+                }
+            }
+
+            &.calls {
+                &.calls-active {
+                    background: lighten($brand-color, 10%);
+
+                    &.active {
+                        background: $white;
+                        svg {fill: $brand-color;}
+                    }
+                    svg {fill: $white-color;}
+                }
+            }
+
+            &.hint:not(.active) {
+                @include animation('hint-pulse 1.5s ease-in infinite');
+            }
+
+            &.disabled {
+                color: rgba(255, 255, 255, 0.5);
+
+                &.active,
+                &:hover {
+                    background: rgba(255, 255, 255, 0.6);
+                    color: rgba(255, 255, 255, 0.5);
+                }
+            }
+
+            &.active,
+            &:hover {
+                background: $white;
+                border-right: $spacer / 2 solid $brand-color;
+                cursor: pointer;
+                // Cascading error in Chrome when using svg path selector.
+
+                svg {
+                    fill: $brand-color;
+                }
+
+                &.hint {
+                    svg {
+                        fill: $brand-color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: $breakpoint-mobile) {
+    .c-main-menu {
+        border-top: $spacer solid $white-color;
+    }
+}

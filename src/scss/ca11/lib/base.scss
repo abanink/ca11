@@ -148,13 +148,11 @@ video {
 }
 
 ::-webkit-scrollbar {
-    width: $spacer * 1.5;
+    width: $spacer / 2;
 }
 
 ::-webkit-scrollbar-track {
-    background: $grey-color-lighter;
-    border-right: 2px solid $brand-color;
-    border-top: 2px solid transparent;
+    background: none;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -212,4 +210,8 @@ ol {
 .cf {
     display: inline-block;
     &::first-letter {text-transform: uppercase;}
+}
+
+html body .hidden {
+    display: none;
 }

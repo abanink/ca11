@@ -39,22 +39,19 @@ class AppForeground extends App {
         */
         this.components = {
             About: require('../../components/about'),
-            AccountPicker: require('../../components/account_picker'),
             Activities: require('../../components/activities'),
             Availability: require('../../components/availability'),
             Call: require('../../components/call'),
-            CallKeypadInput: require('../../components/call_keypad_input'),
-            CallKeypadTouch: require('../../components/call_keypad_touch'),
             Calls: require('../../components/calls'),
-            CallSwitch: require('../../components/call_switch'),
             Contacts: require('../../components/contacts'),
-            DevicePicker: require('../../components/device_picker'),
+            DeviceControls: require('../../components/device-controls'),
+            DialerInput: require('../../components/dialer-input'),
+            DialerTouch: require('../../components/dialer-touch'),
             Field: require('../../components/field'),
             Login: require('../../components/login'),
-            MainCallBar: require('../../components/main_callbar'),
-            MainMenuBar: require('../../components/main_menubar'),
-            MainStatusBar: require('../../components/main_statusbar'),
-            MicPermission: require('../../components/mic_permission'),
+            MediaControls: require('../../components/media-controls'),
+            MediaPermission: require('../../components/media-permission'),
+            MediaStream: require('../../components/media-stream'),
             Notifications: require('../../components/notifications'),
             Settings: require('../../components/settings'),
             Soundmeter: require('../../components/soundmeter'),
@@ -106,8 +103,7 @@ class AppForeground extends App {
 
                 }
 
-                this.media.poll()
-
+                if (this.state.user.authenticated) this.media.query()
             },
         })
     }
@@ -125,6 +121,7 @@ class AppForeground extends App {
 const options = require('./lib/options')
 // Used in browser context to allow a context closure without
 // having to make an additional JavaScript build target.
+
 if (env.isBrowser) {
     if (env.isExtension) {
         Raven.context(function() {

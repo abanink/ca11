@@ -1,8 +1,10 @@
-<component class="component-login" tabindex="-1" v-on:keyup.enter="login">
+<section component class="c-login" tabindex="-1" v-on:keyup.enter="login">
 
     <header>
         <div v-if="app.session.active" class="greeting">
-            <span v-if="app.session.active === 'new'" class="cf">{{$t('welcome to {name}', {name: app.name})}}</span>
+            <span v-if="app.session.active === 'new' || user.status === 'login'" class="cf">
+                {{$t('welcome to {name}', {name: app.name})}}
+            </span>
             <span v-else class="cf">{{$t('welcome back')}}<br/>{{app.session.active}}</span>
         </div>
         <div v-else class="greeting">
@@ -13,8 +15,8 @@
                 <template v-if="!app.session.active && app.session.available.length">
                 {{$t('continue with an existing user session')}}
                 </template>
-                <template v-else-if="app.session.active === 'new'">
-                {{$t('a local session is created to protect and encapsulate your personal data; everything remains encrypted on your computer.')}}</br>
+                <template v-else-if="app.session.active === 'new' || user.status === 'login'">
+                {{$t('a local session is used to protect and encapsulate your personal data; data is stored encrypted on this computer.')}}</br>
                 </template>
                 <template v-else>
                 {{$t('unlock your session with the session secret')}}
@@ -81,4 +83,4 @@
             <i @click="setOverlay('about')"><icon name="help"/></i>{{$t('icon')}}
         </div>
     </footer>
-</component>
+</section>

@@ -162,7 +162,7 @@ class AppBackground extends App {
             user: {authenticated: true},
         }, {encrypt: false, persist: true})
 
-        this.plugins.calls.sig11Calls.connect()
+        this.plugins.calls.sig11.connect()
 
 
         // Set the default layer if it's still set to login.
@@ -176,8 +176,6 @@ class AppBackground extends App {
         if (vault.store && !vault.key) {
             await this.crypto.storeVaultKey()
         }
-        // Get a fresh reference to the media permission on unlock.
-        if (this.env.isExtension) this.media.poll()
 
         this.emit('bg:user-unlocked', {}, true)
     }

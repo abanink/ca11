@@ -3,26 +3,11 @@
 .tabs {
     height: $spacer * 7;
     margin-bottom: 0;
+    padding: 0;
+    width: 100%;
 
     &:not(:last-child) {
-        margin-bottom: $spacer * 2;
-    }
-
-    &.tabs-squeezed {
-        ul {
-            align-items: top;
-            border-bottom: 0;
-        }
-
-        li {
-            font-weight: 500;
-            text-transform: uppercase;
-
-            a {
-                border-bottom-width: 2px;
-                height: auto;
-            }
-        }
+        margin-bottom: 0;
     }
 
     ul {
@@ -31,6 +16,7 @@
 
         li {
             flex-grow: 1;
+
 
             &.disabled {
                 opacity: 0.3;
@@ -45,10 +31,11 @@
     }
 
     a {
-        border-bottom-width: $spacer / 2;
+        border-bottom: $spacer / 2 solid $grey-color-lightest;
         font-family: 'Rajdhani';
-        font-weight: 500;
+        font-weight: 600;
         height: $spacer * 7;
+        text-transform: uppercase;
 
         svg {
             @include icon-size($spacer * 3);

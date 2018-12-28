@@ -1,0 +1,62 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+
+// The most upper box containing account info and
+// icon-links to several locations.
+.c-call-switcher {
+    background: $grey-color-darkest;
+    border-top: $spacer / 2 solid $white-color;
+    margin-bottom: $spacer;
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        width: 100%;
+        z-index: 10000000;
+    }
+
+    .call {
+        @include icon-size($spacer * 6.25);
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        &.new-call {
+            width: 100%;
+        }
+
+        svg {
+            @include icon-size($spacer * 3);
+            fill: $grey-color-darker;
+        }
+
+        &.hint {
+            @include animation('hint-pulse 1s infinite ease-in-out');
+        }
+
+        &:hover {
+            svg {fill: $grey-color;}
+        }
+
+        &.active {
+            svg {fill: $grey-color-lightest;}
+        }
+    }
+}
+
+
+@media screen and (min-width: $breakpoint-mobile) {
+    .c-call-switcher {
+        border-top: $spacer solid $white-color;
+
+        .call {
+            svg {
+                @include icon-size($spacer * 3.5);
+            }
+        }
+    }
+}

@@ -1,25 +1,45 @@
-<component class="component-settings">
+<section component="settings" class="c-settings">
 
-    <div class="tabs">
+    <header class="main-content-header tabs">
         <ul>
-            <li :class="classes('tabs', 'general')" @click="setTab('settings', 'general')">
-                <a><icon name="settings-misc"/><span class="cf">{{$t('general')}}</span></a>
+            <li
+                class="tooltip tooltip-right"
+                :class="classes('tabs', 'general')"
+                :data-tooltip="$t('general').capitalize()"
+                @click="setTab('settings', 'general')"
+            >
+                <a><icon name="settings-misc"/></a>
             </li>
-            <li :class="classes('tabs', 'devices')" @click="setTab('settings', 'devices', settings.webrtc.enabled)">
-                <a><icon name="headset_mic"/><span class="cf">{{$t('devices')}}</span></a>
+            <li
+                class="tooltip tooltip-right"
+                :class="classes('tabs', 'devices')"
+                :data-tooltip="$t('devices').capitalize()"
+                @click="setTab('settings', 'devices', settings.webrtc.enabled)"
+            >
+                <a><icon name="headset_mic"/></a>
             </li>
-            <li :class="classes('tabs', 'sig11')" @click="setTab('settings', 'sig11')">
-                <a><icon name="sig11"/><span class="cf">{{$t('SIG11')}}</span></a>
+            <li
+                class="tooltip tooltip-left"
+                :class="classes('tabs', 'sig11')"
+                :data-tooltip="$t('SIG11').capitalize()"
+                @click="setTab('settings', 'sig11')"
+            >
+                <a><icon name="protocol-sig11"/></a>
             </li>
-            <li class="test-tab-phone" :class="classes('tabs', 'sip')" @click="setTab('settings', 'sip')">
-                <a><icon name="protocol-sip"/><span class="cf">{{$t('SIP')}}</span></a>
+            <li
+                class="tooltip tooltip-left test-tab-phone"
+                :class="classes('tabs', 'sip')"
+                :data-tooltip="$t('SIP').capitalize()"
+                @click="setTab('settings', 'sip')"
+            >
+                <a><icon name="protocol-sip"/></a>
             </li>
         </ul>
-    </div>
+    </header>
 
 
     <!-- General settings -->
-    <div class="tab" :class="{'is-active': tabs.active === 'general'}">
+    <main class="main-content-base tab" :class="{'is-active': tabs.active === 'general'}">
         <Field name="language" type="select"
             :help="$t('language used throughout the application.')"
             :label="$t('application language')"
@@ -37,18 +57,21 @@
             :label="$t('exception telemetry')"
             :model.sync="settings.telemetry.enabled"
             :help="$t('allow us to store anonymized application errors to improve {name}.', {name: app.name})"/>
-    </div>
+    </main>
 
 
     <!-- Device settings -->
-    <div class="tab" :class="{'is-active': tabs.active === 'devices'}">
-        <DevicePicker v-if="settings.webrtc.media.permission"/>
-        <MicPermission v-else/>
-    </div>
+    <main class="main-content-base tab" :class="{'is-active': tabs.active === 'devices'}">
+        <DeviceControls
+            v-if="media.stream[media.stream.type].id && media.permission"
+            :stream="media.stream[media.stream.type]"
+        />
+        <MediaPermission v-else/>
+    </main>
 
 
     <!-- SIG11 preferences -->
-    <div class="tab" :class="{'is-active': tabs.active === 'sig11'}">
+    <main class="main-content-base tab" :class="{'is-active': tabs.active === 'sig11'}">
         <Field name="sig11_enabled" type="checkbox"
             :label="$t('enable SIG11 protocol')"
             :model.sync="calls.sig11.toggled"
@@ -68,11 +91,11 @@
             placeholder=''
             :readonly="true"/>
         </template>
-    </div>
+    </main>
 
 
     <!-- SIP preferences -->
-    <div class="tab tab-phone" :class="{'is-active': tabs.active === 'sip'}">
+    <main class="main-content-base tab tab-phone" :class="{'is-active': tabs.active === 'sip'}">
         <Field name="sip_enabled" type="checkbox"
             :label="$t('enable SIP protocol')"
             :model.sync="calls.sip.toggled"
@@ -96,10 +119,10 @@
             :placeholder="$t('SIP account secret')"
             :validation="$v.calls.sip.account.selected.password"/>
         </template>
-    </div>
+    </main>
 
 
-    <div class="tabs-actions field is-grouped">
+    <footer class="tabs-actions field is-grouped">
         <button class="button is-primary cf test-settings-save" :disabled="$v.$invalid" @click="save">{{$t('save changes')}}</button>
-    </div>
-</component>
+    </footer>
+</section>
