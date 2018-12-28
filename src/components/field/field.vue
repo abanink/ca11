@@ -54,12 +54,18 @@
 </div>
 
 
-<div class="field field-radio-group switch-toggle" v-else-if="type === 'radio-group'">
+<div class="field field-radio-group" v-else-if="type === 'radio-group'">
     <template v-for="option in options">
-        <input type="radio" :id="option.value" :name="name"
-            :disabled="option.disabled" :checked="option.value === model"
-            :value="option.value" @change="updateModel($event)">
-        <label :for="option.value">{{option.name}}</label>
+        <input
+            type="radio"
+            :checked="option.value === model"
+            :disabled="option.disabled"
+            :id="option.value"
+            :name="name"
+            :value="option.value"
+            @change="updateModel($event)"
+        >
+        <label :for="option.value" class="uc">{{option.name}}</label>
     </template>
     <a></a>
 </div>
@@ -69,8 +75,13 @@
     <label class="label ca" :class="classes('label')" :for="name">{{label}}</label>
     <div class="control">
         <div v-bind:class="classes('select')">
-            <select v-on:change="updateModel($event)" :id="name"
-                :name="name" :v-bind:value="model" :disabled="disabled || !options.length">
+            <select
+                v-on:change="updateModel($event)"
+                :id="name"
+                :name="name"
+                :v-bind:value="model"
+                :disabled="disabled || !options.length"
+            >
                 <option v-if="!options.length" value="" disabled selected class="cf">{{$t(empty)}}</option>
                 <option :value="null" v-else-if="placeholder">{{placeholder.capitalize()}}</option>
 

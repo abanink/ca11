@@ -28,7 +28,7 @@ module.exports = (app) => {
             },
             updateSoundmeter: async function() {
 
-                const stream = app.media.streams[this.stream.id[this.stream.kind]]
+                const stream = app.media.streams[this.stream.id]
                 const mediaStreamSource = audioContext.createMediaStreamSource(stream)
                 meter = volumeLib.createAudioMeter(audioContext)
                 mediaStreamSource.connect(meter)
@@ -38,7 +38,8 @@ module.exports = (app) => {
             canvasElement = this.$refs.meter
             canvasContext = canvasElement.getContext('2d')
             try {
-                const stream = app.media.streams[this.stream.id[this.stream.kind]]
+                console.log(this.stream)
+                const stream = app.media.streams[this.stream.id]
                 const mediaStreamSource = audioContext.createMediaStreamSource(stream)
                 meter = volumeLib.createAudioMeter(audioContext)
                 mediaStreamSource.connect(meter)

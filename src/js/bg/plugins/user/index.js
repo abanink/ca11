@@ -1,8 +1,6 @@
 /**
 * The User module deals with everything that requires some
-* form of authentication. It is currently very tighly coupled
-* with the VoIPGRID vendor, but in theory should be able to deal
-* with other authentication backends.
+* form of authentication.
 * @module ModuleUser
 */
 const Plugin = require('ca11/lib/plugin')

@@ -6,6 +6,7 @@ $font-path: '../fonts';
 // Dimensions: spacing units.
 $spacer: 8px;
 
+
 // Dimensions: The boundaries of the popup.
 $max-popup-width: 500px;
 $min-popup-height: 300px;
@@ -29,9 +30,16 @@ $grey-color-light: lighten($grey-color, 25%);
 $grey-color-lighter: lighten($grey-color, 35%);
 $grey-color-lightest: lighten($grey-color, 40%);
 
-$breakpoint-mobile: 600px;
+$breakpoint-mobile: 620px;
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 992px;
+
+// Work with a 4/3 aspect ratio.
+$mobile-space-unit-4: $spacer * 6;
+$mobile-space-unit-3: $mobile-space-unit-4 / 4 * 3;
+
+$tablet-space-unit-4: $spacer * 12;
+$tablet-space-unit-3: $tablet-space-unit-4 / 4 * 3;
 
 $white-tint-color-dark: lighten($grey-color, 44%);
 $white-tint-color-light: lighten($grey-color, 45%);

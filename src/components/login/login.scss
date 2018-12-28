@@ -1,10 +1,15 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.component-login {
+.c-login {
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    justify-items: stretch;
     margin: 0 auto;
     max-width: 700px;
-    padding: $spacer * 4;
+    width: 100%;
 
     header {
         text-align: center;

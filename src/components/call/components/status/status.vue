@@ -7,7 +7,8 @@
     </div>
     <div class="in-call-info">
         <div class="caller-status" v-if="call.status === 'new'">
-            {{call.endpoint}}
+            <span v-if="call.endpoint">{{call.endpoint}}</span>
+            <span v-else>{{$t('enter a number').capitalize()}}</span>
         </div>
         <div class="caller-status" v-else>
             <template v-if="call.displayName">{{call.displayName}}</template>

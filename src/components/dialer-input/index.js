@@ -33,13 +33,6 @@ module.exports = (app) => {
                 }
                 return null
             },
-            protocols: function() {
-                let protocols = [
-                    {disabled: !this.sip.enabled, name: 'sip', value: 'sip'},
-                    {disabled: !this.sig11.enabled, name: 'sig11', value: 'sig11'},
-                ]
-                return protocols
-            },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
             classes: function(block) {

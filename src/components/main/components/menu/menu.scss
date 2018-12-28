@@ -3,21 +3,20 @@
 
 .c-main-menu {
     background: $grey-color-lightest;
+    border-top: $spacer / 2 solid $white-color;
     z-index: 100;
 
     .options {
         // Keeps the menubar icons from scrolling with the main content.
-        position: relative;
-        width: $spacer * 6;
 
         .option {
             align-items: center;
             background: $grey-color-lightest;
-            border-left: $spacer / 2 solid $grey-color-lighter;
+            border-right: $spacer / 2 solid $grey-color-lightest;
             color: $grey-color-darker;
             display: flex;
             flex-direction: column;
-            height: $spacer * 7;
+            height: $spacer * 6;
             justify-content: center;
             transition: border-color 150ms ease-in-out;
 
@@ -71,7 +70,7 @@
             &.active,
             &:hover {
                 background: $white;
-                border-left: $spacer / 2 solid $brand-color;
+                border-right: $spacer / 2 solid $brand-color;
                 cursor: pointer;
                 // Cascading error in Chrome when using svg path selector.
 
@@ -87,5 +86,10 @@
             }
         }
     }
+}
 
+@media screen and (min-width: $breakpoint-mobile) {
+    .c-main-menu {
+        border-top: $spacer solid $white-color;
+    }
 }

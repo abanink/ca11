@@ -92,8 +92,7 @@ module.exports = (app) => {
             },
             classes: function(block, modifier = null) {
                 let classes = {}
-                if (block === 'item-list') classes[`x-${this.displayMode}`] = true
-                else if (block === 'favorite-button') {
+                if (block === 'favorite-button') {
                     classes.active = modifier
                 } else if (block === 'filter-favorites') {
                     classes.active = this.filters.favorites
@@ -185,7 +184,6 @@ module.exports = (app) => {
         store: {
             calls: 'calls.calls',
             contacts: 'contacts.contacts',
-            displayMode: 'app.displayMode',
             editMode: 'app.editMode',
             filters: 'contacts.filters',
             search: 'app.search',

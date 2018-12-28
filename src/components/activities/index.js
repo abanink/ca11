@@ -56,7 +56,7 @@ module.exports = (app) => {
                     if (this.filters.missedOutgoing) classes.active = true
                 } else if (block === 'filter-reminders') {
                     if (this.filters.reminders) classes.active = true
-                } else if (block === 'item-list') classes[`x-${this.displayMode}`] = true
+                }
                 return classes
             },
             deleteActivities: function() {
@@ -95,7 +95,6 @@ module.exports = (app) => {
         store: {
             activities: 'activities.activities',
             contacts: 'contacts.contacts',
-            displayMode: 'app.displayMode',
             editMode: 'app.editMode',
             filters: 'activities.filters',
             search: 'app.search',

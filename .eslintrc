@@ -39,8 +39,7 @@
         "Raven": true,
         "sdpInterop": true,
         "SIP": true,
-        "Vuelidate": true,
-        "resizeSensor": true
+        "Vuelidate": true
     },
     "plugins": [
         "sort-class-members"

@@ -2,7 +2,6 @@
 @import 'ca11/lib/variables';
 
 .c-call {
-    border-left: $spacer / 2 solid $white-color;
     color: $primary-color;
     display: flex;
     width: 100%;
@@ -15,7 +14,6 @@
         max-width: 350px;
     }
 }
-
 
 .call-actions {
     align-self: flex-start;

@@ -1,15 +1,4 @@
 <component class="c-dialer-touch" tabindex="-1">
-
-    <header class="header-bar" v-if="callActive.status === 'new'">
-        <div class="filter-line">
-            <div class="header-bar-title uc">{{$t('calls')}}</div>
-            <div class="content-filters">
-
-                <Field class="filter" name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
-            </div>
-        </div>
-    </header>
-
     <div class="keypad">
         <div :class="classes('number-input')">
             <input name="number-input" type="text" ref="input" autocomplete="off" autofocus placeholder="..."

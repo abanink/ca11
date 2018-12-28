@@ -5,45 +5,58 @@
 // The most upper box containing account info and
 // icon-links to several locations.
 .c-call-switcher {
-    background: $grey-color-lightest;
-    border-bottom: $spacer / 8 solid $grey-color-lighter;
-    display: flex;
-    flex-direction: row-reverse;
-    width: 100%;
-    z-index: 10000000;
+    background: $grey-color-darkest;
+    border-top: $spacer / 2 solid $white-color;
+    margin-bottom: $spacer;
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        width: 100%;
+        z-index: 10000000;
+    }
 
     .call {
         @include icon-size($spacer * 6.25);
-
         align-items: center;
-        // border: $spacer / 2 solid $grey-color-lightest;
-        border-right: $spacer / 2 solid transparent;
         display: flex;
         justify-content: center;
+        width: 100%;
 
-        &:hover {
-            background: $white-tint-color-bright;
-            border-right: $spacer / 2 solid $brand-color;
-
-            svg {
-                fill: $brand-color;
-            }
+        &.new-call {
+            width: 100%;
         }
 
         svg {
             @include icon-size($spacer * 3);
-            fill: $primary-color;
-            margin-left: -1px;
+            fill: $grey-color-darker;
         }
 
         &.hint {
             @include animation('hint-pulse 1s infinite ease-in-out');
         }
 
+        &:hover {
+            svg {fill: $grey-color;}
+        }
+
         &.active {
-            background: $white-color;
-            border-right: $spacer / 2 solid $brand-color;
-            svg {fill: $brand-color;}
+            svg {fill: $grey-color-lightest;}
+        }
+    }
+}
+
+
+@media screen and (min-width: $breakpoint-mobile) {
+    .c-call-switcher {
+        border-top: $spacer solid $white-color;
+
+        .call {
+            svg {
+                @include icon-size($spacer * 3.5);
+            }
         }
     }
 }

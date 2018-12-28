@@ -133,8 +133,6 @@
     "axios": "0.16.x",
     "bulma": "0.6.x",
     "bulma-switch": "0.1.x",
-    "css-element-queries": "0.4.x",
-    "css-toggle-switch": "^4.1.0",
     "electron": "3.0.x",
     "electron-reload": "1.x.x",
     "eventemitter3": "2.x.x",

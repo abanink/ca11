@@ -1,10 +1,3 @@
-/**
-* VoIPGRID-platform specific functionality. Within the platform, it is
-* possible to set a user's availability. This has effect when the
-* user is part of a dialplan and can be used to dynamically switch
-* between endpoints.
-* @module ModuleAvailability
-*/
 const Plugin = require('ca11/lib/plugin')
 
 

@@ -100,27 +100,6 @@ function env({section}) {
         _env.isElectron = true
         if (_env.section.fg) {
             $('html').classList.add('electron')
-            // In Electron, a different IPC mechanism is used to set
-            // the window height from the main script.
-
-            document.addEventListener('DOMContentLoaded', function(event) {
-                electron.ipcRenderer.send('resize-window', {
-                    height: document.body.clientHeight,
-                    width: document.body.clientWidth,
-                })
-
-                electron.ipcRenderer.on('resize-window-done', () => {
-                    document.body.style.opacity = 1
-                })
-
-                resizeSensor(document.body, (e) => {
-                    document.body.style.opacity = 0.5
-                    electron.ipcRenderer.send('resize-window', {
-                        height: document.body.clientHeight,
-                        width: document.body.clientWidth,
-                    })
-                })
-            })
         }
     } catch (e) {
         // Catch reference errors.

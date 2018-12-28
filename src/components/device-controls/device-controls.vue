@@ -8,7 +8,7 @@
 
         <div slot="select-after" v-if="$v.settings.webrtc.devices.sinks.headsetInput.valid.customValid">
             <em class="help cf">{{$t('does the microphone of your headset respond?')}}</em>
-            <Soundmeter v-if="stream.id[stream.kind]" class="soundmeter" :stream="stream"/>
+            <Soundmeter v-if="stream[stream.type].id" class="soundmeter" :stream="stream[stream.type]"/>
         </div>
     </Field>
 

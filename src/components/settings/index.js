@@ -69,6 +69,7 @@ module.exports = (app) => {
             devices: 'settings.webrtc.devices',
             env: 'env',
             language: 'language',
+            media: 'settings.webrtc.media',
             ringtones: 'settings.ringtones',
             settings: 'settings',
             tabs: 'ui.tabs.settings',

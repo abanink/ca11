@@ -1,4 +1,4 @@
-<component class="c-main-menu">
+<nav component class="c-main-menu">
     <div class="options">
 
         <div :aria-labelledby="$t('recent activity')"
@@ -31,4 +31,4 @@
             <icon :name="plugin.menubarIcon"/>
         </div>
     </div>
-</component>
+</nav>

@@ -38,6 +38,7 @@ module.exports = (app) => {
                         } else {
                             classes.error = true
                             if (this.sip.status === 'disconnected') tooltip.sip = this.$t('disconnected')
+                            else if (this.sip.status === 'registration_failed') tooltip.sip = this.$t('failed to register')
                             else tooltip.sip = this.$t(this.sip.status) // Handle unknown status.
                         }
                     }

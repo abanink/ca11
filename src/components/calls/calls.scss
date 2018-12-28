@@ -2,21 +2,6 @@
 @import 'ca11/lib/mixins';
 
 .c-calls {
-    .c-dialer-touch {
-        grid-column: content / 2;
-        grid-row: content / 6;
-    }
-
-    .c-media-controls {
-        grid-column: sidebar;
-        grid-row: subnav / 6;
-    }
-
-    .c-call-switcher {
-        grid-column: content / 2;
-        grid-row: subnav;
-    }
-
     .call-type {
         align-items: center;
         display: flex;

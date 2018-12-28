@@ -2,9 +2,11 @@
 * Generic layout for an item list.
 */
 .item-list {
+    align-items: stretch;
     display: flex;
-    flex-flow: row wrap;
     flex-wrap: wrap;
+    justify-items: stretch;
+    width: 100%;
 
     button {
         &:hover {
@@ -22,36 +24,16 @@
         }
     }
 
-    svg {
-        @include icon-size($spacer * 3.5);
-    }
-
     .item-container {
-        margin-bottom: $spacer;
-        padding: $spacer / 4;
+        flex: 1 1 1;
+        padding: $spacer;
+        width: 100%;
 
         &.selected {
             box-shadow: 0 0 5px rgba($grey-color-darkest, 0.5);
         }
     }
 
-    .item-header {
-        align-items: center;
-
-        display: flex;
-        margin-right: $spacer / 2;
-
-        svg {
-            background: $grey-color-lightest;
-            border-radius: 50%;
-            fill: $grey-color-light;
-        }
-    }
-
-    .item-options {
-        display: flex;
-        margin-left: $spacer / 2;
-    }
 
     .item-option {
         align-items: center;
@@ -106,6 +88,24 @@
         position: relative;
         width: 100%;
 
+        .item-header {
+            align-items: center;
+            display: flex;
+            margin-right: $spacer;
+
+            .item-icon {
+                @include icon-size($spacer * 4.5);
+                padding: $spacer / 2;
+            }
+
+            svg {
+                background: $grey-color-lightest;
+                border: $spacer / 4 solid $grey-color-lighter;
+                border-radius: 50%;
+                fill: $grey-color;
+            }
+        }
+
         .item-info {
             display: flex;
             flex: 1;
@@ -133,6 +133,21 @@
                     white-space: nowrap;
                     width: 100%;
                 }
+
+                .item-options {
+                    display: flex;
+                    margin-left: $spacer / 2;
+
+                    .item-option {
+                        svg {
+                            @include icon-size($spacer * 3.5);
+                        }
+                    }
+
+                    &:hover {
+                        display: flex;
+                    }
+                }
             }
 
             .item-description {
@@ -140,12 +155,6 @@
                 display: flex;
                 font-size: 0.9rem;
                 padding-left: $spacer / 2;
-            }
-        }
-
-        &:hover {
-            .item-options {
-                display: flex;
             }
         }
     }
@@ -191,6 +200,11 @@
                 justify-content: center;
                 margin-right: $spacer / 2;
                 text-align: center;
+                width: $spacer * 6;
+
+                svg {
+                    @include icon-size($spacer * 3.5);
+                }
 
                 &:hover {
                     cursor: pointer;
@@ -223,30 +237,8 @@
         }
     }
 
-    &.x-1 {
-        .context-item-icon {
-            width: $spacer * 6;
-        }
 
-        .item-container {
-            width: 100%;
-        }
-
-        .item-header {
-            .item-icon {
-                @include icon-size($spacer * 6);
-                padding: $spacer / 2;
-            }
-        }
-
-
-    }
-
-    &.x-2 {
-        .context-item-icon {
-            width: $spacer * 4.5;
-        }
-
+    @media screen and (min-width: $breakpoint-mobile) {
         .item-container {
             width: 50%;
         }
@@ -263,17 +255,9 @@
                 bottom: -$spacer / 4;
             }
         }
-
-        svg {
-            @include icon-size($spacer * 3);
-        }
     }
 
-    &.x-3 {
-        .context-item-icon {
-            width: $spacer * 3.5;
-        }
-
+    @media screen and (min-width: $breakpoint-desktop) {
         .item-container {
             width: calc(100% / 3);
         }
@@ -284,10 +268,6 @@
                     font-size: 1rem;
                 }
             }
-        }
-
-        svg {
-            @include icon-size($spacer * 2.5);
         }
 
         .item-header {

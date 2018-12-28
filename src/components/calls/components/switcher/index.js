@@ -6,17 +6,17 @@ module.exports = (app) => {
         computed: app.helpers.sharedComputed(),
         methods: Object.assign({
             activateCall: function(call) {
-                // Otherwise it's just activated.
-                app.emit('bg:calls:call_activate', {
-                    callId: call.id,
-                    holdInactive: false,
-                    unholdActive: false,
-                })
-            },
-            activateNewCall: function() {
-                app.emit('bg:calls:call_activate', {
-                    callId: null,
-                })
+                app.setState({ui: {layer: 'calls'}})
+                if (call) {
+                    app.emit('bg:calls:call_activate', {
+                        callId: call.id,
+                        holdInactive: false,
+                        unholdActive: false,
+                    })
+                } else {
+                    app.emit('bg:calls:call_activate', {callId: null})
+                }
+
             },
             callIcon: function(call) {
                 if (['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(call.status)) {

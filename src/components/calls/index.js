@@ -11,6 +11,13 @@ module.exports = (app) => {
                 if (this.sig11.enabled && !['loading', 'registered'].includes(this.sig11.status)) return false
                 return true
             },
+            protocols: function() {
+                let protocols = [
+                    {disabled: !this.sip.enabled, name: 'sip', value: 'sip'},
+                    {disabled: !this.sig11.enabled, name: 'sig11', value: 'sig11'},
+                ]
+                return protocols
+            },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
             classes: function(block) {

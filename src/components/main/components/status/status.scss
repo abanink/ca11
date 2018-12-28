@@ -14,14 +14,13 @@
         justify-content: space-between;
         white-space: nowrap;
 
-        svg.disabled {fill: $grey-color-light;}
-
         .status-indicator {
             text-align: center;
             width: $spacer * 6;
 
             svg {
                 @include icon-size($spacer * 3.5);
+                &.disabled {fill: $grey-color-light;}
             }
         }
 

@@ -1,20 +1,24 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
+
 .c-media-controls {
     background: $grey-color-lightest;
-    grid-column: col-side;
-    grid-row: row-status / 6;
+    z-index: 100;
 
-    .media-container {
-        border-right: $spacer / 2 solid $grey-color-lighter;
+    .c-media-stream {
+        height: $mobile-space-unit-4;
 
         &:hover {
             cursor: pointer;
         }
 
-        &.selected {
-            border-right: $spacer / 2 solid $brand-color;
+    }
+
+    @media screen and (min-width: $breakpoint-mobile) {
+        .c-media-stream {
+            height: $tablet-space-unit-3;
         }
     }
 }
+

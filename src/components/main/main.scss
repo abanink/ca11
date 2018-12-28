@@ -1,48 +1,48 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
+@import './main-content-header';
+
 
 .c-main {
     border-top: $spacer / 2 solid $brand-color;
-    display: grid;
-    flex: 1;
-    grid-template-columns: [menu] 50px [content] auto;
-    grid-template-rows:
-        [status] 50px
-        [content] auto
-        [footer] 50px;
     height: 100vh;
-    position: relative;
+    padding-right: $spacer / 2;
     width: 100vw;
 
-    .main-menu {
-        grid-column: menu;
-        grid-row: content / 6;
-    }
-
-    .main-status {
-        grid-column: menu / 4;
-        grid-row: status;
+    .padded {
+        padding: $spacer;
     }
 
     .main-content {
-        display: grid;
-        // Position in the main grid.
-        grid-column: content / 4;
-        grid-row: content / 6;
+        // border-left: $spacer / 4 solid $white-color;
 
-        // Define a grid for the main content.
-        grid-template-columns: [content] auto [sidebar] 100px;
-        grid-template-rows:
-            [subnav] 50px
-            [content] auto;
+        .main-content-base {
+            border-right: $spacer / 4 solid $white-color;
+            overflow-y: scroll;
+            width: 100%;
+        }
     }
 
-    .overlay {
+    .main-status-leave-to,
+    .main-status-enter {
+        transform: translateY(-$mobile-space-unit-4);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .main-status-leave,
+    .main-status-enter-to {
+        transform: translateY(0);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .main-overlay {
         animation: grow 0.3s ease-in-out;
         background: $white;
+        height: 100vh;
         position: absolute;
         width: 100%;
+        z-index: 100000000;
 
         .close-button {
             position: absolute;
@@ -54,5 +54,19 @@
                 cursor: pointer;
             }
         }
+    }
+}
+
+
+@media screen and (min-width: $breakpoint-mobile) {
+    .padded {
+        padding: $spacer * 2;
+    }
+
+}
+
+@media screen and (min-width: $breakpoint-tablet) {
+    .padded {
+        padding: $spacer * 3;
     }
 }
