@@ -2,7 +2,6 @@
 @import 'ca11/lib/variables';
 
 .c-call {
-    color: $primary-color;
     display: flex;
     width: 100%;
 
@@ -34,19 +33,19 @@
 
         &.decline {
             background: $red-color;
-            color: $white;
+            color: $white-color;
             &:hover {background: lighten($red-color, 10%);}
         }
 
         &.accept {
             background: $green-color;
-            color: $white;
+            color: $white-color;
             &:hover {background: lighten($green-color, 10%);}
         }
 
         &.dial {
             background: $brand-color;
-            color: $white;
+            color: $white-color;
             &:hover {background: lighten($brand-color, 10%);}
         }
 

@@ -93,13 +93,5 @@ module.exports = function(settings) {
         })
     }
 
-
-    tasks.vendor = function stylesVendor() {
-        return helpers.compile({
-            debug: false,
-            entry: './src/scss/ca11/vendor.scss',
-        })
-    }
-
     return {helpers, tasks}
 }

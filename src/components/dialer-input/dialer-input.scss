@@ -12,7 +12,6 @@
 
     .number-input {
         align-items: center;
-        color: $primary-color;
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -22,9 +21,8 @@
 
         input {
             background: $white-color;
-            border: 1px solid $white;
+            border: 1px solid $white-color;
             border-radius: ($spacer / 2) 0 0 ($spacer / 2);
-            color: $primary-color;
             font-size: 1.8rem;
             font-weight: 500;
             height: 40px;
@@ -45,7 +43,6 @@
 
         // Transfer button next to input.
         i {
-            background: $white-tint-color-light;
             border: 1px solid $grey-color-lighter;
             border-bottom-right-radius: $spacer / 2;
             border-top-right-radius: $spacer / 2;
@@ -69,14 +66,13 @@
         }
 
         + .number-input-match {
-            color: $white;
+            color: $white-color;
             height: $spacer * 3;
             line-height: $spacer * 3;
         }
     }
 
     .contacts-match {
-        color: $primary-color;
         font-weight: 500;
         height: $spacer * 3;
         text-align: center;

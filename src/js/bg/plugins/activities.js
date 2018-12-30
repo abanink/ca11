@@ -28,6 +28,7 @@ class PluginActivity extends Plugin {
                     protocol: call.protocol,
                 },
                 icon: `call-missed-${call.type}`,
+                selected: false,
                 status: call.type === 'outgoing' ? 'unanswered' : 'missed',
             }
 
@@ -41,6 +42,7 @@ class PluginActivity extends Plugin {
                     protocol: call.protocol,
                 },
                 icon: `call-${call.type}`,
+                selected: false,
                 status: 'finished',
             }
 

@@ -15,7 +15,6 @@
         z-index: 1000000;
 
         .contacts-match {
-            color: $primary-color;
             font-weight: 500;
             height: $spacer * 3;
             text-align: center;
@@ -52,12 +51,12 @@
                 }
 
                 &::placeholder {
-                    color: $brand-accent-color;
+                    color: $brand-color;
                 }
             }
 
             .correct {
-                color: $brand-accent-color;
+                color: $brand-color;
                 position: absolute;
                 right: 10px;
 
@@ -109,7 +108,7 @@
                 .key-row {
                     .key {
                         &:hover {
-                            background: $white;
+                            background: $white-color;
                             color: $brand-color;
                             cursor: not-allowed;
                         }

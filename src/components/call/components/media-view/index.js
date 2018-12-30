@@ -5,7 +5,11 @@ module.exports = (app) => {
     const CallMediaView = {
         computed: Object.assign({
             selectedStreams: function() {
-                return Object.values(this.call.streams).filter((i) => i.selected)
+                let streams = []
+                if (this.stream[this.stream.type].selected) streams.push(this.stream[this.stream.type])
+                const callStreams = Object.values(this.call.streams).filter((i) => i.selected)
+                streams = streams.concat(callStreams)
+                return streams
             },
         }, app.helpers.sharedComputed()),
         methods: {

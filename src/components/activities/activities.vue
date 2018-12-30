@@ -1,8 +1,8 @@
-<section component class="c-activities">
+<section component class="c-activities content">
 
-    <header class="main-content-header">
-        <icon class="header-icon" name="recent"/>
-        <div class="header-text uc">{{$t('activity')}}</div>
+    <header class="content__header header">
+        <icon class="header__icon" name="recent"/>
+        <div class="header__text">{{$t('activity')}}</div>
 
         <!-- <div class="actions"> -->
             <!-- <div class="field field-text search">
@@ -17,92 +17,125 @@
 
         <!-- </div> -->
 
-        <div class="header-filters">
+        <div class="header__filters">
             <button
-                class="filter tooltip tooltip-bottom"
+                class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-reminders')"
                 :data-tooltip="$t('reminders').capitalize()"
                 @click="toggleFilterReminders()"
             >
                 <icon name="idea"/>
-                <span class="cf">{{$t('reminders')}}</span>
             </button>
             <button
-                class="filter tooltip tooltip-bottom"
+                class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-missed-incoming')"
                 :data-tooltip="$t('missed').capitalize()"
                 @click="toggleFilterMissedIncoming()"
                 >
                 <icon name="call-missed-incoming"/>
-                <span class="cf hide">{{$t('missed')}}</span>
             </button>
             <button
-                class="filter tooltip tooltip-bottom"
+                class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-missed-outgoing')"
                 :data-tooltip="$t('unanswered').capitalize()"
                 @click="toggleFilterMissedOutgoing()"
             >
                 <icon name="call-missed-outgoing"/>
-                <span class="cf">{{$t('unanswered')}}</span>
             </button>
         </div>
 
-        <div class="header-actions">
-            <button class="action" :class="{active: editMode}" @click.stop="toggleEditMode()">
+        <div class="header__actions">
+            <button
+                class="header__action"
+                :class="{'header__action--active': editMode}"
+                @click.stop="toggleEditMode()"
+            >
                 <icon name="edit"/>
             </button>
 
-            <button v-if="editMode" class="action" @click.stop="deleteActivities()">
+            <button
+                v-if="editMode"
+                class="header__action"
+                @click.stop="deleteActivities()"
+            >
                 <icon name="delete"/>
             </button>
         </div>
 
     </header>
 
-    <main class="main-content-base">
-        <article class="item-list">
+    <main class="main items" v-click-outside="toggleSelectItem">
 
-            <div class="no-results-indicator" v-if="!filteredActivities.length">
-                <div><icon name="recent"/></div>
-                <div class="text cf">{{$t('no {target}', {target: $t('activity')})}}</div>
-            </div>
+        <div v-if="!filteredActivities.length" class="items__empty">
+            <icon class="items__empty-icon" name="recent"/>
+            <div class="items__empty-text cf">{{$t('no {target}', {target: $t('activity')})}}</div>
+        </div>
 
-            <div v-else v-for="activity of filteredActivities" class="item-container activity">
-                <div class="item">
-                    <div class="item-header" :class="classes('recent-status', activity)">
-                        <icon class="item-icon" :name="activity.icon"/>
+        <div
+            v-else
+            v-for="activity of filteredActivities"
+
+            class="item activity"
+            :class="{selected: activity.selected}"
+            @click.stop="toggleSelectItem(activity, true)"
+        >
+
+            <div class="item__header">
+                <icon class="item__icon" :name="activity.icon"/>
+                <div class="item__text">
+                    <div v-if="activity.contact" class="item__title">
+                        {{activity.contact.name}}
                     </div>
-
-                    <div class="item-info">
-                        <div class="item-handle">
-                            <div class="item-tag" v-if="activity.contact">
-                                {{activity.contact.name}}
-                            </div>
-                            <div class="item-tag" v-else>
-                                {{activity.description.endpoint}}
-                            </div>
-
-                            <input v-if="activity.remind" class="activity-label" type="text" v-model="activity.label" :placeholder="$t(activity.status)" />
-
-                            <div class="item-options">
-                                <button v-if="!editMode" class="item-option" :class="classes('remind-button', activity)" v-on:click="toggleReminder(activity)">
-                                    <icon name="idea"/>
-                                </button>
-                                <button v-if="!editMode" class="item-option" v-on:click="callEndpoint(activity)">
-                                    <icon name="phone"/>
-                                </button>
-                                <button v-if="editMode" @click.stop="deleteActivity(activity)" class="item-option">
-                                    <icon name="delete"/>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="item-description">
-                            {{activity.description.endpoint}} - {{activity.date | fuzzydate}}
-                        </div>
+                    <div v-else class="item__title">
+                        {{activity.description.endpoint}}
+                    </div>
+                    <div class="item__description">
+                        {{activity.description.endpoint}} - {{activity.date | fuzzydate}}
                     </div>
                 </div>
+
+                <div class="item__options">
+                    <button
+                        v-if="!editMode"
+                        class="item__option"
+                        :class="classes('remind-button', activity)"
+                        v-on:click="toggleReminder(activity)"
+                    >
+                        <icon name="idea"/>
+                    </button>
+                    <button
+                        v-if="!editMode"
+                        class="item__option"
+                        v-on:click="callEndpoint(activity)"
+                    >
+                        <icon name="phone"/>
+                    </button>
+                    <button
+                        v-if="editMode"
+                        class="item__option"
+                        @click.stop="deleteActivity(activity)"
+                    >
+                        <icon name="delete"/>
+                    </button>
+                </div>
             </div>
-        </article>
+
+
+
+            <div class="item__context">
+                <textarea
+                    v-if="activity.remind"
+                    v-autosize="activity.label"
+                    v-model="activity.label"
+                    class="item__label editable"
+                    type="text"
+                    :placeholder="$t(activity.status)"
+                >
+                    {{activity.label}}
+                </textarea>
+
+            </div>
+        </div>
+
     </main>
 </section>

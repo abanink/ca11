@@ -1,7 +1,8 @@
 <section component="settings" class="c-settings">
 
-    <header class="main-content-header tabs">
-        <ul>
+    <header class="main-content-header">
+        <icon class="header-icon" name="settings"/>
+        <ul class="tabs">
             <li
                 class="tooltip tooltip-right"
                 :class="classes('tabs', 'general')"

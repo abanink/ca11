@@ -1,36 +1,33 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.c-call-media-view {
+
+.media-view {
+    background: $grey-color-lightest;
+    display: grid;
     flex: 1;
-    width: 100%;
+    grid-gap: var(--spacer);
+    margin: var(--spacer);
+    padding: var(--spacer);
 
-    .media-view {
-        background: $grey-color-lightest;
-        display: grid;
-        flex: 1;
-        margin: $spacer / 2;
-        padding: $spacer / 2;
+    &.x1 {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
 
-        .c-media-stream {
-            border: $spacer / 2 solid $white-color;
+    &.x2 {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
 
-            video {
-                background: none;
-            }
+    &.x3 {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+
+    &__media-stream {
+        border: var(--spacer) solid $white-color;
+
+        video {
+            background: none;
         }
 
-        .placeholder {
-            background: $grey-color-lighter;
-            border: $spacer / 2 dashed $grey-color-light;
-            color: $grey-color-dark;
-            font-family: 'Rajdhani';
-            font-weight: 600;
-            text-align: center;
-
-            svg {
-                @include icon-size($spacer * 6);
-            }
-        }
     }
 }

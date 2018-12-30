@@ -3,11 +3,9 @@
         "ca11": {
             "colors": {
                 "brand-color": "#601111",
-                "brand-accent-color": "#888888",
                 "green-color": "#508654",
                 "grey-color": "#808d93",
                 "orange-color": "#f98644",
-                "primary-color": "#3c3c50",
                 "red-color": "#a75147"
             },
             "plugins": {

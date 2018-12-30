@@ -63,7 +63,7 @@
 
             .cam {
                 @include icon-size($spacer * 4);
-                fill: $black;
+                fill: #000;
             }
 
             &.cam-disabled {

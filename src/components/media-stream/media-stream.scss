@@ -1,7 +1,7 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.c-media-stream {
+.media-stream {
     background: $grey-color-darkest;
     display: grid;
     position: relative;
@@ -73,6 +73,20 @@
             &:hover {
                 cursor: pointer;
             }
+        }
+    }
+
+
+    &__placeholder {
+        background: $grey-color-lighter;
+        border: var(--spacer) dashed $grey-color-light;
+        color: $grey-color-dark;
+        font-family: 'Rajdhani';
+        font-weight: 600;
+        text-align: center;
+
+        svg {
+            @include icon-size($spacer * 6);
         }
     }
 }

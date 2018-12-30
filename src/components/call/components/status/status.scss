@@ -19,7 +19,7 @@
 
     // Another call that isn't started yet.
     &.inactive {
-        background: $brand-accent-color;
+        background: $brand-color;
         color: #fff;
     }
 
@@ -72,7 +72,7 @@
 
             &.active,
             &:hover {
-                background: $white;
+                background: $white-color;
                 cursor: pointer;
 
                 i {
@@ -81,7 +81,7 @@
             }
 
             i {
-                color: $white;
+                color: $white-color;
                 font-size: $spacer * 2;
                 line-height: $spacer * 4;
             }

@@ -216,13 +216,7 @@ module.exports = function(settings) {
             path.join(settings.SRC_DIR, 'scss', '**', '*.scss'),
             path.join(settings.SRC_DIR, 'components', '**', '*.scss'),
             path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', 'components', '**', '*.scss'),
-            `!${path.join(settings.SRC_DIR, 'scss', 'ca11', 'vendor.scss')}`,
         ], {followSymlinks: true}, gulp.series(styles.tasks.app, helpers.reload('app.css')))
-
-        gulp.watch([
-            path.join(settings.SRC_DIR, 'scss', 'ca11', 'vendor.scss'),
-        ], gulp.series(styles.tasks.vendor, helpers.reload('vendor.css')))
-
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'components', '**', '*.vue'),

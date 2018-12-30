@@ -7,7 +7,7 @@
     z-index: 100;
 
     .c-media-stream {
-        height: $mobile-space-unit-4;
+        height: $space-4;
 
         &:hover {
             cursor: pointer;
@@ -15,10 +15,10 @@
 
     }
 
-    @media screen and (min-width: $breakpoint-mobile) {
-        .c-media-stream {
-            height: $tablet-space-unit-3;
-        }
-    }
+    // @media screen and (min-width: $breakpoint-mobile) {
+    //     .c-media-stream {
+    //         height: $tablet-space-unit-3;
+    //     }
+    // }
 }
 

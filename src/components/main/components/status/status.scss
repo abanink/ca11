@@ -3,7 +3,7 @@
 
 
 .c-main-status {
-    background: $grey-color-lightest;
+    background: $grey-color-darker;
     color: $grey-color;
 
     .status-indicators {
@@ -54,7 +54,7 @@
 
             &.active,
             &:hover {
-                background: $white;
+                background: $white-color;
                 color: $brand-color;
                 cursor: pointer;
             }
@@ -65,12 +65,13 @@
 
 // Shared between c-main-status and c-call-status.
 .main-status {
+    border-bottom: var(--spacer12) solid $grey-color-lighter;
     display: flex;
     font-family: 'Rajdhani';
     font-size: 0.9rem;
     font-weight: 600;
-    height: ($spacer * 6);
     justify-content: space-between;
+    margin-bottom: var(--spacer12);
     transition: background 0.5s ease;
     z-index: 100;
 

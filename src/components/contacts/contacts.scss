@@ -45,6 +45,6 @@
         animation: ringing-svg 0.75s ease-in-out infinite;
 
         path[pid='0'] {fill: $red-color;}
-        path[pid='1'] {fill: $white;}
+        path[pid='1'] {fill: $white-color;}
     }
 }

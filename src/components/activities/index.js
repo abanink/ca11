@@ -46,8 +46,9 @@ module.exports = (app) => {
                     start: true,
                 })
             },
-            classes: function(block, modifier) {
-                let classes = {}
+            classes: function(block, modifier, prefix = '') {
+                const classes = {}
+
                 if (block === 'remind-button') {
                     if (modifier.remind) classes.active = true
                 } else if (block === 'filter-missed-incoming') {
@@ -84,6 +85,15 @@ module.exports = (app) => {
             toggleReminder: function(activity) {
                 activity.remind = !activity.remind
                 app.setState(activity, {path: `activities.activities.${this.activities.findIndex(i => i.id === activity.id)}`, persist: true})
+            },
+            toggleSelectItem: function(item, select = true) {
+                for (const activity of Object.values(this.activities)) {
+                    if (item.id !== activity.id) activity.selected = false
+                }
+
+                if (select) item.selected = select
+                console.log("SELECTED:", item)
+                app.setState({activity: {activities: this.activities}}, {persist: true})
             },
         }, app.helpers.sharedMethods()),
         mounted: function() {

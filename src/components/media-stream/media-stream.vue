@@ -1,4 +1,4 @@
-<component class="c-media-stream"
+<article component class="media-stream"
     :class="classes('component')"
     @click="toggleSelect"
 >
@@ -22,4 +22,4 @@
     />
 
     <!-- <Soundmeter class="soundmeter" :stream="stream"/> -->
-</component>
+</article>

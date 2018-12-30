@@ -150,14 +150,7 @@ module.exports = (app) => {
             toggleFilterPresence: function() {
                 app.setState({contacts: {filters: {presence: !this.filters.presence}}}, {persist: true})
             },
-            /**
-             * One contact at a time is in a selected state.
-             * Contact is not passed with v-click-outside
-             * and doesn't need to be.
-             * @param {Object} contact The Contact's state.
-             * @param {Boolean} select Selects or deselects Contact.
-             */
-            toggleSelectContact: function(contact, select = true) {
+            toggleSelectItem: function(contact, select = true) {
                 for (const _contact of Object.values(this.contacts)) {
                     if (contact.id !== _contact.id) _contact.selected = false
                 }

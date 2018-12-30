@@ -46,7 +46,7 @@
                     background: lighten($brand-color, 10%);
 
                     &.active {
-                        background: $white;
+                        background: $white-color;
                         svg {fill: $brand-color;}
                     }
                     svg {fill: $white-color;}
@@ -69,7 +69,7 @@
 
             &.active,
             &:hover {
-                background: $white;
+                background: $white-color;
                 border-right: $spacer / 2 solid $brand-color;
                 cursor: pointer;
                 // Cascading error in Chrome when using svg path selector.

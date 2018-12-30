@@ -1,45 +1,35 @@
 // Bulma tabs with some minor modifications.
 
 .tabs {
-    height: $spacer * 7;
-    margin-bottom: 0;
-    padding: 0;
+    display: flex;
+    justify-content: space-between;
     width: 100%;
 
-    &:not(:last-child) {
-        margin-bottom: 0;
-    }
-
-    ul {
-        display: flex;
-        justify-content: space-between;
-
-        li {
-            flex-grow: 1;
+    li {
+        flex: 1;
 
 
-            &.disabled {
-                opacity: 0.3;
+        &.disabled {
+            opacity: 0.3;
 
-                a {
-                    &:hover {
-                        cursor: not-allowed;
-                    }
+            a {
+                &:hover {
+                    cursor: not-allowed;
                 }
             }
         }
-    }
 
-    a {
-        border-bottom: $spacer / 2 solid $grey-color-lightest;
-        font-family: 'Rajdhani';
-        font-weight: 600;
-        height: $spacer * 7;
-        text-transform: uppercase;
+        a {
+            border-bottom: $spacer / 2 solid $grey-color-lightest;
+            font-family: 'Rajdhani';
+            font-weight: 600;
+            height: 100%;
+            text-transform: uppercase;
 
-        svg {
-            @include icon-size($spacer * 3);
-            margin-right: $spacer;
+            svg {
+                @include icon-size($spacer * 3.5);
+                margin-right: $spacer;
+            }
         }
     }
 }

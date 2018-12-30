@@ -1,6 +1,5 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
-
 @import './main-content-header';
 
 
@@ -10,35 +9,31 @@
     padding-right: $spacer / 2;
     width: 100vw;
 
-    .padded {
-        padding: $spacer;
-    }
-
-    .main-content {
+    &__content {
         // border-left: $spacer / 4 solid $white-color;
 
-        .main-content-base {
+        .main {
             border-right: $spacer / 4 solid $white-color;
             overflow-y: scroll;
             width: 100%;
         }
     }
 
-    .main-status-leave-to,
-    .main-status-enter {
-        transform: translateY(-$mobile-space-unit-4);
+    &__status-leave-to,
+    &__status-enter {
+        transform: translateY(-#{$space-4});
         transition: transform 0.2s ease-in-out;
     }
 
-    .main-status-leave,
-    .main-status-enter-to {
+    &__status-leave,
+    &__status-enter-to {
         transform: translateY(0);
         transition: transform 0.2s ease-in-out;
     }
 
-    .main-overlay {
+    &__overlay {
         animation: grow 0.3s ease-in-out;
-        background: $white;
+        background: $white-color;
         height: 100vh;
         position: absolute;
         width: 100%;
@@ -54,19 +49,5 @@
                 cursor: pointer;
             }
         }
-    }
-}
-
-
-@media screen and (min-width: $breakpoint-mobile) {
-    .padded {
-        padding: $spacer * 2;
-    }
-
-}
-
-@media screen and (min-width: $breakpoint-tablet) {
-    .padded {
-        padding: $spacer * 3;
     }
 }

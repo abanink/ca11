@@ -98,7 +98,7 @@ gulp.task('publish', async(done) => {
 gulp.task('sentry-release', publish.tasks.sentryRelease)
 gulp.task('sentry-remove', publish.tasks.sentryRemove)
 gulp.task('styles', (done) => {
-    let runTasks = [styles.tasks.app, styles.tasks.vendor]
+    let runTasks = [styles.tasks.app]
     return gulp.parallel(runTasks)(done)
 })
 

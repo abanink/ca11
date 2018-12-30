@@ -1,40 +1,51 @@
-<section component class="c-contacts">
+<section component class="c-contacts content">
 
-    <header class="main-content-header">
-        <icon class="header-icon" name="contacts"/>
-        <div class="header-text uc">{{$t('contacts')}}</div>
+    <header class="content__header header">
+        <icon class="header__icon" name="contacts"/>
+        <div class="header__text">{{$t('contacts')}}</div>
 
-        <div class="header-filters">
+        <div class="header__filters">
             <button
-                class="filter tooltip tooltip-bottom"
+                class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-favorites')"
                 :data-tooltip="$t('favorites').capitalize()"
                 @click="toggleFilterFavorites()"
             >
                 <icon name="star"/>
-                <span class="cf">{{$t('favorites')}}</span>
             </button>
             <button
-                class="filter tooltip tooltip-bottom"
+                class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-presence')"
                 :data-tooltip="$t('presence').capitalize()"
                 @click="toggleFilterPresence()"
             >
                 <icon name="presence"/>
-                <span class="cf">{{$t('presence')}}</span>
             </button>
         </div>
 
-        <div class="header-actions">
-            <button class="action" :class="{active: editMode}" @click.stop="toggleEditMode()">
+        <div class="header__actions">
+            <button
+                class="header__action"
+                :class="{'header__action--active': editMode}"
+                @click.stop="toggleEditMode()"
+            >
                 <icon name="edit"/>
             </button>
 
-            <button v-if="editMode" class="action" @click.stop="addContact()">
+            <button
+                v-if="editMode"
+                class="header__action"
+                @click.stop="addContact()"
+            >
                 <icon name="contact-add"/>
             </button>
 
-            <button v-if="editMode" :class="{active: subscribeAll}" @click.stop="toggleSubscribeAll()" class="action">
+            <button
+                v-if="editMode"
+                class="header__action"
+                :class="{active: subscribeAll}"
+                @click.stop="toggleSubscribeAll()"
+            >
                 <icon name="eye"/>
             </button>
         </div>
@@ -51,7 +62,7 @@
         <!-- </div> -->
     </header>
 
-    <main class="main-content-base">
+    <main class="main">
         <article class="item-list">
             <div class="no-results-indicator" v-if="!filteredContacts.length">
                 <div><icon name="contacts"/></div>
@@ -61,9 +72,11 @@
             <div
                 v-else
                 v-for="contact in filteredContacts"
-                v-click-outside="toggleSelectContact"
-                @click.stop="toggleSelectContact(contact, true)"
-                class="item-container contact" :class="{selected: contact.selected}">
+                v-click-outside="toggleSelectItem"
+                @click.stop="toggleSelectItem(contact, true)"
+                class="item-container contact"
+                :class="{selected: contact.selected}"
+            >
 
                 <div class="item">
                     <div class="item-header">
