@@ -1,14 +1,19 @@
 <component class="c-calls" :class="classes('component')">
 
-    <header class="main-content-header" v-if="callActive.status === 'new'">
-        <icon class="header-icon" name="phone"/>
-        <span class="header-text uc">{{$t('calls')}}</span>
+    <header v-if="callActive.status === 'new'" class="content__header header">
+        <icon class="header__icon" name="phone"/>
+        <span class="header__text">{{$t('calls')}}</span>
 
-        <div class="header-filters">
-            <Field class="filter" name="protocol" type="radio-group" :model.sync="description.protocol" :options="protocols"/>
+        <div class="header__filters">
+            <Field
+                class="header__filter"
+                name="protocol"
+                type="radio-group"
+                :model.sync="description.protocol"
+                :options="protocols"
+            />
         </div>
-
-        <div class="header-actions"></div>
+        <div class="header__actions"></div>
     </header>
     <CallMediaPreview v-else-if="callActive.id" :call="callActive"/>
 

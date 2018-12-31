@@ -2,21 +2,23 @@
 @import 'ca11/lib/variables';
 
 
-.c-main-status {
-    background: $grey-color-darker;
-    color: $grey-color;
+.status {
+    background: $grey-color-dark;
+    color: $grey-color-light;
 
-    .status-indicators {
+    &__indicators {
         // Don't wrap but put dots at the end if it doesn't fit.
         align-items: center;
+        background: $grey-color-lightest;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         white-space: nowrap;
+        width: var(--space-4);
 
         .status-indicator {
             text-align: center;
-            width: $spacer * 6;
+            // width: $spacer * 6;
 
             svg {
                 @include icon-size($spacer * 3.5);
@@ -30,7 +32,7 @@
     }
 
     // The icon links container at the right top of the popup.
-    .menu-options {
+    &__menu {
         align-items: center;
         display: flex;
         flex-direction: row;
@@ -39,9 +41,11 @@
             height: $spacer * 6;
             line-height: $spacer * 6;
             padding: 0 $spacer;
+            text-align: center;
+            width: var(--space-4);
 
             svg {
-                @include icon-size($spacer * 3);
+                @include icon-size(var(--icon-normal));
             }
 
             &.disabled {
@@ -65,7 +69,6 @@
 
 // Shared between c-main-status and c-call-status.
 .main-status {
-    border-bottom: var(--spacer12) solid $grey-color-lighter;
     display: flex;
     font-family: 'Rajdhani';
     font-size: 0.9rem;

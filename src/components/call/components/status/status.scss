@@ -6,16 +6,7 @@
 .c-call-status {
     // align-items: center;
     background: $brand-color;
-    // // border-bottom: $spacer / 2 solid $grey-color-lightest;
-    // // border-top: $spacer / 2 solid $grey-color-lightest;
     color: $white-color;
-    // display: flex;
-    // font-family: 'Rajdhani';
-    // font-size: 1rem;
-    // font-weight: 600;
-    // height: ($spacer * 6);
-    // justify-content: space-between;
-    // z-index: 1000;
 
     // Another call that isn't started yet.
     &.inactive {

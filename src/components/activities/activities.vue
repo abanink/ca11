@@ -120,8 +120,6 @@
                 </div>
             </div>
 
-
-
             <div class="item__context">
                 <textarea
                     v-if="activity.remind"

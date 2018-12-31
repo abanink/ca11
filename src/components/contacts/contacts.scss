@@ -25,26 +25,31 @@
     }
 }
 
+.endpoint__leds {
+    display: flex;
+    width: 100%;
 
-.presence-led {
-    @include icon-size($spacer * 1.5);
-    background: $grey-color-lighter;
-    border-radius: 50%;
-    margin-right: $spacer / 1.5;
+    @at-root .endpoint__led {
+        @include icon-size($spacer * 1.5);
+        background: $grey-color-lighter;
+        border-radius: 50%;
+        margin-right: $spacer / 1.5;
 
-    &.available {background: $green-color;}
-    &.busy {background: $red-color;}
-    &.not-set {background: $grey-color-lighter;}
+        &.available {background: $green-color;}
+        &.busy {background: $red-color;}
+        &.not-set {background: $grey-color-lighter;}
 
-    &.failed {
-        background: $grey-color-lightest;
-        border: 1px solid $red-color;
-    }
+        &.failed {
+            background: $grey-color-lightest;
+            border: 1px solid $red-color;
+        }
 
-    &.ringing {
-        animation: ringing-svg 0.75s ease-in-out infinite;
+        &.ringing {
+            animation: ringing-svg 0.75s ease-in-out infinite;
 
-        path[pid='0'] {fill: $red-color;}
-        path[pid='1'] {fill: $white-color;}
+            path[pid='0'] {fill: $red-color;}
+            path[pid='1'] {fill: $white-color;}
+        }
     }
 }
+

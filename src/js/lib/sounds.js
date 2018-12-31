@@ -360,6 +360,12 @@ class RingTone extends Sound {
 
 
 
+function beep(vol, freq, duration) {
+
+}
+
+
+
 
 module.exports = class Sounds {
 
@@ -373,5 +379,18 @@ module.exports = class Sounds {
         this.ringTone = new RingTone(app)
         this.buttonTone = new ButtonTone(app)
         this.callEnd = new CallEnd(app)
+    }
+
+
+    beep(vol, freq, duration) {
+        const v = this.context.createOscillator()
+        const u = this.context.createGain()
+        v.connect(u)
+        v.frequency.value = freq
+        v.type = 'square'
+        u.connect(this.context.destination)
+        u.gain.value = vol * 0.01
+        v.start(this.context.currentTime)
+        v.stop(this.context.currentTime + duration * 0.001)
     }
 }

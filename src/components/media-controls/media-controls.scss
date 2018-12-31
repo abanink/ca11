@@ -6,8 +6,8 @@
     background: $grey-color-lightest;
     z-index: 100;
 
-    .c-media-stream {
-        height: $space-4;
+    .media-stream {
+        height: var(--space-433);
 
         &:hover {
             cursor: pointer;

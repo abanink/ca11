@@ -4,7 +4,6 @@ $font-path: '../fonts';
 $spacer: 8px;
 $spacer12: 4px; // static spacer.
 
-
 $space-4: $spacer * 6;
 $space-3: $space-4 / 4 * 3;
 
@@ -14,10 +13,11 @@ $breakpoint-desktop: 992px;
 
 
 :root {
+    --border: 1px;
     --gutter: 8px;
     --gutter12: 4px;
     --icon-large: #{$spacer * 4.5};
-    --icon-normal: #{$spacer * 2.5};
+    --icon-normal: #{$spacer * 3};
     --icon-small: #{$spacer * 1.75};
     // Dynamic spacer; derived from static $spacer.
     --spacer: #{$spacer / 4};
@@ -32,10 +32,11 @@ $breakpoint-desktop: 992px;
 
 @media screen and (min-width: $breakpoint-mobile) {
     :root {
+        --border: 2px;
         --gutter: 12px;
         --gutter12: 6px;
         --icon-large: #{$spacer * 5};
-        --icon-normal: #{$spacer * 3};
+        --icon-normal: #{$spacer * 3.5};
         --icon-small: #{$spacer * 2};
         --spacer: #{$spacer / 2};
         --spacer12: #{$spacer / 4};
@@ -48,10 +49,11 @@ $breakpoint-desktop: 992px;
 
 @media screen and (min-width: $breakpoint-tablet) {
     :root {
+        --border: 3px;
         --gutter: 16px;
         --gutter12: 8px;
         --icon-large: #{$spacer * 5.5};
-        --icon-normal: #{$spacer * 3.25};
+        --icon-normal: #{$spacer * 4};
         --icon-small: #{$spacer * 2.25};
         --spacer: #{$spacer};
         --spacer12: #{$spacer / 2};
@@ -62,14 +64,13 @@ $breakpoint-desktop: 992px;
     }
 }
 
-$grey-color: #526785;
 // Colors: Derivate colors from the base color palette.
 $grey-color-darkest: darken($grey-color, 40%);
 $grey-color-darker: darken($grey-color, 20%);
-$grey-color-dark: darken($grey-color, 5%);
-$grey-color-light: lighten($grey-color, 25%);
-$grey-color-lighter: lighten($grey-color, 52%);
-$grey-color-lightest: lighten($grey-color, 56%);
+$grey-color-dark: lighten($grey-color, 10%);
+$grey-color-light: lighten($grey-color, 27%);
+$grey-color-lighter: lighten($grey-color, 32%);
+$grey-color-lightest: lighten($grey-color, 37%);
 
 $brand-color: #601111 !default;
 $green-color: #28ca42 !default;

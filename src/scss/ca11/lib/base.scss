@@ -62,7 +62,7 @@ button {
 
 // Editable inputs are styled like regular text nodes,
 // unless they are not read-only.
-input.editable {
+.editable {
     border: 1px solid transparent;
 
     &:not([readonly]) {
@@ -126,4 +126,9 @@ video {
 
 html body .hidden {
     display: none;
+}
+
+input {
+    color: $grey-color-dark;
+    padding: $spacer;
 }

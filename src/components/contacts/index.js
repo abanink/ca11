@@ -90,10 +90,13 @@ module.exports = (app) => {
                     status: 'new',
                 })
             },
-            classes: function(block, modifier = null) {
+            classes: function(block, context = null) {
                 let classes = {}
-                if (block === 'favorite-button') {
-                    classes.active = modifier
+                if (block === 'entry-status') {
+                    classes[context.status] = true
+                    classes.editable = this.editMode
+                } else if (block === 'favorite-button') {
+                    classes.active = context
                 } else if (block === 'filter-favorites') {
                     classes.active = this.filters.favorites
                 } else if (block === 'filter-presence') {

@@ -2,8 +2,8 @@
 @import 'ca11/lib/variables';
 
 .c-main-menu {
-    background: $grey-color-lightest;
-    border-top: $spacer / 2 solid $white-color;
+    background: $grey-color-dark;
+    border-top: var(--border) solid $grey-color-lightest;
     z-index: 100;
 
     .options {
@@ -11,9 +11,8 @@
 
         .option {
             align-items: center;
-            background: $grey-color-lightest;
-            border-right: $spacer / 2 solid $grey-color-lightest;
-            color: $grey-color-darker;
+            border-right: $spacer / 2 solid $grey-color-light;
+            color: $grey-color-light;
             display: flex;
             flex-direction: column;
             height: $spacer * 6;
@@ -21,7 +20,7 @@
             transition: border-color 150ms ease-in-out;
 
             svg {
-                @include icon-size($spacer * 3.5);
+                @include icon-size(var(--icon-normal));
             }
 
             // Unread red-dot on top of the recent icon.
@@ -69,13 +68,12 @@
 
             &.active,
             &:hover {
-                background: $white-color;
                 border-right: $spacer / 2 solid $brand-color;
                 cursor: pointer;
                 // Cascading error in Chrome when using svg path selector.
 
                 svg {
-                    fill: $brand-color;
+                    fill: $grey-color-lightest;
                 }
 
                 &.hint {
@@ -88,8 +86,3 @@
     }
 }
 
-@media screen and (min-width: $breakpoint-mobile) {
-    .c-main-menu {
-        border-top: $spacer solid $white-color;
-    }
-}

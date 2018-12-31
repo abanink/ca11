@@ -92,7 +92,6 @@ module.exports = (app) => {
                 }
 
                 if (select) item.selected = select
-                console.log("SELECTED:", item)
                 app.setState({activity: {activities: this.activities}}, {persist: true})
             },
         }, app.helpers.sharedMethods()),
