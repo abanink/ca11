@@ -1,40 +1,3 @@
-// Bulma tabs with some minor modifications.
-
-.tabs {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-
-    li {
-        flex: 1;
-
-
-        &.disabled {
-            opacity: 0.3;
-
-            a {
-                &:hover {
-                    cursor: not-allowed;
-                }
-            }
-        }
-
-        a {
-            border-bottom: $spacer / 2 solid $grey-color-lightest;
-            font-family: 'Rajdhani';
-            font-weight: 600;
-            height: 100%;
-            text-transform: uppercase;
-
-            svg {
-                @include icon-size($spacer * 3.5);
-                margin-right: $spacer;
-            }
-        }
-    }
-}
-
-// Button beneath tabs.
 .tabs-actions {
     padding: $spacer ($spacer * 3);
     padding-bottom: $spacer * 2;
@@ -44,7 +7,7 @@
     display: none;
     padding: 0 ($spacer * 3);
 
-    &.is-active {
+    &.active {
         display: block;
     }
 }

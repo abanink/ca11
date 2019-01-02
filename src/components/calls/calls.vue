@@ -18,7 +18,7 @@
     <CallMediaPreview v-else-if="callActive.id" :call="callActive"/>
 
     <!-- calling disabled -->
-    <main class="main-content-base">
+    <main class="main">
         <div v-if="!keypadEnabled" class="call-disabled">
             <icon class="disabled-icon" name="dialpad-off"/>
             <div class="disabled-text">

@@ -8,7 +8,7 @@
         'main-status main-status main-status'
         'main-menu main-content media-controls';
     grid-template-columns: var(--space-4) 1fr var(--space-4); // menu content
-    grid-template-rows: $space-4 1fr; // status height remains static.
+    grid-template-rows: calc(#{$space-4} + var(--border)) 1fr; // status height remains static.
 
     .c-media-controls {
         grid-area: media-controls;

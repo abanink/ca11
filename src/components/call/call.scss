@@ -6,7 +6,7 @@
     width: 100%;
 
     .soundmeter {
-        background: $grey-color-lightest;
+        background: var(--grey-50);
         height: $spacer / 4;
         margin: 0 auto;
         margin-top: $spacer;
@@ -21,7 +21,7 @@
     width: 100%;
 
     .rounded-button {
-        border: 2px solid $grey-color-lightest;
+        border: 2px solid var(--grey-50);
 
         svg {
             @include icon-size($spacer * 4);
@@ -31,23 +31,23 @@
     .action {
         margin: $spacer;
 
-        &.decline {
-            background: $red-color;
-            color: $white-color;
-            &:hover {background: lighten($red-color, 10%);}
-        }
+        // &.decline {
+        //     background: $red-color;
+        //     color: $white-color;
+        //     &:hover {background: lighten($red-color, 10%);}
+        // }
 
-        &.accept {
-            background: $green-color;
-            color: $white-color;
-            &:hover {background: lighten($green-color, 10%);}
-        }
+        // &.accept {
+        //     background: $green-color;
+        //     color: $white-color;
+        //     &:hover {background: lighten($green-color, 10%);}
+        // }
 
-        &.dial {
-            background: $brand-color;
-            color: $white-color;
-            &:hover {background: lighten($brand-color, 10%);}
-        }
+        // &.dial {
+        //     background: var(--primary-base);
+        //     color: $white-color;
+        //     // &:hover {background: lighten(var(--primary-base), 10%);}
+        // }
 
         &.disabled {
             background: $grey-color;

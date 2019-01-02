@@ -2,7 +2,7 @@
     <!-- remote streams -->
     <MediaStream :stream="stream" v-for="stream of selectedStreams"/>
 
-    <div class="media-stream__placeholder" v-if="!stream[stream.type].selected && !selectedStreams.length">
+    <div class="media-stream media-stream__placeholder" v-if="!stream[stream.type].selected && !selectedStreams.length">
         <div class="content">
             <div class="call-stats">
                 <icon name="call-active"/>

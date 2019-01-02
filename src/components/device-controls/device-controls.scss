@@ -15,7 +15,7 @@
 
         svg {
             @include icon-size($spacer * 1.5);
-            color: $brand-color;
+            color: var(--primary-base);
             display: inline-block;
             margin-bottom: $spacer / 4;
             margin-right: $spacer / 2;

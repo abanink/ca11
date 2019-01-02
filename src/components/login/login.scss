@@ -16,7 +16,7 @@
         width: 100%;
 
         .greeting {
-            color: $brand-color;
+            color: var(--primary-base);
             font-family: 'Rajdhani';
             font-size: 1.8rem;
             font-weight: 600;
@@ -24,13 +24,13 @@
     }
 
     .welcome-message {
-        color: $grey-color-darker;
+        color: var(--grey-400);
         max-width: 70%;
         padding-bottom: $spacer;
         padding-top: $spacer * 2;
 
         .session-name {
-            color: $brand-color;
+            color: var(--primary-base);
             font-style: italic;
         }
     }
@@ -45,7 +45,7 @@
         text-align: center;
 
         svg {
-            color: $brand-color;
+            color: var(--primary-base);
             margin-top: -2px;
             padding: 0 ($spacer / 6);
             width: $spacer * 2.5;
@@ -76,15 +76,15 @@
             }
 
             &:hover {
-                color: $brand-color;
+                color: var(--primary-base);
                 cursor: pointer;
             }
         }
 
         .session {
             align-items: center;
-            background: $grey-color-lightest;
-            border-bottom: 2px solid $grey-color-lighter;
+            background: var(--grey-50);
+            border-bottom: 2px solid var(--grey-100);
             border-top: 2px solid transparent;
             display: flex;
             margin-bottom: $spacer / 2;
@@ -104,21 +104,21 @@
                 @include icon-size($spacer * 2.5);
 
                 &:hover {
-                    color: $brand-color;
+                    color: var(--primary-base);
                 }
             }
 
             &:hover {
-                border-bottom: 2px solid $brand-color;
+                border-bottom: 2px solid var(--primary-base);
                 cursor: pointer;
 
                 .icon-session svg {
-                    color: $brand-color;
+                    color: var(--primary-base);
                 }
             }
 
             .description {
-                color: $grey-color-dark;
+                color: var(--grey-300);
                 font-size: 0.9rem;
                 font-weight: 500;
                 height: $spacer * 5;

@@ -44,7 +44,7 @@
             }
 
             .support-title {
-                color: $brand-color;
+                color: var(--primary-base);
                 font-family: 'Rajdhani';
                 font-weight: 600;
             }
@@ -54,7 +54,7 @@
             }
 
             .support-channel {
-                color: $brand-color;
+                color: var(--primary-base);
                 font-family: 'Rajdhani';
                 font-weight: 600;
             }
@@ -63,7 +63,7 @@
                 box-shadow: 0 ($spacer / 2) 6px 0 rgba(0, 0, 0, 0.2);
 
                 .support-icon {
-                    color: $brand-color;
+                    color: var(--primary-base);
                 }
             }
         }

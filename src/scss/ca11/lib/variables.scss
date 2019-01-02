@@ -2,7 +2,7 @@
 $font-path: '../fonts';
 
 $spacer: 8px;
-$spacer12: 4px; // static spacer.
+$spacer-05: 4px; // static spacer.
 
 $space-4: $spacer * 6;
 $space-3: $space-4 / 4 * 3;
@@ -11,17 +11,98 @@ $breakpoint-mobile: 620px;
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 992px;
 
+$primary-color: #601111 !default;
+$secondary-color: adjust_hue($primary-color, 200);
+$grey-color: lighten(desaturate($secondary-color, 55%), 20%);
+
+$green-color: #508654 !default;
+$orange-color: #f98644 !default;
+$red-color: #d9534f !default;
+$white-color: #fff;
+
+
+$palette: (
+    'primary': (
+        'base': $primary-color,
+        'dark': mix(black, $primary-color, 35%),
+        'light': mix(white, $primary-color, 25%)
+    ),
+    'secondary': (
+        'base': $secondary-color,
+        'dark': mix(black, $secondary-color, 35%),
+        'light': mix(white, $secondary-color, 10%)
+    ),
+    'grey': (
+        500: darken($grey-color, 30%),
+        400: darken($grey-color, 20%),
+        300: darken($grey-color, 10%),
+        200: lighten($grey-color, 30%),
+        100: lighten($grey-color, 50%),
+        50: lighten($grey-color, 55%)
+    )
+);
+
+@function palette($category: 'primary', $tint: 'base') {
+    @return map-get(map-get($palette, $category), $tint);
+}
+
+$base-font-size: 1rem;
+$base-line-height: 1.25 * $base-font-size;
+
+
+
+.theme-default-light {
+    --primary-base: #{palette('primary', 'base')};
+    --primary-dark: #{palette('primary', 'dark')};
+    --primary-light: #{palette('primary', 'light')};
+
+    --secondary-base: #{palette('secondary', 'base')};
+    --secondary-dark: #{palette('secondary', 'dark')};
+    --secondary-light: #{palette('secondary', 'light')};
+
+    --grey-500: #{palette('grey', 500)};
+    --grey-400: #{palette('grey', 400)};
+    --grey-300: #{palette('grey', 300)};
+    --grey-200: #{palette('grey', 200)};
+    --grey-100: #{palette('grey', 100)};
+    --grey-50: #{palette('grey', 50)};
+}
+
+
+.theme-default-dark {
+    --primary-base: #{palette('primary', 'base')};
+    --primary-dark: #{palette('primary', 'dark')};
+    --primary-light: #{palette('primary', 'light')};
+
+    --secondary-base: #{palette('secondary', 'base')};
+    --secondary-dark: #{palette('secondary', 'dark')};
+    --secondary-light: #{palette('secondary', 'light')};
+
+    --grey-50: #{palette('grey', 500)};
+    --grey-100: #{palette('grey', 400)};
+    --grey-200: #{palette('grey', 300)};
+    --grey-300: #{palette('grey', 200)};
+    --grey-400: #{palette('grey', 100)};
+    --grey-500: #{palette('grey', 50)};
+}
+
 
 :root {
+    --text-small: 0.75rem;
+    --text-base: 0.9rem;
+    --text-large: 1.05rem;
+
     --border: 1px;
     --gutter: 8px;
     --gutter12: 4px;
     --icon-large: #{$spacer * 4.5};
     --icon-normal: #{$spacer * 3};
     --icon-small: #{$spacer * 1.75};
-    // Dynamic spacer; derived from static $spacer.
-    --spacer: #{$spacer / 4};
-    --spacer12: #{$spacer / 8};
+    --spacer: #{$spacer / 1.5};
+    --spacer-025: #{$spacer / 8};
+    --spacer-05: #{$spacer / 4};
+    --spacer-112: #{$spacer / 4};
+
     // Main space with 4/3 aspect ratio.
     --space-4: #{$space-4};
     --space-3: #{$space-3};
@@ -29,6 +110,7 @@ $breakpoint-desktop: 992px;
     // the UI height at key points in the UI.
     --space-433: #{$space-4};
 }
+
 
 @media screen and (min-width: $breakpoint-mobile) {
     :root {
@@ -38,8 +120,14 @@ $breakpoint-desktop: 992px;
         --icon-large: #{$spacer * 5};
         --icon-normal: #{$spacer * 3.5};
         --icon-small: #{$spacer * 2};
-        --spacer: #{$spacer / 2};
-        --spacer12: #{$spacer / 4};
+        --spacer: #{$spacer / 1.5};
+        --spacer-025: #{$spacer / 8};
+        --spacer-05: #{$spacer / 4};
+        --spacer-112: #{$spacer / 2};
+
+        --text-small: 0.85rem;
+        --text-base: 1rem;
+        --text-large: 1.15rem;
 
         --space-4: #{$space-4 * 1.5};
         --space-3: #{$space-3 * 1.5};
@@ -56,24 +144,16 @@ $breakpoint-desktop: 992px;
         --icon-normal: #{$spacer * 4};
         --icon-small: #{$spacer * 2.25};
         --spacer: #{$spacer};
-        --spacer12: #{$spacer / 2};
+        --spacer-025: #{$spacer / 4};
+        --spacer-05: #{$spacer / 2};
+        --spacer-112: #{$spacer / 2};
+
+        --text-small: 0.95rem;
+        --text-base: 1.1rem;
+        --text-large: 1.3rem;
 
         --space-4: #{$space-4 * 2};
         --space-3: #{$space-3 * 2};
         --space-433: #{$space-3 * 2};
     }
 }
-
-// Colors: Derivate colors from the base color palette.
-$grey-color-darkest: darken($grey-color, 40%);
-$grey-color-darker: darken($grey-color, 20%);
-$grey-color-dark: lighten($grey-color, 10%);
-$grey-color-light: lighten($grey-color, 27%);
-$grey-color-lighter: lighten($grey-color, 32%);
-$grey-color-lightest: lighten($grey-color, 37%);
-
-$brand-color: #601111 !default;
-$green-color: #28ca42 !default;
-$red-color: #d9534f !default;
-$white-color: #fff;
-

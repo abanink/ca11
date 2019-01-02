@@ -47,7 +47,7 @@
         <div class="header__actions">
             <button
                 class="header__action"
-                :class="{'header__action--active': editMode}"
+                :class="{'active': editMode}"
                 @click.stop="toggleEditMode()"
             >
                 <icon name="edit"/>

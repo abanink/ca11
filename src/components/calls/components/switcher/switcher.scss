@@ -5,16 +5,12 @@
 // The most upper box containing account info and
 // icon-links to several locations.
 .c-call-switcher {
-    background: $grey-color-darkest;
-    border-top: $spacer / 2 solid $white-color;
-    margin-bottom: $spacer;
+    background: var(--grey-500);
 
     .container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-
-        width: 100%;
         z-index: 10000000;
     }
 
@@ -22,6 +18,7 @@
         @include icon-size($spacer * 6.25);
         align-items: center;
         display: flex;
+        height: $space-4;
         justify-content: center;
         width: 100%;
 
@@ -31,7 +28,7 @@
 
         svg {
             @include icon-size($spacer * 3);
-            fill: $grey-color-darker;
+            fill: var(--grey-400);
         }
 
         &.hint {
@@ -43,20 +40,8 @@
         }
 
         &.active {
-            svg {fill: $grey-color-lightest;}
+            svg {fill: var(--grey-50);}
         }
     }
 }
 
-
-@media screen and (min-width: $breakpoint-mobile) {
-    .c-call-switcher {
-        border-top: $spacer solid $white-color;
-
-        .call {
-            svg {
-                @include icon-size($spacer * 3.5);
-            }
-        }
-    }
-}

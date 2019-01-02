@@ -6,7 +6,7 @@
 input,
 textarea {
     &::placeholder {
-        color: $grey-color-light;
+        color: var(--grey-200);
     }
 }
 
@@ -61,10 +61,10 @@ textarea {
     input:focus + ul.validation-message {
         // Make sure it doesn't collapse when there is no message.
         background: $white-color;
-        border: 1px solid $grey-color-lighter;
+        border: 1px solid var(--grey-100);
         border-radius: $spacer / 2;
         border-top: 0;
-        box-shadow: -1px 1px 4px rgba($grey-color-darker, 0.7);
+        box-shadow: -1px 1px 4px rgba(var(--grey-400), 0.7);
         color: $grey-color;
         display: block;
         font-family: 'Rajdhani';
@@ -110,14 +110,14 @@ textarea {
             }
 
             select {
-                border: 1px solid $grey-color-lightest;
+                border: 1px solid var(--grey-50);
                 box-shadow: none;
-                color: $grey-color-darker;
+                color: var(--grey-400);
                 width: 100%;
 
                 &:focus {
-                    border: 1px solid $brand-color;
-                    box-shadow: 0 0 1px 1px $brand-color;
+                    border: 1px solid var(--primary-base);
+                    box-shadow: 0 0 1px 1px var(--primary-base);
                 }
             }
 
@@ -146,8 +146,8 @@ textarea {
             width: 300px;
 
             input {
-                border: 1px solid $grey-color-lightest;
-                color: $grey-color-darker;
+                border: 1px solid var(--grey-50);
+                color: var(--grey-400);
                 font-size: 1rem;
                 height: $spacer * 4.5;
                 outline: none;
@@ -157,7 +157,7 @@ textarea {
                 width: 100%;
 
                 &::placeholder {
-                    color: $grey-color-darker;
+                    color: var(--grey-400);
                 }
 
                 &:active,
@@ -176,7 +176,7 @@ textarea {
 
     .filtered-options {
         background: $white-color;
-        border: 1px solid lighten($brand-color, 20%);
+        // border: 1px solid lighten(var(--primary-base), 20%);
         border-top: 1px solid $white-color;
         margin-top: -1px;
         max-height: 162px;
@@ -186,18 +186,18 @@ textarea {
         z-index: 100000;
 
         .option {
-            color: $grey-color-darker;
+            color: var(--grey-400);
             padding: $spacer / 2;
             user-select: none;
 
             &.selected {
-                background: $grey-color-lightest;
-                color: $grey-color-darkest;
+                background: var(--grey-50);
+                color: var(--grey-500);
             }
 
             &:hover {
-                background: $grey-color-lightest;
-                color: $grey-color-darker;
+                background: var(--grey-50);
+                color: var(--grey-400);
                 cursor: pointer;
             }
         }
@@ -215,7 +215,7 @@ textarea {
         vertical-align: middle;
 
         &::before {
-            background: $grey-color-light;
+            background: var(--grey-200);
         }
 
     }
@@ -228,7 +228,7 @@ textarea {
                 pointer-events: auto;
 
                 &.visible {
-                    color: $brand-color;
+                    color: var(--primary-base);
                 }
 
                 svg:hover {
@@ -244,7 +244,7 @@ textarea {
         resize: none;
 
         &[readonly] {
-            border: 1px solid $grey-color-lightest;
+            border: 1px solid var(--grey-50);
         }
     }
 }
@@ -253,10 +253,10 @@ textarea {
 // Override some of the default styling of Bulma inputs.
 .control {
     input[disabled] {
-        background: $grey-color-lightest;
+        background: var(--grey-50);
 
         &:focus {
-            border: 1px solid $grey-color-lightest;
+            border: 1px solid var(--grey-50);
         }
     }
 
@@ -266,8 +266,8 @@ textarea {
 
         &:focus,
         &:active {
-            border: 1px solid $brand-color;
-            box-shadow: 0 0 1px 1px $brand-color;
+            border: 1px solid var(--primary-base);
+            box-shadow: 0 0 1px 1px var(--primary-base);
         }
 
         &[type='password'],
@@ -285,7 +285,7 @@ textarea {
 .switch[type='checkbox'] {
     &:checked + label {
         &::before {
-            background: $brand-color;
+            background: var(--primary-base);
         }
     }
 }

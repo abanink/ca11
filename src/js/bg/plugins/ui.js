@@ -92,6 +92,7 @@ class PluginUI extends Plugin {
                     active: 'general',
                 },
             },
+            theme: 'default-light',
             visible: false,
         }
     }

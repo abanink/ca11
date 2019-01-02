@@ -2,30 +2,24 @@
 @import 'ca11/lib/variables';
 
 .c-media-preview {
-    background: $grey-color-lighter;
+    background: var(--grey-100);
+    // overflow: visible !important;
     display: flex;
     flex-direction: row;
     width: 100%;
 
-    .c-media-stream {
-        margin: $spacer / 4;
-        width: $spacer * 5;
+    .streams-container {
+        display: flex;
+        flex-direction: row-reverse;
+        width: 100%;
+    }
+
+    .media-stream {
+        filter: grayscale(100%);
+        width: var(--space-4);
 
         &.selected {
-            border: $spacer / 4 solid $brand-color;
-        }
-
-        @media screen and (min-width: $breakpoint-mobile) {
-            border: $spacer / 2 solid $white-color;
-            width: 100px;
-
-            &.selected {
-                border: $spacer / 2 solid $brand-color;
-            }
-        }
-
-        &:first-child {
-            margin-left: 0;
+            filter: grayscale(0%);
         }
     }
 }

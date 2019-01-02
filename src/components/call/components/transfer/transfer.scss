@@ -16,8 +16,8 @@
         width: 100%;
 
         .transfer-button {
-            background: $grey-color-lightest;
-            border: $spacer / 4 solid $grey-color-lighter;
+            background: var(--grey-50);
+            border: $spacer / 4 solid var(--grey-100);
             border-radius: $spacer / 2;
             font-family: 'Rajdhani';
             font-size: 0.9rem;
@@ -34,8 +34,8 @@
             }
 
             &.active {
-                border: 2px solid $brand-color;
-                color: $brand-color;
+                border: 2px solid var(--primary-base);
+                color: var(--primary-base);
                 cursor: default;
             }
 
@@ -53,7 +53,7 @@
     }
 
     .transfer-text {
-        color: $grey-color-dark;
+        color: var(--grey-300);
         font-size: 0.9rem;
         font-weight: 500;
         margin-bottom: $spacer;

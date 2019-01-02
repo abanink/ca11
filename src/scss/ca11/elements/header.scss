@@ -1,0 +1,149 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+
+.header {
+    $self: &;
+
+    align-items: stretch;
+    background: var(--grey-100);
+    border-right: var(--border) solid var(--grey-50);
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+
+    &__icon {
+        align-self: flex-end;
+        background: var(--primary-base);
+        fill: $white-color;
+        padding: var(--spacer);
+    }
+
+    &__text {
+        color: var(--primary-base);
+        display: none;
+        font-family: 'Rajdhani';
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-left: $spacer;
+        text-transform: uppercase;
+    }
+
+    &__actions {
+        align-items: center;
+        border-right: $spacer / 2 solid var(--primary-base);
+        color: var(--primary-base);
+        display: flex;
+        flex-direction: row-reverse;
+        padding-right: $spacer;
+
+        #{$self}__action {
+            margin-left: var(--spacer);
+
+            svg {
+                @include icon-size(var(--icon-normal));
+            }
+        }
+    }
+
+    &__filters {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        height: 100%;
+        margin-left: $spacer;
+
+        #{$self}__filter {
+            align-items: center;
+            color: var(--grey-200);
+            display: flex;
+            justify-content: center;
+            margin-right: $spacer;
+            padding: 0;
+            padding-right: $spacer / 4;
+            user-select: none;
+
+            &--active {
+                color: $grey-color;
+
+                svg {
+                    border: 2px solid var(--primary-base);
+                    fill: var(--primary-base);
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            svg {
+                @include icon-size(var(--icon-large));
+                background: var(--grey-50);
+                border: $spacer / 4 solid $white-color;
+                border-radius: 50%;
+                padding: $spacer / 2;
+            }
+        }
+    }
+
+    &__tabs {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        li {
+            align-items: center;
+            border-bottom: $spacer-05 solid transparent;
+            border-top: $spacer-05 solid transparent;
+            color: var(--grey-200);
+            display: flex;
+            flex: 1;
+            justify-content: center;
+
+            &.active {
+                border-bottom: $spacer-05 solid var(--primary-base);
+                color: var(--primary-base);
+            }
+
+            svg {
+                @include icon-size(var(--icon-normal));
+            }
+
+            &.disabled {
+                opacity: 0.3;
+
+                &:hover {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}
+
+// @media screen and (min-width: $breakpoint-mobile) {
+//     .header {
+//         // border-right: $spacer / 2 solid var(--grey-50);
+
+//         &__icon {
+//             @include icon-size($spacer * 6.5);
+//         }
+
+//         &__text {
+//             align-items: center;
+//             display: flex;
+//         }
+
+//         &__actions {
+//             border-right: $spacer solid var(--primary-base);
+//         }
+
+//         &__filters {
+//             &-button svg {
+//                 @include icon-size($spacer * 5);
+//             }
+//         }
+//     }
+// }
+
+
+

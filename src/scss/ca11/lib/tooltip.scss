@@ -28,10 +28,10 @@
 // Base styles for the tooltip's content area.
 .tooltip::after,
 [data-tooltip]::after {
-    background: $grey-color-lightest;
+    background: var(--grey-50);
     border-radius: $spacer / 4;
-    box-shadow: 0 0 8px $grey-color-darker;
-    color: $grey-color-dark;
+    box-shadow: 0 0 8px var(--grey-400);
+    color: var(--grey-300);
     content: attr(data-tooltip);
     display: block;
     font-size: 14px;

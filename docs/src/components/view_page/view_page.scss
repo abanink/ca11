@@ -24,14 +24,14 @@
     }
 
     h2 {
-        color: $brand-color;
+        color: var(--primary-base);
         font-size: 1.7rem;
         font-weight: 500;
         margin-top: $spacer * 2;
     }
 
     h3 {
-        color: $grey-color-darker;
+        color: var(--grey-400);
         font-size: 1.3rem;
         font-weight: 500;
         margin-top: $spacer;
@@ -62,7 +62,7 @@
         width: 100%;
 
         .cell {
-            background-color: $grey-color-lightest;
+            background-color: var(--grey-50);
             flex: 1 1 auto;
             padding: 10px;
             text-align: center;

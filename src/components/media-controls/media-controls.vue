@@ -6,12 +6,12 @@
             <icon :name="stream.type" @click="switchStream()"/>
         </div>
     </MediaStream>
-    <div v-else class="c-media-stream loading">
+    <div v-else class="media-stream loading">
         <div class="content">
             <icon name="spinner" class="spinner"/>
         </div>
     </div>
 
-    <CallsSwitcher :call="callActive"/>
     <CallOptions :call="call"/>
+    <CallsSwitcher :call="callActive"/>
 </aside>

@@ -59,7 +59,7 @@ class AppDocs extends App {
 
         const router = new VueRouter({
             base: '/',
-            linkActiveClass: 'is-active',
+            linkActiveClass: 'active',
             mode: 'history',
         })
 

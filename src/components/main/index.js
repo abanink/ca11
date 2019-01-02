@@ -10,7 +10,9 @@ module.exports = (app) => {
             classes: function(block) {
                 let classes = {}
 
-                if (block === 'notifications') {
+                if (block === 'component') {
+                    classes[`theme-${this.ui.theme}`] = true
+                } else if (block === 'notifications') {
                     if (this.user.authenticated) {
                         if (this.wizard.completed) {
                             classes.sidebar = true
@@ -33,6 +35,7 @@ module.exports = (app) => {
             layer: 'ui.layer',
             overlay: 'ui.overlay',
             telemetry: 'settings.telemetry',
+            ui: 'ui',
             user: 'user',
             wizard: 'settings.wizard',
         },

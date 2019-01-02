@@ -1,7 +1,49 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
+.media-controls-option {
+    background: var(--grey-50);
+    border: 0;
+    border-left: $spacer / 2 solid transparent;
+    color: $grey-color;
+    height: var(--space-433);
+    padding: $spacer * 1.5 0;
+    text-align: center;
+    user-select: none;
+    width: 100%;
 
-.c-call-options {
+    svg {
+        @include icon-size($spacer * 3);
 
+        @media screen and (min-width: $breakpoint-mobile) {
+            @include icon-size($spacer * 3.5);
+        }
+    }
+
+    &:not([disabled]):hover {
+        background: $white-color;
+        border-left: $spacer / 2 solid var(--primary-base);
+        color: var(--primary-base);
+        cursor: pointer;
+    }
+
+    &.active {
+        background: $white-color;
+        border-left: $spacer / 2 solid var(--primary-base);
+        color: var(--primary-base);
+    }
+
+    &[disabled] {
+        background: none;
+        color: var(--grey-50);
+        cursor: not-allowed;
+    }
+
+
+    p {
+        color: var(--grey-50);
+        font-size: 0.9rem;
+        font-weight: 500;
+        user-select: none;
+    }
 }

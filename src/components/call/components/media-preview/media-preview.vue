@@ -1,8 +1,11 @@
-<component class="c-media-preview main-content-header" :class="classes('component')">
-    <icon class="header-icon" name="phone"/>
-    <MediaStream
-        v-for="stream of Object.values(call.streams)"
-        :class="{selected: stream.selected}"
-        :stream="stream"
-    />
+<component class="c-media-preview content__header header" :class="classes('component')">
+    <icon class="header__icon" name="call-active"/>
+
+    <div class="streams-container">
+        <MediaStream
+            v-for="stream of Object.values(call.streams)"
+            :class="{selected: stream.selected}"
+            :stream="stream"
+        />
+    </div>
 </component>

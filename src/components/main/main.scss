@@ -1,19 +1,15 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
-@import './main-content-header';
 
 
 .c-main {
-    border-top: $spacer / 2 solid $brand-color;
+    border-top: var(--spacer-112) solid var(--primary-base);
     height: 100vh;
-    // padding-right: $spacer / 2;
     width: 100vw;
 
     &__content {
-        // border-left: $spacer / 4 solid $white-color;
-
         .main {
-            border-right: $spacer / 4 solid $white-color;
+            border-right: var(--border) solid var(--grey-50);
             overflow-y: scroll;
             width: 100%;
         }
@@ -45,7 +41,7 @@
             top: $spacer;
 
             &:hover {
-                color: $brand-color;
+                color: var(--primary-base);
                 cursor: pointer;
             }
         }

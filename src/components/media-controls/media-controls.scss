@@ -3,22 +3,21 @@
 
 
 .c-media-controls {
-    background: $grey-color-lightest;
+    background: var(--grey-100);
     z-index: 100;
 
     .media-stream {
+        filter: grayscale(100%);
         height: var(--space-433);
+
+        &.selected {
+            filter: grayscale(0%);
+        }
 
         &:hover {
             cursor: pointer;
         }
 
     }
-
-    // @media screen and (min-width: $breakpoint-mobile) {
-    //     .c-media-stream {
-    //         height: $tablet-space-unit-3;
-    //     }
-    // }
 }
 

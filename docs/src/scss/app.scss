@@ -6,7 +6,7 @@ html {
 }
 
 a, a:visited {
-    color: $brand-color;
+    color: var(--primary-base);
     font-weight: 500;
 }
 
@@ -21,7 +21,7 @@ ul {
         text-align: left;
 
         &::before {
-            background: $brand-color;
+            background: var(--primary-base);
             border-radius: 50%;
             color: $white-color;
             content: "";
@@ -35,10 +35,10 @@ ul {
     }
 
     ol li::before {
-        background: lighten($brand-color, 10%);
+        background: lighten(var(--primary-base), 10%);
 
         ol li::before {
-            background: lighten($brand-color, 20%);
+            background: lighten(var(--primary-base), 20%);
         }
     }
 }
@@ -63,10 +63,10 @@ ol {
     }
 
     ol li::before {
-        background: lighten($brand-color, 10%);
+        background: lighten(var(--primary-base), 10%);
 
         ol li::before {
-            background: lighten($brand-color, 20%);
+            background: lighten(var(--primary-base), 20%);
         }
     }
 }

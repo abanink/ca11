@@ -30,7 +30,7 @@
 
     .call-disabled {
         align-items: center;
-        color: $grey-color-lighter;
+        color: var(--grey-100);
         display: flex;
         flex-direction: column;
         margin-top: $spacer * 6;
@@ -38,7 +38,7 @@
 
         .disabled-icon {
             @include icon-size($spacer * 8);
-            color: $grey-color-lighter;
+            color: var(--grey-100);
         }
 
         .disabled-text {

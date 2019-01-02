@@ -32,7 +32,7 @@
 
             &[disabled='disabled'] {
                 &::placeholder {
-                    color: $grey-color-light;
+                    color: var(--grey-200);
                 }
             }
 
@@ -43,7 +43,7 @@
 
         // Transfer button next to input.
         i {
-            border: 1px solid $grey-color-lighter;
+            border: 1px solid var(--grey-100);
             border-bottom-right-radius: $spacer / 2;
             border-top-right-radius: $spacer / 2;
             color: $grey-color;
@@ -52,14 +52,14 @@
             width: $spacer * 5;
 
             &:hover {
-                background: $brand-color;
+                background: var(--primary-base);
                 color: $white-color;
                 cursor: pointer;
             }
 
             &.disabled {
-                background: $grey-color-lightest;
-                border: 1px solid $grey-color-lighter;
+                background: var(--grey-50);
+                border: 1px solid var(--grey-100);
                 color: rgba($grey-color, 0.4);
                 cursor: not-allowed;
             }

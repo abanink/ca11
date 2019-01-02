@@ -5,27 +5,27 @@
     padding: $spacer ($spacer * 2);
 
     &.info {
-        background: $grey-color-lightest;
-        border: 1px solid $grey-color-lighter;
-        color: $grey-color-darker;
+        background: var(--grey-50);
+        border: 1px solid var(--grey-100);
+        color: var(--grey-400);
 
         a {
-            color: $brand-color;
+            color: var(--primary-base);
         }
 
         header {
-            color: $brand-color;
+            color: var(--primary-base);
 
             svg {
-                fill: $brand-color;
+                fill: var(--primary-base);
             }
         }
     }
 
     &.troubleshoot {
-        background: $grey-color-lightest;
+        background: var(--grey-50);
         border: 1px solid $red-color;
-        color: $grey-color-darker;
+        color: var(--grey-400);
 
         a {
             color: $red-color;
@@ -48,7 +48,7 @@
         text-transform: uppercase;
 
         svg {
-            color: $brand-color;
+            color: var(--primary-base);
             margin-right: $spacer;
         }
     }

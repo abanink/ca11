@@ -5,7 +5,6 @@ html,
 body {
     margin: 0;
     padding: 0;
-    zoom: 1;
 }
 
 // Animations get in the way while running browser tests
@@ -16,6 +15,7 @@ html {
     font-family: 'Roboto';
     touch-action: manipulation;
 
+    // Styling adapted for Puppeteer screenshots/tests.
     &.test {
         * {
             transition: none !important; // sass-lint:disable-line no-important
@@ -23,41 +23,41 @@ html {
     }
 }
 
-body {
-    component {
-        display: block;
-    }
-
-    .help {
-        display: inline-block;
-        font-size: 0.9rem;
-        margin-top: $spacer;
-    }
+component {
+    display: block;
 }
 
 button {
     background: none;
     border: 0;
-    fill: $grey-color-light;
+    color: var(--grey-200);
     padding: 0;
+    user-select: none;
 
     &:hover {
         cursor: pointer;
-        svg {fill: $brand-color;}
+        svg {fill: var(--primary-base);}
     }
 
     &.active {
-        svg {fill: $brand-color;}
+        color: var(--primary-base) !important;
+        svg {fill: var(--primary-base);}
     }
 
     &[disabled] {
-        svg {fill: $grey-color-light;}
+        svg {fill: var(--grey-200);}
 
         &:hover {
             cursor: not-allowed;
-            svg {fill: $grey-color-lighter;}
+            svg {fill: var(--grey-100);}
         }
     }
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 // Editable inputs are styled like regular text nodes,
@@ -66,7 +66,7 @@ button {
     border: 1px solid transparent;
 
     &:not([readonly]) {
-        border: 1px dashed $grey-color-lighter;
+        border: 1px dashed var(--grey-100);
     }
 }
 
@@ -75,7 +75,7 @@ button {
 // that function like a link.
 .link {
     &:hover {
-        color: $brand-color;
+        color: var(--primary-base);
         cursor: pointer;
     }
 }
@@ -90,7 +90,7 @@ video {
 }
 
 ::selection {
-    background: $brand-color;
+    background: var(--primary-base);
     color: $white-color;
 }
 
@@ -106,12 +106,12 @@ video {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: $brand-color;
+    background: var(--primary-base);
 }
 
 ::selection {
-    background: $brand-color;
-    color: $grey-color-lightest;
+    background: var(--primary-base);
+    color: var(--grey-50);
 }
 
 // Small helper classes to apply proper capitalizing without polluting translations.
@@ -129,6 +129,6 @@ html body .hidden {
 }
 
 input {
-    color: $grey-color-dark;
-    padding: $spacer;
+    color: var(--grey-300);
+    padding: var(--spacer-05) var(--spacer-025);
 }

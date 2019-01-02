@@ -11,7 +11,7 @@ module.exports = (app) => {
                 let classes = {}
                 if (block === 'tabs') {
                     if (modifier === 'devices' && !this.settings.webrtc.enabled) classes.disabled = true
-                    if (modifier === this.tabs.active) classes['is-active'] = true
+                    if (modifier === this.tabs.active) classes.active = true
                 }
                 return classes
             },

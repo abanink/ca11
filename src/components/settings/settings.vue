@@ -1,15 +1,16 @@
 <section component="settings" class="c-settings">
 
-    <header class="main-content-header">
-        <icon class="header-icon" name="settings"/>
-        <ul class="tabs">
+    <header class="content__header header">
+        <icon class="header__icon" name="settings"/>
+
+        <ul class="header__tabs">
             <li
                 class="tooltip tooltip-right"
                 :class="classes('tabs', 'general')"
                 :data-tooltip="$t('general').capitalize()"
                 @click="setTab('settings', 'general')"
             >
-                <a><icon name="settings-misc"/></a>
+                <icon name="settings-misc"/>
             </li>
             <li
                 class="tooltip tooltip-right"
@@ -17,7 +18,7 @@
                 :data-tooltip="$t('devices').capitalize()"
                 @click="setTab('settings', 'devices', settings.webrtc.enabled)"
             >
-                <a><icon name="headset_mic"/></a>
+                <icon name="headset_mic"/>
             </li>
             <li
                 class="tooltip tooltip-left"
@@ -25,7 +26,7 @@
                 :data-tooltip="$t('SIG11').capitalize()"
                 @click="setTab('settings', 'sig11')"
             >
-                <a><icon name="protocol-sig11"/></a>
+                <icon name="protocol-sig11"/>
             </li>
             <li
                 class="tooltip tooltip-left test-tab-phone"
@@ -33,14 +34,14 @@
                 :data-tooltip="$t('SIP').capitalize()"
                 @click="setTab('settings', 'sip')"
             >
-                <a><icon name="protocol-sip"/></a>
+                <icon name="protocol-sip"/>
             </li>
         </ul>
     </header>
 
 
     <!-- General settings -->
-    <main class="main-content-base tab" :class="{'is-active': tabs.active === 'general'}">
+    <main class="main tab" :class="{active: tabs.active === 'general'}">
         <Field name="language" type="select"
             :help="$t('language used throughout the application.')"
             :label="$t('application language')"
@@ -62,7 +63,7 @@
 
 
     <!-- Device settings -->
-    <main class="main-content-base tab" :class="{'is-active': tabs.active === 'devices'}">
+    <main class="main tab" :class="{active: tabs.active === 'devices'}">
         <DeviceControls
             v-if="media.stream[media.stream.type].id && media.permission"
             :stream="media.stream[media.stream.type]"
@@ -72,7 +73,7 @@
 
 
     <!-- SIG11 preferences -->
-    <main class="main-content-base tab" :class="{'is-active': tabs.active === 'sig11'}">
+    <main class="main tab" :class="{active: tabs.active === 'sig11'}">
         <Field name="sig11_enabled" type="checkbox"
             :label="$t('enable SIG11 protocol')"
             :model.sync="calls.sig11.toggled"
@@ -96,7 +97,7 @@
 
 
     <!-- SIP preferences -->
-    <main class="main-content-base tab tab-phone" :class="{'is-active': tabs.active === 'sip'}">
+    <main class="main tab tab-phone" :class="{active: tabs.active === 'sip'}">
         <Field name="sip_enabled" type="checkbox"
             :label="$t('enable SIP protocol')"
             :model.sync="calls.sip.toggled"

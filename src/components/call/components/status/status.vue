@@ -15,12 +15,12 @@
             <template v-else>{{call.endpoint}}</template>
         </div>
         <div class="call-info" v-if="call.status === 'new'">
-            <span class="status cf">{{$t('new call')}}</span>
+            <span class="cf">{{$t('new call')}}</span>
             <span class="timer"></span>
         </div>
         <div class="call-info" v-else>
             <span class="timer" v-if="call.timer.start">{{sessionTime}} - </span>
-            <span class="status">{{callStatus}}</span>
+            <span>{{callStatus}}</span>
         </div>
     </div>
 </component>

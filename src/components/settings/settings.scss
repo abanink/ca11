@@ -5,7 +5,7 @@
     width: 100%;
 
     .soundmeter {
-        border: 1px solid $grey-color-lightest;
+        border: 1px solid var(--grey-50);
     }
 
     // The switch is disabled, but use more opacity to indicate

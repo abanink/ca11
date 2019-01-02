@@ -3,27 +3,37 @@
 
 
 .media-view {
-    background: $grey-color-lightest;
+    background: var(--grey-50);
     display: grid;
     flex: 1;
-    grid-gap: var(--spacer);
-    margin: var(--spacer);
-    padding: var(--spacer);
+    grid-template-columns: repeat(auto-fill, 1fr);
 
-    &.x1 {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+    @media screen and (min-width: $breakpoint-mobile) {
+        grid-template-columns: repeat(auto-fill, calc(100% / 2));
+
+        &.x1 {
+            grid-template-columns: repeat(auto-fill, 100%);
+        }
     }
 
-    &.x2 {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    @media screen and (min-width: $breakpoint-tablet) {
+        &.x1 {
+            grid-template-columns: repeat(auto-fill, calc(100% / 2));
+        }
+
+        &.x2 {
+            grid-template-columns: repeat(auto-fill, 50%);
+        }
+
+        &.x3 {
+            grid-template-columns: repeat(auto-fill, calc(100% / 3));
+        }
     }
 
-    &.x3 {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    }
-
-    &__media-stream {
+    .media-stream {
         border: var(--spacer) solid $white-color;
+        // margin: var(--spacer);
 
         video {
             background: none;

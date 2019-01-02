@@ -2,9 +2,8 @@
     "brands": {
         "ca11": {
             "colors": {
-                "brand-color": "#601111",
+                "primary-color": "#601111",
                 "green-color": "#508654",
-                "grey-color": "#808d93",
                 "orange-color": "#f98644",
                 "red-color": "#a75147"
             },

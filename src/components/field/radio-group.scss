@@ -9,13 +9,13 @@
         width: 0;
 
         &:checked + label {
-            background: $brand-color;
+            background: var(--primary-base);
             color: $white-color;
         }
     }
 
     label {
-        background: $grey-color-lightest;
+        background: var(--grey-50);
         color: rgba(0, 0, 0, 0.6);
         display: inline-block;
         font-family: 'Rajdhani';

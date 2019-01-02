@@ -2,21 +2,21 @@
 
     <div class="status__menu">
         <!-- Popout link in WebExtension -->
-        <div class="option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
+        <button class="option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
             <icon class="ext-tab" name="ext-tab"/>
-        </div>
+        </button>
 
-        <div class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
+        <button class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
             <icon class="settings" name="settings"/>
-        </div>
+        </button>
 
-        <div class="option" :class="{active: layer === 'about'}" @click="setOverlay('about')">
+        <button class="option" :class="{active: layer === 'about'}" @click="setOverlay('about')">
             <icon name="help"/>
-        </div>
+        </button>
 
-        <div class="option" @click="logout">
+        <button class="option" @click="logout">
             <icon name="logout"/>
-        </div>
+        </button>
 
     </div>
 
