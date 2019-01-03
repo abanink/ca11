@@ -74,7 +74,7 @@ class Sig11 {
             return fs.createReadStream(path.join(this.settings.BUILD_DIR, 'index.html')).pipe(res)
         })
 
-        this.server = http.createServer(app).listen(8080)
+        this.server = http.createServer(app).listen(this.settings.sig11.port)
         this.wss = new WebSocket.Server({
             disableHixie: true,
             perMessageDeflate: false,

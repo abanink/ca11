@@ -26,7 +26,7 @@
                 "endpoint": "sig11.dev.ca11.io"
             },
             "sip": {
-                "endpoint": ""
+                "endpoint": "sip.dev.ca11.io"
             },
             "stun": [
                 "stun:stun3.l.google.com:19302",
@@ -90,5 +90,8 @@
                 }
             }
         }
+    },
+    "sig11": {
+        "port": 3001
     }
 }
