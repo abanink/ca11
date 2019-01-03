@@ -258,6 +258,10 @@
   dependencies:
     find-up "^2.1.0"
 
+"@garage11/ca11-theme-default@git+https://github.com/garage11/ca11-theme-default":
+  version "1.0.0"
+  resolved "git+https://github.com/garage11/ca11-theme-default#27cf167a51cf52e24d1b1459ba34a3ef24fb953d"
+
 "@garage11/commitlint-circle@1.x.x":
   version "1.0.2"
   resolved "https://registry.npmjs.org/@garage11/commitlint-circle/-/commitlint-circle-1.0.2.tgz#cffe21c851493be1b857000433db481f4426ca7b"

@@ -7,21 +7,6 @@
 </div>
 
 
-<div class="field field-color" v-else-if="type === 'color'">
-    <label class="label ca" :for="name">{{label}}</label>
-    <input class="input" type="color" @change="updateModel($event)"
-        v-bind:value="model" :disabled="disabled"/>
-</div>
-
-
-<div class="field field-file" v-else-if="type === 'file'">
-    <label class="label ca" :for="name">{{label}}</label>
-    <input type="file" />
-    <span class="validation-message help is-danger" :class="{hide: invalidFieldValue, show: invalidFieldValue}" v-html="validationMessage"></span>
-    <em class="help cf" v-if="help">{{help}}</em>
-</div>
-
-
 <div class="field field-multiselect" v-else-if="type === 'multiselect'">
     <label class="label ca" :class="classes('label')" :for="name">{{label}}</label>
     <div class="control">

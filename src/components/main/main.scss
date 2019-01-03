@@ -8,42 +8,47 @@
     width: 100vw;
 
     &__content {
+        // (!) This container may scroll vertically.
         .main {
-            border-right: var(--border) solid var(--grey-50);
+            // margin-top: var(--spacer-05);
             overflow-y: scroll;
+            padding: var(--spacer);
+            // (!) Right padding is taken care of by the scoll trackbar.
+            padding-right: 0;
+            padding-top: 0;
             width: 100%;
         }
     }
 
     &__status-leave-to,
     &__status-enter {
-        transform: translateY(-#{$space-4});
-        transition: transform 0.2s ease-in-out;
+        // transform: translateY(50px);
+        // transition: transform 1.2s ease-in-out;
     }
 
     &__status-leave,
     &__status-enter-to {
-        transform: translateY(0);
-        transition: transform 0.2s ease-in-out;
+        // transform: translateY(0);
+        // transition: transform 1.2s ease-in-out;
     }
 
-    &__overlay {
-        animation: grow 0.3s ease-in-out;
-        background: $white-color;
-        height: 100vh;
-        position: absolute;
-        width: 100%;
-        z-index: 100000000;
+    // &__overlay {
+    //     animation: grow 0.3s ease-in-out;
+    //     background: $white-color;
+    //     height: 100vh;
+    //     position: absolute;
+    //     width: 100%;
+    //     z-index: 100000000;
 
-        .close-button {
-            position: absolute;
-            right: $spacer;
-            top: $spacer;
+    //     .close-button {
+    //         position: absolute;
+    //         right: $spacer;
+    //         top: $spacer;
 
-            &:hover {
-                color: var(--primary-base);
-                cursor: pointer;
-            }
-        }
-    }
+    //         &:hover {
+    //             color: var(--primary-base);
+    //             cursor: pointer;
+    //         }
+    //     }
+    // }
 }

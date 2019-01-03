@@ -1,4 +1,4 @@
-<component class="c-media-preview content__header header" :class="classes('component')">
+<component class="c-media-preview content__header" :class="classes('component')">
     <icon class="header__icon" name="call-active"/>
 
     <div class="streams-container">

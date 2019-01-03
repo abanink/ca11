@@ -12,6 +12,6 @@
         </div>
     </div>
 
-    <CallOptions :call="call"/>
     <CallsSwitcher :call="callActive"/>
+    <CallOptions :call="call"/>
 </aside>

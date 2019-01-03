@@ -6,6 +6,7 @@
 // icon-links to several locations.
 .c-call-switcher {
     background: var(--grey-500);
+    border-top: var(--spacer-05) solid $white-color;
 
     .container {
         display: flex;

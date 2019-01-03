@@ -7,15 +7,15 @@
 
     align-items: stretch;
     background: var(--grey-100);
-    border-right: var(--border) solid var(--grey-50);
     display: flex;
     justify-content: flex-start;
     width: 100%;
 
     &__icon {
-        align-self: flex-end;
+        // align-self: flex-end;
         background: var(--primary-base);
         fill: $white-color;
+        height: 100%;
         padding: var(--spacer);
     }
 
@@ -31,7 +31,7 @@
 
     &__actions {
         align-items: center;
-        border-right: $spacer / 2 solid var(--primary-base);
+        border-right: var(--spacer) solid var(--primary-base);
         color: var(--primary-base);
         display: flex;
         flex-direction: row-reverse;
@@ -119,31 +119,3 @@
         }
     }
 }
-
-// @media screen and (min-width: $breakpoint-mobile) {
-//     .header {
-//         // border-right: $spacer / 2 solid var(--grey-50);
-
-//         &__icon {
-//             @include icon-size($spacer * 6.5);
-//         }
-
-//         &__text {
-//             align-items: center;
-//             display: flex;
-//         }
-
-//         &__actions {
-//             border-right: $spacer solid var(--primary-base);
-//         }
-
-//         &__filters {
-//             &-button svg {
-//                 @include icon-size($spacer * 5);
-//             }
-//         }
-//     }
-// }
-
-
-

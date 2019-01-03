@@ -129,6 +129,7 @@
     "yargs": "7.x.x"
   },
   "dependencies": {
+    "@garage11/ca11-theme-default": "git+https://github.com/garage11/ca11-theme-default",
     "@garage11/vue-i18n": "1.x.x",
     "axios": "0.16.x",
     "electron": "3.0.x",

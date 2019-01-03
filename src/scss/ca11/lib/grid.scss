@@ -4,11 +4,12 @@
 
 .c-main {
     display: grid;
+    grid-gap: var(--spacer-05);
     grid-template-areas:
         'main-status main-status main-status'
         'main-menu main-content media-controls';
     grid-template-columns: var(--space-4) 1fr var(--space-4); // menu content
-    grid-template-rows: calc(#{$space-4} + var(--border)) 1fr; // status height remains static.
+    grid-template-rows: calc(#{$space-4} + var(--spacer-05)) 1fr; // status height remains static.
 
     .c-media-controls {
         grid-area: media-controls;
@@ -27,6 +28,7 @@
     &__content {
         display: grid;
         grid-area: main-content;
+        grid-gap: var(--spacer-05);
         grid-template-areas:
             'main-content-header'
             'main-content-base';
@@ -35,11 +37,12 @@
 
         .header {
             grid-area: main-content-header;
+            // margin-bottom: var(--spacer-05);
 
             &__icon {
-                height: var(--space-433);
+                // height: var(--space-433);
                 margin-left: calc(var(--space-4) * -1);
-                width: var(--space-4);
+                width: calc(var(--space-4) - var(--spacer-05));
             }
         }
 

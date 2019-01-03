@@ -3,6 +3,7 @@
 
 .c-main-menu {
     background: var(--grey-50);
+    border-top: var(--spacer-05) solid $white-color;
     z-index: 100;
 
     .options {

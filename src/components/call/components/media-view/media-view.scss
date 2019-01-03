@@ -3,10 +3,9 @@
 
 
 .media-view {
-    background: var(--grey-50);
     display: grid;
-    flex: 1;
     grid-template-columns: repeat(auto-fill, 1fr);
+    width: 100%;
 
 
     @media screen and (min-width: $breakpoint-mobile) {
@@ -32,7 +31,7 @@
     }
 
     .media-stream {
-        border: var(--spacer) solid $white-color;
+        // border: var(--spacer) solid $white-color;
         // margin: var(--spacer);
 
         video {

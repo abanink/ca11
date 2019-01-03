@@ -52,11 +52,9 @@
 
         .status-indicator {
             text-align: center;
-            // width: $spacer * 6;
 
             svg {
                 @include icon-size($spacer * 3.5);
-                // &.disabled {fill: var(--grey-200);}
             }
         }
 
@@ -74,7 +72,7 @@
     font-size: text-scale('sm');
     font-weight: 600;
     justify-content: space-between;
-    margin-bottom: var(--border);
+    // margin-bottom: var(--spacer-05);
     transition: background 0.5s ease;
     z-index: 100;
 

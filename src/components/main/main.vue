@@ -2,12 +2,12 @@
     <!-- Force the telemetry window to show up -->
     <Notifications :class="classes('notifications')"/>
 
-    <div class="c-main__overlay" v-if="overlay">
+    <!-- <div class="c-main__overlay" v-if="overlay">
         <div class="close-button" @click="closeOverlay()">
             <icon name="close"/>
         </div>
         <component v-bind:is="overlay"/>
-    </div>
+    </div> -->
 
     <transition v-if="wizard.completed && user.authenticated" name="c-main__status">
         <CallStatus

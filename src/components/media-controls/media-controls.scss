@@ -8,7 +8,8 @@
 
     .media-stream {
         filter: grayscale(100%);
-        height: var(--space-433);
+        height: calc(var(--space-433));
+
 
         &.selected {
             filter: grayscale(0%);

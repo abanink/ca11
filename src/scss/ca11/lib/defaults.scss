@@ -3,6 +3,7 @@
 */
 html,
 body {
+    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -98,11 +99,11 @@ video {
 
 
 ::-webkit-scrollbar {
-    width: $spacer / 2;
+    width: var(--spacer);
 }
 
 ::-webkit-scrollbar-track {
-    background: none;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
