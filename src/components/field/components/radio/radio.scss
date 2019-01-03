@@ -1,7 +1,8 @@
 @import 'ca11/lib/variables';
 
-.field-radio-group {
+.c-radio {
     input {
+
         border: 0;
         height: 0;
         overflow: hidden;
@@ -16,7 +17,7 @@
 
     label {
         background: var(--grey-50);
-        color: rgba(0, 0, 0, 0.6);
+        color: var(--grey-200);
         display: inline-block;
         font-family: 'Rajdhani';
         font-size: 0.9rem;

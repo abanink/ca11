@@ -1,50 +1,68 @@
 <component class="c-device-controls">
 
-    <Field name="input_device" type="select"
+    <FieldSelect
+        v-model="devices.sinks.headsetInput"
+        name="input_device"
+        :help="$t('language used throughout the application.')"
         :label="$t('headset microphone')"
-        :model.sync="devices.sinks.headsetInput"
         :options="devices.input"
-        :validation="$v.settings.webrtc.devices.sinks.headsetInput.valid">
-
-        <div slot="select-after" v-if="$v.settings.webrtc.devices.sinks.headsetInput.valid.customValid">
+        :validation="$v.settings.webrtc.devices.sinks.headsetInput.valid"
+    >
+        <div slot="context" v-if="$v.settings.webrtc.devices.sinks.headsetInput.valid.customValid">
             <em class="help cf">{{$t('does the microphone of your headset respond?')}}</em>
             <Soundmeter v-if="stream[stream.type].id" class="soundmeter" :stream="stream[stream.type]"/>
         </div>
-    </Field>
+    </FieldSelect>
 
-    <Field name="output_device" type="select"
+    <FieldSelect
+        v-model="devices.sinks.headsetOutput"
+        name="output_device"
         :help="$v.settings.webrtc.devices.sinks.headsetOutput.valid.customValid ? $t('does the sound test play on the expected device?') : ''"
         :label="$t('headset audio')"
-        :model.sync="devices.sinks.headsetOutput"
         :options="devices.output"
-        :validation="$v.settings.webrtc.devices.sinks.headsetOutput.valid">
-        <button slot="select-extra" class="ringtone-play button is-link select-button"
-            :disabled="playing.headsetOutput" @click="playSound('busyTone', 'headsetOutput')">
-            <span class="icon is-small"><icon name="call-active"/></span>
+        :validation="$v.settings.webrtc.devices.sinks.headsetOutput.valid"
+    >
+        <button
+            slot="button"
+            :disabled="playing.headsetOutput"
+            @click="playSound('busyTone', 'headsetOutput')"
+        >
+            <icon name="call-active"/>
         </button>
-    </Field>
+    </FieldSelect>
 
-    <Field name="sounds_device" type="select"
+    <FieldSelect
+        v-model="devices.sinks.ringOutput"
+        name="sounds_device"
         :help="$v.settings.webrtc.devices.sinks.ringOutput.valid.customValid ? $t('does the sound test play on the expected device?') : ''"
         :label="$t('ringtone audio')"
-        :model.sync="devices.sinks.ringOutput"
         :options="devices.output"
-        :validation="$v.settings.webrtc.devices.sinks.ringOutput.valid">
-
-        <button slot="select-extra" class="ringtone-play button is-link select-button"
-            :disabled="playing.ringOutput" @click="playSound('ringTone', 'ringOutput')">
-            <span class="icon is-small"><icon name="call-active"/></span>
+        :validation="$v.settings.webrtc.devices.sinks.ringOutput.valid"
+    >
+        <button
+            slot="button"
+            :disabled="playing.headsetOutput"
+            @click="playSound('busyTone', 'headsetOutput')"
+        >
+            <icon name="call-active"/>
         </button>
-    </Field>
+    </FieldSelect>
 
-    <Field v-if="user.developer" class="ringtone-select" name="ringtone" type="select"
-        :label="$t('ringtone audiofile')"
-        :model.sync="ringtones.selected"
-        :options="ringtones.options">
-
-        <button slot="select-extra" class="ringtone-play button is-link select-button"
-            :disabled="playing.ringOutput" @click="playSound('ringTone', 'ringOutput')">
-            <span class="icon is-small"><icon name="call-active"/></span>
+    <FieldSelect
+        v-model="devices.sinks.headsetOutput"
+        name="output_device"
+        :help="$v.settings.webrtc.devices.sinks.headsetOutput.valid.customValid ? $t('does the sound test play on the expected device?') : ''"
+        :label="$t('headset audio')"
+        :options="devices.output"
+        :validation="$v.settings.webrtc.devices.sinks.headsetOutput.valid"
+    >
+        <button
+            slot="button"
+            :disabled="playing.headsetOutput"
+            @click="playSound('busyTone', 'headsetOutput')"
+        >
+            <icon name="call-active"/>
         </button>
-    </Field>
+    </FieldSelect>
+
 </component>

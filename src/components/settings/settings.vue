@@ -42,23 +42,42 @@
 
     <!-- General settings -->
     <main class="main tab" :class="{active: tabs.active === 'general'}">
-        <Field name="language" type="select"
+        <FieldSelect
+            v-model="language.selected"
+            name="language"
             :help="$t('language used throughout the application.')"
             :label="$t('application language')"
-            :model.sync="language.selected"
             :options="language.options"
-            :placeholder="$t('select a language')"/>
+        />
 
-        <Field name="store_key" type="checkbox"
+        <FieldCheckbox
+            v-model="app.vault.store"
+            name="store_key"
+            :help="$t('automatically unlock your session after restart.')"
             :label="$t('remember session')"
-            :model.sync="app.vault.store"
-            :help="$t('automatically unlock your session after restart.')">
-        </Field>
+        />
 
-        <Field name="telemetry_enabled" type="checkbox"
+        <FieldCheckbox
+            v-model="settings.telemetry.enabled"
+            name="store_key"
+            :help="$t('allow us to store anonymized application errors to improve {name}.', {name: app.name})"
             :label="$t('exception telemetry')"
-            :model.sync="settings.telemetry.enabled"
-            :help="$t('allow us to store anonymized application errors to improve {name}.', {name: app.name})"/>
+        />
+
+        <FieldSelect
+            v-model="settings.ringtones.selected"
+            name="ringtone"
+            :label="$t('ringtone')"
+            :options="settings.ringtones.options">
+
+            <button
+                slot="button"
+                :disabled="playing.ringOutput"
+                @click="playSound('ringTone', 'ringOutput')"
+            >
+                <icon name="call-active"/>
+            </button>
+        </FieldSelect>
     </main>
 
 
@@ -74,53 +93,69 @@
 
     <!-- SIG11 preferences -->
     <main class="main tab" :class="{active: tabs.active === 'sig11'}">
-        <Field name="sig11_enabled" type="checkbox"
+        <FieldCheckbox
+            v-model="calls.sig11.toggled"
+            name="sig11_enabled"
             :label="$t('enable SIG11 protocol')"
-            :model.sync="calls.sig11.toggled"
-            :help="$t('decentralized calling on overlay network SIG11.')"/>
+        />
 
-        <template v-if="calls.sig11.toggled">
-        <Field name="sig11_endpoint" type="text"
-            :label="$t('parent node (WSS)')"
-            :model.sync="calls.sig11.endpoint"
-            placeholder="websocket.sig11.example.org"
-            :validation="$v.calls.sig11.endpoint"/>
+        <FieldText
+            v-if="calls.sig11.toggled"
+            v-model="calls.sig11.endpoint"
+            name="sig11_endpoint"
+            placeholder="e.g. sig11.websocket.tld"
+            :help="$t('decentralized calling on overlay network SIG11.')"
+            :label="$t('communication hub')"
+            :validation="$v.calls.sig11.endpoint"
+        />
 
-        <Field name="public_key" class="network-public-key" type="textarea"
-            :label="$t('public identity')"
-            :model.sync="user.identity.publicKey"
+        <FieldTextarea
+            v-if="calls.sig11.toggled"
+            v-model="user.identity.publicKey"
+            name="sig11_identity"
             :help="$t('automatically unlock your session after restart.')"
-            placeholder=''
-            :readonly="true"/>
-        </template>
+            :label="$t('public identity')"
+            :readonly="true"
+        />
     </main>
 
 
     <!-- SIP preferences -->
     <main class="main tab tab-phone" :class="{active: tabs.active === 'sip'}">
-        <Field name="sip_enabled" type="checkbox"
+
+        <FieldCheckbox
+            v-model="calls.sip.toggled"
+            name="sip_enabled"
+            :help="$t('centralized calling on telecom SIP networks using Secure Websockets.', {name: app.name})"
             :label="$t('enable SIP protocol')"
-            :model.sync="calls.sip.toggled"
-            :help="$t('centralized calling on telecom SIP networks using Secure Websockets.', {name: app.name})"/>
+        />
 
-        <template v-if="calls.sip.toggled">
-        <Field name="sip_endpoint" type="text"
+        <FieldText
+            v-if="calls.sip.toggled"
+            v-model="calls.sip.endpoint"
+            name="sip_endpoint"
+            placeholder="e.g. sip.websocket.tld"
             :label="$t('SIP domain (WSS)')"
-            :model.sync="calls.sip.endpoint"
-            placeholder="sip.websocket.example.org"
-            :validation="$v.calls.sip.endpoint"/>
+            :validation="$v.calls.sip.endpoint"
+        />
 
-        <!-- Only show the username field with a 'new' session. -->
-        <Field name="sip_username" type="text"
-            :label="$t('SIP Extension')" :model.sync="calls.sip.account.selected.username"
-            :placeholder="$t('411')"
-            :validation="$v.calls.sip.account.selected.username"/>
+        <FieldText
+            v-if="calls.sip.toggled"
+            v-model="calls.sip.account.selected.username"
+            name="sip_username"
+            :label="$t('SIP Extension')"
+            :placeholder="$t('1000')"
+            :validation="$v.calls.sip.account.selected.username"
+        />
 
-        <Field name="sip_password" type="password"
-            :label="$t('SIP password')" :model.sync="calls.sip.account.selected.password"
+        <FieldText
+            v-if="calls.sip.toggled"
+            v-model="calls.sip.account.selected.password"
+            name="sip_password"
+            :label="$t('SIP password')"
             :placeholder="$t('SIP account secret')"
-            :validation="$v.calls.sip.account.selected.password"/>
-        </template>
+            :validation="$v.calls.sip.account.selected.password"
+        />
     </main>
 
 

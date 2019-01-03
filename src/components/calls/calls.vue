@@ -5,11 +5,10 @@
         <span class="header__text">{{$t('calls')}}</span>
 
         <div class="header__filters">
-            <Field
+            <FieldRadio
+                v-model="description.protocol"
                 class="header__filter"
                 name="protocol"
-                type="radio-group"
-                :model.sync="description.protocol"
                 :options="protocols"
             />
         </div>

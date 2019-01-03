@@ -185,6 +185,29 @@ function helpers(app) {
         }
     }
 
+    _helpers.playSound = function(soundName, sinkTarget) {
+        this.playing[sinkTarget] = true
+
+        if (app.sounds[soundName].off) {
+            // Prevent frenzy-clicking the test-audio button.
+            if (app.sounds[soundName].playing) return
+
+            app.sounds[soundName].play(false, this.devices.sinks[sinkTarget])
+            app.sounds[soundName].off('stop').on('stop', () => {
+                this.playing[sinkTarget] = false
+            })
+        } else {
+            // Prevent frenzy-clicking the test-audio button.
+            if (app.sounds[soundName].started) return
+
+            app.sounds[soundName].play(this.devices.sinks[sinkTarget])
+            setTimeout(() => {
+                app.sounds[soundName].stop()
+                this.playing[sinkTarget] = false
+            }, 2500)
+        }
+    }
+
 
     // Allow plugins to add their own shared methods. These
     // must be added before components are setting their
@@ -221,6 +244,7 @@ function helpers(app) {
                 }
             },
             openTab: _helpers.openTab,
+            playSound: _helpers.playSound,
             setLayer: function(layerName) {
                 app.setState({ui: {layer: layerName}}, {encrypt: false, persist: true})
             },

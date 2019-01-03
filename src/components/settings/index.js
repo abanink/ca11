@@ -6,6 +6,15 @@ module.exports = (app) => {
     * @memberof fg.components
     */
     const Settings = {
+        data: function() {
+            return {
+                playing: {
+                    headsetOutput: false,
+                    ringOutput: false,
+                    speakerOutput: false,
+                },
+            }
+        },
         methods: Object.assign({
             classes: function(block, modifier) {
                 let classes = {}

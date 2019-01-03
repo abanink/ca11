@@ -1,7 +1,8 @@
 <component class="c-availability">
-
-    <Field name="dnd_availability" type="checkbox"
+    <FieldCheckbox
+        v-model="dnd"
         :disabled="!webrtc.enabled"
+        name="dnd_availability"
         :label="$t('DND')"
-        :model.sync="dnd"/>
+    />
 </component>
