@@ -68,12 +68,6 @@ class Sig11 {
 
     async start() {
         const app = connect()
-
-        app.use(serveStatic(this.settings.BUILD_DIR))
-        app.use((req, res, next) => {
-            return fs.createReadStream(path.join(this.settings.BUILD_DIR, 'index.html')).pipe(res)
-        })
-
         this.server = http.createServer(app).listen(this.settings.sig11.port)
         this.wss = new WebSocket.Server({
             disableHixie: true,
