@@ -45,6 +45,7 @@ module.exports = function(settings) {
                 debug: !settings.BUILD_OPTIMIZED,
                 packageCache: {},
                 paths: [
+                    settings.NODE_DIR,
                     path.join(settings.ROOT_DIR, '../'),
                 ],
             }
@@ -191,19 +192,6 @@ module.exports = function(settings) {
     }
 
 
-    tasks.plugins = function codeAppPlugins(done) {
-        const builtin = settings.brands[settings.BRAND_TARGET].plugins.builtin
-        const custom = settings.brands[settings.BRAND_TARGET].plugins.custom
-
-        Promise.all([
-            helpers.plugins(Object.assign(builtin, custom), 'bg'),
-            helpers.plugins(Object.assign(builtin, custom), 'fg'),
-        ]).then(() => {
-            done()
-        })
-    }
-
-
     tasks.electron = function codeElectron(done) {
         if (settings.BUILD_TARGET !== 'electron') {
             logger.info(`Electron task doesn\'t make sense for build target ${settings.BUILD_TARGET}`)
@@ -218,6 +206,19 @@ module.exports = function(settings) {
         const electronBrandSettings = settings.brands[settings.BRAND_TARGET].vendor
         const settingsFile = `./build/${settings.BRAND_TARGET}/${settings.BUILD_TARGET}/settings.json`
         writeFileAsync(settingsFile, JSON.stringify(electronBrandSettings)).then(() => {done()})
+    }
+
+
+    tasks.plugins = function codeAppPlugins(done) {
+        const builtin = settings.brands[settings.BRAND_TARGET].plugins.builtin
+        const custom = settings.brands[settings.BRAND_TARGET].plugins.custom
+
+        Promise.all([
+            helpers.plugins(Object.assign(builtin, custom), 'bg'),
+            helpers.plugins(Object.assign(builtin, custom), 'fg'),
+        ]).then(() => {
+            done()
+        })
     }
 
 

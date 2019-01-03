@@ -52,7 +52,7 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
     // Setup directory config.
     settings.BRAND_TARGET = argv.brand ? argv.brand : process.env.BRAND ? process.env.BRAND : 'ca11'
     settings.BRAND_TARGETS = Object.keys(settings.brands)
-    settings.BUILD_ROOT_DIR = path.join(settings.BASE_DIR, 'build')
+    settings.BUILD_ROOT_DIR = argv.buildroot ? argv.buildroot : path.join(settings.BASE_DIR, 'build')
 
     settings.PACKAGE = require(`${settings.ROOT_DIR}/package`)
 
@@ -106,12 +106,11 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
                 label: 'Config',
                 nodes: [
                     {
-                        label: 'Dirs',
+                        label: c.cyan('Directories'),
                         nodes: [
                             {label: `ROOT_DIR             ${tildify(settings.ROOT_DIR)}`},
                             {label: `BASE_DIR             ${tildify(settings.BASE_DIR)}`},
                             {label: `SRC_DIR              ${tildify(settings.SRC_DIR)}`},
-                            {label: `BUILD_ROOT_DIR       ${tildify(settings.BUILD_ROOT_DIR)}`},
                             {label: `DIST_DIR             ${tildify(settings.DIST_DIR)}`},
                             {label: `BUILD_DIR            ${tildify(settings.BUILD_DIR)}`},
                             {label: `THEME_DIR            ${tildify(settings.THEME_DIR)}`},
@@ -120,9 +119,10 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
                         ],
                     },
                     {
-                        label: 'Flags',
+                        label: c.cyan('Flags'),
                         nodes: [
                             {label: `BRAND_TARGET         --brand ${format.selected(settings.BRAND_TARGETS, settings.BRAND_TARGET)}`},
+                            {label: `BUILD_ROOT_DIR       --buildroot <${c.bold.white(tildify(settings.BUILD_ROOT_DIR))}>`},
                             {label: `BUILD_TARGET         --target ${format.selected(settings.BUILD_TARGETS, settings.BUILD_TARGET)}`},
                             {label: `BUILD_OPTIMIZED      --optimized <${settings.BUILD_OPTIMIZED ? c.bold.red('yes') : c.bold.red('no')}>`},
                             {label: `BUILD_VERBOSE        --verbose <${settings.BUILD_VERBOSE ? c.bold.red('yes') : c.bold.red('no')}`},
@@ -135,7 +135,7 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
                         ],
                     },
                     {
-                        label: 'Environment',
+                        label: c.cyan('Environment'),
                         nodes: [
                             {label: `DEBUG_MODE           DEBUG=${settings.DEBUG_MODE ? c.bold.green('1') : c.bold.grey('0')}`},
                             {label: `HEADLESS             HEADLESS=${settings.HEADLESS ? c.bold.green('1') : c.bold.grey('0')}`},
