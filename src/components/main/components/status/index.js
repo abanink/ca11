@@ -23,7 +23,7 @@ module.exports = (app) => {
 
                 if (generalError) {
                     classes.error = true
-                    tooltip.sip = tooltip.sig11 = generalError.capitalize()
+                    tooltip.sip = tooltip.sig11 = generalError.ca()
                 } else {
                     if (!this.sip.enabled) tooltip.sip = this.$t('disabled')
                     else {
@@ -59,8 +59,8 @@ module.exports = (app) => {
                     }
                 }
 
-                this.tooltipSip = tooltip.sip.capitalize()
-                this.tooltipSig11 = tooltip.sig11.capitalize()
+                this.tooltipSip = tooltip.sip.ca()
+                this.tooltipSig11 = tooltip.sig11.ca()
 
                 if (!classes.error && !classes.warning) classes.ok = true
                 return classes

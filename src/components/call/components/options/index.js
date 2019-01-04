@@ -68,6 +68,7 @@ module.exports = (app) => {
         staticRenderFns: templates.call_options.s,
         store: {
             description: 'calls.description',
+            ui: 'ui',
         },
     }
 

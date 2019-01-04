@@ -3,12 +3,9 @@
 
     <div class="step-description">
         <span class="cf">
-            {{$t('{name} uses Sentry error tracking. This helps us to respond better to potential stability issues in {name}. Logged exceptions are semi-anonimized and are removed after the issue is fixed.', {name: app.name})}}
+            {{$t('Sentry application error tracking helps us to improve {name}. Do you want to help by allowing {name} to send application error data to Sentry?', {name: app.name})}}
         </span>
-        <span class="cf">
-            {{$t('do you want to enable error tracking?', {name: app.name})}}
-        </span>
-        <em class="help cf">{{$t('you can always change this choice afterwards in Settings.')}}</em>
+        <em class="help cf">{{$t('you can always change your choice afterwards in Settings.')}}</em>
         <br/>
     </div>
 

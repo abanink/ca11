@@ -2,38 +2,55 @@
 @import 'ca11/lib/variables';
 
 .c-login {
+    $self: &;
     align-items: stretch;
     display: flex;
     flex-direction: column;
     justify-content: stretch;
     justify-items: stretch;
     margin: 0 auto;
-    max-width: 700px;
+    max-width: 400px;
+    padding: $spacer * 3;
     width: 100%;
+
 
     header {
         text-align: center;
         width: 100%;
 
-        .greeting {
+        #{$self}__title {
             color: var(--primary-base);
             font-family: 'Rajdhani';
-            font-size: 1.8rem;
+            font-size: calc(var(--text-base) * 2);
+            letter-spacing: 3px;
             font-weight: 600;
+            text-transform: uppercase;
         }
     }
 
-    .welcome-message {
+
+    &__subtitle {
         color: var(--grey-400);
-        max-width: 70%;
-        padding-bottom: $spacer;
-        padding-top: $spacer * 2;
-
-        .session-name {
-            color: var(--primary-base);
-            font-style: italic;
-        }
+        font-size: var(--text-base);
+        font-weight: 600;
+        font-family: 'Rajdhani';
+        text-transform: capitalize;
+        letter-spacing: 0px;
+        padding: var(--spacer);
     }
+
+
+    // .welcome-message {
+    //     color: var(--grey-400);
+    //     max-width: 70%;
+    //     padding-bottom: $spacer;
+    //     padding-top: $spacer * 2;
+
+    //     .session-name {
+    //         color: var(--primary-base);
+    //         font-style: italic;
+    //     }
+    // }
 
     .buttons {
         padding-bottom: $spacer;

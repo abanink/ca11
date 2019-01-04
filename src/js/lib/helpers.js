@@ -132,11 +132,11 @@ function helpers(app) {
                 request_terminated: $t('busy here'),
             },
             callingDisabled: {
-                device: $t('audio device settings - invalid audio device').capitalize(),
-                disconnected: $t('not connected to service').capitalize(), // Non-WebRTC status.
-                mediaPermission: $t('microphone access denied').capitalize(),
-                offline: $t('internet connection is offline').capitalize(),
-                unregistered: $t('not registered at service').capitalize(),
+                device: $t('audio device settings - invalid audio device').ca(),
+                disconnected: $t('not connected to service').ca(), // Non-WebRTC status.
+                mediaPermission: $t('microphone access denied').ca(),
+                offline: $t('internet connection is offline').ca(),
+                unregistered: $t('not registered at service').ca(),
             },
         }
     }
@@ -296,7 +296,7 @@ function helpers(app) {
             greeting: function() {
                 let hours = new Date().getHours()
                 if (hours < 12) return this.$t('good morning')
-                else if (hours >= 12 && hours <= 17) return this.$t('good afternoon').capitalize()
+                else if (hours >= 12 && hours <= 17) return this.$t('good afternoon').ca()
                 else return this.$t('good evening')
             },
             hours: function() {

@@ -5,7 +5,10 @@
 class Utils {
 
     constructor() {
-        String.prototype.capitalize = function() {
+        String.prototype.ca = function() {
+            return this.charAt(0).toUpperCase() + this.slice(1)
+        }
+        String.prototype.uc = function() {
             return this.charAt(0).toUpperCase() + this.slice(1)
         }
     }

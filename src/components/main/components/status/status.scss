@@ -5,18 +5,17 @@
 .status {
     background: var(--grey-50);
     color: var(--grey-200);
+    align-items: center;
 
     // The icon links container at the right top of the popup.
     &__menu {
         align-items: center;
         display: flex;
         flex-direction: row;
+        flex: 1;
 
         .option {
-            height: $spacer * 6;
-            line-height: $spacer * 6;
-            padding: 0 $spacer;
-            text-align: center;
+            height: 100%;
             width: var(--space-4);
 
             svg {
@@ -42,8 +41,7 @@
 
     &__indicators {
         // Don't wrap but put dots at the end if it doesn't fit.
-        align-items: center;
-        background: var(--grey-50);
+        align-items: stretch;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -51,7 +49,10 @@
         width: var(--space-4);
 
         .status-indicator {
-            text-align: center;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            width: 50%;
 
             svg {
                 @include icon-size($spacer * 3.5);
@@ -69,7 +70,7 @@
 .main-status {
     display: flex;
     font-family: 'Rajdhani';
-    font-size: text-scale('sm');
+    // font-size: text-scale('sm');
     font-weight: 600;
     justify-content: space-between;
     // margin-bottom: var(--spacer-05);

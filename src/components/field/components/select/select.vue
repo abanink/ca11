@@ -12,7 +12,7 @@
             </option>
 
             <option v-else-if="placeholder" :value="null">
-                {{placeholder.capitalize()}}
+                {{placeholder.ca()}}
             </option>
 
             <option
@@ -20,7 +20,7 @@
                 v-for="option in options"
                 :selected="option[idfield] === value.id"
                 :value="option[idfield]"
-            >{{$t(option.name).capitalize()}}</option>
+            >{{$t(option.name).ca()}}</option>
         </select>
         <slot class="c-select__button" name="button"></slot>
     </div>

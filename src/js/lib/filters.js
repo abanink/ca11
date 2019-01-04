@@ -23,7 +23,7 @@ function filters(app) {
             fuzzy = app.$t('yesterday')
         }
         if (!fuzzy) return new Date(value).toLocaleString()
-        else return fuzzy.capitalize()
+        else return fuzzy.ca()
     })
 }
 

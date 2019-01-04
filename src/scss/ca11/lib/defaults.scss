@@ -3,9 +3,9 @@
 */
 html,
 body {
-    width: 100%;
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 // Animations get in the way while running browser tests
@@ -13,6 +13,7 @@ body {
 // forcefully suppress them when a testrunner is using
 // the application.
 html {
+    font-size: var(--text-base);
     font-family: 'Roboto';
     touch-action: manipulation;
 
@@ -99,7 +100,7 @@ video {
 
 
 ::-webkit-scrollbar {
-    width: var(--spacer);
+    width: var(--gutter12);
 }
 
 ::-webkit-scrollbar-track {
@@ -118,7 +119,7 @@ video {
 // Small helper classes to apply proper capitalizing without polluting translations.
 .lc {text-transform: lowercase;}
 .uc {text-transform: uppercase;}
-.ca {text-transform: capitalize;}
+.ca {text-transform: ca;}
 
 .cf {
     display: inline-block;

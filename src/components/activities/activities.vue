@@ -8,7 +8,7 @@
             <!-- <div class="field field-text search">
                 <div class="control">
                     <input class="input" autofocus type="input"
-                        :placeholder="$t('search').capitalize() + '...'"
+                        :placeholder="$t('search') + '...'"
                         :disabled="search.disabled"
                         v-model="search.input"/>
                 </div>
@@ -21,7 +21,7 @@
             <button
                 class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-reminders')"
-                :data-tooltip="$t('reminders').capitalize()"
+                :data-tooltip="$t('reminders')"
                 @click="toggleFilterReminders()"
             >
                 <icon name="idea"/>
@@ -29,7 +29,7 @@
             <button
                 class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-missed-incoming')"
-                :data-tooltip="$t('missed').capitalize()"
+                :data-tooltip="$t('missed')"
                 @click="toggleFilterMissedIncoming()"
                 >
                 <icon name="call-missed-incoming"/>
@@ -37,7 +37,7 @@
             <button
                 class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-missed-outgoing')"
-                :data-tooltip="$t('unanswered').capitalize()"
+                :data-tooltip="$t('unanswered')"
                 @click="toggleFilterMissedOutgoing()"
             >
                 <icon name="call-missed-outgoing"/>

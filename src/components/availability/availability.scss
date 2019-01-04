@@ -1,5 +1,11 @@
 @import 'ca11/lib/variables';
 
 .c-availability {
-    clear: both;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .field {
+        margin: 0;
+    }
 }

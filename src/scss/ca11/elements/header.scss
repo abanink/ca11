@@ -31,14 +31,16 @@
 
     &__actions {
         align-items: center;
-        border-right: var(--spacer) solid var(--primary-base);
+        // Border in the same style as the scroll trackbar.
+        border-right: var(--gutter12) solid var(--primary-base);
         color: var(--primary-base);
         display: flex;
         flex-direction: row-reverse;
-        padding-right: $spacer;
+
 
         #{$self}__action {
-            margin-left: var(--spacer);
+            padding-right: var(--gutter12);
+            // margin-left: var(--spacer);
 
             svg {
                 @include icon-size(var(--icon-normal));
@@ -47,27 +49,30 @@
     }
 
     &__filters {
+        margin-left: var(--gutter);
         align-items: center;
         display: flex;
         flex: 1;
         height: 100%;
-        margin-left: $spacer;
+        // margin-left: var(--gutter);
 
         #{$self}__filter {
             align-items: center;
             color: var(--grey-200);
             display: flex;
             justify-content: center;
+            // Override .field's margin-bottom.
+            margin: 0;
             margin-right: $spacer;
             padding: 0;
-            padding-right: $spacer / 4;
+            padding-right: var(--spacer);
             user-select: none;
 
             &--active {
                 color: $grey-color;
 
                 svg {
-                    border: 2px solid var(--primary-base);
+                    border: $spacer / 4 solid var(--primary-base);
                     fill: var(--primary-base);
                 }
             }
@@ -81,14 +86,14 @@
                 background: var(--grey-50);
                 border: $spacer / 4 solid $white-color;
                 border-radius: 50%;
-                padding: $spacer / 2;
+                padding: var(--spacer-05);
             }
         }
     }
 
     &__tabs {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         width: 100%;
 
         li {
@@ -97,8 +102,9 @@
             border-top: $spacer-05 solid transparent;
             color: var(--grey-200);
             display: flex;
-            flex: 1;
+            // flex: 1;
             justify-content: center;
+            width: var(--space-4);
 
             &.active {
                 border-bottom: $spacer-05 solid var(--primary-base);

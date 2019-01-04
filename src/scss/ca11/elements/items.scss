@@ -5,9 +5,9 @@
     align-items: stretch;
     display: flex;
     flex-wrap: wrap;
-    justify-items: stretch;
-    padding: var(--gutter12);
-    width: 100%;
+    // justify-items: stretch;
+    // background: #f00;
+    // width: 100%;
 
     &__empty {
         align-items: center;
@@ -45,14 +45,19 @@
 
 .item {
     $item: &;
+    border-left: var(--gutter12) solid transparent;
     display: flex;
     flex-direction: column;
     margin-bottom: var(--gutter);
     padding: var(--gutter12);
+    padding-left: var(--gutter12);
+    transition: border-left ease-in 0.1s;
     width: 100%;
 
     &.selected {
-        box-shadow: 0 0 var(--spacer) var(--grey-500);
+        // box-shadow: 0 0 var(--spacer) var(--grey-500);
+
+        border-left: var(--gutter12) solid var(--primary-base);
 
         #{$item}__context {
             display: flex;
@@ -77,6 +82,7 @@
             // Force a static width.
             flex: 0 0 var(--icon-large);
             margin-right: var(--gutter);
+            padding: var(--spacer-05);
         }
 
         #{$item}__text .editable,

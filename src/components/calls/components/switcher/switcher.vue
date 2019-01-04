@@ -13,7 +13,7 @@
         <div
             class="call placeholder tooltip tooltip-left"
             :class="{active: callActive.status === 'new'}"
-            :data-tooltip="$t('setup new call').capitalize()"
+            :data-tooltip="$t('setup new call')"
             @click="activateCall()"
         >
             <icon name="phone-add"/>

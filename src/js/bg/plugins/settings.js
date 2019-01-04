@@ -38,11 +38,11 @@ class PluginSettings extends Plugin {
                     output: [],
                     ready: true,
                     sinks: {
-                        headsetInput: {id: 'default', name: this.app.$t('default').capitalize()},
-                        headsetOutput: {id: 'default', name: this.app.$t('default').capitalize()},
-                        ringOutput: {id: 'default', name: this.app.$t('default').capitalize()},
-                        speakerInput: {id: 'default', name: this.app.$t('default').capitalize()},
-                        speakerOutput: {id: 'default', name: this.app.$t('default').capitalize()},
+                        headsetInput: {id: 'default', name: this.app.$t('default').ca()},
+                        headsetOutput: {id: 'default', name: this.app.$t('default').ca()},
+                        ringOutput: {id: 'default', name: this.app.$t('default').ca()},
+                        speakerInput: {id: 'default', name: this.app.$t('default').ca()},
+                        speakerOutput: {id: 'default', name: this.app.$t('default').ca()},
                     },
                     speaker: {
                         enabled: false,

@@ -29,8 +29,8 @@ module.exports = (app) => {
             callTitle: function(call) {
                 const translations = app.helpers.getTranslations().call
                 if (call.status === 'new') {
-                    if (call.active) return this.$t('close new call').capitalize()
-                    else return `${this.$t('select new call')}`.capitalize()
+                    if (call.active) return this.$t('close new call').ca()
+                    else return `${this.$t('select new call')}`.ca()
                 } else {
                     let text = `${call.endpoint} - `
                     if (call.status === 'accepted') {
@@ -40,7 +40,7 @@ module.exports = (app) => {
                         text += translations[call.status]
                     }
 
-                    return text.capitalize()
+                    return text.ca()
                 }
             },
             newCallAllowed: function() {

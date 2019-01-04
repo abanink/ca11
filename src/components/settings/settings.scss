@@ -1,8 +1,6 @@
 @import 'ca11/lib/variables';
 
 .c-settings {
-    background: none;
-    width: 100%;
 
     .soundmeter {
         border: 1px solid var(--grey-50);
@@ -32,11 +30,6 @@
                 }
             }
         }
-    }
-
-    // The container for the save button.
-    .tabs-actions {
-        margin-top: $spacer * 2;
     }
 
     .network-public-key {

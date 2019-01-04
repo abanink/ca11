@@ -8,7 +8,7 @@
             <button
                 class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-favorites')"
-                :data-tooltip="$t('favorites').capitalize()"
+                :data-tooltip="$t('favorites')"
                 @click="toggleFilterFavorites()"
             >
                 <icon name="star"/>
@@ -16,7 +16,7 @@
             <button
                 class="header__filter tooltip tooltip-bottom"
                 :class="classes('filter-presence')"
-                :data-tooltip="$t('presence').capitalize()"
+                :data-tooltip="$t('presence')"
                 @click="toggleFilterPresence()"
             >
                 <icon name="presence"/>
@@ -54,7 +54,7 @@
             <!-- <div class="field field-text search">
                 <div class="control">
                     <input class="input" autofocus type="input"
-                        :placeholder="$t('search').capitalize() + '...'"
+                        :placeholder="$t('search') + '...'"
                         :disabled="search.disabled"
                         v-model="search.input"/>
                 </div>
@@ -174,7 +174,7 @@
                         v-model="endpoint.number"
                         class="editable context__entry-input"
                         type="text"
-                        :placeholder="$t('phonenumber or extension').capitalize()"
+                        :placeholder="$t('phonenumber or extension')"
                         :readonly="!editMode"
                     />
                     <input
@@ -183,7 +183,7 @@
                         class="editable context__entry-input"
                         type="text"
                         :readonly="!editMode"
-                        :placeholder="$t('public key').capitalize()"
+                        :placeholder="$t('public key')"
                     />
 
                     <!-- entry options at the right -->
