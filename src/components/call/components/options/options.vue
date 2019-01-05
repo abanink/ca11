@@ -1,7 +1,7 @@
 <component class="c-call-options">
 
     <button
-        v-if="!call.id"
+        v-if="!call.id && ui.layer === 'calls'"
         :disabled="!description.endpoint"
         class="media-controls-option tooltip tooltip-left"
         :data-tooltip="$t('place call')"

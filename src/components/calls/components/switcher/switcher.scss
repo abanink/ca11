@@ -5,7 +5,6 @@
 // The most upper box containing account info and
 // icon-links to several locations.
 .c-call-switcher {
-    background: var(--grey-500);
     border-top: var(--spacer-05) solid $white-color;
 
     .container {
@@ -18,6 +17,8 @@
     .call {
         @include icon-size($spacer * 6.25);
         align-items: center;
+        background: var(--grey-500);
+        color: var(--grey-400);
         display: flex;
         height: $space-4;
         justify-content: center;
@@ -29,18 +30,15 @@
 
         svg {
             @include icon-size($spacer * 3);
-            fill: var(--grey-400);
         }
 
         &.hint {
             @include animation('hint-pulse 1s infinite ease-in-out');
         }
 
-        &:hover {
-            svg {fill: $grey-color;}
-        }
-
+        &:hover,
         &.active {
+            background: var(--grey-400);
             svg {fill: var(--grey-50);}
         }
     }

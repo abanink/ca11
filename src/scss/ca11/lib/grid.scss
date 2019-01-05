@@ -49,10 +49,9 @@
         //     grid-area: main-content-base;
         // }
 
+        &.c-about,
         &.c-settings {
             grid-column-end: media-controls;
-            // grid-template-areas: 'main';
-            // grid-template-rows: var(--space-433) fit-content(100%);
         }
 
         &.c-calls {
@@ -69,10 +68,10 @@
 
 .c-wizard,
 .c-login {
-    grid-column-start: 1;
     grid-column-end: 4;
-    grid-row-start: main-status;
+    grid-column-start: 1;
     grid-row-end: main-content;
+    grid-row-start: main-status;
 }
 
 

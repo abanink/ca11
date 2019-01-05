@@ -5,16 +5,10 @@ module.exports = (app) => {
     */
     const Calls = {
         computed: Object.assign({
-            keypadEnabled: function() {
-                if (this.callingDisabled) return false
-                if (this.sip.enabled && !['loading', 'registered'].includes(this.sip.status)) return false
-                if (this.sig11.enabled && !['loading', 'registered'].includes(this.sig11.status)) return false
-                return true
-            },
             protocols: function() {
                 let protocols = [
-                    {disabled: !this.sip.enabled, name: 'sip', value: 'sip'},
                     {disabled: !this.sig11.enabled, name: 'sig11', value: 'sig11'},
+                    {disabled: !this.sip.enabled, name: 'sip', value: 'sip'},
                 ]
                 return protocols
             },

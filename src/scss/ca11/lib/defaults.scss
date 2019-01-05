@@ -13,8 +13,8 @@ body {
 // forcefully suppress them when a testrunner is using
 // the application.
 html {
-    font-size: var(--text-base);
     font-family: 'Roboto';
+    font-size: var(--text-base);
     touch-action: manipulation;
 
     // Styling adapted for Puppeteer screenshots/tests.
@@ -23,6 +23,10 @@ html {
             transition: none !important; // sass-lint:disable-line no-important
         }
     }
+}
+
+a {
+    color: var(--primary-base);
 }
 
 component {

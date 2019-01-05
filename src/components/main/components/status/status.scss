@@ -3,64 +3,77 @@
 
 
 .status {
+    align-items: center;
     background: var(--grey-50);
     color: var(--grey-200);
-    align-items: center;
 
     // The icon links container at the right top of the popup.
     &__menu {
         align-items: center;
         display: flex;
-        flex-direction: row;
         flex: 1;
+        flex-direction: row;
+    }
 
-        .option {
-            height: 100%;
-            width: var(--space-4);
+    &__indicator,
+    &__option {
+        height: 100%;
+        width: var(--space-4);
 
-            svg {
-                @include icon-size(var(--icon-normal));
-            }
+        svg {
+            @include icon-size(var(--icon-normal));
+        }
 
-            &.disabled {
-                opacity: 0.3;
+        &.active,
+        &:hover {
+            cursor: pointer;
+        }
+    }
 
-                &:hover {
-                    cursor: default;
-                }
-            }
+    &__option {
+        &.disabled {
+            opacity: 0.3;
 
-            &.active,
             &:hover {
-                // background: $white-color;
-                // color: var(--primary-base);
-                cursor: pointer;
+                cursor: default;
             }
         }
     }
 
-    &__indicators {
-        // Don't wrap but put dots at the end if it doesn't fit.
-        align-items: stretch;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        white-space: nowrap;
-        width: var(--space-4);
-
-        .status-indicator {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            width: 50%;
+    &__indicator {
+        .container {
+            background: var(--grey-100);
+            border: var(--border) solid var(--grey-300);
+            border-radius: 50%;
+            display: inline-block;
+            padding: var(--spacer-05);
 
             svg {
-                @include icon-size($spacer * 3.5);
+                @include icon-size(var(--icon-small));
+                fill: $white-color;
             }
-        }
 
-        .dnd-switch {
-            margin-left: $spacer * 3;
+            &.error {background: $red-color;}
+            &.warning {background: $red-color;}
+            &.ok {background: $green-color;}
+
+            &.disabled {background: var(--grey-100);};
+        }
+    }
+
+
+    &__menu-side {
+        // Don't wrap but put dots at the end if it doesn't fit.
+        align-items: stretch;
+        background: var(--grey-50);
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        justify-content: space-between;
+        white-space: nowrap;
+
+        .option {
+            width: var(--space-4);
         }
     }
 }
@@ -76,10 +89,6 @@
     // margin-bottom: var(--spacer-05);
     transition: background 0.5s ease;
     z-index: 100;
-
-    &.error .status-indicators svg {fill: $red-color;}
-    &.warning .status-indicators svg {fill: $red-color;}
-    &.ok .status-indicators svg {fill: $green-color;}
 
     [class^='icon-'] {
         &:hover {

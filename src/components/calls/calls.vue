@@ -2,7 +2,6 @@
 
     <header v-if="callActive.status === 'new'" class="content__header header">
         <icon class="header__icon" name="phone"/>
-        <span class="header__text">{{$t('calls')}}</span>
 
         <div class="header__filters">
             <FieldRadio
@@ -12,14 +11,16 @@
                 :options="protocols"
             />
         </div>
+
+        <span class="header__text">{{$t('calling')}}</span>
         <div class="header__actions"></div>
     </header>
     <CallMediaPreview v-else-if="callActive.id" :call="callActive"/>
 
     <!-- calling disabled -->
     <main class="main">
-        <div v-if="!keypadEnabled" class="call-disabled">
-            <icon class="disabled-icon" name="dialpad-off"/>
+        <div v-if="callingDisabled" class="call-disabled">
+            <icon class="disabled-icon" name="phone"/>
             <div class="disabled-text">
                 <span class="cf">{{$t('service unavailable.')}}</span><br/>
                 <span class="cf">{{$t('what\'s wrong?')}}</span>
@@ -33,7 +34,7 @@
             </div>
         </div>
 
-        <Call v-if="callActive.id" :call="callActive"/>
+        <Call v-else-if="callActive.id" :call="callActive"/>
         <!-- starting without any active call -->
         <DialerTouch
             v-else

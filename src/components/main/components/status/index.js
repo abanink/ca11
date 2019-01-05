@@ -6,63 +6,55 @@ module.exports = (app) => {
         computed: app.helpers.sharedComputed(),
         data: function() {
             return {
-                tooltipSig11: '',
-                tooltipSip: '',
+                tooltip: {
+                    sig11: '',
+                    sip: '',
+                },
             }
         },
         methods: Object.assign({
-            classes: function() {
+            classes: function(protocol) {
                 let classes = {}
                 let generalError = false
-                let tooltip = {sig11: '', sip: ''}
+                let tooltip = ''
 
                 // Handle common errors that affects any protocol.
                 if (!this.settings.webrtc.media.permission) generalError = this.$t('no microphone access')
                 else if (!this.settings.webrtc.devices.ready) generalError = this.$t('invalid audio device')
                 else if (!this.app.online) generalError = this.$t('offline')
 
+                // General errors are applied to all indicators.
                 if (generalError) {
                     classes.error = true
-                    tooltip.sip = tooltip.sig11 = generalError.ca()
+                    tooltip = generalError.ca()
+                }
+
+                if (!this[protocol].enabled) {
+                    classes.disabled = true
+                    tooltip = this.$t('disabled')
                 } else {
-                    if (!this.sip.enabled) tooltip.sip = this.$t('disabled')
-                    else {
-                        if (this.sip.status === 'loading') tooltip.sip = this.$t('loading')
-                        else if (this.sip.status === 'registered') {
-                            if (this.dnd) {
-                                classes.warning = true
-                                tooltip.sip = this.$t('do not disturb')
-                            } else tooltip.sip = this.$t('registered')
+                    if (this[protocol].status === 'loading') tooltip = this.$t('loading')
+                    else if (this[protocol].status === 'registered') {
+                        if (this.dnd) {
+                            classes.warning = true
+                            tooltip = this.$t('do not disturb')
+                        } else tooltip = this.$t('registered')
 
-                            tooltip.sip += ` (${this.sip.account.selected.username})`
-                        } else {
-                            classes.error = true
-                            if (this.sip.status === 'disconnected') tooltip.sip = this.$t('disconnected')
-                            else if (this.sip.status === 'registration_failed') tooltip.sip = this.$t('failed to register')
-                            else tooltip.sip = this.$t(this.sip.status) // Handle unknown status.
+                        if (protocol === 'sip') {
+                            tooltip += ` (${this.sip.account.selected.username})`
                         }
-                    }
-
-                    if (!this.sig11.enabled) tooltip.sig11 = this.$t('disabled')
-                    else {
-                        if (this.sig11.status === 'loading') tooltip.sig11 = this.$t('loading')
-                        else if (this.sig11.status === 'registered') {
-                            if (this.dnd) {
-                                classes.warning = true
-                                tooltip.sig11 = this.$t('do not disturb')
-                            } else tooltip.sig11 = this.$t('registered')
-                        } else {
-                            classes.error = true
-                            if (this.sig11.status === 'disconnected') tooltip.sig11 = this.$t('disconnected')
-                            else tooltip.sig11 = this.$t(this.sig11.status) // Handle unknown status.
-                        }
+                    } else {
+                        classes.error = true
+                        if (this[protocol].status === 'disconnected') tooltip = this.$t('disconnected')
+                        else if (this[protocol].status === 'registration_failed') tooltip = this.$t('failed to register')
+                        else tooltip = this.$t(this[protocol].status) // Handle unknown status.
                     }
                 }
 
-                this.tooltipSip = tooltip.sip.ca()
-                this.tooltipSig11 = tooltip.sig11.ca()
-
                 if (!classes.error && !classes.warning) classes.ok = true
+
+                this.tooltip[protocol] = tooltip
+
                 return classes
             },
             logout: app.helpers.logout,

@@ -2,7 +2,6 @@
 
     <header class="content__header header">
         <icon class="header__icon" name="contacts"/>
-        <div class="header__text">{{$t('contacts')}}</div>
 
         <div class="header__filters">
             <button
@@ -22,6 +21,8 @@
                 <icon name="presence"/>
             </button>
         </div>
+
+        <div class="header__text">{{$t('contacts')}}</div>
 
         <div class="header__actions">
             <button
@@ -63,6 +64,7 @@
     </header>
 
     <main class="main items" v-click-outside="toggleSelectItem">
+
         <div v-if="!filteredContacts.length" class="items__empty">
             <icon class="items__empty-icon" name="contacts"/>
             <div class="items__empty-text cf">{{$t('no {target}', {target: $t('contacts')})}}</div>

@@ -51,10 +51,16 @@ function helpers(app) {
     _helpers.callingDisabled = function() {
         let errors = []
 
+        let selectedProtocol = app.state.calls.description.protocol
+
         if (!app.state.app.online) errors.push('offline')
         else {
             if (!app.state.settings.webrtc.media.permission) errors.push('mediaPermission')
             if (!(app.state.settings.webrtc.devices.ready)) errors.push('device')
+        }
+
+        if (!['loading', 'registered'].includes(app.state.calls[selectedProtocol].status)) {
+            errors.push('disconnected')
         }
 
         if (!errors.length) return false

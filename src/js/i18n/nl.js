@@ -42,7 +42,7 @@ module.exports = {
     'connect to the {name} network by starting a new session.': 'verbind met het {name} netwerk door een nieuwe sessie te beginnen.',
     'connected': 'verbonden',
     'connection interrupted': 'verbinding verbroken',
-    'contacts': 'contacten',
+    'contacts': 'contactpersonen',
     'continue with an existing session': 'ga door met een bestaande sessie',
     'database schema changed': 'database schema is veranderd',
     'decline all incoming softphone calls.': 'blokkeer alle inkomende softphone gesprekken.',

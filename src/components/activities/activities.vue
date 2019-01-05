@@ -2,7 +2,6 @@
 
     <header class="content__header header">
         <icon class="header__icon" name="recent"/>
-        <div class="header__text">{{$t('activity')}}</div>
 
         <!-- <div class="actions"> -->
             <!-- <div class="field field-text search">
@@ -44,6 +43,7 @@
             </button>
         </div>
 
+        <div class="header__text">{{$t('activity')}}</div>
         <div class="header__actions">
             <button
                 class="header__action"

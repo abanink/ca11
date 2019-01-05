@@ -2,7 +2,6 @@
 
 .c-radio {
     input {
-
         border: 0;
         height: 0;
         overflow: hidden;
@@ -22,12 +21,12 @@
         font-family: 'Rajdhani';
         font-size: 0.9rem;
         font-weight: 600;
-        height: $spacer * 4;
-        line-height: $spacer * 4;
+        height: $spacer * 3;
+        line-height: $spacer * 3;
         text-align: center;
         text-shadow: none;
         transition: all 0.2s ease-in-out;
-        width: $spacer * 7;
+        width: $spacer * 6;
 
         &:first-of-type {
             border-right: 0;

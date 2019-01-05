@@ -1,29 +1,64 @@
-<component class="c-main-status main-status status" :class="classes()">
+<component class="c-main-status main-status status">
 
     <div class="status__menu">
         <!-- Popout link in WebExtension -->
-        <button class="option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
+        <button class="status__option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
             <icon class="ext-tab" name="ext-tab"/>
         </button>
 
-        <button class="option test-statusbar-settings" :class="{active: layer === 'settings'}" @click="setLayer('settings')">
+        <button
+            class="status__option test-statusbar-settings"
+            :class="{active: layer === 'settings'}"
+            @click="setLayer('settings')"
+        >
             <icon class="settings" name="settings"/>
         </button>
 
-        <button class="option" :class="{active: layer === 'about'}" @click="setOverlay('about')">
+        <button
+            v-if="sig11.enabled"
+            class="status__indicator tooltip tooltip-bottom"
+            :data-tooltip="tooltip.sig11"
+        >
+            <div class="container" :class="classes('sig11')">
+            <icon name="mute" v-if="!settings.webrtc.media.permission"/>
+            <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
+            <icon name="spinner" v-else-if="sig11.status === 'loading'" class="spinner"/>
+            <icon name="protocol-sig11" v-else/>
+            </div>
+        </button>
+
+        <button
+            v-if="sip.enabled"
+            class="status__indicator tooltip tooltip-bottom"
+            :data-tooltip="tooltip.sip"
+        >
+            <div class="container" :class="classes('sip')">
+            <icon name="mute" v-if="!settings.webrtc.media.permission"/>
+            <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
+            <icon name="spinner" v-else-if="sip.status === 'loading'" class="spinner"/>
+            <icon name="protocol-sip" v-else/>
+            </div>
+        </button>
+
+        <Availability class="status__option dnd-switch" />
+    </div>
+
+
+
+    <div class="status__menu-side">
+        <button
+            class="status__option"
+            :class="{active: layer === 'about'}"
+            @click="setLayer('about')"
+        >
             <icon name="help"/>
         </button>
 
-        <button class="option" @click="logout">
+        <button class="status__option" @click="logout">
             <icon name="logout"/>
         </button>
 
-    </div>
-
-    <Availability class="dnd-switch" />
-
-    <div class="status__indicators">
-        <div class="status-indicator sig11 tooltip tooltip-right" :data-tooltip="tooltipSig11">
+        <!-- <div class="status-indicator sig11 tooltip tooltip-left" :data-tooltip="tooltipSig11">
             <icon name="protocol-sig11" v-if="!sig11.enabled" class="disabled"/>
             <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
             <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
@@ -31,12 +66,12 @@
             <icon name="protocol-sig11" v-else/>
         </div>
 
-        <div class="status-indicator sip tooltip tooltip-right" :data-tooltip="tooltipSip">
+        <div class="status-indicator sip tooltip tooltip-left" :data-tooltip="tooltipSip">
             <icon name="protocol-sip" v-if="!sip.enabled" class="disabled"/>
             <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
             <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
             <icon name="spinner" v-else-if="sip.status === 'loading'" class="spinner"/>
             <icon name="protocol-sip" v-else/>
-        </div>
+        </div> -->
     </div>
 </component>
