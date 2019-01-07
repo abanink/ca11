@@ -2,45 +2,39 @@
 @import 'ca11/lib/variables';
 
 .c-wizard {
-    padding: $spacer * 3;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    grid-column-end: 4;
+    grid-column-start: 1;
+    grid-row-end: main-content;
+    grid-row-start: main-status;
+    padding: var(--space-3);
+    width: 100%;
 
-
-    .step {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        margin: 0 auto;
-        max-width: 600px;
-        text-align: center;
-
-        > header {
-            color: var(--primary-base);
-            font-family: 'Rajdhani';
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-
-        .step-description {
-            color: var(--grey-300);
-            padding: $spacer * 2 0;
-            text-align: center;
-            width: 75%;
-        }
-
-        .step-container {
-            color: var(--grey-300);
-            width: 75%;
-        }
+    &__header {
+        color: var(--primary-base);
+        font-family: 'Rajdhani';
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
     }
 
-    .progress {
+    &__description {
+        color: var(--grey-300);
+        padding: $spacer * 2 0;
+        text-align: center;
+        // width: 75%;
+    }
+
+    &__progress {
         align-items: center;
         display: flex;
         justify-content: center;
         margin-bottom: $spacer * 3;
         margin-top: $spacer * 3;
 
-        .step-hl {
+        &-step {
             @include icon-size($spacer * 1.5);
             background: var(--grey-200);
             border-radius: 50%;

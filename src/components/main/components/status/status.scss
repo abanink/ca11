@@ -13,20 +13,18 @@
         display: flex;
         flex: 1;
         flex-direction: row;
+        height: 100%;
     }
 
     &__indicator,
     &__option {
+        border-left: var(--gutter12) solid transparent;
+        border-right: var(--gutter12) solid transparent;
         height: 100%;
         width: var(--space-4);
 
         svg {
             @include icon-size(var(--icon-normal));
-        }
-
-        &.active,
-        &:hover {
-            cursor: pointer;
         }
     }
 
@@ -38,24 +36,42 @@
                 cursor: default;
             }
         }
+
+        &.active {
+            border-left: var(--gutter12) solid var(--primary-base);
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     &__indicator {
         .container {
-            background: var(--grey-100);
-            border: var(--border) solid var(--grey-300);
+            background: $white-color;
+            border: $border solid var(--grey-200);
             border-radius: 50%;
             display: inline-block;
-            padding: var(--spacer-05);
+            padding: $spacer / 4;
 
             svg {
-                @include icon-size(var(--icon-small));
-                fill: $white-color;
+                @include icon-size($spacer * 2.5);
+                fill: var(--grey-300);
             }
 
-            &.error {background: $red-color;}
-            &.warning {background: $red-color;}
-            &.ok {background: $green-color;}
+            &.error {
+                border: $border solid $red-color;
+                svg {fill: $red-color;}
+            }
+            &.warning {
+                border: $border solid $red-color;
+                svg {fill: $red-color;}
+            }
+
+            &.ok {
+                border: $border solid $green-color;
+                svg {fill: $green-color;}
+            }
 
             &.disabled {background: var(--grey-100);};
         }

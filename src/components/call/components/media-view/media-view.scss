@@ -7,9 +7,8 @@
     grid-template-columns: repeat(auto-fill, 1fr);
     width: 100%;
 
-
     @media screen and (min-width: $breakpoint-mobile) {
-        grid-template-columns: repeat(auto-fill, calc(100% / 2));
+        grid-template-columns: repeat(auto-fill, 50%);
 
         &.x1 {
             grid-template-columns: repeat(auto-fill, 100%);
@@ -18,7 +17,7 @@
 
     @media screen and (min-width: $breakpoint-tablet) {
         &.x1 {
-            grid-template-columns: repeat(auto-fill, calc(100% / 2));
+            grid-template-columns: repeat(auto-fill, 50%);
         }
 
         &.x2 {

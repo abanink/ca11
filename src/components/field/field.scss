@@ -3,6 +3,7 @@
 
 .field {
     margin-bottom: var(--gutter);
+    max-width: $breakpoint-mobile;
 
     &__label {
         color: var(--grey-300);
@@ -22,7 +23,16 @@
     }
 
     &__element {
+        border: 1px solid var(--grey-100);
+        color: var(--grey-300);
         font-size: var(--text-base);
+        padding: $spacer;
+
+        &:focus,
+        &:active {
+            border: 1px solid var(--primary-base);
+            box-shadow: 0 0 var(--border) var(--primary-base);
+        }
     }
 
 
@@ -30,6 +40,7 @@
         color: var(--grey-300);
         font-size: var(--text-small);
         font-style: italic;
+        padding-top: var(--spacer-05);
     }
 
     &__row {

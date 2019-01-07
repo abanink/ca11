@@ -11,6 +11,9 @@ module.exports = (app) => {
                     const stepIndex = this.options.findIndex((option) => option.name === this.selected.name)
                     app.setState({settings: {wizard: {steps: {selected: this.options[stepIndex - 1]}}}}, {persist: true})
                 },
+                stepBackFirst: function() {
+                    app.helpers.logout()
+                },
                 stepNext: function() {
                     const stepIndex = this.options.findIndex((option) => option.name === this.selected.name)
                     app.setState({settings: {wizard: {steps: {selected: this.options[stepIndex + 1]}}}}, {persist: true})

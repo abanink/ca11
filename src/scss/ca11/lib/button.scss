@@ -6,15 +6,19 @@
     &.is-centered {
         justify-content: center;
     }
+
+    .button {
+        margin: 0 var(--spacer);
+    }
 }
 
 .button {
+    background: var(--grey-100);
     border: var(--border) solid var(--grey-100);
+    color: var(--grey-300);
     font-family: 'Rajdhani';
     font-weight: 600;
-    background: var(--grey-100);
-    color: var(--grey-300);
-    padding: var(--spacer);
+    padding: $spacer;
     text-transform: uppercase;
 
     &[disabled] {

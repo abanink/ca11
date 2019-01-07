@@ -5,7 +5,7 @@
 
         <ul class="header__tabs">
             <li
-                class="tooltip tooltip-right"
+                class="tooltip tooltip-bottom"
                 :class="classes('tabs', 'general')"
                 :data-tooltip="$t('general')"
                 @click="setTab('settings', 'general')"
@@ -13,7 +13,7 @@
                 <icon name="settings-misc"/>
             </li>
             <li
-                class="tooltip tooltip-right"
+                class="tooltip tooltip-bottom"
                 :class="classes('tabs', 'devices')"
                 :data-tooltip="$t('devices')"
                 @click="setTab('settings', 'devices', settings.webrtc.enabled)"
@@ -21,7 +21,7 @@
                 <icon name="headset_mic"/>
             </li>
             <li
-                class="tooltip tooltip-left"
+                class="tooltip tooltip-bottom"
                 :class="classes('tabs', 'sig11')"
                 :data-tooltip="$t('SIG11')"
                 @click="setTab('settings', 'sig11')"
@@ -29,7 +29,7 @@
                 <icon name="protocol-sig11"/>
             </li>
             <li
-                class="tooltip tooltip-left test-tab-phone"
+                class="tooltip tooltip-bottom test-tab-phone"
                 :class="classes('tabs', 'sip')"
                 :data-tooltip="$t('SIP')"
                 @click="setTab('settings', 'sip')"
@@ -39,9 +39,25 @@
         </ul>
     </header>
 
-    <main>
+    <main class="main">
         <!-- General settings -->
-        <div class="main tab" :class="{active: tabs.active === 'general'}">
+        <div class="tab" :class="{active: tabs.active === 'general'}">
+            <FieldSelect
+                v-model="settings.ringtones.selected"
+                name="ringtone"
+                :label="$t('ringtone')"
+                :options="settings.ringtones.options">
+
+                <button
+                    slot="button"
+                    class="button"
+                    :disabled="playing.ringOutput"
+                    @click="playSound('ringTone', 'ringOutput')"
+                >
+                    <icon name="call-active"/>
+                </button>
+            </FieldSelect>
+
             <FieldSelect
                 v-model="language.selected"
                 name="language"
@@ -63,21 +79,6 @@
                 :help="$t('allow us to store anonymized application errors to improve {name}.', {name: app.name})"
                 :label="$t('exception telemetry')"
             />
-
-            <FieldSelect
-                v-model="settings.ringtones.selected"
-                name="ringtone"
-                :label="$t('ringtone')"
-                :options="settings.ringtones.options">
-
-                <button
-                    slot="button"
-                    :disabled="playing.ringOutput"
-                    @click="playSound('ringTone', 'ringOutput')"
-                >
-                    <icon name="call-active"/>
-                </button>
-            </FieldSelect>
         </div>
 
 

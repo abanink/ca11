@@ -24,9 +24,10 @@ class PluginSettings extends Plugin {
             },
             ringtones: {
                 options: [
-                    {id: 1, name: 'default.ogg'},
+                    {id: 'default.ogg', name: 'default'},
+                    {id: 'ringtone-1.ogg', name: 'ringtone-1'},
                 ],
-                selected: {id: 1, name: 'default.ogg'},
+                selected: {id: 'default.ogg', name: 'default'},
             },
             telemetry: {
                 enabled: false,

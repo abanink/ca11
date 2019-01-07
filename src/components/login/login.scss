@@ -22,8 +22,8 @@
             color: var(--primary-base);
             font-family: 'Rajdhani';
             font-size: calc(var(--text-base) * 2);
-            letter-spacing: 3px;
             font-weight: 600;
+            letter-spacing: 3px;
             text-transform: uppercase;
         }
     }
@@ -31,12 +31,16 @@
 
     &__subtitle {
         color: var(--grey-400);
+        font-family: 'Rajdhani';
         font-size: var(--text-base);
         font-weight: 600;
-        font-family: 'Rajdhani';
-        text-transform: capitalize;
-        letter-spacing: 0px;
+        letter-spacing: 0;
         padding: var(--spacer);
+
+
+        &::first-letter {
+            text-transform: uppercase;
+        }
     }
 
 

@@ -43,12 +43,13 @@ module.exports = (app) => {
             },
             press: function(key) {
                 if (!allowedKeys.includes(key)) return
-                app.sounds.buttonTone.play()
                 let newVal = app.utils.sanitizeNumber(`${this.endpoint}${key}`)
                 if (newVal) this.$emit('update:model', newVal)
                 if (this.mode === 'dtmf') {
                     app.emit('bg:calls:dtmf', {callId: this.call.id, key})
                 }
+                navigator.vibrate(50)
+                app.sounds.beep(5, 750, 50)
             },
             removeLastNumber: function() {
                 if (this.callingDisabled) return
@@ -57,7 +58,7 @@ module.exports = (app) => {
         }, app.helpers.sharedMethods()),
         mounted: function() {
             // Only focus on desktop.
-            if (!this.env.isAndroid) this.$refs.input.focus()
+            if (!app.env.isAndroid) this.$refs.input.focus()
         },
         props: {
             call: {default: null},

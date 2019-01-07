@@ -1,0 +1,70 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+
+.c-select {
+    $self: &;
+
+    &__control {
+        display: flex;
+        flex-direction: column;
+        max-width: 300px;
+        position: relative;
+        width: 100%;
+    }
+
+    &__element-container {
+        display: flex;
+        z-index: 1000;
+
+        #{$self}__element {
+            font-size: 1rem;
+            outline: none;
+            padding: $spacer;
+            user-select: none;
+            width: 100%;
+
+            &:focus {
+                outline: 1px solid var(--primary-base);
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+
+    &__options {
+        background: var(--grey-50);
+        border: 1px solid var(--grey-100);
+        box-shadow: 0 0 $spacer rgba(palette('grey', 500), 0.8);
+        margin-top: $spacer * 5;
+        max-height: 162px;
+
+        max-width: inherit;
+        position: absolute;
+        width: inherit;
+        z-index: 100000;
+
+        .option {
+            // color: $grey-color-darker;
+            border-right: var(--gutter12) solid transparent;
+            padding: $spacer;
+            user-select: none;
+            width: inherit;
+
+            &.selected {
+                background: $white-color;
+                border-right: var(--gutter12) solid var(--primary-base);
+                color: var(--primary-base);
+            }
+
+            &:hover {
+                background: $white-color;
+                color: var(--primary-base);
+                cursor: pointer;
+            }
+        }
+    }
+}

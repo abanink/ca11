@@ -49,30 +49,37 @@
     border-left: var(--gutter12) solid transparent;
     display: flex;
     flex-direction: column;
-    margin-bottom: var(--gutter);
+    margin-top: var(--gutter12);
     padding: var(--gutter12);
-    padding-left: var(--gutter12);
-    transition: border-left ease-in 0.1s;
     width: 100%;
 
-    &.selected {
-        // box-shadow: 0 0 var(--spacer) var(--grey-500);
+    &:hover {
+        cursor: pointer;
+    }
 
-        border-left: var(--gutter12) solid var(--primary-base);
+    &.selected {
+        border-left: var(--gutter12) solid var(--grey-200);
 
         #{$item}__context {
             display: flex;
         }
+
+        #{$item}__icon {
+            fill: var(--primary-base);
+        }
+
+        &:hover {
+            cursor: default;
+        }
     }
 
     &__header {
-        align-items: flex-start;
         display: flex;
         flex-direction: row;
         // Required to have ellipsis text overflow on .name.
-        justify-content: flex-start;
         text-overflow: ellipsis;
         width: 100%;
+
 
         #{$item}__icon {
             @include icon-size(var(--icon-large));
@@ -106,6 +113,26 @@
                 font-size: var(--text-small);
                 overflow: hidden;
                 text-overflow: ellipsis;
+            }
+        }
+
+        // Options for this item.
+        #{$item}__options {
+            align-items: center;
+            display: flex;
+
+            #{$item}__option {
+                align-items: center;
+                color: var(--grey-100);
+                display: flex;
+                justify-content: center;
+
+                transition: color ease-in-out 0.1s;
+                user-select: none;
+
+                svg {
+                    @include icon-size(var(--icon-small));
+                }
             }
         }
     }
@@ -164,10 +191,15 @@
             }
 
             @at-root .context__entry-input {
+                color: var(--grey-200);
                 flex: 1 1 auto;
+                font-family: 'Rajdhani';
+                font-weight: 600;
+                font-size: var(--text-normal);
                 // Fixes incorrect width calculation.
                 margin-left: var(--gutter);
-                padding: var(--spacer);
+                // padding: var(--spacer);
+                padding-left: 0;
                 width: 0;
             }
 
@@ -179,27 +211,8 @@
                 // margin-left: $spacer / 2;
 
                 svg {
-                    @include icon-size(var(--icon-normal));
+                    @include icon-size(var(--icon-small));
                 }
-            }
-        }
-    }
-
-    // Options for this item.
-    &__options {
-        display: flex;
-
-        #{$item}__option {
-            align-items: center;
-            color: var(--grey-200);
-            display: flex;
-            justify-content: center;
-
-            transition: color ease-in-out 0.1s;
-            user-select: none;
-
-            svg {
-                @include icon-size(var(--icon-normal));
             }
         }
     }

@@ -1,7 +1,7 @@
 <component class="c-wizard-media-permission">
-    <header class="cf">{{$t('microphone access')}}</header>
+    <header class="c-wizard__header">{{$t('microphone access')}}</header>
 
-    <div class="step-description">
+    <div class="c-wizard__description">
         <span class="cf">{{$t('{name} needs permission to use your microphone in order to make a call.', {name: app.name})}}</span>
         <MediaPermission :soundmeter="false" />
         <span class="after-permission-text cf" v-if="permission">

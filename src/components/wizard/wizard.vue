@@ -1,7 +1,11 @@
-<component class="c-wizard">
-    <component v-bind:is="steps.selected.name" class="step">
-        <div class="progress" slot="progress">
-            <div class="step-hl" :class="{active: _step.name === steps.selected.name}" v-for="_step in steps.options"/>
+<component class="c-wizard wizard__step" v-bind:is="steps.selected.name">
+
+        <div class="c-wizard__progress" slot="progress">
+            <div
+                v-for="_step in steps.options"
+                class="c-wizard__progress-step"
+                :class="{active: _step.name === steps.selected.name}"
+            />
         </div>
-    </component>
+
 </component>

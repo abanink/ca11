@@ -15,8 +15,24 @@
         </button>
 
         <button
+            class="status__option"
+            :class="{active: layer === 'about'}"
+            @click="setLayer('about')"
+        >
+            <icon name="help"/>
+        </button>
+
+
+        <Availability class="status__option dnd-switch" />
+    </div>
+
+
+
+    <div class="status__menu-side">
+
+        <button
             v-if="sig11.enabled"
-            class="status__indicator tooltip tooltip-bottom"
+            class="status__indicator tooltip tooltip-left"
             :data-tooltip="tooltip.sig11"
         >
             <div class="container" :class="classes('sig11')">
@@ -29,7 +45,7 @@
 
         <button
             v-if="sip.enabled"
-            class="status__indicator tooltip tooltip-bottom"
+            class="status__indicator tooltip tooltip-left"
             :data-tooltip="tooltip.sip"
         >
             <div class="container" :class="classes('sip')">
@@ -40,38 +56,9 @@
             </div>
         </button>
 
-        <Availability class="status__option dnd-switch" />
-    </div>
-
-
-
-    <div class="status__menu-side">
-        <button
-            class="status__option"
-            :class="{active: layer === 'about'}"
-            @click="setLayer('about')"
-        >
-            <icon name="help"/>
-        </button>
 
         <button class="status__option" @click="logout">
             <icon name="logout"/>
         </button>
-
-        <!-- <div class="status-indicator sig11 tooltip tooltip-left" :data-tooltip="tooltipSig11">
-            <icon name="protocol-sig11" v-if="!sig11.enabled" class="disabled"/>
-            <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
-            <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
-            <icon name="spinner" v-else-if="sig11.status === 'loading'" class="spinner"/>
-            <icon name="protocol-sig11" v-else/>
-        </div>
-
-        <div class="status-indicator sip tooltip tooltip-left" :data-tooltip="tooltipSip">
-            <icon name="protocol-sip" v-if="!sip.enabled" class="disabled"/>
-            <icon name="mute" v-else-if="!settings.webrtc.media.permission"/>
-            <icon name="mute" v-else-if="!settings.webrtc.devices.ready"/>
-            <icon name="spinner" v-else-if="sip.status === 'loading'" class="spinner"/>
-            <icon name="protocol-sip" v-else/>
-        </div> -->
     </div>
 </component>

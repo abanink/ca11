@@ -5,23 +5,22 @@
             {{$t('welcome to {name}', {name: app.name})}}
         </div>
 
-        <div class="c-login__subtitle cf">
-            <template v-if="(!app.session.active && !app.session.available.length) || user.status === 'login'">
-            {{$t('open platform for secure calling, meetings and collaboration')}}</br>
+        <div class="c-login__subtitle">
+            <template v-if="!app.session.active || user.status === 'login'">
+            {{$t('secure decentralized calling, meetings and collaboration')}}</br>
             </template>
             <template v-else-if="app.session.active === 'new'">
             {{$t('start new session')}}
             </template>
             <template v-else>
-            {{$t('unlock existing session')}}
+            {{$t('unlock session')}}: <br/>{{app.session.active}}
             </template>
         </div>
     </header>
 
     <!-- Login when there are no sessions or when starting a new session-->
-    <div v-if="!app.session.available.length || app.session.active === 'new' || user.status === 'login'">
-        <!-- Only show the username field with a 'new' session. -->
-
+    <div
+        v-if="!app.session.available.length || app.session.active === 'new' || user.status === 'login'">
         <FieldText
             v-model="user.username"
             autocomplete="off"
@@ -43,7 +42,7 @@
             :validation="$v.password"
         />
 
-        <div class="buttons">
+        <div class="buttons is-centered">
             <button
                 v-if="app.session.available.length"
                 class="button cf"
@@ -71,7 +70,7 @@
             :validation="$v.password"
         />
 
-        <div class="buttons">
+        <div class="buttons is-centered">
             <button
                 v-if="app.session.available.length"
                 :disabled="user.status === 'login'"
@@ -89,7 +88,10 @@
     </div>
 
     <!--List all available sessions-->
-    <div v-else-if="app.session.available.length && !app.session.active" class="sessions">
+    <div
+        v-else-if="app.session.available.length && !app.session.active"
+        class="sessions"
+    >
         <div v-for="session in app.session.available" class="session">
             <i class="icon-session" @click="selectSession(session)"><icon name="contact"/></i>
             <div class="description" @click="selectSession(session)">{{session}}</div>
@@ -108,7 +110,7 @@
 
     <footer>
         <div class="help-message cf">
-            {{$t('need help?')}}<br/>
+            {{$t('what is this?')}}<br/>
             <span class="cf">{{$t('click on the')}}</span>
             <i @click="setOverlay('about')"><icon name="help"/></i>{{$t('icon')}}
         </div>

@@ -8,6 +8,8 @@ $space-4: $spacer * 6;
 $space-3: $space-4 / 4 * 3;
 $space-2: $space-4 / 4 * 2;
 
+$border: 2px;
+
 $breakpoint-mobile: 620px;
 $breakpoint-tablet: 768px;
 $breakpoint-desktop: 992px;
@@ -36,7 +38,7 @@ $palette: (
     'grey': (
         500: darken($grey-color, 30%),
         400: darken($grey-color, 20%),
-        300: darken($grey-color, 10%),
+        300: $grey-color,
         200: lighten($grey-color, 30%),
         100: lighten($grey-color, 50%),
         50: lighten($grey-color, 55%)

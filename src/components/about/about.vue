@@ -8,34 +8,60 @@
     </header>
 
     <main class="about main">
-        <div class="support">
-            <div class="support-option">
-                <icon class="support-icon" name="logo"/>
-                <div class="support-title cf">{{$t('online help')}}</div>
-                <div class="support-description">{{app.name}} {{$t('documentation')}}</div>
-                <div class="support-channel link" @click="openTab(vendor.support.website)">{{vendor.name}} website</div>
+        <div class="support-l">
+
+            <div
+                class="support-item"
+                @click="openTab(vendor.support.website)"
+            >
+                <div class="support-item__icon"><icon name="logo"/></div>
+                <div class="support-item-l">
+                    <div class="support-item__title cf">{{$t('need help?')}}</div>
+                    <div class="support-item__description cf">
+                        {{$t('the documentation is here to help you make the most out of the {vendor} softphone', {vendor: app.name})}}!
+                    </div>
+                  </div>
             </div>
 
-            <div v-if="vendor.support.email" class="support-option">
-                <icon class="support-icon" name="mail"/>
-                <div class="support-title">E-mail</div>
-                <div class="support-description cf">{{$t('drop us your question')}}</div>
-                <div class="support-channel"><a :href="'mailto:' + vendor.support.email">{{vendor.support.email}}</a></div>
+            <div
+                v-if="vendor.support.email"
+                class="support-item"
+                @click="openTab('mailto:' + vendor.support.email)"
+            >
+                <div class="support-item__icon"><icon name="mail"/></div>
+                <div class="support-item-l">
+                    <div class="support-item__title cf">{{$t('don\'t be a stranger')}}!</div>
+                    <div class="support-item__description cf">
+                        {{$t('mail us for feedback, media coverage or questions about {vendor} product integration', {vendor: app.name})}}.
+                    </div>
+                </div>
             </div>
 
-            <div v-if="vendor.support.phone" class="support-option">
-                <icon class="support-icon" name="phone"/>
-                <div class="support-title cf">{{$t('phone')}}</div>
-                <div class="support-description cf">{{$t('give us a call')}}:</div>
-                <div class="support-channel link">{{vendor.support.phone}}</div>
+            <div
+                class="support-item"
+                @click="openTab('https://github.com/garage11/ca11/')"
+            >
+                <div class="support-item__icon"><icon name="github"/></div>
+                <div class="support-item-l">
+                    <div class="support-item__title cf">{{$t('{vendor} developers', {vendor: app.name})}}</div>
+                    <div class="support-item__description cf">
+                       {{$t('{vendor} is a free and open software project. Star us, make a feature request or report an issue on Github.', {vendor: app.name})}}
+                    </div>
+                </div>
             </div>
 
-            <div class="support-option">
-                <icon class="support-icon" name="github"/>
-                <div class="support-title">Github</div>
-                <div class="support-description cf">{{$t('report an issue')}}</div>
-                <div class="support-channel link" @click="openTab('https://github.com/garage11/ca11/issues')">Github issues</div>
+            <div
+                v-if="vendor.support.phone"
+                class="support-item"
+            >
+                <div class="support-item__icon"><icon name="phone"/></div>
+                <div class="support-item-l">
+                    <div class="support-item__title cf">{{$t('phone')}}</div>
+                    <div class="support-item__description cf">{{$t('give us a call')}}:</div>
+                    <div class="support-item__channel">{{vendor.support.phone}}</div>
+                </div>
             </div>
+
         </div>
     </main>
 </section>

@@ -252,6 +252,8 @@ function helpers(app) {
             openTab: _helpers.openTab,
             playSound: _helpers.playSound,
             setLayer: function(layerName) {
+                // Haptic feedback for mobile devices.
+                navigator.vibrate(50)
                 app.setState({ui: {layer: layerName}}, {encrypt: false, persist: true})
             },
             setOverlay: function(layerName) {
@@ -267,6 +269,7 @@ function helpers(app) {
                 description.endpoint = ''
             },
             toggleEditMode: function() {
+                navigator.vibrate(250)
                 app.setState({app: {editMode: !app.state.app.editMode}}, {persist: true})
             },
             translations: function(category, key) {

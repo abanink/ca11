@@ -307,12 +307,12 @@ class App extends Skeleton {
     */
     notify(notification) {
         if (typeof notification.timeout === 'undefined') {
-            if (notification.type === 'info') notification.timeout = 3000
-            else notification.timeout = 4500
+            notification.timeout = 1500
         }
         notification.id = shortid.generate()
         let notifications = this.state.app.notifications
         notifications.push(notification)
+        navigator.vibrate(250)
         this.setState({app: {notifications}})
     }
 

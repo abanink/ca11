@@ -1,7 +1,26 @@
+@import 'variables';
+
 @keyframes blink {
     0% {opacity: 0.2;}
     20% {opacity: 1;}
     100% {opacity: 0.2;}
+}
+
+@keyframes glowing {
+    0% {
+        fill: var(--grey-200);
+        filter: drop-shadow(0 0 0 var(--grey-200));
+    }
+
+    50% {
+        fill: var(--primary-base);
+        filter: drop-shadow(0 0 4px rgba(palette('primary', 'base'), 0.5));
+    }
+
+    100% {
+        fill: var(--grey-200);
+        filter: drop-shadow(0 0 0 var(--grey-200));
+    }
 }
 
 @keyframes grow {

@@ -25,46 +25,59 @@
         }
     }
 
-    .support {
-        display: flex;
-        flex-flow: row wrap;
-        padding: $spacer * 3;
+    .support-l {
+        display: grid;
+        // flex-flow: row wrap;
+        // margin: $spacer * 3;
+        grid-template-columns: repeat(auto-fill, 100%);
+        padding: var(--gutter12);
+        // justify-items: stretch;
 
-        .support-option {
-            align-items: center;
+        @media screen and (min-width: $breakpoint-mobile) {
+            grid-template-columns: repeat(auto-fill, 50%);
+        }
+
+        width: 100%;
+
+        .support-item {
+            align-items: stretch;
+            background: var(--grey-50);
+            border-bottom: var(--gutter12) solid transparent;
             display: flex;
-            flex-direction: column;
-            height: 160px;
-            justify-content: center;
-            width: 50%;
+            margin: var(--gutter12);
 
-            .support-icon {
-                @include icon-size($spacer * 3);
-                margin-bottom: $spacer * 2;
+            &-l {
+
+                padding: var(--gutter12);
             }
 
-            .support-title {
-                color: var(--primary-base);
+            &__icon {
+                align-items: center;
+                display: flex;
+                padding: var(--gutter);
+                padding-right: var(--gutter12);
+
+                svg {
+                    @include icon-size($spacer * 5);
+                    color: var(--primary-base);
+                }
+
+            }
+
+            &__title {
+                color: var(--grey-400);
                 font-family: 'Rajdhani';
+                font-size: var(--text-large);
                 font-weight: 600;
             }
 
-            .support-description {
-                text-align: center;
-            }
-
-            .support-channel {
-                color: var(--primary-base);
-                font-family: 'Rajdhani';
-                font-weight: 600;
+            &__description {
+                color: var(--grey-300);
             }
 
             &:hover {
-                box-shadow: 0 ($spacer / 2) 6px 0 rgba(0, 0, 0, 0.2);
-
-                .support-icon {
-                    color: var(--primary-base);
-                }
+                border-bottom: var(--gutter12) solid var(--primary-base);
+                cursor: pointer;
             }
         }
     }

@@ -2,6 +2,10 @@
 
 .c-settings {
 
+    .main {
+        overflow: visible;
+    }
+
     .soundmeter {
         border: 1px solid var(--grey-50);
     }

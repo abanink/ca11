@@ -1,20 +1,6 @@
 module.exports = (app) => {
     const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '#']
 
-    // Detect the mouseup event on the window tag as opposed to the li
-    // tag, otherwise if we release the mouse when not over a button,
-    // the tone will remain playing.
-    function stopKeypress() {
-        if (app.sounds.dtmfTone.status) {
-            window.setTimeout(() => {
-                app.sounds.dtmfTone.stop()
-            }, 50)
-        }
-    }
-
-    document.addEventListener('mouseup', stopKeypress)
-    document.addEventListener('touchend', stopKeypress)
-
     /**
     * @memberof fg.components
     */
@@ -50,11 +36,6 @@ module.exports = (app) => {
             },
             pressKey: function(key) {
                 if (!allowedKeys.includes(key)) return
-                app.sounds.dtmfTone.play(key)
-                // Force stop playing dtmf sound after x amount of time,
-                // because mouseup event may not fire properly, in case of
-                // a right-click => contextmenu.
-                window.setTimeout(() => app.sounds.dtmfTone.stop(), 500)
 
                 let newVal = app.utils.sanitizeNumber(`${this.endpoint}${key}`)
                 if (newVal) this.$emit('update:model', newVal)

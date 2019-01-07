@@ -13,7 +13,6 @@
     width: 100%;
 
     &__icon {
-        // align-self: flex-end;
         background: var(--primary-base);
         fill: $white-color;
         height: 100%;
@@ -54,12 +53,11 @@
     }
 
     &__filters {
-        margin-left: var(--gutter);
         align-items: center;
         display: flex;
         flex: 1;
         height: 100%;
-        // margin-left: var(--gutter);
+        margin-left: var(--gutter);
 
         #{$self}__filter {
             align-items: center;
@@ -73,7 +71,7 @@
             padding-right: var(--spacer);
             user-select: none;
 
-            &--active {
+            &.active {
                 color: $grey-color;
 
                 svg {
@@ -103,8 +101,8 @@
 
         li {
             align-items: center;
-            border-bottom: $spacer-05 solid transparent;
-            border-top: $spacer-05 solid transparent;
+            border-bottom: var(--gutter12) solid transparent;
+            border-top: var(--gutter12) solid transparent;
             color: var(--grey-200);
             display: flex;
             // flex: 1;
@@ -112,7 +110,7 @@
             width: var(--space-4);
 
             &.active {
-                border-bottom: $spacer-05 solid var(--primary-base);
+                border-bottom: var(--gutter12) solid var(--primary-base);
                 color: var(--primary-base);
             }
 

@@ -1,3 +1,4 @@
+@import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
 .extension {
@@ -14,21 +15,11 @@
     width: 100%;
     z-index: 100000;
 
-    &.topbar {
-        // Must start at the end of the top navigation bar.
-        top: $spacer * 5;
-    }
-
-    &.sidebar {
-        left: $spacer * 6;
-        width: calc(100% - #{$spacer * 6});
-    }
-
     .notification {
         align-items: center;
         background: var(--primary-base);
+        border-bottom: var(--spacer-05) solid var(--grey-50);
         border-radius: 0;
-        border-top: 2px solid var(--grey-50);
         color: var(--grey-50);
         display: flex;
         flex-direction: row;
@@ -40,23 +31,16 @@
         padding: 0;
         transition: all 0.25s;
 
-        &.is-warning {
-            background: lighten($orange-color, 40%);
-            border-bottom: 2px solid $orange-color;
-            color: darken($orange-color, 25%);
-
-            .icon svg {
-                fill: $orange-color;
-            }
-        }
-
-
         .icon {
+            align-items: center;
+            background: var(--primary-base);
+            display: flex;
             height: 100%;
-            line-height: $spacer * 6;
-            min-width: $spacer * 6;
+            justify-content: center;
+            width: var(--space-4);
 
             svg {
+                @include icon-size(var(--icon-normal));
                 fill: var(--grey-50);
                 height: $spacer * 3;
                 width: $spacer * 3;
@@ -78,13 +62,6 @@
                     fill: var(--grey-50);
                 }
             }
-        }
-
-        .delete {
-            background: var(--grey-50);
-            fill: var(--primary-base);
-            margin-right: $spacer;
-            vertical-align: middle;
         }
     }
 
