@@ -1,7 +1,6 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-
 .c-main {
     // border-top: var(--gutter12) solid var(--primary-base);
     height: 100vh;
@@ -52,3 +51,11 @@
     //     }
     // }
 }
+
+// 100vh on Android doesn't take the toolbar in account.
+html.android {
+    .c-main {
+        height: calc(100vh - 56px);
+    }
+}
+

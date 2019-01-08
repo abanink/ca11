@@ -19,7 +19,7 @@ module.exports = (app, shared) => {
                 let devices = app.utils.copyObject(this.devices)
                 // Persist the the device data.
                 app.setState({settings: {webrtc: {devices}}}, {persist: true})
-                this.finishWizard()
+                this.stepNext()
             },
         }, shared().methods),
         render: templates.wizard_devices.r,

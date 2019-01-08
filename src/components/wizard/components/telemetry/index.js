@@ -7,7 +7,7 @@ module.exports = (app, shared) => {
         methods: Object.assign({
             toggleTelemetry: function(enabled) {
                 app.setState({settings: {telemetry: {enabled}}}, {persist: true})
-                this.stepNext()
+                this.finishWizard()
             },
         }, shared().methods),
         render: templates.wizard_telemetry.r,

@@ -6,15 +6,7 @@
         </div>
 
         <div class="c-login__subtitle">
-            <template v-if="!app.session.active || user.status === 'login'">
             {{$t('secure decentralized calling, meetings and collaboration')}}</br>
-            </template>
-            <template v-else-if="app.session.active === 'new'">
-            {{$t('start new session')}}
-            </template>
-            <template v-else>
-            {{$t('unlock session')}}: <br/>{{app.session.active}}
-            </template>
         </div>
     </header>
 

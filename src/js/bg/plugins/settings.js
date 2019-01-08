@@ -26,6 +26,10 @@ class PluginSettings extends Plugin {
                 options: [
                     {id: 'default.ogg', name: 'default'},
                     {id: 'ringtone-1.ogg', name: 'ringtone-1'},
+                    {id: 'ringtone-2.ogg', name: 'ringtone-2'},
+                    {id: 'ringtone-3.ogg', name: 'ringtone-3'},
+                    {id: 'ringtone-4.ogg', name: 'ringtone-4'},
+                    {id: 'ringtone-5.ogg', name: 'ringtone-5'},
                 ],
                 selected: {id: 'default.ogg', name: 'default'},
             },
@@ -92,9 +96,9 @@ class PluginSettings extends Plugin {
                 steps: {
                     options: [
                         {name: 'WizardWelcome'},
-                        {name: 'WizardTelemetry'},
                         {name: 'WizardMediaPermission'},
                         {name: 'WizardDevices'},
+                        {name: 'WizardTelemetry'},
                     ],
                     selected: {name: 'WizardWelcome'},
                 },

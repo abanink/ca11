@@ -4,11 +4,12 @@
 
 .c-select {
     $self: &;
+    max-width: 300px;
 
     &__control {
         display: flex;
         flex-direction: column;
-        max-width: 300px;
+        //
         position: relative;
         width: 100%;
     }
@@ -43,20 +44,21 @@
         max-height: 162px;
 
         max-width: inherit;
+        overflow-y: auto;
         position: absolute;
         width: inherit;
         z-index: 100000;
 
         .option {
             // color: $grey-color-darker;
-            border-right: var(--gutter12) solid transparent;
+            border-bottom: var(--gutter12) solid transparent;
             padding: $spacer;
             user-select: none;
             width: inherit;
 
             &.selected {
                 background: $white-color;
-                border-right: var(--gutter12) solid var(--primary-base);
+                border-bottom: var(--gutter12) solid var(--primary-base);
                 color: var(--primary-base);
             }
 

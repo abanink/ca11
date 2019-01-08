@@ -32,7 +32,7 @@
                 <div class="support-item-l">
                     <div class="support-item__title cf">{{$t('don\'t be a stranger')}}!</div>
                     <div class="support-item__description cf">
-                        {{$t('mail us for feedback, media coverage or questions about {vendor} product integration', {vendor: app.name})}}.
+                        {{$t('mail us for any feedback or questions you may have about {vendor} or related products', {vendor: app.name})}}.
                     </div>
                 </div>
             </div>

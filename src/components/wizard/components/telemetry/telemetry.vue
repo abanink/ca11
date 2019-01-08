@@ -4,10 +4,9 @@
     <div class="c-wizard__description">
         <span class="cf">
             <a href="https://sentry.io/">Sentry</a>
-            {{$t(' application error tracking helps us to improve {name}. Do you want to support {name} by allowing errors to be logged automatically to Sentry?', {name: app.name})}}
+            {{$t('automated application error tracking helps us to improve {name}. Do you want to support {name} by allowing errors to be logged automatically to Sentry?', {name: app.name})}}
         </span>
-        <em class="help cf">{{$t('you can change your choice afterwards from Settings.')}}</em>
-        <br/>
+        <div class="c-wizard__help cf">{{$t('you can always change your choice afterwards from Settings.')}}</div>
     </div>
 
     <slot name="progress"></slot>
@@ -16,10 +15,10 @@
         <button class="button test-wizard-devices-back" @click="stepBack()">
             {{$t('back')}}
         </button>
-        <button class="button cf test-wizard-telemetry-no" @click="toggleTelemetry(false)">
+        <button class="button test-wizard-telemetry-no" @click="toggleTelemetry(false)">
             {{$t('no')}}
         </button>
-        <button class="button is-primary cf test-wizard-telemetry-yes" @click="toggleTelemetry(true)">
+        <button class="button is-primary test-wizard-telemetry-yes" @click="toggleTelemetry(true)">
             {{$t('yes')}}
         </button>
     </div>

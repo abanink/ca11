@@ -129,15 +129,11 @@ module.exports = (app, base) => {
         render: templates.field_select.r,
         staticRenderFns: templates.field_select.s,
         updated() {
-            // Keep the scroll position centered on the selected option.
-            let $ = {widget: this.$refs.widget}
-            if (!$.widget) return
-
-            $.input = this.$refs.input
-            $.options = this.$refs.options
-            $.selectedOption = $.widget.querySelector(`#option-${this.searchSelected.id}`)
-            if ($.selectedOption) {
-                $.options.scrollTop = $.selectedOption.offsetTop - $.input.offsetHeight - $.selectedOption.offsetHeight
+            const input = this.$refs.input
+            const options = this.$refs.options
+            const selected = document.querySelector(`#option-${this.searchSelected.id.split('.')[0]}`)
+            if (selected) {
+                options.scrollTop = selected.offsetTop - input.offsetHeight - selected.offsetHeight
             }
         },
     }

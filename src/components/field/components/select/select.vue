@@ -1,4 +1,4 @@
-<div class="c-select field" ref="widget" v-click-outside="searchToggle">
+<div class="c-select field" v-click-outside="searchToggle">
     <label
         class="c-select__label field__label"
         :class="classes('label')"
@@ -33,10 +33,13 @@
         </div>
 
         <div class="c-select__options" v-show="visible" ref="options">
-            <div :id="`option-${option.id}`" class="option"
-                @click="searchSelect($event, option, null, true)"
+            <div
                 v-for="option in filteredOptions"
-                :class="{selected: searchSelected.id === option.id}">
+                class="option"
+                :class="{selected: searchSelected.id === option.id}"
+                :id="`option-${option.id.split('.')[0]}`"
+                @click="searchSelect($event, option, null, true)"
+            >
                 {{option.name.ca()}}
             </div>
         </div>

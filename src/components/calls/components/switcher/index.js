@@ -64,6 +64,7 @@ module.exports = (app) => {
         store: {
             calls: 'calls.calls',
             description: 'calls.description',
+            ui: 'ui',
             user: 'user',
         },
     }

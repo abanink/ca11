@@ -242,10 +242,17 @@ class CallEnd extends Sound {
 }
 
 
+class PowerOn extends Sound {
+    constructor(app) {
+        super(app)
+        this.audio = new Audio('audio/power-on.ogg')
+    }
+}
+
 class RingTone extends Sound {
     constructor(app) {
         super(app)
-        this.audio = new Audio(`audio/ringtones/${this.app.state.settings.ringtones.selected.id}`)
+        this.audio = new Audio()
     }
 
     play(...args) {
@@ -262,6 +269,7 @@ module.exports = class Sounds {
         this.context = context
 
         this.busyTone = new BusyTone(app)
+        this.powerOn = new PowerOn(app)
         this.ringbackTone = new RingbackTone(app)
         this.ringTone = new RingTone(app)
         this.callEnd = new CallEnd(app)

@@ -21,7 +21,7 @@
         border-left: var(--gutter12) solid transparent;
         border-right: var(--gutter12) solid transparent;
         height: 100%;
-        width: var(--space-4);
+        width: calc(var(--space-4));
 
         svg {
             @include icon-size(var(--icon-normal));
@@ -29,6 +29,11 @@
     }
 
     &__option {
+        /// Account for the grid-gap.
+        &:first-child {
+            margin-right: var(--spacer-05);
+        }
+
         &.disabled {
             opacity: 0.3;
 
@@ -38,7 +43,7 @@
         }
 
         &.active {
-            border-left: var(--gutter12) solid var(--primary-base);
+            border-right: var(--gutter12) solid var(--primary-base);
         }
 
         &:hover {

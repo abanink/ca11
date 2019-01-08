@@ -3,6 +3,11 @@ module.exports = (app, base) => {
     * @memberof fg.components
     */
     const FieldPassword = {
+        data: function() {
+            return {
+                visible: false,
+            }
+        },
         extends: base,
         methods: {
             toggleVisible() {

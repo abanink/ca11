@@ -2,6 +2,7 @@ module.exports = (app) => {
 
     const v = Vuelidate.validators
 
+
     /**
     * @memberof fg.components
     */

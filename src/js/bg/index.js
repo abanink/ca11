@@ -2,7 +2,6 @@
 * The Background app namespace.
 * @namespace AppBackground
 */
-const Api = require('./lib/api')
 const App = require('../lib/app')
 const Crypto = require('./lib/crypto')
 const Devices = require('./lib/devices')
@@ -82,15 +81,11 @@ class AppBackground extends App {
 
     async __init() {
         this.__loadPlugins(this.__plugins)
-
-        this.api = new Api(this)
-
         // The background needs video elements to keep the call alive.
         this.media = new Media(this)
-
+        this.sounds = new Sounds(this)
         await this.__initStore()
 
-        this.sounds = new Sounds(this)
         // Clear all state if the schema changed after a plugin update.
         // This is done here because of translations, which are only available
         // after initializing Vue.
@@ -177,7 +172,7 @@ class AppBackground extends App {
             await this.crypto.storeVaultKey()
         }
 
-        this.emit('bg:user-unlocked', {}, true)
+        this.emit('bg:user-unlocked', {}, 'both')
     }
 
 
@@ -193,8 +188,6 @@ class AppBackground extends App {
         this.logger.info(`${this}init state store`)
         super.__initStore()
         await this.changeSession('active')
-        // Setup HTTP client without authentication when there is a store.
-        this.api.setupClient()
         // The vault always starts in a locked position.
         this.setState({
             app: {vault: {unlocked: false}},
@@ -202,10 +195,8 @@ class AppBackground extends App {
         })
 
         if (this.state.app.vault.key) {
-            this.logger.info(`${this}continuing existing session '${this.state.user.username}'...`)
+            this.logger.info(`${this}opening session '${this.state.user.username}'...`)
             await this.__initSession({key: this.state.app.vault.key})
-            // The API username and token are now available in the store.
-            this.api.setupClient(this.state.user.username, this.state.user.token)
             // (!) State is reactive after initializing the view-model.
             this.__initViewModel({main: null})
             this._watchersActivate()
@@ -438,8 +429,6 @@ class AppBackground extends App {
 
         if (sessionId === 'active') {
             sessionId = session.active ? session.active : null
-
-            if (sessionId) this.logger.debug(`${this}active session: "${sessionId}"`)
         }
 
         if (logout) {

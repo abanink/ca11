@@ -89,8 +89,8 @@ class AppForeground extends App {
                     main: require('../../components/main')(this),
                 })
                 this.media = new Media(this)
-
                 this.sounds = new Sounds(this)
+
                 this.vm.$mount(document.querySelector('#app-placeholder'))
                 this.setState({ui: {visible: true}})
                 if (this.env.isExtension) {
@@ -100,10 +100,11 @@ class AppForeground extends App {
                     // This check is also required in the foreground, since
                     // the popup opens a popout which is the only way an
                     // extension can be given permission.
-
                 }
 
-                if (this.state.user.authenticated) this.media.query()
+                if (this.state.user.authenticated) {
+                    this.media.query()
+                }
             },
         })
     }

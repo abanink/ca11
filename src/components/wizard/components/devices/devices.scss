@@ -2,24 +2,10 @@
 @import 'ca11/lib/variables';
 
 .c-wizard-devices {
-    &.step {
-        .step-description {
-            padding-bottom: 0;
-
-            .component-device-picker {
-                margin-top: $spacer * 2;
-                text-align: left;
-
-                .field {
-                    .control {
-                        width: 100%;
-
-                        .select {
-                            width: 100%;
-                        }
-                    }
-                }
-            }
-        }
+    .c-device-controls {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        margin-top: var(--gutter);
     }
 }

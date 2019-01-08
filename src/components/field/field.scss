@@ -25,8 +25,12 @@
     &__element {
         border: 1px solid var(--grey-100);
         color: var(--grey-300);
-        font-size: var(--text-base);
+        font-size: var(--text-small);
         padding: $spacer;
+
+        &::placeholder {
+            color: var(--grey-200);
+        }
 
         &:focus,
         &:active {

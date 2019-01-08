@@ -1,9 +1,6 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.c-call-options {
-
-}
 
 .media-controls-option {
     background: var(--grey-50);
@@ -38,11 +35,12 @@
 
     &[disabled] {
         background: none;
-        color: var(--grey-50);
         cursor: not-allowed;
 
         &:hover {
-            color: var(--grey-100) !important;
+            svg {
+                fill: var(--grey-200);
+            }
         }
     }
 

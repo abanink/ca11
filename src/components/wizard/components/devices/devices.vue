@@ -16,7 +16,7 @@
             {{$t('back')}}
         </button>
         <button class="button is-primary test-wizard-devices-next" @click="storeDevices()" :disabled="!stepValid">
-            {{$t('finish')}}
+            {{$t('next')}}
         </button>
     </div>
 </component>

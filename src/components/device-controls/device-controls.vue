@@ -1,5 +1,4 @@
 <component class="c-device-controls">
-
     <FieldSelect
         v-model="devices.sinks.headsetInput"
         name="headset_input"
@@ -8,7 +7,8 @@
         :options="devices.input"
         :validation="$v.settings.webrtc.devices.sinks.headsetInput.valid"
     >
-        <div slot="context" v-if="$v.settings.webrtc.devices.sinks.headsetInput.valid.customValid">
+
+        <div slot="context">
             <Soundmeter v-if="stream[stream.type].id" class="soundmeter" :stream="stream[stream.type]"/>
         </div>
     </FieldSelect>

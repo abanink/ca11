@@ -49,6 +49,7 @@ module.exports = (app) => {
 
     const components = {
         FieldCheckbox: require('./components/checkbox'),
+        FieldPassword: require('./components/password'),
         FieldRadio: require('./components/radio'),
         FieldSelect: require('./components/select'),
         FieldText: require('./components/text'),

@@ -23,6 +23,7 @@ class PluginUser extends Plugin {
         // Other implementation may use other user identifiers than email,
         // that's why the main event uses `username` instead of `email`.
         this.app.on('bg:user:login', (...args) => {
+            app.sounds.powerOn.play()
             try {this.login(...args)} catch (err) {console.trace(err)}
         })
 
@@ -31,8 +32,14 @@ class PluginUser extends Plugin {
         })
 
         this.app.on('bg:user:unlock', (...args) => {
+            app.sounds.powerOn.play()
             try {this.unlock(...args)} catch (err) {console.trace(err)}
         })
+
+        // this.app.on('bg:user-unlocked', () => {
+        //     console.log("PLAY!!!!!!!!!")
+        //     app.sounds.powerOn.play()
+        // })
 
         this.app.on('bg:user:set_session', ({session}) => {
             app.changeSession(session)
@@ -132,8 +139,6 @@ class PluginUser extends Plugin {
         this.app._watchersDeactivate()
         await this.app.changeSession(null, {}, {logout: true})
 
-        // Remove credentials from basic auth.
-        this.app.api.setupClient()
         // Disconnect without reconnect attempt.
         // this.app.plugins.calls.disconnect(false)
         this.app.emit('bg:user:logged_out', {}, true)
@@ -162,9 +167,8 @@ class PluginUser extends Plugin {
             await this.app.__initSession({password})
             this.app._watchersActivate()
             this.app._languagePresets()
-            this.app.api.setupClient(username, this.app.state.user.token)
             this.app.setState({ui: {layer: 'calls'}}, {encrypt: false, persist: true})
-            this.app.notify({icon: 'user', message: this.app.$t('session unlocked'), type: 'info'})
+            this.app.notify({icon: 'contact', message: this.app.$t('your session is unlocked'), type: 'info'})
             this.app.__initServices()
         } catch (err) {
             // Wrong password, resulting in a failure to decrypt.
@@ -172,7 +176,7 @@ class PluginUser extends Plugin {
                 ui: {layer: 'login'},
                 user: {authenticated: false},
             }, {encrypt: false, persist: true})
-            const message = this.app.$t('failed to unlock session; please check your password')
+            const message = this.app.$t('failed to unlock; check your password')
             this.app.notify({icon: 'warning', message, type: 'danger'})
         } finally {
             this.app.setState({user: {status: null}})

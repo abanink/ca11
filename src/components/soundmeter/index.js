@@ -38,7 +38,7 @@ module.exports = (app) => {
             canvasElement = this.$refs.meter
             canvasContext = canvasElement.getContext('2d')
             try {
-                console.log(this.stream)
+                console.log('STREAM:', app.media.streams[this.stream.id])
                 const stream = app.media.streams[this.stream.id]
                 const mediaStreamSource = audioContext.createMediaStreamSource(stream)
                 meter = volumeLib.createAudioMeter(audioContext)

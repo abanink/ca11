@@ -90,6 +90,7 @@ function env({section}) {
             if (_env.isEdge) $('html').classList.add('edge')
             if (_env.isFirefox) $('html').classList.add('firefox')
             if (_env.isExtension) $('html').classList.add('extension')
+            if (_env.isAndroid) $('html').classList.add('android')
         }
     }
 

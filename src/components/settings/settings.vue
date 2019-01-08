@@ -97,7 +97,8 @@
             <FieldCheckbox
                 v-model="calls.sig11.toggled"
                 name="sig11_enabled"
-                :label="$t('enable SIG11 protocol')"
+                :help="$t('free calling on decentralized network SIG11.')"
+                :label="`${$t('SIG11 network')} (${$t('decentralized')})`"
             />
 
             <FieldText
@@ -105,8 +106,8 @@
                 v-model="calls.sig11.endpoint"
                 name="sig11_endpoint"
                 placeholder="e.g. sig11.websocket.tld"
-                :help="$t('decentralized calling on overlay network SIG11.')"
-                :label="$t('communication hub')"
+                :help="$t('a SIG11 websocket endpoint used for signalling.')"
+                :label="$t('signalling endpoint')"
                 :validation="$v.calls.sig11.endpoint"
             />
 
@@ -126,8 +127,8 @@
             <FieldCheckbox
                 v-model="calls.sip.toggled"
                 name="sip_enabled"
-                :help="$t('centralized calling on telecom SIP networks using Secure Websockets.', {name: app.name})"
-                :label="$t('enable SIP protocol')"
+                :help="$t('subscription-based calling on a SIP network.')"
+                :label="`${$t('SIP network')} (${$t('centralized')})`"
             />
 
             <FieldText
@@ -136,6 +137,7 @@
                 name="sip_endpoint"
                 placeholder="e.g. sip.websocket.tld"
                 :label="$t('SIP domain (WSS)')"
+                :help="$t('a SIP-over-WSS (secure websockets) endpoint.')"
                 :validation="$v.calls.sip.endpoint"
             />
 
@@ -148,7 +150,7 @@
                 :validation="$v.calls.sip.account.selected.username"
             />
 
-            <FieldText
+            <FieldPassword
                 v-if="calls.sip.toggled"
                 v-model="calls.sip.account.selected.password"
                 name="sip_password"
@@ -158,7 +160,7 @@
             />
         </div>
 
-        <div class="buttons tabs-actions">
+        <div class="tabs-actions">
             <button class="button test-settings-save" :disabled="$v.$invalid" @click="save">{{$t('save changes')}}</button>
         </div>
     </main>
