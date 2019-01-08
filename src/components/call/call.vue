@@ -3,7 +3,7 @@
         v-if="call.transfer.active && call.status === 'accepted'"
         :call="call"
     />
-    <DialerTouch
+    <Keypad
         v-else-if="call.keypad.active"
         mode="dtmf"
         :call="call"

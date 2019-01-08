@@ -45,8 +45,6 @@ class AppForeground extends App {
             Calls: require('../../components/calls'),
             Contacts: require('../../components/contacts'),
             DeviceControls: require('../../components/device-controls'),
-            DialerInput: require('../../components/dialer-input'),
-            DialerTouch: require('../../components/dialer-touch'),
             Field: require('../../components/field'),
             Login: require('../../components/login'),
             MediaControls: require('../../components/media-controls'),

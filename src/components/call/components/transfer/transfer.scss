@@ -1,43 +1,45 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.c-call-transfer {
+.c-transfer {
+    $self: &;
     align-items: center;
     display: flex;
     flex: 1;
     flex-direction: column;
-    margin-top: $spacer;
+    margin-top: var(--gutter);
 
-    .transfer-buttons {
+    &__buttons {
         display: flex;
         flex-direction: row;
         justify-content: center;
-        margin-bottom: $spacer * 1.5;
+        margin-bottom: var(--gutter);
         width: 100%;
 
-        .transfer-button {
-            background: var(--grey-50);
-            border: $spacer / 4 solid var(--grey-100);
-            border-radius: $spacer / 2;
-            font-family: 'Rajdhani';
-            font-size: 0.9rem;
-            font-weight: 600;
-            line-height: $spacer * 4;
-            margin: 0 $spacer;
-            padding: 0 $spacer;
-            text-align: center;
-            width: 130px;
+        #{$self}__button {
+            margin: $spacer $spacer;
+            // background: var(--grey-50);
+            // border: $spacer / 4 solid var(--grey-100);
+            // border-radius: $spacer / 2;
+            // font-family: 'Rajdhani';
+            // font-size: 0.9rem;
+            // font-weight: 600;
+            // line-height: $spacer * 4;
+            // margin: 0 $spacer;
+            // padding: 0 $spacer;
+            // text-align: center;
+            // width: 130px;
 
-            &.active,
-            &:hover {
-                cursor: pointer;
-            }
+            // &.active,
+            // &:hover {
+            //     cursor: pointer;
+            // }
 
-            &.active {
-                border: 2px solid var(--primary-base);
-                color: var(--primary-base);
-                cursor: default;
-            }
+            // &.active {
+            //     border: 2px solid var(--primary-base);
+            //     color: var(--primary-base);
+            //     cursor: default;
+            // }
 
 
             &.disabled {
@@ -52,7 +54,7 @@
         }
     }
 
-    .transfer-text {
+    &__text {
         color: var(--grey-300);
         font-size: 0.9rem;
         font-weight: 500;

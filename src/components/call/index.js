@@ -1,9 +1,18 @@
 module.exports = (app) => {
-    app.components.CallMediaPreview = Vue.component('CallMediaPreview', require('./components/media-preview')(app))
-    app.components.CallMediaView = Vue.component('CallMediaView', require('./components/media-view')(app))
-    app.components.CallOptions = Vue.component('CallOptions', require('./components/options')(app))
-    app.components.CallStatus = Vue.component('CallStatus', require('./components/status')(app))
-    app.components.CallTransfer = Vue.component('CallTransfer', require('./components/transfer')(app))
+    const components = {
+        CallMediaPreview: require('./components/media-preview'),
+        CallMediaView: require('./components/media-view'),
+        CallOptions: require('./components/options'),
+        CallStatus: require('./components/status'),
+        CallTransfer: require('./components/transfer'),
+        DialerInput: require('./components/dialer-input'),
+        Keypad: require('./components/keypad'),
+    }
+
+    for (const [name, component] of Object.entries(components)) {
+        app.components[name] = Vue.component(name, component(app))
+    }
+
 
     /**
     * @memberof fg.components

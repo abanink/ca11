@@ -3,12 +3,13 @@
 
 // The default styling is against a white background. The
 // `call-ongoing` class is used to differentiate.
-.component-call-keypad-input {
+.c-dialer-input {
     align-items: center;
     display: flex;
     flex-direction: column;
     width: 100%;
     z-index: 1000000;
+
 
     .number-input {
         align-items: center;
@@ -19,16 +20,19 @@
         max-width: 300px;
         position: relative;
 
+
         input {
-            background: $white-color;
+            background: var(--grey-50);
             border: 1px solid $white-color;
             border-radius: ($spacer / 2) 0 0 ($spacer / 2);
-            font-size: 1.8rem;
-            font-weight: 500;
+            color: var(--primary-base);
+            font-size: var(--text-huge);
+            font-weight: 600;
             height: 40px;
             padding-right: $spacer;
             text-align: right;
             width: 200px;
+            border-bottom: var(--border) solid var(--grey-200);
 
             &[disabled='disabled'] {
                 &::placeholder {

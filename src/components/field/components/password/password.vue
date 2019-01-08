@@ -15,9 +15,7 @@
             class="c-password__eye"
             :class="{visible}"
             @click="toggleVisible()"
-        >
-            <icon name="eye"/>
-        </div>
+        ><icon name="eye"/></div>
     </div>
-    <div v-if="help" class="c-password__help cf">{{help}}</div>
+    <div v-if="help" class="c-password__help field__help">{{help}}</div>
 </div>

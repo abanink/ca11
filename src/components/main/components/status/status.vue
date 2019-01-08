@@ -1,5 +1,5 @@
 <component class="c-main-status main-status status">
-
+    <transition name="c-main__status">
     <div class="status__menu">
         <!-- Popout link in WebExtension -->
         <button class="status__option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
@@ -25,6 +25,7 @@
 
         <Availability class="status__option dnd-switch" />
     </div>
+    </transition>
 
 
 
@@ -61,4 +62,5 @@
             <icon name="logout"/>
         </button>
     </div>
+
 </component>

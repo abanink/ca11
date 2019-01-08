@@ -62,8 +62,8 @@ module.exports = (app) => {
             mode: {default: 'call', type: String},
             search: {default: true, type: Boolean},
         },
-        render: templates.dialer_input.r,
-        staticRenderFns: templates.dialer_input.s,
+        render: templates.call_dialer_input.r,
+        staticRenderFns: templates.call_dialer_input.s,
         store: {
             contacts: 'contacts.contacts',
             description: 'calls.description',

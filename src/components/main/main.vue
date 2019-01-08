@@ -2,14 +2,12 @@
     <!-- Force the telemetry window to show up -->
     <Notifications :class="classes('notifications')"/>
 
-    <transition v-if="wizard.completed && user.authenticated" name="c-main__status">
         <CallStatus
-            v-if="callOngoing && callActive"
+            v-if="(user.authenticated && wizard.completed) && (callOngoing && callActive)"
             class="c-main__status"
             :call="callActive"
         />
-        <MainStatus v-else class="c-main__status"/>
-    </transition>
+        <MainStatus v-else-if="(user.authenticated && wizard.completed)" class="c-main__status"/>
 
     <Login v-if="!user.authenticated"/>
     <Wizard v-else-if="!wizard.completed && user.authenticated"/>

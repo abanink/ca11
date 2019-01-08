@@ -8,9 +8,10 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+    border-right: var(--gutter12) solid var(--primary-base);
 
     .streams-container {
-        border-right: var(--spacer) solid var(--primary-base);
+        margin-right: var(--spacer-05);
         display: flex;
         flex-direction: row-reverse;
         width: 100%;
@@ -22,6 +23,10 @@
 
         &.selected {
             filter: grayscale(0%);
+        }
+
+        &:hover {
+            cursor: pointer;
         }
     }
 }

@@ -8,18 +8,18 @@
 
 @keyframes glowing {
     0% {
-        fill: var(--grey-200);
-        filter: drop-shadow(0 0 0 var(--grey-200));
+        fill: var(--primary-base);
+        filter: drop-shadow(0 0 1px var(--primary-base));
     }
 
-    50% {
+    75% {
         fill: var(--primary-base);
-        filter: drop-shadow(0 0 4px rgba(palette('primary', 'base'), 0.5));
+        filter: drop-shadow(0 0 3px var(--primary-base));
     }
 
     100% {
-        fill: var(--grey-200);
-        filter: drop-shadow(0 0 0 var(--grey-200));
+        fill: var(--primary-base);
+        filter: drop-shadow(0 0 1px var(--primary-base));
     }
 }
 

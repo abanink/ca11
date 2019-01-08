@@ -45,6 +45,10 @@
         font-size: var(--text-small);
         font-style: italic;
         padding-top: var(--spacer-05);
+
+        &:first-letter {
+            text-transform: uppercase;
+        }
     }
 
     &__row {

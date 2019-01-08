@@ -5,7 +5,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const DialerTouch = {
+    const CallKeypad = {
         computed: Object.assign({
             matchedContact: function() {
                 let _number = String(this.endpoint)
@@ -33,8 +33,6 @@ module.exports = (app) => {
                 let classes = {}
                 if (block === 'component') {
                     classes['call-ongoing'] = true
-                } else if (block === 'number-input') {
-                    classes['number-input'] = true
                 }
                 return classes
             },
@@ -67,8 +65,8 @@ module.exports = (app) => {
             mode: {default: 'call', type: String},
             search: {default: true, type: Boolean},
         },
-        render: templates.dialer_touch.r,
-        staticRenderFns: templates.dialer_touch.s,
+        render: templates.call_keypad.r,
+        staticRenderFns: templates.call_keypad.s,
         store: {
             calls: 'calls.calls',
             contacts: 'contacts.contacts',
@@ -94,5 +92,5 @@ module.exports = (app) => {
         },
     }
 
-    return DialerTouch
+    return CallKeypad
 }

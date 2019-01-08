@@ -25,8 +25,12 @@
             user-select: none;
             width: 100%;
 
+            &::placeholder {
+                color: var(--grey-300);
+            }
+
             &:focus {
-                outline: 1px solid var(--primary-base);
+                // outline: 1px solid var(--primary-base);
             }
 
             &:hover {
@@ -51,14 +55,14 @@
 
         .option {
             // color: $grey-color-darker;
-            border-bottom: var(--gutter12) solid transparent;
+            border-bottom: var(--border) solid transparent;
             padding: $spacer;
             user-select: none;
             width: inherit;
 
             &.selected {
                 background: $white-color;
-                border-bottom: var(--gutter12) solid var(--primary-base);
+                border-bottom: var(--border) solid var(--primary-base);
                 color: var(--primary-base);
             }
 

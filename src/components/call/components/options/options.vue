@@ -12,7 +12,7 @@
 
     <button
         v-if="call.status === 'invite'"
-        class="media-controls-option tooltip tooltip-left"
+        class="media-controls-option tooltip tooltip-left hint"
         :data-tooltip="$t('accept call')"
         @click="callAccept(call)"
     >

@@ -18,17 +18,17 @@
             autocomplete="off"
             name="username"
             :autofocus="true"
-            :help="$t('a session holds your data on this computer.')"
+            :help="$t('protects your {name} data in a local vault.', {name: app.name})"
             :label="$t('session name')"
             :placeholder="$t('session name')"
             :validation="$v.user.username"
         />
 
-        <FieldText
+        <FieldPassword
             v-model="password"
             name="password"
             :autofocus="true"
-            :help="$t('your data is protected with this secret.')"
+            :help="$t('only the secret can unlock the vault.')"
             :label="$t('session secret')"
             :placeholder="$t('screen secret')"
             :validation="$v.password"
@@ -101,10 +101,8 @@
     </div>
 
     <footer>
-        <div class="help-message cf">
-            {{$t('what is this?')}}<br/>
-            <span class="cf">{{$t('click on the')}}</span>
-            <i @click="setOverlay('about')"><icon name="help"/></i>{{$t('icon')}}
+        <div class="help-message cf" @click="openTab(vendor.support.website)">
+            {{$t('learn more about {name}', {name: app.name})}}<br/>
         </div>
     </footer>
 </section>

@@ -44,7 +44,6 @@
 
         #{$self}__action {
             padding-right: var(--gutter12);
-            // margin-left: var(--spacer);
 
             svg {
                 @include icon-size(var(--icon-normal));

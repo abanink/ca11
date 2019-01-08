@@ -82,9 +82,8 @@
 
 
     &__placeholder {
-        background: var(--grey-100);
-        border: var(--spacer) dashed var(--grey-200);
-        color: var(--grey-300);
+        background: var(--grey-500);
+        color: var(--grey-50);
         font-family: 'Rajdhani';
         font-weight: 600;
         text-align: center;
@@ -92,5 +91,9 @@
         svg {
             @include icon-size($spacer * 6);
         }
+    }
+
+    &__stats {
+        color: var(--grey-100);
     }
 }

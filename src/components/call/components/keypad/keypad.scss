@@ -1,0 +1,136 @@
+@import 'ca11/lib/variables';
+@import 'ca11/lib/mixins';
+
+.c-dialer-t {
+    $self: &;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: var(--gutter);
+
+    &__input {
+        align-items: center;
+        color: var(--primary-base);
+        display: flex;
+        justify-content: center;
+        max-width: 700px;
+        position: relative;
+
+        input {
+            @include no-outline;
+            border: 0;
+            border-bottom: var(--border) solid var(--grey-100);
+            color: var(--primary-base);
+            font-size: var(--text-huge);
+            font-weight: 600;
+            height: $spacer * 6;
+            overflow: hidden;
+            padding: 0 $spacer * 4;
+            text-align: center;
+            text-overflow: ellipsis;
+            width: 100%;
+
+            &[disabled='disabled'] {
+                &::placeholder {
+                    color: var(--grey-200);
+                }
+            }
+
+            &::placeholder {
+                color: var(--primary-base);
+            }
+        }
+
+        #{$self}__correct {
+            color: var(--primary-base);
+            user-select: none;
+            position: absolute;
+            right: 0;
+
+            &.disabled {
+                opacity: 0.5;
+
+                &:hover {
+                    cursor: not-allowed;
+                }
+            }
+
+            svg {
+                height: 1.8rem;
+                width: 1.8rem;
+            }
+
+            &:hover {
+                cursor: pointer;
+                svg {fill: var(--primary-base);}
+            }
+        }
+
+        + .number-input-match {
+            color: var(--grey-400);
+            height: $spacer * 5;
+            line-height: $spacer * 5;
+        }
+    }
+
+
+    &__keys {
+        align-content: center;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 700px;
+        width: 100%;
+
+        &.disabled {
+            opacity: 0.5;
+
+            .key-row {
+                .key {
+                    &:hover {
+                        background: $white-color;
+                        color: var(--primary-base);
+                        cursor: not-allowed;
+                    }
+                }
+            }
+        }
+
+        #{$self}__key-row {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+
+            #{$self}__key {
+                @include no-outline;
+                background: none;
+                border: 0;
+                break-inside: avoid;
+                color: var(--primary-base);
+                font-family: 'Rajdhani';
+                font-size: 1.5rem;
+                font-weight: 600;
+                height: 80px;
+                margin: 0;
+                width: 100%;
+
+                &:hover {
+                    background: var(--grey-50);
+                    color: var(--primary-base);
+                    cursor: pointer;
+                }
+
+                &.function {
+                    color: $grey-color;
+                    font-size: 1.5rem;
+                }
+
+                .sub {
+                    color: $grey-color;
+                    font-size: 0.9rem;
+                }
+            }
+        }
+    }
+}

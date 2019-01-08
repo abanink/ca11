@@ -14,25 +14,34 @@
 
 .button {
     background: var(--grey-100);
-    border: var(--border) solid var(--grey-100);
+    border-bottom: var(--border) solid var(--grey-200);
+    border-top: var(--border) solid transparent;
     color: var(--grey-300);
     font-family: 'Rajdhani';
     font-weight: 600;
     padding: $spacer;
     text-transform: uppercase;
+    transition: background ease 0.5s;
+
+    &.active {
+        border-bottom: var(--border) solid var(--primary-base);
+        color: var(--grey-200);
+    }
 
     &[disabled] {
         background: var(--grey-50);
+
         color: var(--grey-200);
 
         &:hover {
+            border-bottom: var(--border) solid var(--grey-200);
             color: var(--grey-200);
         }
     }
 
     &:hover {
         background: var(--grey-50);
-        border: var(--border) solid var(--grey-50);
+        border-bottom: var(--border) solid var(--primary-base);
         color: var(--primary-base);
     }
 }

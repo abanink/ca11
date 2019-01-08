@@ -36,7 +36,7 @@
 
         <Call v-else-if="callActive.id" :call="callActive"/>
         <!-- starting without any active call -->
-        <DialerTouch
+        <Keypad
             v-else
             display="touch"
             mode="call"

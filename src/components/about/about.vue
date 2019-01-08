@@ -43,7 +43,7 @@
             >
                 <div class="support-item__icon"><icon name="github"/></div>
                 <div class="support-item-l">
-                    <div class="support-item__title cf">{{$t('{vendor} developers', {vendor: app.name})}}</div>
+                    <div class="support-item__title cf">{{$t('improving {vendor}', {vendor: app.name})}}</div>
                     <div class="support-item__description cf">
                        {{$t('{vendor} is a free and open software project. Star us, make a feature request or report an issue on Github.', {vendor: app.name})}}
                     </div>

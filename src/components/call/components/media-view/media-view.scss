@@ -5,17 +5,23 @@
 .media-view {
     display: grid;
     grid-template-columns: repeat(auto-fill, 1fr);
+    // padding: var(--gutter12);
+    // account for scrollbar.
+    padding-left: var(--gutter12);
+    margin-top: var(--spacer05);
     width: 100%;
 
     @media screen and (min-width: $breakpoint-mobile) {
         grid-template-columns: repeat(auto-fill, 50%);
 
+        &.x0,
         &.x1 {
             grid-template-columns: repeat(auto-fill, 100%);
         }
     }
 
     @media screen and (min-width: $breakpoint-tablet) {
+        &.x0,
         &.x1 {
             grid-template-columns: repeat(auto-fill, 50%);
         }
@@ -30,12 +36,15 @@
     }
 
     .media-stream {
-        // border: var(--spacer) solid $white-color;
-        // margin: var(--spacer);
+        margin: var(--spacer-05);
+        border: var(--spacer-05) solid var(--primary-base);
 
         video {
             background: none;
         }
 
+        &__placeholder {
+            border: var(--spacer-05) dashed var(--grey-300);
+        }
     }
 }
