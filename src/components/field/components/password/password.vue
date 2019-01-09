@@ -4,6 +4,7 @@
         <input
             class="c-password__element field__element"
             :disabled="disabled"
+            :class="elementclass"
             :name="name"
             :placeholder="placeholder"
             :type="visible ? 'text' : 'password'"

@@ -9,7 +9,11 @@
             :value="option.value"
             @change="updateModel($event)"
         >
-        <label :for="option.value" class="uc">{{option.name}}</label>
+        <label
+            class="uc"
+            :class="`${elementclass}-${option.value}`"
+            :for="option.value"
+        >{{option.name}}</label>
     </template>
     <a></a>
 </div>

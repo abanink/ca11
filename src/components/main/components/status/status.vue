@@ -1,39 +1,34 @@
-<component class="c-main-status main-status status">
-    <transition name="c-main__status">
-    <div class="status__menu">
+<component class="c-status main-status t-status">
+    <transition name="c-status">
+    <div class="c-status__menu">
         <!-- Popout link in WebExtension -->
-        <button class="status__option" v-if="env.isExtension && !env.isPopout" @click="openPopoutView">
-            <icon class="ext-tab" name="ext-tab"/>
-        </button>
+        <button
+            v-if="env.isExtension && !env.isPopout"
+            class="c-status__option"
+            @click="openPopoutView"
+        ><icon name="ext-tab"/></button>
 
         <button
-            class="status__option test-statusbar-settings"
+            class="c-status__option t-btn-settings"
             :class="{active: layer === 'settings'}"
             @click="setLayer('settings')"
-        >
-            <icon class="settings" name="settings"/>
-        </button>
+        ><icon name="settings"/></button>
 
         <button
-            class="status__option"
+            class="c-status__option"
             :class="{active: layer === 'about'}"
             @click="setLayer('about')"
-        >
-            <icon name="help"/>
-        </button>
+        ><icon name="help"/></button>
 
-
-        <Availability class="status__option dnd-switch" />
+        <Availability class="c-status__option dnd-switch" />
     </div>
     </transition>
 
-
-
-    <div class="status__menu-side">
-
+    <div class="c-status__menu-side">
         <button
             v-if="sig11.enabled"
-            class="status__indicator tooltip tooltip-left"
+            class="c-status__indicator tooltip tooltip-left"
+            :class="`t-st-status-sig11-${sig11.status}`"
             :data-tooltip="tooltip.sig11"
         >
             <div class="container" :class="classes('sig11')">
@@ -46,7 +41,8 @@
 
         <button
             v-if="sip.enabled"
-            class="status__indicator tooltip tooltip-left"
+            class="c-status__indicator tooltip tooltip-left"
+            :class="`t-st-status-sip-${sip.status}`"
             :data-tooltip="tooltip.sip"
         >
             <div class="container" :class="classes('sip')">
@@ -57,8 +53,7 @@
             </div>
         </button>
 
-
-        <button class="status__option" @click="logout">
+        <button class="c-status__option" @click="logout">
             <icon name="logout"/>
         </button>
     </div>

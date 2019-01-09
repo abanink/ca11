@@ -1,9 +1,9 @@
-<component class="c-call-options">
+<component class="c-options">
 
     <button
         v-if="!call.id && ui.layer === 'calls'"
         :disabled="!description.endpoint"
-        class="media-controls-option tooltip tooltip-left"
+        class="c-options__option t-btn-options-call-start tooltip tooltip-left"
         :data-tooltip="$t('place call')"
         @click="placeCall(description)"
     >
@@ -12,7 +12,7 @@
 
     <button
         v-if="call.status === 'invite'"
-        class="media-controls-option tooltip tooltip-left hint"
+        class="c-options__option t-btn-options-call-accept tooltip tooltip-left hint"
         :data-tooltip="$t('accept call')"
         @click="callAccept(call)"
     >
@@ -21,7 +21,7 @@
 
     <button
         v-if="call.id && callCanTerminate"
-        class="media-controls-option tooltip tooltip-left"
+        class="c-options__option t-btn-options-call-stop tooltip tooltip-left"
         :data-tooltip="$t('end call')"
         @click="callTerminate(call)"
     >
@@ -29,7 +29,7 @@
     </button>
 
     <button v-if="call.id"
-        class="media-controls-option tooltip tooltip-left"
+        class="c-options__option tooltip tooltip-left"
         :class="classes('dialpad-button')"
         :data-tooltip="$t('toggle keypad')"
         :disabled="call.status !== 'accepted' || call.transfer.active"
@@ -39,7 +39,7 @@
     </button>
 
     <button v-if="call.id"
-        class="media-controls-option tooltip tooltip-left"
+        class="c-options__option tooltip tooltip-left"
         :class="classes('hold-button')"
         :data-tooltip="$t('toggle on-hold')"
         :disabled="call.status !== 'accepted'"
@@ -50,7 +50,7 @@
 
     <button
         v-if="call.id && call.transfer.type !== 'accept'"
-        class="media-controls-option tooltip tooltip-left"
+        class="c-options__option tooltip tooltip-left"
         :class="classes('transfer-button')"
         :data-tooltip="$t('toggle transfer')"
         :disabled="call.status !== 'accepted'"
@@ -60,7 +60,7 @@
     </button>
     <button
         v-else-if="call.id"
-        class="media-controls-option tooltip tooltip-left"
+        class="c-options__option tooltip tooltip-left"
         :data-tooltip="$t('complete transfer')"
         :disabled="call.status !== 'accepted'"
         @click="transferFinalize"

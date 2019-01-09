@@ -14,8 +14,8 @@
                 v-model="searchQuery"
                 autocomplete="off"
                 class="c-select__element field__element"
-                ref="input"
                 readonly="!search"
+                ref="input"
                 :disabled="disabled"
                 :id="name"
                 :placeholder="value.id ? value.name : placeholder.capitalize()"
@@ -32,16 +32,20 @@
             <slot class="button" name="button"></slot>
         </div>
 
-        <div class="c-select__options" v-show="visible" ref="options">
+        <div
+            v-show="visible"
+            class="c-select__options"
+            ref="options"
+            :class="elementclass"
+        >
             <div
                 v-for="option in filteredOptions"
                 class="option"
                 :class="{selected: searchSelected.id === option.id}"
                 :id="`option-${option.id.split('.')[0]}`"
                 @click="searchSelect($event, option, null, true)"
-            >
-                {{option.name.ca()}}
-            </div>
+            >{{option.name.ca()}}</div>
+
         </div>
 
     </div>

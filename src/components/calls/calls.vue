@@ -1,4 +1,4 @@
-<component class="c-calls" :class="classes('component')">
+<component class="c-calls t-calls" :class="classes('component')">
 
     <header v-if="callActive.status === 'new'" class="content__header header">
         <icon class="header__icon" name="phone"/>
@@ -6,6 +6,7 @@
         <div class="header__filters">
             <FieldRadio
                 v-model="description.protocol"
+                elementclass="t-rd-calls-protocol"
                 class="header__filter"
                 name="protocol"
                 :options="protocols"

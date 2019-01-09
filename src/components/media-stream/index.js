@@ -11,16 +11,12 @@ module.exports = (app) => {
         // },
         methods: {
             classes: function(block) {
-                let classes = {}
-                if (block === 'component') {
-                    classes.audio = (this.stream.kind === 'audio')
-                    classes.selected = this.stream.selected
-                    classes.video = (this.stream.kind === 'video')
-                    if (this.stream.kind === 'video' && !this.stream.local) {
-                        classes.hidden = !this.stream.visible
-                    }
+                const classes = {
+                    [this.stream.kind]: true,
+                    selected: this.stream.selected,
                 }
 
+                classes[`t-btn-media-stream-${this.stream.kind}`] = true
                 return classes
             },
             toggleSelect: function() {

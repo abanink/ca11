@@ -1,4 +1,4 @@
-<component class="c-wizard-media-permission">
+<component class="c-media-permission t-media-permission">
     <header class="c-wizard__header">{{$t('microphone access')}}</header>
 
     <div class="c-wizard__description">
@@ -12,13 +12,16 @@
         <slot name="progress"></slot>
 
         <div class="buttons is-centered">
-            <button class="button cf test-wizard-mic-permission-back is-left" @click="stepBack()">
-                {{$t('back')}}
-            </button>
+            <button
+                class="button t-media-permission-back is-left"
+                @click="stepBack()"
+            >{{$t('back')}}</button>
 
-            <button class="button is-primary cf test-wizard-mic-permission-next" @click="queryDevices()" :disabled="!stepValid">
-                {{$t('next')}}
-            </button>
+            <button
+                class="button is-primary t-media-permission-next"
+                @click="queryDevices()"
+                :disabled="!stepValid"
+            >{{$t('next')}}</button>
         </div>
     </div>
 </component>

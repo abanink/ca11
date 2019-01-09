@@ -2,7 +2,7 @@ module.exports = function(settings, screenshot) {
     const brand = settings.brands[settings.BRAND_TARGET]
 
     return async function({page, app}, screens) {
-        await page.waitForSelector('.greeting')
+        await page.waitForSelector('.c-login')
         if (screens) await screenshot({app, page}, 'login')
 
         // The voip adapter has an endpoint field that must be filled.

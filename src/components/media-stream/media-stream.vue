@@ -1,5 +1,7 @@
-<article component class="media-stream"
-    :class="classes('component')"
+<article
+    component
+    class="media-stream"
+    :class="classes()"
     @click="toggleSelect"
 >
 

@@ -21,16 +21,6 @@ module.exports = (app) => {
             },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
-            classes: function(block) {
-                let classes = {}
-                if (block === 'component') {
-                    classes['call-ongoing'] = true
-                } else if (block === 'number-input') {
-                    classes['number-input'] = true
-                    classes[this.display] = true
-                }
-                return classes
-            },
             inputChange: function(newVal) {
                 this.$emit('update:model', newVal)
             },

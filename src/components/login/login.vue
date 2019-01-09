@@ -1,4 +1,9 @@
-<section component class="c-login" tabindex="-1" v-on:keyup.enter="login">
+<section
+    class="c-login t-login"
+    component
+    tabindex="-1"
+    v-on:keyup.enter="login"
+>
 
     <header>
         <div class="c-login__title">
@@ -16,9 +21,10 @@
         <FieldText
             v-model="user.username"
             autocomplete="off"
-            name="username"
+            elementclass="t-txt-session-id"
+            name="session-id"
             :autofocus="true"
-            :help="$t('protects your {name} data in a local vault.', {name: app.name})"
+            :help="$t('your data is protected in a browser vault.', {name: app.name})"
             :label="$t('session name')"
             :placeholder="$t('session name')"
             :validation="$v.user.username"
@@ -26,23 +32,24 @@
 
         <FieldPassword
             v-model="password"
-            name="password"
+            elementclass="t-txt-session-pw"
+            name="session-pw"
             :autofocus="true"
-            :help="$t('only the secret can unlock the vault.')"
-            :label="$t('session secret')"
-            :placeholder="$t('screen secret')"
+            :help="$t('the password that opens the browser vault.', {name: app.name})"
+            :label="$t('session password')"
+            :placeholder="$t('screen password')"
             :validation="$v.password"
         />
 
         <div class="buttons is-centered">
             <button
                 v-if="app.session.available.length"
-                class="button cf"
+                class="button t-btn-change-session"
                 @click="selectSession()"
                 :disabled="user.status === 'login'"
             >{{$t('change session')}}</button>
             <button
-                class="button is-primary test-login-button"
+                class="button t-btn-login"
                 :class="{'is-loading': user.status === 'login'}"
                 :disabled="$v.$invalid || user.status === 'login'"
                 @click="login"
@@ -54,24 +61,25 @@
     <div v-else-if="app.session.active && app.session.active !== 'new'">
         <FieldText
             v-model="password"
-                name="username"
+            elementclass="t-txt-session-pw"
+            name="session-pw"
             :autofocus="true"
-            :help="$t('the session can be opened with the correct session secret.')"
-            :label="$t('session secret')"
-            :placeholder="$t('session secret')"
+            :help="$t('the password that opens the browser vault.', {name: app.name})"
+            :label="$t('session password')"
+            :placeholder="$t('session password')"
             :validation="$v.password"
         />
 
         <div class="buttons is-centered">
             <button
                 v-if="app.session.available.length"
+                class="button t-btn-login"
                 :disabled="user.status === 'login'"
-                class="button cf"
                 @click="selectSession()"
             >{{$t('change session')}}</button>
 
             <button
-                class="button is-primary test-login-button"
+                class="button t-btn-login"
                 :class="{'is-loading': user.status === 'login'}"
                 :disabled="$v.$invalid || user.status === 'login'"
                 @click="login"
@@ -95,8 +103,12 @@
             {{$t('start new session')}}
         </div>
         <div class="session new-session" @click="newSession()">
-            <i class="icon-session"><icon class="icon-session" name="contact-add"/></i>
-            <div class="description cf">{{$t('add session')}}</div>
+            <i class="icon-session">
+                <icon class="icon-session" name="contact-add"/>
+            </i>
+            <div class="description cf">
+                {{$t('add session')}}
+            </div>
         </div>
     </div>
 

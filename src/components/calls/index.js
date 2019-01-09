@@ -17,7 +17,8 @@ module.exports = (app) => {
             classes: function(block) {
                 let classes = {}
                 if (block === 'component') {
-                    if (this.callOngoing) classes['call-ongoing'] = true
+                    if (this.callOngoing) classes['t-st-calls-ongoing'] = true
+                    else classes['t-st-calls-idle'] = true
                 }
                 return classes
             },

@@ -1,4 +1,4 @@
-<section component class="c-main" :class="classes('component')">
+<section component class="c-main t-main" :class="classes('component')">
     <!-- Force the telemetry window to show up -->
     <Notifications :class="classes('notifications')"/>
 

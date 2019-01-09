@@ -36,8 +36,10 @@ module.exports = (app) => {
         },
         props: {
             disabled: Boolean,
+            elementclass: String,
             help: String,
             label: String,
+            name: String,
             placeholder: String,
             readonly: Boolean,
             validation: Object,

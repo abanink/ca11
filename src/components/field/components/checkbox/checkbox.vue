@@ -1,11 +1,17 @@
 <div class="c-checkbox field">
     <div class="field__row">
-        <label :for="name" class="c-checkbox__switch">
+        <label
+            :for="name"
+            class="c-checkbox__switch"
+            :class="elementclass"
+        >
             <input
                 class="c-checkbox__input"
+                :class="elementclass"
                 type="checkbox"
                 :checked="value"
                 :disabled="disabled"
+                :id="name"
                 :name="name"
                 @change="updateModel($event)"
             />

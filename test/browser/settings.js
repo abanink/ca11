@@ -5,26 +5,28 @@ module.exports = function(settings) {
 
     return {
         enableSip: async function(runner, screens) {
-            await runner.click('.test-statusbar-settings')
-            await runner.waitFor('.component-settings')
+            await runner.waitFor('.t-btn-settings')
+            await runner.click('.t-btn-settings')
+            await runner.waitFor('.t-settings')
 
-            await runner.click('.test-tab-phone')
+            await runner.click('.t-tab-sip')
+            await runner.click('.t-cb-sip-toggled')
 
-            await runner.click('input[name="sip_enabled"')
-
-            await runner.type('input[name="sip_endpoint"]', brand.tests[runner._name].endpoint)
-            await runner.type('input[name="sip_username"]', brand.tests[runner._name].username)
-            await runner.type('input[name="sip_password"]', brand.tests[runner._name].password)
+            await runner.type('.t-txt-sip-username', brand.tests[runner._name].username)
+            await runner.type('.t-txt-sip-password', brand.tests[runner._name].password)
 
             if (screens) {
-                const container = await runner.$('#app')
-                await container.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}settings-sip-enabled.png`)})
+                const container = await runner.$('.t-main')
+                await container.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}enable-sip.png`)})
             }
 
-            await runner.click('.test-settings-save')
+            await runner.click('.t-btn-settings-save')
             // Wait until the status indicates a registered device.
-            await runner.waitFor('.test-status-sip-registered')
-            await runner.click('.test-delete-notification')
+            await runner.waitFor('.t-st-status-sip-registered')
+            // Go back to calls layer and switch to sip calling.
+            await runner.click('.t-btn-menu-calls')
+            await runner.click('.t-rd-calls-protocol-sip')
+
         },
     }
 }

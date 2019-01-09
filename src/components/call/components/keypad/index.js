@@ -29,13 +29,6 @@ module.exports = (app) => {
             },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
-            classes: function(block) {
-                let classes = {}
-                if (block === 'component') {
-                    classes['call-ongoing'] = true
-                }
-                return classes
-            },
             inputChange: function(newVal) {
                 this.$emit('update:model', newVal)
             },

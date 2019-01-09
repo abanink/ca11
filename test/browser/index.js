@@ -8,7 +8,7 @@ const test = require('tape')
 const BRAND = process.env.BRAND ? process.env.BRAND : 'ca11'
 const SCREENS = process.env.SCREENS ? true : false
 
-const settings = require('../../tools/settings')(path.join(__dirname, '../../'))
+const settings = require('../../gulp/settings')(path.join(__dirname, '../../'))
 // Force to webview.
 settings.BUILD_TARGET = 'webview'
 
@@ -99,7 +99,7 @@ test('<alice,bob> start a new session', async(t1) => {
     t1.end()
 
     test('<alice,bob> complete the wizard', async(t2) => {
-        const aliceContainer = await alice.$('#app')
+        const aliceContainer = await alice.$('.c-main')
         let [aliceOptions, bobOptions] = await Promise.all([
             await testWizard(alice, SCREENS),
             await testWizard(bob, false),
@@ -108,11 +108,6 @@ test('<alice,bob> start a new session', async(t1) => {
         if (SCREENS) {
             await aliceContainer.screenshot({path: path.join(settings.SCREENS_DIR, `${brand.tests.step(alice)}ready-to-use.png`)})
         }
-
-        await Promise.all([
-            alice.click('.test-delete-notification'),
-            bob.click('.test-delete-notification'),
-        ])
 
         // Check that there are 3 fake input/output/sound devices at the start.
         const aliceDevices = aliceOptions.input.length + aliceOptions.output.length + aliceOptions.sounds.length

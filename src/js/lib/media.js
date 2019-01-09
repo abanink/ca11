@@ -129,12 +129,11 @@ class Media {
 
     /**
     * Query for an audio, video or display stream.
-    * @param {String} type - The type of media to aqcuire.
+    * @param {String} type - The type of media to acquire.
     * @returns {MediaStream} - When succesfully requested a stream; null otherwise.
     */
     async query(type = null) {
         if (this.app.env.isNode) return null
-
         if (!type) type = this.app.state.settings.webrtc.media.stream.type
 
         const streamId = this.app.state.settings.webrtc.media.stream[type].id
@@ -196,8 +195,8 @@ class Media {
             this.app.apps.bg.media.streams = this.streams
         }
 
-        // This stream is not part of a particular call. That is
-        // why it has a separate reference.
+        // The local stream is not part of a particular call.
+        // That is why it is kept apart from the other streams.
         const media = {
             permission: true,
             stream: {
@@ -211,7 +210,8 @@ class Media {
         }
 
         this.app.setState({settings: {webrtc: {media}}}, {persist: true})
-        // (!) The stream id is NEVER persisted
+        // (!) The stream id is never persisted; there is stream
+        // initialization logic that relies on the absence of the id.
         this.app.setState({settings: {webrtc: {media: {stream: {[type]: {id: stream.id}}}}}})
         return stream
     }

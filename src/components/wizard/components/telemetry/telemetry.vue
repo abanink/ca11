@@ -1,4 +1,4 @@
-<component class="c-wizard-telemetry">
+<component class="c-telemetry t-telemetry">
     <header class="c-wizard__header">{{$t('telemetry')}}</header>
 
     <div class="c-wizard__description">
@@ -12,13 +12,19 @@
     <slot name="progress"></slot>
 
     <div class="buttons is-centered">
-        <button class="button test-wizard-devices-back" @click="stepBack()">
+        <button class="button t-btn-telemetry-back" @click="stepBack()">
             {{$t('back')}}
         </button>
-        <button class="button test-wizard-telemetry-no" @click="toggleTelemetry(false)">
+        <button
+            class="button t-btn-telemetry-next-no"
+            @click="toggleTelemetry(false)"
+        >
             {{$t('no')}}
         </button>
-        <button class="button is-primary test-wizard-telemetry-yes" @click="toggleTelemetry(true)">
+        <button
+            class="button t-btn-telemetry-next-yes"
+            @click="toggleTelemetry(true)"
+        >
             {{$t('yes')}}
         </button>
     </div>

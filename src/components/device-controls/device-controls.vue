@@ -1,6 +1,7 @@
 <component class="c-device-controls">
     <FieldSelect
         v-model="devices.sinks.headsetInput"
+        elementclass="t-sel-headset-input"
         name="headset_input"
         :help="$t('does the microphone of your headset respond?')"
         :label="$t('headset microphone')"
@@ -15,6 +16,7 @@
 
     <FieldSelect
         v-model="devices.sinks.headsetOutput"
+        elementclass="t-sel-headset-output"
         name="headset_output"
         :help="$v.settings.webrtc.devices.sinks.headsetOutput.valid.customValid ? $t('does the sound test play on the expected device?') : ''"
         :label="$t('headset audio')"
@@ -33,6 +35,7 @@
 
     <FieldSelect
         v-model="devices.sinks.ringOutput"
+        elementclass="t-sel-ring-output"
         name="ring_output"
         :help="$v.settings.webrtc.devices.sinks.ringOutput.valid.customValid ? $t('does the sound test play on the expected device?') : ''"
         :label="$t('ringtone audio')"
@@ -40,7 +43,6 @@
         :validation="$v.settings.webrtc.devices.sinks.ringOutput.valid"
     >
         <button
-
             class="button"
             slot="button"
             :disabled="playing.headsetOutput"
@@ -49,5 +51,4 @@
             <icon name="call-active"/>
         </button>
     </FieldSelect>
-
 </component>

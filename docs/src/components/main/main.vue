@@ -1,4 +1,4 @@
-<component class="component-main" id="app">
+<component class="component-main theme-default-light" id="app">
     <Sidebar class="app-view-sidebar"/>
     <div class="app-view-main">
         <router-view></router-view>

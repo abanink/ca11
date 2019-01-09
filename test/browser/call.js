@@ -5,49 +5,57 @@ module.exports = function(settings) {
 
     return {
         answerCall: async function({caller, callee}, screens) {
-            const calleeContainer = await callee.$('#app')
-            const callerContainer = await caller.$('#app')
+            const calleeContainer = await callee.$('.t-main')
+            const callerContainer = await caller.$('.t-main')
 
-            await callee.waitFor('.component-calls .call-ongoing')
+            await callee.waitFor('.t-st-calls-ongoing')
             if (screens) {
                 await calleeContainer.screenshot({
-                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(callee)}calldialog-incoming.png`),
+                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(callee)}call-invite.png`),
                 })
             }
-            await callee.click('.component-call .test-button-accept')
+            await callee.click('.t-btn-options-call-accept')
             // Alice and bob are now getting connected;
             // wait for Alice to see the connected screen.
-            await caller.waitFor('.component-call .call-options')
+            await caller.waitFor('.t-btn-media-stream-video')
+            await callee.waitFor('.t-btn-media-stream-video')
+
+            await caller.click('.t-btn-media-stream-video')
+            await callee.click('.t-btn-media-stream-video')
 
             if (screens) {
                 await callerContainer.screenshot({
-                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(caller)}calldialog-outgoing-accepted.png`),
+                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(caller)}calling.png`),
+                })
+                await calleeContainer.screenshot({
+                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(callee)}calling.png`),
                 })
             }
         },
         callNumber: async function(runner, screens, number) {
-            const container = await runner.$('#app')
+            const container = await runner.$('.t-main')
 
             // Enter a number and press the call button.
-            await runner.click('.test-menubar-calls')
-            await runner.waitFor('.component-calls')
+            await runner.click('.t-btn-menu-calls')
+            await runner.waitFor('.t-keypad')
 
             // Test by clicking the dialpad buttons.
             for (const n of String(number).split('')) {
-                await runner.click(`.test-key-${n}`)
+                await runner.click(`.t-btn-keypad-${n}`)
             }
 
             if (screens) {
                 await container.screenshot({
-                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}dialpad-call.png`),
+                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}dial-${number}.png`),
                 })
             }
 
-            await runner.click('.test-call-button')
-            await runner.waitFor('.component-calls .call-ongoing')
+            await runner.click('.t-btn-options-call-start')
+            // await runner.waitFor('.t-st-call-invite')
+            // await caller.click('.t-btn-media-stream-video')
             if (screens) {
                 await container.screenshot({
-                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}calldialog-outgoing.png`),
+                    path: path.join(settings.SCREENS_DIR, `${brand.tests.step(runner)}call-${number}.png`),
                 })
             }
 

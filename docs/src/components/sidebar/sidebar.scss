@@ -1,13 +1,13 @@
-@import "ca11/lib/variables";
+@import 'ca11/lib/variables';
 
-.component-sidebar {
+.c-sidebar {
     background: var(--grey-50);
     display: flex;
     flex-direction: column;
 
     .header {
         align-items: center;
-        background: var(--primary-base);
+        background: var(--grey-50);
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -26,17 +26,21 @@
         }
 
         .header-title {
-            color: $white-color;
+            color: var(--primary-base);
+            font-family: 'Rajdhani';
             font-size: 1.4rem;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0;
             text-align: center;
             text-transform: uppercase;
             width: 100%;
         }
 
         .header-brand {
-            color: $brand-accent-color;
-            font-size: 0.9rem;
+            color: var(--grey-300);
+            font-family: 'Rajdhani';
+            font-size: var(--text-small);
+            font-weight: bold;
             text-align: center;
             text-transform: uppercase;
             width: 100%;
@@ -44,26 +48,27 @@
     }
 
     .navigation {
-
         .navigation-header {
-            background: $brand-accent-color;
-            color: $white-color;
-            font-weight: 500;
-            padding: $spacer;
+            background: var(--grey-100);
+            color: var(--primary-base);
+            font-family: 'Rajdhani';
+            font-weight: 600;
+            padding: var(--spacer);
             text-transform: uppercase;
         }
 
         .navigation-link {
+            border-left: var(--border) solid transparent;
             color: var(--grey-400);
             display: block;
-            font-weight: 500;
-            padding: $spacer;
+            padding: var(--spacer);
             width: 100%;
-
 
             &.active,
             &:hover {
                 background: $white-color;
+                border-right: var(--border) solid var(--primary-base);
+                color: var(--primary-base);
                 cursor: pointer;
             }
         }

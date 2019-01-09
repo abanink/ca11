@@ -1,4 +1,4 @@
-<component class="c-wizard-welcome">
+<component class="c-welcome">
     <header class="c-wizard__header">{{greeting}}!</header>
 
     <div class="c-wizard__description">
@@ -8,11 +8,14 @@
     <slot name="progress"></slot>
 
     <div class="buttons is-centered" v-if="selected.ready !== null">
-        <button class="button" @click="stepBackFirst()">
+        <button
+            class="button t-btn-welcome-cancel"
+            @click="stepBackFirst()"
+        >
             {{$t('cancel')}}
         </button>
         <button
-            class="button is-primary test-wizard-welcome-next"
+            class="button is-primary t-btn-welcome-next"
             @click="stepNext()"
         >{{$t('let\'s start')}}</button>
     </div>

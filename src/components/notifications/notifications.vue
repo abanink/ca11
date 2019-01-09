@@ -1,4 +1,7 @@
-<component class="c-notifications">
+<component
+    class="c-notifications"
+    :class="{'t-res-notifications': notifications.length, 't-nores-notifications': !notifications.length}"
+>
     <transition-group name="notification" tag="ul">
         <li v-for="item in notifications" v-bind:key="notifications.indexOf(item)" class="notification" :class="classes('notification', item)">
             <div class="icon">

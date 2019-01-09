@@ -1,4 +1,4 @@
-<section component="settings" class="c-settings">
+<section component class="c-settings t-settings">
 
     <header class="content__header header">
         <icon class="header__icon" name="settings"/>
@@ -29,7 +29,7 @@
                 <icon name="protocol-sig11"/>
             </li>
             <li
-                class="tooltip tooltip-bottom test-tab-phone"
+                class="tooltip tooltip-bottom t-tab-sip"
                 :class="classes('tabs', 'sip')"
                 :data-tooltip="$t('SIP')"
                 @click="setTab('settings', 'sip')"
@@ -126,6 +126,7 @@
         <div class="tab" :class="{active: tabs.active === 'sip'}">
             <FieldCheckbox
                 v-model="calls.sip.toggled"
+                elementclass="t-cb-sip-toggled"
                 name="sip_enabled"
                 :help="$t('subscription-based calling on a SIP network.')"
                 :label="`${$t('SIP network')} (${$t('centralized')})`"
@@ -134,6 +135,7 @@
             <FieldText
                 v-if="calls.sip.toggled"
                 v-model="calls.sip.endpoint"
+                elementclass="t-txt-sip-endpoint"
                 name="sip_endpoint"
                 placeholder="e.g. sip.websocket.tld"
                 :label="$t('SIP domain (WSS)')"
@@ -144,6 +146,7 @@
             <FieldText
                 v-if="calls.sip.toggled"
                 v-model="calls.sip.account.selected.username"
+                elementclass="t-txt-sip-username"
                 name="sip_username"
                 :label="$t('SIP Extension')"
                 :placeholder="$t('1000')"
@@ -153,6 +156,7 @@
             <FieldPassword
                 v-if="calls.sip.toggled"
                 v-model="calls.sip.account.selected.password"
+                elementclass="t-txt-sip-password"
                 name="sip_password"
                 :label="$t('SIP password')"
                 :placeholder="$t('SIP account secret')"
@@ -161,7 +165,11 @@
         </div>
 
         <div class="tabs-actions">
-            <button class="button test-settings-save" :disabled="$v.$invalid" @click="save">{{$t('save changes')}}</button>
+            <button
+                class="button t-btn-settings-save"
+                :disabled="$v.$invalid"
+                @click="save"
+            >{{$t('save changes')}}</button>
         </div>
     </main>
 

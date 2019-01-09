@@ -15,7 +15,7 @@ test('[browser] Alice calls Bob, Bob answers.', async(t, onExit) => {
         loginAndWizard('bob', onExit),
     ])
 
-    await screenshot(alice, 'ready-to-use')
+    await screenshot(alice, 'landing-page')
 
     // Check that there are 3 fake input/output/sound devices at the start.
     const aliceDevices = alice.options.input.length + alice.options.output.length + alice.options.sounds.length

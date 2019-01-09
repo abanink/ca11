@@ -1,7 +1,7 @@
 @import 'ca11/lib/variables';
 @import 'ca11/lib/mixins';
 
-.c-dialer-t {
+.c-keypad {
     $self: &;
     align-items: center;
     display: flex;
@@ -101,6 +101,7 @@
             display: flex;
             flex-grow: 1;
             justify-content: center;
+            width: 100%;
 
             #{$self}__key {
                 @include no-outline;

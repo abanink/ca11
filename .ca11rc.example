@@ -63,17 +63,14 @@
             },
             "tests": {
                 "alice": {
-                    "endpoint": "sip.dev.ca11.io",
                     "username": "1000",
                     "password": "unsecurepassword"
                 },
                 "bob": {
-                    "endpoint": "sip.dev.ca11.io",
                     "username": "2000",
                     "password": "unsecurepassword"
                 },
                 "charlie": {
-                    "endpoint": "sip.dev.ca11.io",
                     "username": "3000",
                     "password": "unsecurepassword"
                 },

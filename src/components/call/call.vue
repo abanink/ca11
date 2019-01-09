@@ -1,4 +1,4 @@
-<component class="c-call">
+<component class="c-call" :class="`t-st-call-${call.status}`">
     <CallTransfer
         v-if="call.transfer.active && call.status === 'accepted'"
         :call="call"
