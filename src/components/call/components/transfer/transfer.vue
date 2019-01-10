@@ -2,7 +2,7 @@
     <div class="c-transfer__text">
         {{$t('transfer this call to')}}:
     </div>
-    <DialerInput
+    <Dialer
         mode="call"
         :endpoint="description.endpoint"
         :model.sync="description.endpoint"
@@ -10,19 +10,16 @@
 
     <div class="c-transfer__options">
         <button
-            class="button c-transfer__button"
+            class="button c-transfer__button t-btn-transfer-attended"
             :class="classes('attended-button')"
             @click="transferMode('attended')"
-        >
-            {{$t('attended transfer')}}
-        </button>
+        >{{$t('attended transfer')}}</button>
+
         <button
-            class="button c-transfer__button"
+            class="button c-transfer__button t-btn-transfer-blind"
             :class="classes('blind-button')"
             @click="transferMode('blind')"
-        >
-            {{$t('blind transfer')}}
-        </button>
+        >{{$t('blind transfer')}}</button>
     </div>
 
     <ol class="c-transfer__instruction" v-if="call.transfer.type === 'attended'">

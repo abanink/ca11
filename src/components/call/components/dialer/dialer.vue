@@ -1,10 +1,11 @@
-<component class="c-dialer-input" tabindex="-1">
+<component class="c-dialer" tabindex="-1">
     <input
         v-bind:value="endpoint"
         v-on:input="inputChange($event.target.value)"
         v-on:keyup.enter="setupCall(description)"
         autocomplete="off"
         autofocus placeholder="..."
+        class="c-dialer__input t-txt-dialer-number"
         name="number-input"
         ref="input"
         type="text"
@@ -14,7 +15,7 @@
 
     <button
         v-on:keyup.enter="keypadAction"
-        class="button"
+        class="c-dialer__transfer button t-btn-dialer-call"
         :class="classes('transfer-button')"
         :disabled="!endpoint"
         @click="setupCall(description)"

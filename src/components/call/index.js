@@ -5,7 +5,7 @@ module.exports = (app) => {
         CallOptions: require('./components/options'),
         CallStatus: require('./components/status'),
         CallTransfer: require('./components/transfer'),
-        DialerInput: require('./components/dialer-input'),
+        Dialer: require('./components/dialer'),
         Keypad: require('./components/keypad'),
     }
 

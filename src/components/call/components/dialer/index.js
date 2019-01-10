@@ -4,7 +4,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const DialerInput = {
+    const Dialer = {
         computed: Object.assign({
             matchedContact: function() {
                 let _number = String(this.endpoint)
@@ -57,8 +57,8 @@ module.exports = (app) => {
             mode: {default: 'call', type: String},
             search: {default: true, type: Boolean},
         },
-        render: templates.call_dialer_input.r,
-        staticRenderFns: templates.call_dialer_input.s,
+        render: templates.call_dialer.r,
+        staticRenderFns: templates.call_dialer.s,
         store: {
             contacts: 'contacts.contacts',
             description: 'calls.description',
@@ -77,5 +77,5 @@ module.exports = (app) => {
         },
     }
 
-    return DialerInput
+    return Dialer
 }

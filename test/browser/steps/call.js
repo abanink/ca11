@@ -31,22 +31,37 @@ module.exports = function(_) {
                 await caller.page.click(`.t-btn-keypad-${n}`)
             }
 
-            await _.screenshot(caller, `call-${caller.session.username}.png`)
+            await _.screenshot(caller, `call-${caller.session.username}`)
             await caller.page.click('.t-btn-options-call-start')
-            await _.screenshot(caller, `calling-${caller.session.username}.png`)
+            await _.screenshot(caller, `calling-${caller.session.username}`)
         },
+        /**
+         * Assumes caller and callee are already in a call
+         * with each other.
+         * @param {*} caller - The caller actor.
+         * @param {*} callee - The callee actor.
+         * @param {*} transfer - The transfer actor.
+         */
         transferActor: async function(caller, callee, transfer) {
             // Alice blind transfers to Charlie.
-            _.step(callee, `transferring ${caller.session.username} to ${transfer.session.username}`)
-            await caller.page.click('.component-call .test-transfer-button')
-            await caller.page.waitFor('.component-call .transfer-options')
+            _.step(callee, `transfer ${caller.session.username} to ${transfer.session.username}`)
+            await callee.page.click('.t-btn-options-transfer-toggle')
+            await callee.page.waitFor('.t-btn-transfer-attended')
             // Pick blind (unattended) transfer.
-            await caller.page.click('.component-call .transfer-options .test-blind-button')
+            await callee.page.click('.t-btn-transfer-attended')
+
             // Focus number input
-            await caller.page.click('.component-call .transfer-options .number-input input')
-            await caller.page.type('.component-call .transfer-options .number-input input', brand.tests.charlie.number)
-            // Click on icon-small (transfer)
-            await caller.page.click('.component-call .transfer-options .test-keypad-action')
+            await callee.page.click('.t-txt-dialer-number')
+            await callee.page.type('.t-txt-dialer-number', transfer.sip.username)
+            await _.screenshot(callee, `blind-transfer-${caller.session.username}-to-${transfer.session.username}`)
+
+            await callee.page.click('.t-btn-dialer-call')
+
+            await transfer.page.waitFor('.t-btn-options-call-accept')
+            await transfer.page.click('.t-btn-options-call-accept')
+
+            await callee.page.waitFor('.t-btn-options-transfer-finalize')
+            await callee.page.click('.t-btn-options-transfer-finalize')
         },
     }
 }

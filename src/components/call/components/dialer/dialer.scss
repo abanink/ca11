@@ -1,0 +1,34 @@
+@import 'ca11/lib/variables';
+@import 'ca11/lib/mixins';
+
+.c-dialer {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: $spacer;
+    max-width: 300px;
+    position: relative;
+
+    &__input {
+        background: var(--grey-50);
+        border: 1px solid var(--grey-100);
+        color: var(--primary-base);
+        font-size: var(--text-large);
+        font-weight: 600;
+        height: 40px;
+        padding-right: $spacer;
+        text-align: right;
+        width: 200px;
+
+        &[disabled='disabled'] {
+            &::placeholder {
+                color: var(--grey-200);
+            }
+        }
+
+        &::placeholder {
+            color: $grey-color;
+        }
+    }
+}

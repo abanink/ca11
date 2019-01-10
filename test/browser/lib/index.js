@@ -127,15 +127,11 @@ const lib = {
     },
     /**
      * Perform a async tape test.
-     *
      * This function will automatically call `t.end` when the test body is done.
-     *
      * It also provides an `onExit` hook to register handlers that will be called
      * when the test is done (irregardless of failure or success).
-     *
      * Finally it will catch exceptions in the async test body and report them and
      * fail the tape test.
-     *
      * @param {String} title - Test title.
      * @param {AsyncFunction} func - Test body.
      * @returns {Tape} - Tape test case
@@ -148,7 +144,6 @@ const lib = {
                 await func(t, onExit)
                 t.end()
             } catch (e) {
-                t.fail('exception')
                 throw e
             } finally {
                 if (!settings.DEBUG_MODE) {
