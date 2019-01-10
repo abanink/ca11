@@ -100,8 +100,8 @@
 
         li {
             align-items: center;
-            border-bottom: var(--gutter12) solid transparent;
-            border-top: var(--gutter12) solid transparent;
+            border-bottom: var(--border) solid transparent;
+            border-top: var(--border) solid transparent;
             color: var(--grey-200);
             display: flex;
             // flex: 1;
@@ -109,7 +109,7 @@
             width: var(--space-4);
 
             &.active {
-                border-bottom: var(--gutter12) solid var(--primary-base);
+                border-bottom: var(--border) solid var(--primary-base);
                 color: var(--primary-base);
             }
 

@@ -1,37 +1,30 @@
 <nav component class="c-main-menu">
     <div class="options">
 
-        <div :aria-labelledby="$t('recent activity')"
-            class="option t-btn-menu-activity"
+        <button
+            class="button option t-btn-menu-activity"
             :class="classes('activities')"
-            role="button"
-            @click="setLayer('activities')" >
-            <icon name="recent"/>
-        </div>
+            @click="setLayer('activities')"
+        ><icon name="recent"/></button>
 
-        <div :aria-labelledby="$t('contacts')"
+        <button
+            class="button option t-btn-menu-contacts"
             :class="classes('contacts', true)"
-            class="option t-btn-menu-contacts"
-            role="button"
-            @click="setLayer('contacts')">
-            <icon name="contacts"/>
-        </div>
+            @click="setLayer('contacts')"
+        ><icon name="contacts"/></button>
 
-        <div :aria-labelledby="$t('dialpad')"
+        <button
+            class="button option t-btn-menu-calls"
             :class="classes('calls')"
-            class="option t-btn-menu-calls"
             @click="setLayer('calls')"
-            role="button">
-             <icon name="phone"/>
-        </div>
+        ><icon name="phone"/></button>
 
-        <div
+        <button
             v-if="plugin.menubarIcon"
             v-for="plugin in customPlugins" @click="setLayer(plugin.menubarIcon)"
-            role="button" :aria-labelledby="plugin.name"
-            class="option"
+            class="button option"
             :class="classes(plugin.menubarIcon, plugin.menubarTransferHint)"
-        ><icon :name="plugin.menubarIcon"/></div>
+        ><icon :name="plugin.menubarIcon"/></button>
 
     </div>
 </nav>

@@ -21,6 +21,11 @@ module.exports = (app) => {
             },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
+            classes: function() {
+                return {
+                    hint: true,
+                }
+            },
             inputChange: function(newVal) {
                 this.$emit('update:model', newVal)
             },
@@ -61,9 +66,6 @@ module.exports = (app) => {
             sip: 'calls.sip',
         },
         watch: {
-            'call.protocol': function(protocol) {
-                app.setState({calls: {call: {protocol}}}, {persist: true})
-            },
             endpoint: function(endpoint) {
                 if (this.callingDisabled) return
                 let cleanedNumber = endpoint

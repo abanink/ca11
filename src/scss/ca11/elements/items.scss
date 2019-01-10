@@ -5,9 +5,6 @@
     align-items: stretch;
     display: flex;
     flex-wrap: wrap;
-    // justify-items: stretch;
-    // background: #f00;
-    // width: 100%;
 
     &__empty {
         align-items: center;
@@ -123,7 +120,7 @@
 
             #{$item}__option {
                 align-items: center;
-                color: var(--grey-100);
+                color: var(--grey-200);
                 display: flex;
                 justify-content: center;
 

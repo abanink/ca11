@@ -1,9 +1,11 @@
 <component class="c-transfer">
-    <div class="c-transfer__text cf">{{$t('select a transfer recipient')}}:</div>
+    <div class="c-transfer__text">
+        {{$t('transfer this call to')}}:
+    </div>
     <DialerInput
         mode="call"
-        :model.sync="description.endpoint"
         :endpoint="description.endpoint"
+        :model.sync="description.endpoint"
     />
 
     <div class="c-transfer__options">
@@ -23,6 +25,31 @@
         </button>
     </div>
 
+    <ol class="c-transfer__instruction" v-if="call.transfer.type === 'attended'">
+        <li>
+            {{$t('starts a new call with {endpoint}', {endpoint: description.endpoint ? description.endpoint : '...'})}}
+        </li>
 
+        <li class="action">{{$t('consult with {endpoint} about this caller', {
+            endpoint: description.endpoint ? description.endpoint : '...'
+            })}}
+        </li>
+        <li class="action">{{$t('finalize the transfer')}}</li>
+        <li>{{$t('connects {target} with {endpoint}', {
+            endpoint: description.endpoint ? description.endpoint : '...',
+            target: call.endpoint,
+        })}}</li>
+        <li>{{$t('connection ends')}}</li>
+    </ol>
 
+    <ol class="c-transfer__instruction" v-else-if="call.transfer.type === 'blind'">
+        <li>
+            {{$t('connects {endpoint} with {target}', {
+                endpoint: call.endpoint,
+                target: description.endpoint ? description.endpoint : '...'
+            })}}
+        </li>
+        <li>{{$t('connection ends')}}</li>
+        <li>{{$t('no call success verification')}}</li>
+    </ol>
 </component>

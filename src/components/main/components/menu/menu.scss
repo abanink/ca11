@@ -10,13 +10,10 @@
         // Keeps the menubar icons from scrolling with the main content.
         .option {
             align-items: center;
-            border-top: var(--gutter12) solid transparent;
-            border-bottom: var(--gutter12) solid transparent;
-            color: var(--grey-200);
-            display: flex;
-            flex-direction: column;
+            background: var(--grey-50);
             height: var(--space-433);
-            justify-content: center;
+            width: 100%;
+            // justify-content: center;
 
             svg {
                 @include icon-size(var(--icon-normal));
@@ -29,16 +26,6 @@
                 svg {
                     animation: glowing 750ms cubic-bezier(0.39, 0.58, 0.57, 1) infinite;
                 }
-            }
-
-            &.active {
-                border-bottom: var(--gutter12) solid var(--primary-base);
-            }
-
-            &.active,
-            &:hover {
-                color: var(--primary-base);
-                cursor: pointer;
             }
         }
     }
