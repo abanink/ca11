@@ -79,33 +79,6 @@ module.exports = function(settings) {
 
 
     /**
-     * Mozilla publishing has been untested for a while.
-     * @param {String} brand - Brand to publish to the Mozilla store.
-     * @returns {Promise} Resolves when publishing is completed.
-     */
-    helpers.uploadFirefox = function(brand) {
-        return new Promise((resolve) => {
-            // A Firefox extension version number can only be signed and
-            // uploaded once using web-ext. The second time will fail with an
-            // unobvious reason.
-            const api = settings.BRAND.store.firefox
-            // eslint-disable-next-line max-len
-            let _cmd = `web-ext sign --source-dir ./build/${brand}/firefox --api-key ${api.apiKey} --api-secret ${api.apiSecret} --artifacts-dir ./build/${brand}/firefox`
-            let child = childExec(_cmd, undefined, (err, stdout, stderr) => {
-                if (stderr) logger.info(stderr)
-                if (stdout) logger.info(stdout)
-                logger.info(`Published ${brand} Firefox WebExtension version ${PACKAGE.version}.`)
-                resolve()
-            })
-
-            child.stdout.on('data', (data) => {
-                process.stdout.write(`${data.toString()}\r`)
-            })
-        })
-    }
-
-
-    /**
      * Create a Sentry release manager with
      * the correct API settings.
      * @returns {SentryManager} The sentry manager to operate on.
@@ -129,15 +102,6 @@ module.exports = function(settings) {
      */
     tasks.googleStore = function publishGoogleStore(done) {
         helpers.uploadChrome(settings.BRAND_TARGET, done)
-    }
-
-
-    /**
-     * Deployment task for the Mozilla webstore.
-     * @param {Function} done Gulp task callback.
-     */
-    tasks.mozillaStore = async function publishMozillaStore(done) {
-        helpers.uploadFirefox(settings.BRAND_TARGET, done)
     }
 
 

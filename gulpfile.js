@@ -18,7 +18,7 @@ const test = require('./gulp/tasks/test')(settings)
 const build = gulp.series(misc.tasks.buildClean, function build(done) {
     helpers.showBuildConfig()
     const tasks = ['assets', 'code', 'styles']
-    if (['chrome', 'firefox'].includes(settings.BUILD_TARGET)) {
+    if (['chrome'].includes(settings.BUILD_TARGET)) {
         tasks.push(misc.tasks.manifest)
     }
 

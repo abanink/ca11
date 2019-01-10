@@ -40,16 +40,6 @@
                     "extensionId_beta": "",
                     "extensionId_production": "",
                     "refreshToken": ""
-                },
-                "firefox": {
-                    "apiKey": "",
-                    "apiSecret": "",
-                    "gecko": {
-                        "id_alpha": "",
-                        "id_beta": "",
-                        "id_production": "",
-                        "strict_min_version": ""
-                    }
                 }
             },
             "telemetry": {
