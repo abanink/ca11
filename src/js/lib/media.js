@@ -20,11 +20,6 @@ class Media {
 
         if (!this.app.env.isBrowser) return
 
-        // Create audio/video elements in a browser-like environment.
-        // The audio element is used to playback sounds with
-        // (like ringtones, dtmftones). The video element is
-        // used to attach the remote WebRTC stream to.
-
         if (this.app.env.isExtension) {
             this.__createFallbackMedia()
         } else {

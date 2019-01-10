@@ -1,5 +1,4 @@
 <component class="c-transfer">
-
     <div class="c-transfer__text cf">{{$t('select a transfer recipient')}}:</div>
     <DialerInput
         mode="call"

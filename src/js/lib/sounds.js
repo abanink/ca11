@@ -256,7 +256,7 @@ class RingTone extends Sound {
     }
 
     play(...args) {
-        this.audio.src = `audio/ringtones/${this.app.state.settings.ringtones.selected.id}`
+        this.audio.src = `audio/ringtones/${this.app.state.settings.ringtones.selected.id}.ogg`
         super.play(...args)
     }
 }

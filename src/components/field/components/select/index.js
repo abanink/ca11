@@ -131,7 +131,11 @@ module.exports = (app, base) => {
         updated() {
             const input = this.$refs.input
             const options = this.$refs.options
-            const selected = document.querySelector(`#option-${this.searchSelected.id.split('.')[0]}`)
+            let selected
+            if (this.searchSelected.id) {
+                selected = document.querySelector(`#option-${this.searchSelected.id}`)
+            }
+
             if (selected) {
                 options.scrollTop = selected.offsetTop - input.offsetHeight - selected.offsetHeight
             }

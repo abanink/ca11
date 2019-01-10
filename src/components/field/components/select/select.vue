@@ -40,9 +40,10 @@
         >
             <div
                 v-for="option in filteredOptions"
+                v-if="option.id"
                 class="option"
                 :class="{selected: searchSelected.id === option.id}"
-                :id="`option-${option.id.split('.')[0]}`"
+                :id="`option-${option.id}`"
                 @click="searchSelect($event, option, null, true)"
             >{{option.name.ca()}}</div>
 

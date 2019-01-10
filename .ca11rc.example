@@ -53,16 +53,34 @@
             },
             "tests": {
                 "alice": {
-                    "username": "1000",
-                    "password": "unsecurepassword"
+                    "session": {
+                        "username": "alice",
+                        "password": "testing"
+                    },
+                    "sip": {
+                        "username": "1000",
+                        "password": "unsecurepassword"
+                    }
                 },
                 "bob": {
-                    "username": "2000",
-                    "password": "unsecurepassword"
+                    "session": {
+                        "username": "bob",
+                        "password": "testing"
+                    },
+                    "sip": {
+                        "username": "2000",
+                        "password": "unsecurepassword"
+                    }
                 },
                 "charlie": {
-                    "username": "3000",
-                    "password": "unsecurepassword"
+                    "session": {
+                        "username": "charlie",
+                        "password": "testing"
+                    },
+                    "sip": {
+                        "username": "3000",
+                        "password": "unsecurepassword"
+                    }
                 },
                 "headless": false,
                 "port": 3000

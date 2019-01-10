@@ -24,14 +24,14 @@ class PluginSettings extends Plugin {
             },
             ringtones: {
                 options: [
-                    {id: 'default.ogg', name: 'default'},
-                    {id: 'ringtone-1.ogg', name: 'ringtone-1'},
-                    {id: 'ringtone-2.ogg', name: 'ringtone-2'},
-                    {id: 'ringtone-3.ogg', name: 'ringtone-3'},
-                    {id: 'ringtone-4.ogg', name: 'ringtone-4'},
-                    {id: 'ringtone-5.ogg', name: 'ringtone-5'},
+                    {id: 'default', name: 'default'},
+                    {id: 'ringtone-1', name: 'ringtone-1'},
+                    {id: 'ringtone-2', name: 'ringtone-2'},
+                    {id: 'ringtone-3', name: 'ringtone-3'},
+                    {id: 'ringtone-4', name: 'ringtone-4'},
+                    {id: 'ringtone-5', name: 'ringtone-5'},
                 ],
-                selected: {id: 'default.ogg', name: 'default'},
+                selected: {id: 'default', name: 'default'},
             },
             telemetry: {
                 enabled: false,

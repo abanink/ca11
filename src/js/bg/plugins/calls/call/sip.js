@@ -41,16 +41,8 @@ class CallSIP extends Call {
     * Handle an incoming `invite` call from.
     */
     _incoming() {
-        // (!) Set the state before calling super.
-        this.state.displayName = this.session.remoteIdentity.displayName
-        // Try to get caller info from the RPID first; e.g. this was a reinvite.
-        let rpid = this.session.transaction.request.getHeader('Remote-Party-Id')
-        if (rpid) {
-            rpid = this._parseRpid(rpid)
-            Object.assign(this.state, rpid)
-        } else {
-            this.state.endpoint = this.session.remoteIdentity.uri.user
-        }
+        this.state.endpoint = this.session.assertedIdentity.uri.user
+        this.state.displayName = this.session.assertedIdentity.uri.user
 
         this.state.stats.callId = this.session.request.call_id
         this.app.logger.debug(`${this}incoming call ${this.state.stats.callId} started`)
@@ -65,7 +57,7 @@ class CallSIP extends Call {
             if (e.getHeader('X-Asterisk-Hangupcausecode') === '58') {
                 this.app.notify({
                     icon: 'warning',
-                    message: this.app.$t('your VoIP account misses AVPF and encryption support.'),
+                    message: this.app.$t('code 58: PBX AVPF/encryption issue'),
                     type: 'warning',
                 })
             }
@@ -112,15 +104,14 @@ class CallSIP extends Call {
             this._stop({message: this.translations[this.state.status]})
         })
 
-
-        // Check for the RPID. Update the display name and number to the
-        // transferred caller, if there is one.
         this.session.on('reinvite', (session, request) => {
-            let _rpid = request.getHeader('Remote-Party-Id')
-            if (_rpid) {
-                _rpid = this._parseRpid(_rpid)
-                this.setState(_rpid)
-            }
+            // Seems to be a timing issue in SIP.js. After a transfer,
+            // the old name is keps in assertedIdentity, unless a timeout
+            // is added.
+            setTimeout(() => {
+                this.state.displayName = session.assertedIdentity.uri.user
+                this.state.endpoint = session.assertedIdentity.uri.user
+            }, 0)
         })
     }
 
@@ -225,6 +216,18 @@ class CallSIP extends Call {
             this.session.bye()
         })
 
+        // The user is being transferred; update the caller
+        // info from the P-Asserted-Identity header.
+        this.session.on('reinvite', (session) => {
+            // Seems to be a timing issue in SIP.js. After a transfer,
+            // the old name is keps in assertedIdentity, unless a timeout
+            // is added.
+            setTimeout(() => {
+                this.state.displayName = session.assertedIdentity.uri.user
+                this.state.endpoint = session.assertedIdentity.uri.user
+            }, 0)
+        })
+
         this.session.on('failed', (message) => {
             this.app.logger.info(`${this}call declined: ${message.status_code}/${this.state.stats.callId}`)
 
@@ -257,34 +260,6 @@ class CallSIP extends Call {
     */
     _parseHeader(header) {
         return new Map(header.replace(/\"/g, '').split(';').map((i) => i.split('=')))
-    }
-
-
-    /**
-    * Pass the name and number of the caller from the Remote-Party-ID header.
-    * @param {String} header - The raw RPID header string.
-    * @returns {Object} - displayName and number properties that map to state.
-    */
-    _parseRpid(header) {
-        let rpid = {displayName: '', number: 'unknown'}
-
-        const numberMatch = (/<(.*)>/g).exec(header)
-        const nameMatch = (/"(.*?)"/g).exec(header)
-
-        if (numberMatch) {
-            try {
-                rpid.endpoint = numberMatch[1].split('@')[0].replace('sip:', '')
-            } catch (err) {
-                this.app.logger.warn(`${this}failed to parse rpid header ${header}`)
-                rpid.endpoint = numberMatch[0]
-            }
-        }
-
-        if (nameMatch) {
-            rpid.displayName = nameMatch[1]
-        }
-
-        return rpid
     }
 
 

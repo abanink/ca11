@@ -3,6 +3,9 @@ module.exports = (app) => {
     * @memberof fg.components
     */
     const CallTransfer = {
+        computed: {
+            transferStatus: app.helpers.sharedComputed().transferStatus,
+        },
         methods: {
             classes: function(block) {
                 let classes = {}
