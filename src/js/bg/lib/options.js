@@ -38,7 +38,6 @@ module.exports = (function() {
     }
 
     let contactsPlugin = options.plugins.builtin.find((i) => i.name === 'contacts')
-    let userPlugin = options.plugins.builtin.find((i) => i.name === 'user')
 
     // Load plugins from settings.
     if (env.isNode) {
@@ -49,7 +48,6 @@ module.exports = (function() {
         const brand = settings.brands[BRAND]
         contactsPlugin.providers = brand.plugins.builtin.contacts.providers
         contactsPlugin.i18n = brand.plugins.builtin.contacts.i18n
-        userPlugin.i18n = brand.plugins.builtin.user.i18n
         options.plugins.custom = brand.plugins.custom
     } else {
         // Load plugins through envify replacement.

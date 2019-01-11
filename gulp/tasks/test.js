@@ -77,7 +77,7 @@ module.exports = function(settings) {
         const reporter = through.obj()
         reporter.pipe(tapSpec()).pipe(process.stdout)
 
-        return gulp.src('tests/bg/**/*.js')
+        return gulp.src('tests/parts/**/*.js')
             .pipe(tape({bail: true, outputStream: reporter}))
     }
 

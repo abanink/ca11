@@ -188,6 +188,8 @@ class Sound extends EventEmitter {
     constructor(app) {
         super()
         if (app.env.isNode) return
+
+        this.audio = new Audio('audio/power-on.ogg')
         this.app = app
     }
 
@@ -236,23 +238,20 @@ class Sound extends EventEmitter {
 
 class CallEnd extends Sound {
     constructor(app) {
-        super(app)
-        this.audio = new Audio('audio/call-end.ogg')
+        super(app, 'audio/call-end.ogg')
     }
 }
 
 
 class PowerOn extends Sound {
     constructor(app) {
-        super(app)
-        this.audio = new Audio('audio/power-on.ogg')
+        super(app, 'audio/power-on.ogg')
     }
 }
 
 class RingTone extends Sound {
     constructor(app) {
-        super(app)
-        this.audio = new Audio()
+        super(app, '')
     }
 
     play(...args) {

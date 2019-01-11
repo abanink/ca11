@@ -23,8 +23,10 @@ class Logger {
 
     debug(...args) {
         if (this.level >= this.levels.debug) {
-            args[0] = `%c${args[0]}`
-            args.push('color: #999')
+            if (this.app.env.isBrowser) {
+                args[0] = `%c${args[0]}`
+                args.push('color: #999')
+            }
             // eslint-disable-next-line no-console
             console.log(...args)
         }

@@ -1,3 +1,6 @@
+require('../src/js/bg/vendor')
+require('../src/js/i18n')
+
 const {promisify} = require('util')
 const path = require('path')
 
@@ -8,8 +11,8 @@ const test = require('tape-catch')
 
 
 // Use the project directory as base directory.
-const settings = require('../../../gulp/settings')(
-    path.join(__dirname, '../../../'), {
+const settings = require('../gulp/settings')(
+    path.join(__dirname, '../../'), {
         overrides: {
             // Force webview build modus.
             BUILD_TARGET: 'webview',
@@ -131,6 +134,7 @@ const lib = {
             await new Promise(resolve => setTimeout(resolve, 2000))
         }
     },
+    test,
     /**
      * Perform a async tape test.
      * This function will automatically call `t.end` when the test body is done.
@@ -142,7 +146,7 @@ const lib = {
      * @param {AsyncFunction} func - Test body.
      * @returns {Tape} - Tape test case
      */
-    test: (title, func) => {
+    testAsync: (title, func) => {
         const cleanup = []
         const onExit = (f) => cleanup.push(f)
         return test(title, async(t) => {
@@ -169,11 +173,11 @@ lib.actors = {}
 lib.screenshots = {}
 
 lib.steps = {
-    call: require('../steps/call')(lib),
-    meta: require('../steps/meta')(lib),
-    session: require('../steps/session')(lib),
-    settings: require('../steps/settings')(lib),
-    wizard: require('../steps/wizard')(lib),
+    call: require('./browser/steps/call')(lib),
+    meta: require('./browser/steps/meta')(lib),
+    session: require('./browser/steps/session')(lib),
+    settings: require('./browser/steps/settings')(lib),
+    wizard: require('./browser/steps/wizard')(lib),
 }
 
 module.exports = lib
