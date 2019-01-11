@@ -1,6 +1,7 @@
 const Logger = require('./logger')
 const Utils = require('./utils')
 
+
 /**
 * This is the minimal class that all runnable parts of the Ca11
 * application inherit from(background, foreground and contentscript).
@@ -44,11 +45,9 @@ class Skeleton extends EventEmitter {
 
         // Sets the verbosity of the logger.
         if (process.env.NODE_ENV === 'production') {
-            if (this.env.section.bg || this.env.section.fg) this.logger.setLevel('info')
-            else if (this.env.section.observer) this.logger.setLevel('error')
+            this.logger.setLevel('info')
         } else {
-            if (this.env.isNode) this.logger.setLevel('error')
-            else this.logger.setLevel('debug')
+            this.logger.setLevel('debug')
         }
         // Increases verbosity beyond the logger's debug level. Not
         // always useful during development, so it can be switched

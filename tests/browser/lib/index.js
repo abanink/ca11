@@ -91,9 +91,14 @@ const lib = {
     * Take a screenshot of `browser` and write it to file.
     * @param {Object} actor - A test actor object.
     * @param {String} name - Name the screenshot (actor name will be prepended).
-    * @param {Object} scope - Puppeteer scoped element container.
+    * @param {Object} options - Extra screenshot options.
+    * @param {String} options.scope - Puppeteer scoped element container.
+    * * @param {String} options.unique - Don't make the same named screenshot again.
     */
-    screenshot: async(actor, name, scope = null) => {
+    screenshot: async(actor, name, {scope = null, unique = true} = {}) => {
+        if (unique && lib.screenshots[name]) return
+        lib.screenshots[name] = true
+        // Make a screenshot of the app container without scope.
         if (!scope) scope = actor.page
 
         if (settings.SCREENS) {
@@ -160,6 +165,7 @@ const lib = {
 }
 
 lib.actors = {}
+lib.screenshots = {}
 
 lib.steps = {
     call: require('../steps/call')(lib),

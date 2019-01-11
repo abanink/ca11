@@ -6,7 +6,6 @@ const path = require('path')
 const connect = require('connect')
 const del = require('del')
 const gulp = require('gulp')
-const nodemon = require('gulp-nodemon')
 const mkdirp = promisify(require('mkdirp'))
 const livereload = require('gulp-livereload')
 const logger = require('gulplog')
@@ -30,28 +29,21 @@ module.exports = function(settings) {
     }
 
 
-    helpers.serveSig11 = function() {
-        logger.info('Starting SIG11 service')
-        let _nodemon = nodemon({
-            env: {NODE_ENV: settings.NODE_ENV},
-            exec: 'node --inspect',
-            ext: 'js',
-            // Reloads are triggered manually from the appropriate tasks.
-            ignore: [
-                '*.js',
-            ],
-            restartable: true,
-            script: path.join(settings.SRC_DIR, 'js', 'sig11', 'index.js'),
-        })
+    helpers.serveSig11 = async function(reload = false, done) {
+        if (!helpers.sig11) {
+            helpers.sig11 = require('../../src/js/sig11')
+            await helpers.sig11.start()
+        } else if (reload) {
+            logger.info('Restarting SIG11 service...')
+            await helpers.sig11.stop()
+            // Allows updated code to load.
+            delete require.cache[require.resolve('../../src/js/sig11')]
+            helpers.sig11 = require('../../src/js/sig11')
+            await helpers.sig11.start()
+        }
 
-        _nodemon.on('crash', function() {
-            console.error('Application has crashed!\n Trying to restart in 3 seconds...\n')
-            _nodemon.emit('restart', 3)
-        })
-
-        _nodemon.on('start:child', function() {
-            livereload.changed('app.js')
-        })
+        logger.info(`SIG11 service listening on ws://localhost:${settings.sig11.port}`)
+        if (done) done()
     }
 
 
@@ -73,7 +65,7 @@ module.exports = function(settings) {
             logger.info(`Mounted ${mountpoint.dir} on ${mountpoint.mount} (index: ${mountpoint.index ? 'yes' : 'no'})`)
         }
 
-        helpers.server = http.createServer(app).listen(port)
+        helpers.http = http.createServer(app).listen(port)
         logger.info(`HTTP service listening on http://localhost:${port}`)
     }
 
@@ -140,9 +132,16 @@ module.exports = function(settings) {
         const misc = require('./misc')(settings)
         const styles = require('./styles')(settings)
         const test = require('./test')(settings)
-
+        // Serve static files during development.
         helpers.serveHttp()
+
+        // Serve SIG11 signalling service.
         helpers.serveSig11()
+        gulp.watch([
+            path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
+        ], function reloadSIG11(done) {
+            helpers.serveSig11(true, done)
+        })
 
         if (settings.BUILD_TARGET === 'node') {
             // Node development doesn't have transpilation.

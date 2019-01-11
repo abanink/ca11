@@ -1,11 +1,9 @@
 const WebSocket = require('ws')
-const connect = require('connect')
-const fs = require('fs')
 const http = require('http')
-const path = require('path')
-const serveStatic = require('serve-static')
 
 const Network = require('./network')
+
+const env = require('../lib/env')({section: 'sig11'})
 
 
 /**
@@ -23,7 +21,7 @@ class Sig11 {
     constructor(settings) {
         process.title = 'sig11'
         this.settings = settings
-
+        this.sockets = []
         this.network = new Network()
     }
 
@@ -32,7 +30,6 @@ class Sig11 {
         if (req.headers.cookie) {
             let cookieMap = new Map(req.headers.cookie.replace(/\"/g, '').split(';').map((i) => i.split('=')))
             const identity = cookieMap.get('identity')
-            console.log(identity)
 
             this.network.addNode({id: identity, transport: ws})
 
@@ -67,8 +64,12 @@ class Sig11 {
 
 
     async start() {
-        const app = connect()
-        this.server = http.createServer(app).listen(this.settings.sig11.port)
+        this.server = http.createServer()
+        // Keep track of the connections, so we can
+        // shutdown properly in .stop by destroying
+        // all sockets.
+        this.server.on('connection', (socket) => this.sockets.push(socket))
+
         this.wss = new WebSocket.Server({
             disableHixie: true,
             perMessageDeflate: false,
@@ -78,11 +79,29 @@ class Sig11 {
 
         this.wss.on('connection', this.onConnection.bind(this))
         this.wss.on('request', this.onRequest.bind(this))
+
+        return new Promise((resolve) => {
+            this.server.listen(this.settings.sig11.port, () => {
+                resolve()
+            })
+        })
+    }
+
+    async stop() {
+        for (const socket of this.sockets) {
+            socket.destroy()
+        }
+
+        this.sockets = []
+        return new Promise((resolve) => {
+            this.server.close(() => {
+                resolve()
+            })
+        })
     }
 }
 
 
 let settings = require('../../../gulp/settings')(__dirname)
-
-const server = new Sig11(settings)
-server.start()
+const sig11 = new Sig11(settings)
+module.exports = sig11

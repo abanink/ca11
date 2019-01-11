@@ -7,62 +7,12 @@ const stylelint = require('gulp-stylelint')
 const tape = require('gulp-tape')
 const tapSpec = require('tap-spec')
 const through = require('through2')
-const PluginError = require('plugin-error')
-
-const map = require('map-stream')
 
 let helpers = {}
 let tasks = {}
 
 
 module.exports = function(settings) {
-    /**
-     * Scans JSON files for secrets that should not be committed.
-     * @returns {Function} - Function to put in a gulp `pipe`.
-     */
-    helpers.protectSecrets = function() {
-        const protectedKeys = [
-            'apiKey',
-            'apiSecret',
-            'clientSecret',
-            'refreshToken',
-            'username',
-            'password',
-        ]
-
-        function scanForProtectedKeys(file, obj, attrPath) {
-            let count = 0
-            Object.entries(obj).forEach(([key, value]) => {
-                if (protectedKeys.includes(key) && value) {
-                    const attr = [...attrPath, key].join('.')
-                    console.log(`Secret leaking: ${file.path} in attr ${attr}`)
-                    count++
-                } else if (Array.isArray(value)) {
-                    value.map(([index, subvalue]) => {
-                        count += scanForProtectedKeys(file, subvalue, [...attrPath, key, index])
-                    })
-                } else if (value !== null && (typeof value) === 'object') {
-                    count += scanForProtectedKeys(file, value, [...attrPath, key])
-                }
-            })
-
-            return count
-        }
-
-        return map(function(file, done) {
-            let obj = JSON.parse(file.contents.toString())
-            if (scanForProtectedKeys(file, obj, [])) {
-                throw new PluginError({
-                    message: 'Secrets are leaking.',
-                    plugin: 'protect-secrets',
-                })
-            }
-
-            done(null, file)
-        })
-    }
-
-
     /**
      * Run several functional tests using Puppeteer.
      * @param {Function} done Gulp task callback.
@@ -72,14 +22,16 @@ module.exports = function(settings) {
         // Force the build target.
         const misc = require('./misc')(settings)
         misc.helpers.serveHttp({reload: false})
+        misc.helpers.serveSig11()
 
         const reporter = through.obj()
         reporter.pipe(tapSpec()).pipe(process.stdout)
-        return gulp.src('test/browser/**/index.js')
+        return gulp.src('tests/browser/*.js')
             .pipe(tape({bail: true, outputStream: reporter}))
             .on('error', () => {process.exit(1)})
             .on('end', () => {
-                misc.helpers.server.close()
+                misc.helpers.http.close()
+                misc.helpers.sig11.emit('quit')
                 done()
             })
     }
@@ -95,12 +47,11 @@ module.exports = function(settings) {
     tasks.lint = function testLint(done) {
         const jsFilter = filter('**/*.js', {restore: true})
         const scssFilter = filter('**/*.scss', {restore: true})
-        const secretsFilter = filter('**/.ca11rc*', {restore: true})
 
         return gulp.src([
             'gulpfile.js',
             'src/**/*.js',
-            'test/**/*.js',
+            'tests/**/*.js',
             'tools/**/*.js',
             path.join(settings.SRC_DIR, '**', '*.scss'),
             '.ca11rc*',
@@ -119,10 +70,6 @@ module.exports = function(settings) {
                 }],
             }))
             .pipe(scssFilter.restore)
-
-            .pipe(secretsFilter)
-            .pipe(helpers.protectSecrets())
-            .pipe(secretsFilter.restore)
     }
 
 
@@ -130,7 +77,7 @@ module.exports = function(settings) {
         const reporter = through.obj()
         reporter.pipe(tapSpec()).pipe(process.stdout)
 
-        return gulp.src('test/bg/**/*.js')
+        return gulp.src('tests/bg/**/*.js')
             .pipe(tape({bail: true, outputStream: reporter}))
     }
 
