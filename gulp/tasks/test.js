@@ -29,9 +29,9 @@ module.exports = function(settings) {
         return gulp.src('tests/browser/*.js')
             .pipe(tape({bail: true, outputStream: reporter}))
             .on('error', () => {process.exit(1)})
-            .on('end', () => {
+            .on('end', async() => {
                 misc.helpers.http.close()
-                misc.helpers.sig11.emit('quit')
+                await misc.helpers.sig11.stop()
                 done()
             })
     }
