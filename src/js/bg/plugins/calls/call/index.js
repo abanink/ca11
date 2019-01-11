@@ -154,6 +154,7 @@ class Call {
             } catch (err) {
                 const message = this.app.$t('failed to set output device!')
                 this.app.notify({icon: 'warning', message, type: 'danger'})
+                // eslint-disable-next-line no-console
                 console.error(err)
             }
         }

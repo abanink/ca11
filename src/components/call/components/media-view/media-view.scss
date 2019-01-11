@@ -5,10 +5,9 @@
 .media-view {
     display: grid;
     grid-template-columns: repeat(auto-fill, 1fr);
-    // padding: var(--gutter12);
     // account for scrollbar.
-    padding-left: var(--gutter12);
     margin-top: var(--spacer05);
+    padding-left: var(--gutter12);
     width: 100%;
 
     @media screen and (min-width: $breakpoint-mobile) {
@@ -36,8 +35,8 @@
     }
 
     .media-stream {
-        margin: var(--spacer-05);
         border: var(--spacer-05) solid var(--primary-base);
+        margin: var(--spacer-05);
 
         video {
             background: none;

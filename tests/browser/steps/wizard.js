@@ -1,28 +1,17 @@
-const path = require('path')
-/**
- * The wizard user flow is:
- *  - Welcome
- *  - Media Permissions
- *  - Devices
- *  - Telemetry consent
- *  - CA11 ready
- * @param {Object} settings - Project settings.
- * @returns {Object} - input/output/sounds.
- */
 module.exports = function(_) {
     return {
         complete: async function(actor) {
             const {page} = actor
-            // Welcome:
+            // 1. Welcome:
             _.screenshot(actor, 'wizard-welcome')
             await page.click('.t-btn-welcome-next')
 
-            // Media Permissions:
+            // 2. Media Permissions:
             await page.waitFor('.t-media-permission')
             _.screenshot(actor, 'wizard-media-permission')
             await page.click('.t-media-permission-next')
 
-            // Devices:
+            // 3. Devices:
             await page.waitFor('.t-devices')
             await page.waitFor('.t-sel-headset-input .option')
 
@@ -36,7 +25,7 @@ module.exports = function(_) {
 
             await page.click('.t-btn-devices-next')
 
-            // Telemetry consent:
+            // 4. Telemetry consent:
             await page.waitFor('.t-telemetry')
 
             _.screenshot(actor, 'wizard-telemetry')

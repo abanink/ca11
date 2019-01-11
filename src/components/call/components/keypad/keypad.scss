@@ -43,9 +43,9 @@
 
         #{$self}__correct {
             color: var(--primary-base);
-            user-select: none;
             position: absolute;
             right: 0;
+            user-select: none;
 
             &.disabled {
                 opacity: 0.5;

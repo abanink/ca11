@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Free unified WebRTC communication platform",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=11.0.0"
   },
   "scripts": {
     "commitlint-ci": "commitlint-circle",

@@ -3,8 +3,6 @@ const http = require('http')
 
 const Network = require('./network')
 
-const env = require('../lib/env')({section: 'sig11'})
-
 
 /**
 * Sig11 is a signalling layer used to setup p2p calls with.

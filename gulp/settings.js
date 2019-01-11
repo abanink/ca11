@@ -87,14 +87,17 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
 
     // Validate some parameters.
     if (!settings.BUILD_TARGETS.includes(settings.BUILD_TARGET)) {
+        // eslint-disable-next-line no-console
         console.log(`Invalid BUILD_TARGET: ${settings.BUILD_TARGET} ${format.selected(settings.BUILD_TARGETS)}`)
         process.exit(1)
     }
     if (!settings.PUBLISH_CHANNELS.includes(settings.PUBLISH_CHANNEL)) {
+        // eslint-disable-next-line no-console
         console.log(`Invalid PUBLISH_CHANNEL: ${settings.PUBLISH_CHANNEL} ${format.selected(settings.PUBLISH_CHANNELS)}`)
         process.exit(1)
     }
     if (!settings.NODE_ENVS.includes(settings.NODE_ENV)) {
+        // eslint-disable-next-line no-console
         console.log(`Invalid NODE_ENV: ${settings.NODE_ENV} ${format.selected(settings.NODE_ENVS)}`)
         process.exit(1)
     }

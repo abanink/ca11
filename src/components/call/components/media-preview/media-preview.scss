@@ -3,17 +3,16 @@
 
 .c-media-preview {
     background: var(--grey-100);
-    // overflow: visible !important;
+    border-right: var(--gutter12) solid var(--primary-base);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    border-right: var(--gutter12) solid var(--primary-base);
 
     .streams-container {
-        margin-right: var(--spacer-05);
         display: flex;
         flex-direction: row-reverse;
+        margin-right: var(--spacer-05);
         width: 100%;
     }
 

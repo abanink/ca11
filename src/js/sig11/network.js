@@ -13,7 +13,8 @@ class Network {
 
     addNode({id, transport}) {
         this.nodes.set(id, new Node({id, transport}))
-        console.log(`node added: ${this.nodes.size} nodes in network`)
+        // eslint-disable-next-line no-console
+        console.log(`nodes: ${this.nodes.size}`)
     }
 
 
@@ -24,7 +25,8 @@ class Network {
 
     removeNode(id) {
         this.nodes.delete(id)
-        console.log(`node removed: ${this.nodes.size} nodes in network`)
+        // eslint-disable-next-line no-console
+        console.log(`nodes: ${this.nodes.size}`)
     }
 }
 

@@ -38,7 +38,6 @@ module.exports = (app) => {
             canvasElement = this.$refs.meter
             canvasContext = canvasElement.getContext('2d')
             try {
-                console.log('STREAM:', app.media.streams[this.stream.id])
                 const stream = app.media.streams[this.stream.id]
                 const mediaStreamSource = audioContext.createMediaStreamSource(stream)
                 meter = volumeLib.createAudioMeter(audioContext)
@@ -46,6 +45,7 @@ module.exports = (app) => {
                 this.drawLoop()
 
             } catch (err) {
+                // eslint-disable-next-line no-console
                 console.error(err)
                 app.setState({settings: {webrtc: {media: {permission: false}}}})
             }

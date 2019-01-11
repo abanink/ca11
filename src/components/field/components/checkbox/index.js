@@ -6,7 +6,6 @@ module.exports = (app, base) => {
         extends: base,
         methods: {
             updateModel: function(event) {
-                console.log("UPDATE")
                 this.$emit('input', event.target.checked)
             },
         },

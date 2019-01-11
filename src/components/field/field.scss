@@ -46,7 +46,7 @@
         font-style: italic;
         padding-top: var(--spacer-05);
 
-        &:first-letter {
+        &::first-letter {
             text-transform: uppercase;
         }
     }

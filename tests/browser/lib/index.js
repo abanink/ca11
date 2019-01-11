@@ -125,6 +125,7 @@ const lib = {
         if (actor.session.username === 'alice') prefix = c.cyan(prefix)
         else if (actor.session.username === 'bob') prefix = c.magenta(prefix)
         else if (actor.session.username === 'charlie') prefix = c.yellow(prefix)
+        // eslint-disable-next-line no-console
         console.log(`${prefix}${context} ${c.grey(message)}`)
         if (settings.DEBUG_MODE) {
             await new Promise(resolve => setTimeout(resolve, 2000))

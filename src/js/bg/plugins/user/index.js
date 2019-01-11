@@ -24,22 +24,17 @@ class PluginUser extends Plugin {
         // that's why the main event uses `username` instead of `email`.
         this.app.on('bg:user:login', (...args) => {
             app.sounds.powerOn.play()
-            try {this.login(...args)} catch (err) {console.trace(err)}
+            this.login(...args)
         })
 
         this.app.on('bg:user:logout', (...args) => {
-            try {this.logout(...args)} catch (err) {console.trace(err)}
+            this.logout(...args)
         })
 
         this.app.on('bg:user:unlock', (...args) => {
             app.sounds.powerOn.play()
-            try {this.unlock(...args)} catch (err) {console.trace(err)}
+            this.unlock(...args)
         })
-
-        // this.app.on('bg:user-unlocked', () => {
-        //     console.log("PLAY!!!!!!!!!")
-        //     app.sounds.powerOn.play()
-        // })
 
         this.app.on('bg:user:set_session', ({session}) => {
             app.changeSession(session)
@@ -122,6 +117,7 @@ class PluginUser extends Plugin {
             this.app._languagePresets()
 
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(err)
             this.app.notify({icon: 'warning', message: this.app.$t('failed to login; please check your credentials.'), type: 'warning'})
         } finally {

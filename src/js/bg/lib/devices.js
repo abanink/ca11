@@ -64,6 +64,7 @@ class Devices {
         try {
             devices = await navigator.mediaDevices.enumerateDevices()
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(err)
         }
 

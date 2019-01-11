@@ -314,6 +314,7 @@ class Crypto {
                 'raw', this.__base64ToDataArray(vaultKey), this.__cryptoParams.aes.params,
                 true, ['encrypt', 'decrypt'])
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(err)
         }
     }
@@ -377,6 +378,7 @@ class Crypto {
         try {
             this.rsa = await crypto.subtle.generateKey(this.__cryptoParams.rsa.params, true, this.__cryptoParams.rsa.uses)
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(err)
         }
 
@@ -400,6 +402,7 @@ class Crypto {
             ])
             this.rsa = {privateKey: _privateKey, publicKey: _publicKey}
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error(`${this}unable to decrypt rsa identity`)
             throw err
         }
