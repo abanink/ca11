@@ -23,7 +23,5 @@
         :muted="stream.muted || stream.kind !== 'display'"
         ref="display"
     />
-
-    <!-- <Soundmeter class="soundmeter" :stream="stream"/> -->
 </article>
 </transition>

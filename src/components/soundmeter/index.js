@@ -27,7 +27,6 @@ module.exports = (app) => {
                 this.rafID = window.requestAnimationFrame(this.drawLoop)
             },
             updateSoundmeter: async function() {
-
                 const stream = app.media.streams[this.stream.id]
                 const mediaStreamSource = audioContext.createMediaStreamSource(stream)
                 meter = volumeLib.createAudioMeter(audioContext)

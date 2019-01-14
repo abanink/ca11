@@ -31,8 +31,6 @@ module.exports = function(_) {
             _.screenshot(actor, 'wizard-telemetry')
 
             await page.click('.t-btn-telemetry-next-yes')
-            await page.waitFor('.notification')
-
             return {input, output, sounds}
         },
     }
