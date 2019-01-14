@@ -23,7 +23,7 @@
             },
             "permissions": "",
             "sig11": {
-                "endpoint": "localhost"
+                "endpoint": "ws://localhost:3001"
             },
             "sip": {
                 "endpoint": "sip.ca11.io"

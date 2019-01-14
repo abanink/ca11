@@ -149,7 +149,7 @@
                 elementclass="t-txt-sip-username"
                 name="sip_username"
                 :label="`SIP ${$t('extension')}`"
-                :placeholder="1000"
+                placeholder="1000"
                 :validation="$v.calls.sip.account.selected.username"
             />
 
