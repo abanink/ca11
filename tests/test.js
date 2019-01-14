@@ -36,13 +36,9 @@ if (process.env.HEADLESS) {
 // WARNING: Do NOT log CI variables while committing to Github.
 // This may expose the Circle CI secrets in the build log. Change the
 // account credentials immediately when this happens.
-if (process.env[`CI_USERNAME_ALICE_${settings.BRAND_TARGET.toUpperCase()}`]) {
-    settings.BRAND.tests.endpoint = process.env[`CI_ENDPOINT_${settings.BRAND_TARGET.toUpperCase()}`]
+if (process.env.CI_ALICE_SIP_PASSWORD) {
     for (const actor of ['alice', 'bob', 'charlie']) {
-        for (const field of ['id', 'number', 'username', 'password']) {
-            const name = ['ci', field, actor, settings.BRAND_TARGET].map(e => e.toUpperCase()).join('_')
-            settings.BRAND.tests[actor][field] = process.env[name]
-        }
+        settings.BRAND.tests[actor].sip.password = process.env[`CI_${actor.toUpperCase()}_SIP_PASSWORD`]
     }
 }
 
