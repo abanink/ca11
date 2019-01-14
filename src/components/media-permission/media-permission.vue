@@ -7,20 +7,16 @@
                 <div class="browser-bar cam-enabled">
                     <icon name="cam" class="cam"/>
                 </div>
-
-                <icon name="check-circle" class="checked" />
             </div>
             <span class="cf permission-message">
-                {{$t('the media device is ready')}}
+                {{$t('the webcam/microphone is accessable')}}
             </span><br/>
         </div>
         <div v-else>
             <div class="mic-details">
-                <div class="browser-bar cam-enabled">
+                <div class="browser-bar cam-disabled">
                     <icon name="cam-disabled" class="cam"/>
                 </div>
-
-                <icon name="disabled" class="disabled"/>
             </div>
             <span class="cf permission-message">
                 {{$t('no media device permission', {name: app.name})}}

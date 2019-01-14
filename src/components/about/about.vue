@@ -30,7 +30,7 @@
             >
                 <div class="support-item__icon"><icon name="mail"/></div>
                 <div class="support-item-l">
-                    <div class="support-item__title cf">{{$t('questions?')}}</div>
+                    <div class="support-item__title cf">{{$t('questions')}}?</div>
                     <div class="support-item__description cf">
                         {{$t('feel free to contact us for feedback or questions about {vendor} or related products', {vendor: app.name})}}.
                     </div>
@@ -45,7 +45,7 @@
                 <div class="support-item-l">
                     <div class="support-item__title cf">{{$t('improving {vendor}', {vendor: app.name})}}</div>
                     <div class="support-item__description cf">
-                       {{$t('{vendor} is a free and open software project. Star {vendor}, make a feature request or report an issue on Github.', {vendor: app.name})}}
+                       {{$t('{vendor} is a free and open software project. Stargaze {vendor}, make a feature request or report an issue on Github.', {vendor: app.name})}}
                     </div>
                 </div>
             </div>

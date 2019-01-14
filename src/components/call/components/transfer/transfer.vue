@@ -31,7 +31,7 @@
             endpoint: description.endpoint ? description.endpoint : '...'
             })}}
         </li>
-        <li class="action">{{$t('finalize the transfer')}}</li>
+        <li class="action">{{$t('finalize transfer')}}</li>
         <li>{{$t('connects {target} with {endpoint}', {
             endpoint: description.endpoint ? description.endpoint : '...',
             target: call.endpoint,
@@ -47,6 +47,6 @@
             })}}
         </li>
         <li>{{$t('connection ends')}}</li>
-        <li>{{$t('no call success verification')}}</li>
+        <li>{{$t('no caller pickup verification')}}</li>
     </ol>
 </component>

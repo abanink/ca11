@@ -14,62 +14,29 @@
         justify-content: center;
         position: relative;
 
-        &.popup {
-            margin-bottom: $spacer * 5;
-        }
-
-
-        .disabled,
-        .checked {
-            @include icon-size($spacer * 3.5);
-            margin-left: $spacer * 3;
-            position: absolute;
-            z-index: 100;
-        }
-
-        .checked {
-            fill: $green-color;
-        }
-
-        .disabled {
-            fill: $red-color;
-        }
-
-        .icon {
-            @include icon-size($spacer * 3);
-            align-items: center;
-            border-radius: 50%;
-            display: inline-flex;
-            flex-direction: column;
-            justify-content: center;
-            margin-right: $spacer;
-
-            svg {
-                @include icon-size($spacer * 1.5);
-            }
-        }
-
         .browser-bar {
             align-items: center;
             background: var(--grey-50);
+            border: var(--border) solid var(--grey-100);
             border-bottom-right-radius: $spacer * 2.5;
             border-top-right-radius: $spacer * 2.5;
             display: flex;
             height: $spacer * 5;
             justify-content: center;
-            margin-bottom: $spacer * 2;
+            margin-bottom: $spacer;
+            margin-top: $spacer * 2;
             vertical-align: middle;
             width: $spacer * 8;
 
             .cam {
                 @include icon-size($spacer * 4);
-                fill: #000;
             }
 
             &.cam-disabled {
                 .cam {
-                    path[pid='1'] {fill: $white-color;}
-                    rect[pid='2'] {fill: $red-color;}
+                    fill: $red-color;
+                    path[pid='0'] {fill: palette('grey', 300); }
+                    path[pid='2'] {fill: $white-color; }
                 }
             }
 
@@ -89,27 +56,16 @@
     }
 
     .permission-message {
-        color: var(--grey-400);
-        font-size: 0.9rem;
-        font-weight: 500;
+        color: var(--primary-base);
+        font-family: 'Rajdhani';
+        font-size: var(--text-small);
+        font-weight: 600;
         padding-bottom: $spacer;
-
-        &.no-permission {
-            color: var(--grey-400);
-            margin-bottom: $spacer;
-
-            .icon {
-                background: $red-color;
-
-                svg {
-                    fill: $white-color;
-                }
-            }
-        }
+        text-transform: uppercase;
     }
 
     .instruction {
-        font-size: 0.9rem;
+        font-size: var(--text-small);
         font-style: italic;
     }
 }

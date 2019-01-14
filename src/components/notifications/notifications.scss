@@ -1,13 +1,6 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.extension {
-    .component-notifications {
-        &.sidebar {
-            left: $spacer * 5;
-        }
-    }
-}
 
 .c-notifications {
     left: 0;

@@ -23,7 +23,7 @@
             <li
                 class="tooltip tooltip-bottom"
                 :class="classes('tabs', 'sig11')"
-                :data-tooltip="$t('SIG11')"
+                data-tooltip="SIG11"
                 @click="setTab('settings', 'sig11')"
             >
                 <icon name="protocol-sig11"/>
@@ -31,7 +31,7 @@
             <li
                 class="tooltip tooltip-bottom t-tab-sip"
                 :class="classes('tabs', 'sip')"
-                :data-tooltip="$t('SIP')"
+                data-tooltip="SIP"
                 @click="setTab('settings', 'sip')"
             >
                 <icon name="protocol-sip"/>
@@ -76,7 +76,7 @@
             <FieldCheckbox
                 v-model="settings.telemetry.enabled"
                 name="store_key"
-                :help="$t('allow us to store anonymized application errors to improve {name}.', {name: app.name})"
+                :help="$t('log anonymized application errors to Sentry in order to improve {name}.', {name: app.name})"
                 :label="$t('exception telemetry')"
             />
         </div>
@@ -98,7 +98,7 @@
                 v-model="calls.sig11.toggled"
                 name="sig11_enabled"
                 :help="$t('secure, privacy-friendly calling on decentralized network SIG11.')"
-                :label="`${$t('SIG11 network')} (${$t('decentralized')})`"
+                :label="`SIG11 ${$t('network')} (${$t('decentralized')})`"
             />
 
             <FieldText
@@ -106,8 +106,8 @@
                 v-model="calls.sig11.endpoint"
                 name="sig11_endpoint"
                 placeholder="e.g. sig11.websocket.tld"
-                :help="$t('a SIG11 websocket endpoint used for signalling.')"
-                :label="$t('signalling endpoint')"
+                :help="`SIG11 ${$t('websocket node used for signalling.')}`"
+                :label="$t('signalling node')"
                 :validation="$v.calls.sig11.endpoint"
             />
 
@@ -128,8 +128,8 @@
                 v-model="calls.sip.toggled"
                 elementclass="t-cb-sip-toggled"
                 name="sip_enabled"
-                :help="$t('subscription-based calling with a VoIP provider.')"
-                :label="`${$t('SIP network')} (${$t('centralized')})`"
+                :help="$t('monitored calling with a VoIP provider subscription.')"
+                :label="`SIP ${$t('network')} (${$t('centralized')})`"
             />
 
             <FieldText
@@ -138,8 +138,8 @@
                 elementclass="t-txt-sip-endpoint"
                 name="sip_endpoint"
                 placeholder="e.g. sip.websocket.tld"
-                :label="$t('SIP domain (WSS)')"
-                :help="$t('SIP WebSockets Secure service.')"
+                :label="`SIP ${$t('domain')} (WSS)`"
+                help="SIP WebSockets Secure service"
                 :validation="$v.calls.sip.endpoint"
             />
 
@@ -148,8 +148,8 @@
                 v-model="calls.sip.account.selected.username"
                 elementclass="t-txt-sip-username"
                 name="sip_username"
-                :label="$t('SIP Extension')"
-                :placeholder="$t('1000')"
+                :label="`SIP ${$t('extension')}`"
+                :placeholder="1000"
                 :validation="$v.calls.sip.account.selected.username"
             />
 
@@ -158,8 +158,8 @@
                 v-model="calls.sip.account.selected.password"
                 elementclass="t-txt-sip-password"
                 name="sip_password"
-                :label="$t('SIP password')"
-                :placeholder="$t('SIP account secret')"
+                :label="`SIP ${$t('password')}`"
+                :placeholder="`SIP ${$t('password')}`"
                 :validation="$v.calls.sip.account.selected.password"
             />
         </div>

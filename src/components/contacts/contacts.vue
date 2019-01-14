@@ -176,7 +176,7 @@
                         v-model="endpoint.number"
                         class="editable context__entry-input"
                         type="text"
-                        :placeholder="$t('phonenumber or extension')"
+                        :placeholder="$t('number')"
                         :readonly="!editMode"
                     />
                     <input

@@ -7,6 +7,8 @@
     // Needed with object-fit: cover.
     overflow: hidden;
     position: relative;
+    transition: all 0.25s;
+
 
     // Maintain 16/9 aspect ratio for this container.
     &::before {
@@ -96,4 +98,25 @@
     &__stats {
         color: var(--grey-100);
     }
+}
+
+
+.tr-stream-enter {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.tr-stream-enter-to {
+    background: var(--primary-base);
+    opacity: 1;
+    transform: scale(1);
+}
+
+.tr-stream-leave-active {
+    transform: scale(0);
+}
+
+.tr-stream-move {
+    opacity: 1;
+    transition: all 0.5s;
 }

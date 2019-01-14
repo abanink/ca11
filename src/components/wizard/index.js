@@ -5,11 +5,6 @@ module.exports = (app) => {
             methods: {
                 finishWizard: function() {
                     app.setState({settings: {wizard: {completed: true}}}, {persist: true})
-                    app.notify({
-                        icon: 'protocol-sig11',
-                        message: this.$t('enjoy secure calling on the SIG11 network!', {name: this.app.name}),
-                        type: 'info',
-                    })
                 },
                 stepBack: function() {
                     const stepIndex = this.options.findIndex((option) => option.name === this.selected.name)

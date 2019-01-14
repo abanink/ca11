@@ -25,14 +25,13 @@
 
     &__description {
         color: var(--grey-300);
-
         text-align: center;
     }
 
     &__help {
         font-size: var(--text-small);
-        font-weight: 300;
-        margin-top: var(--spacer);
+        font-style: italic;
+        margin-top: $spacer * 2;
     }
 
     &__progress {

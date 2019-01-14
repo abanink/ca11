@@ -24,7 +24,7 @@
             <icon class="disabled-icon" name="phone"/>
             <div class="disabled-text">
                 <span class="cf">{{$t('service unavailable.')}}</span><br/>
-                <span class="cf">{{$t('what\'s wrong?')}}</span>
+                <span class="cf">{{$t('what is wrong?')}}</span>
             </div>
             <div class="disabled-reason">
                 <ul>

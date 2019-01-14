@@ -11,7 +11,7 @@
         </div>
 
         <div class="c-login__subtitle">
-            {{$t('open softphone & decentralized communication network')}}</br>
+            {{$t('open softphone + decentralized network')}}</br>
         </div>
     </header>
 
@@ -35,7 +35,7 @@
             elementclass="t-txt-session-pw"
             name="session-pw"
             :autofocus="true"
-            :help="$t('password that opens this vault.')"
+            :help="$t('password that will open this vault.')"
             :label="$t('session password')"
             :placeholder="$t('session password')"
             :validation="$v.password"
@@ -93,10 +93,6 @@
         class="sessions"
     >
 
-        <div class="c-login__subtitle">
-            {{$t('continue a previous session')}}
-        </div>
-
         <div v-for="session in app.session.available" class="session">
             <i class="icon-session" @click="selectSession(session)"><icon name="contact"/></i>
             <div class="description" @click="selectSession(session)">{{session}}</div>
@@ -104,22 +100,20 @@
                 <icon name="delete"/>
             </i>
         </div>
-        <div class="c-login__subtitle">
-            {{$t('or start a new session')}}
-        </div>
+
         <div class="session new-session" @click="newSession()">
             <i class="icon-session">
                 <icon class="icon-session" name="contact-add"/>
             </i>
             <div class="description cf">
-                {{$t('create new session')}}
+                {{$t('new session')}}
             </div>
         </div>
     </div>
 
     <footer>
         <div class="help-message cf" @click="openTab(vendor.support.website)">
-            {{$t('learn more about {name}', {name: app.name})}}<br/>
+            {{$t('what is {name}', {name: app.name})}}?<br/>
         </div>
     </footer>
 </section>

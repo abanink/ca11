@@ -4,6 +4,7 @@
     <div class="streams-container">
         <MediaStream
             v-for="stream of Object.values(call.streams)"
+            :key="Object.values(call.streams).indexOf(stream)"
             :class="{selected: stream.selected}"
             :stream="stream"
         />

@@ -2,11 +2,13 @@
     <header class="c-wizard__header">{{$t('telemetry')}}</header>
 
     <div class="c-wizard__description">
-        <span class="cf">
-            <a href="https://sentry.io/">Sentry</a>
-            {{$t('automated application error tracking helps us to improve {name}. Do you want to support {name} by allowing errors to be logged automatically to Sentry?', {name: app.name})}}
-        </span>
-        <div class="c-wizard__help cf">{{$t('you can always change your choice afterwards from Settings.')}}</div>
+        {{$t('automated application error logging helps to improve {name}.', {name: app.name}).ca()}}
+        {{$t('do you want to improve {name} by automatically sending application errors to', {name: app.name}).ca()}}
+        <a href="https://sentry.io/">Sentry</a>?
+
+        <div class="c-wizard__help">
+            {{$t('you can always change your choice afterwards from Settings.')}}
+        </div>
     </div>
 
     <slot name="progress"></slot>
@@ -19,13 +21,13 @@
             class="button t-btn-telemetry-next-no"
             @click="toggleTelemetry(false)"
         >
-            {{$t('no')}}
+            {{$t('not really')}}
         </button>
         <button
             class="button t-btn-telemetry-next-yes"
             @click="toggleTelemetry(true)"
         >
-            {{$t('yes')}}
+            {{$t('no problem')}}
         </button>
     </div>
 </component>

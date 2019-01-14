@@ -2,7 +2,8 @@
     <header class="c-wizard__header">{{greeting}}!</header>
 
     <div class="c-wizard__description">
-        <span class="cf">{{$t('{name} allows you to communicate worldwide for free with friends and colleagues on decentralized network SIG11. You can also optionally receive and make calls over a phone network with a VoIP account from a compatible provider. {name} first will ask you a couple of setup questions to get you started!', {name: app.name})}}</span>
+        {{$t('{name} lets you communicate privately and freely with your family, friends and colleagues via decentralized network SIG11!', {name: app.name}).ca()}}
+        {{$t('with {name}, you can also receive and make calls on a telephony network when you have an account from a compatible VoIP provider.', {name: app.name}).ca()}}
     </div>
 
     <slot name="progress"></slot>
@@ -17,6 +18,6 @@
         <button
             class="button is-primary t-btn-welcome-next"
             @click="stepNext()"
-        >{{$t('let\'s start')}}</button>
+        >{{$t('start wizard')}}</button>
     </div>
 </component>

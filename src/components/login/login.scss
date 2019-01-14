@@ -36,11 +36,7 @@
         font-weight: 600;
         letter-spacing: 0;
         padding: var(--spacer);
-
-
-        &::first-letter {
-            text-transform: uppercase;
-        }
+        text-transform: capitalize;
     }
 
     footer {

@@ -3,12 +3,10 @@
 
     <div class="c-wizard__description">
         <span class="cf">
-            {{$t('{name} needs permission to use your webcam and/or microphone to make audio/video calls.', {name: app.name})}}
+            {{$t('{name} requires your permission to use the computer webcam and microphone for audio and video calls.', {name: app.name})}}
         </span>
         <MediaPermission :soundmeter="false" />
-        <span class="after-permission-text cf" v-if="permission">
-            <span class="cf">{{$t('next, we are going to review your audio settings to make sure that you will have the best audio quality.', {name: app.name})}}</span>
-        </span>
+
         <slot name="progress"></slot>
 
         <div class="buttons is-centered">

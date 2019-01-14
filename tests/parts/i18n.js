@@ -28,7 +28,7 @@ async function getTranslations() {
 
     globPattern += '}'
     const files = await glob(globPattern)
-    const translationMatch = /\$t\([\s]*'([a-zA-Z0-9_\s{}.,\\'!?%\-:;"]+)'[(\),)?]/g
+    const translationMatch = /\$t\([\s]*'([a-zA-Z0-9_\s{}.,!?%\-:;"]+)'[(\),)?]/g
     const unescape = /\\/g
 
     for (const filename of files) {

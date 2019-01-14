@@ -4,9 +4,7 @@
     </header>
 
     <div class="c-wizard__description">
-        <span class="cf">
-            {{$t('make sure your headset is properly connected and inspect the audio device settings below:')}}
-        </span>
+        {{$t('please check your headset setup').ca()}}:
 
         <DeviceControls
             v-if="media.stream[media.stream.type].id && media.permission"

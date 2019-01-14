@@ -1,3 +1,4 @@
+<transition name="tr-stream">
 <article
     component
     class="media-stream"
@@ -25,3 +26,4 @@
 
     <!-- <Soundmeter class="soundmeter" :stream="stream"/> -->
 </article>
+</transition>
