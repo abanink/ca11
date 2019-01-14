@@ -18,9 +18,10 @@
         @include icon-size($spacer * 6.25);
         align-items: center;
         background: var(--grey-500);
-        color: var(--grey-400);
+        border-bottom: var(--border) solid transparent;
+        color: var(--grey-300);
         display: flex;
-        height: $space-4;
+        height: var(--space-433);
         justify-content: center;
         width: 100%;
 
@@ -32,13 +33,11 @@
             @include icon-size($spacer * 3);
         }
 
-        &.hint {
-            @include animation('hint-pulse 1s infinite ease-in-out');
-        }
-
-        &:hover,
-        &.active {
+        &.active,
+        &:hover {
             background: var(--grey-400);
+            border-bottom: var(--border) solid var(--grey-300);
+            color: var(--grey-50);
             svg {fill: var(--grey-50);}
         }
     }

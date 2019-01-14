@@ -185,11 +185,10 @@ class RingbackTone {
 */
 class Sound extends EventEmitter {
 
-    constructor(app) {
+    constructor(app, audiofile) {
         super()
         if (app.env.isNode) return
-
-        this.audio = new Audio('audio/power-on.ogg')
+        this.audio = new Audio(audiofile)
         this.app = app
     }
 
@@ -251,7 +250,7 @@ class PowerOn extends Sound {
 
 class RingTone extends Sound {
     constructor(app) {
-        super(app, '')
+        super(app, `audio/ringtones/default.ogg`)
     }
 
     play(...args) {

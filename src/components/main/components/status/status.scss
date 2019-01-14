@@ -18,8 +18,8 @@
 
     &__indicator,
     &__option {
-        border-left: var(--border) solid transparent;
-        border-right: var(--border) solid transparent;
+        border-bottom: var(--border) solid transparent;
+        border-top: var(--border) solid transparent;
         height: 100%;
         width: calc(var(--space-4));
 
@@ -43,7 +43,7 @@
         }
 
         &.active {
-            border-right: var(--border) solid var(--primary-base);
+            border-bottom: var(--border) solid var(--primary-base);
         }
 
         &:hover {

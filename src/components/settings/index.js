@@ -59,7 +59,7 @@ module.exports = (app) => {
 
                 // Update the vault settings.
                 app.setState({app: {vault: this.app.vault}}, {encrypt: false, persist: true})
-                app.notify({icon: 'settings', message: app.$t('your settings are saved'), type: 'success'})
+                app.notify({icon: 'settings', message: app.$t('your settings are stored'), type: 'success'})
 
                 // Verify currently selected devices after saving settings again.
                 app.emit('bg:devices:verify-sinks')

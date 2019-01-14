@@ -30,7 +30,7 @@ module.exports = {
     'disabled': 'uitgeschakeld',
     'do not disturb': 'niet storen',
     'does the microphone of your headset respond?': 'reageert de microfoon van je headset?',
-    'does the sound test play on the expected device?': 'speelt het testgeluid af op het juiste apparaat?',
+    'does the sound play on the expected device?': 'is het geluid te horen op het juiste apparaat?',
     'enabled': 'ingeschakeld',
     'failed to login; please check your credentials.': 'inloggen mislukt; controleer je inloggegevens.',
     'failed to set output device!': 'instellen van uitvoerapparaat mislukt!',

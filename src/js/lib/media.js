@@ -140,15 +140,10 @@ class Media {
             try {
                 const flags = this._getUserMediaFlags({audio: true, video: type === 'video' ? true : false})
                 const userMedia = await navigator.mediaDevices.getUserMedia(flags)
-                for (const track of userMedia.getTracks()) {
-                    track.onended = (e) => {
-
-                    }
-                }
 
                 if (type === 'display') {
                     // getDisplayMedia in Chrome doesn't support audio yet; add the audiotrack from
-                    // userMedia to the MediaStream so Asterisk won't bail the stream.
+                    // userMedia to the MediaStream so Asterisk won't panic.
                     let audio = await userMedia.getAudioTracks()[0]
                     stream = await navigator.getDisplayMedia({audio: false, video: true})
                     for (const track of stream.getTracks()) {
@@ -211,6 +206,16 @@ class Media {
         // initialization logic that relies on the absence of the id.
         this.app.setState({settings: {webrtc: {media: {stream: {[type]: {id: stream.id}}}}}})
         return stream
+    }
+
+
+    stop() {
+        for (const [streamId, stream] of Object.entries(this.streams)) {
+            for (const track of stream.getTracks()) {
+                track.stop()
+            }
+            delete this.streams[streamId]
+        }
     }
 
 

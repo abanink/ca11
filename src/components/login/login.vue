@@ -11,7 +11,7 @@
         </div>
 
         <div class="c-login__subtitle">
-            {{$t('secure decentralized calling, meetings and collaboration')}}</br>
+            {{$t('open softphone & decentralized communication network')}}</br>
         </div>
     </header>
 
@@ -24,7 +24,7 @@
             elementclass="t-txt-session-id"
             name="session-id"
             :autofocus="true"
-            :help="$t('your data is protected in a browser vault.', {name: app.name})"
+            :help="$t('your session is stored in a local vault.', {name: app.name})"
             :label="$t('session name')"
             :placeholder="$t('session name')"
             :validation="$v.user.username"
@@ -35,9 +35,9 @@
             elementclass="t-txt-session-pw"
             name="session-pw"
             :autofocus="true"
-            :help="$t('the password that opens the browser vault.', {name: app.name})"
+            :help="$t('password that opens this vault.')"
             :label="$t('session password')"
-            :placeholder="$t('screen password')"
+            :placeholder="$t('session password')"
             :validation="$v.password"
         />
 
@@ -53,7 +53,7 @@
                 :class="{'is-loading': user.status === 'login'}"
                 :disabled="$v.$invalid || user.status === 'login'"
                 @click="login"
-            >{{$t('start session')}}</button>
+            >{{$t('begin session')}}</button>
         </div>
     </div>
 
@@ -64,7 +64,7 @@
             elementclass="t-txt-session-pw"
             name="session-pw"
             :autofocus="true"
-            :help="$t('the password that opens the browser vault.', {name: app.name})"
+            :help="$t('password that opens vault {name}.', {name: app.session.active})"
             :label="$t('session password')"
             :placeholder="$t('session password')"
             :validation="$v.password"
@@ -92,6 +92,11 @@
         v-else-if="app.session.available.length && !app.session.active"
         class="sessions"
     >
+
+        <div class="c-login__subtitle">
+            {{$t('continue a previous session')}}
+        </div>
+
         <div v-for="session in app.session.available" class="session">
             <i class="icon-session" @click="selectSession(session)"><icon name="contact"/></i>
             <div class="description" @click="selectSession(session)">{{session}}</div>
@@ -100,14 +105,14 @@
             </i>
         </div>
         <div class="c-login__subtitle">
-            {{$t('start new session')}}
+            {{$t('or start a new session')}}
         </div>
         <div class="session new-session" @click="newSession()">
             <i class="icon-session">
                 <icon class="icon-session" name="contact-add"/>
             </i>
             <div class="description cf">
-                {{$t('add session')}}
+                {{$t('create new session')}}
             </div>
         </div>
     </div>

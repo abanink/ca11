@@ -47,12 +47,6 @@ button {
 
     &:hover {
         cursor: pointer;
-        svg {fill: var(--primary-base);}
-    }
-
-    &.active {
-        color: var(--primary-base) !important;
-        svg {fill: var(--primary-base);}
     }
 
     &[disabled] {

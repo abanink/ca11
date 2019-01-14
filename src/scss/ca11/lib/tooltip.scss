@@ -1,4 +1,57 @@
+
+
 @import 'variables';
+
+@mixin tooltipFrames($direction) {
+
+    // Touch devices.
+    @media (hover: none) {
+        animation: tooltip-#{$direction} 1s ease-in both;
+
+        @keyframes tooltip-#{$direction} {
+            0% {opacity: 0;}
+            50% {opacity: 100;}
+            100% {opacity: 0;}
+        }
+    }
+
+    @media (hover) {
+        animation: tooltip-#{$direction} 1s ease-out forwards;
+
+        @keyframes tooltip-#{$direction} {
+            0% {
+                opacity: 0;
+            }
+
+            75% {
+                opacity: 0;
+                @if $direction == 'bottom' {
+                    transform: translateY(-$spacer / 2);
+                } @else if $direction == 'top' {
+                    transform: translateY($spacer / 2);
+                } @else if $direction == 'left' {
+                    transform: translateX($spacer / 2);
+                } @else if $direction == 'right' {
+                    transform: translateX(-$spacer / 2);
+                }
+            }
+
+            100% {
+                opacity: 100;
+
+                @if $direction == 'bottom' {
+                    transform: translateY($spacer / 2);
+                } @else if $direction == 'top' {
+                    transform: translateY(-$spacer / 2);
+                } @else if $direction == 'left' {
+                    transform: translateX(-$spacer / 2);
+                } @else if $direction == 'right' {
+                    transform: translateX($spacer / 2);
+                }
+            }
+        }
+    }
+}
 
 // Based on https://chrisbracco.com/a-simple-css-tooltip/
 .tooltip {
@@ -12,34 +65,21 @@
     opacity: 0;
     pointer-events: none;
     position: absolute;
-    transform: translate3d(0, 0, 0);
-    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    visibility: hidden;
-}
-
-// Show the entire tooltip on hover and focus.
-[data-tooltip]:hover::after,
-[data-tooltip]:focus::after,
-.tooltip:hover::after,
-.tooltip:focus::after {
-    opacity: 1;
-    visibility: visible;
 }
 
 // Base styles for the tooltip's content area.
 .tooltip::after,
 [data-tooltip]::after {
-    background: var(--grey-50);
+    background: var(--grey-100);
     border-radius: $spacer / 4;
     box-shadow: 0 0 8px var(--grey-400);
-    color: var(--grey-300);
+    color: var(--primary-base);
     content: attr(data-tooltip);
-    display: block;
-    font-size: 14px;
-    line-height: 1.2;
-    padding: $spacer / 2 ($spacer);
-    z-index: 100111111111110;
-    // &::first-letter {text-transform: uppercase;}
+    font-family: 'Rajdhani';
+    font-size: var(--text-small);
+    font-weight: 600;
+    padding: var(--spacer-05) var(--spacer);
+    z-index: 10000000000;
 }
 
 // Directions.
@@ -52,14 +92,6 @@
     left: 50%;
 }
 
-[data-tooltip]:hover::after,
-[data-tooltip]:focus::after,
-.tooltip:hover::after,
-.tooltip:focus::after,
-.tooltip-top:hover::after,
-.tooltip-top:focus::after {
-    transform: translateY(-$spacer / 2);
-}
 
 // Left.
 .tooltip-left::after {
@@ -68,10 +100,6 @@
     right: 75%;
 }
 
-.tooltip-left:hover::after,
-.tooltip-left:focus::after {
-    transform: translateX(-$spacer / 2);
-}
 
 // Bottom.
 .tooltip-bottom::after {
@@ -80,10 +108,6 @@
     top: 100%;
 }
 
-.tooltip-bottom:hover::after,
-.tooltip-bottom:focus::after {
-    transform: translateY($spacer / 2);
-}
 
 // Right.
 .tooltip-right::after {
@@ -91,14 +115,27 @@
     left: 75%;
 }
 
-.tooltip-right:hover::after,
-.tooltip-right:focus::after {
-    transform: translateX($spacer / 2);
-}
+
 
 // Vertically center tooltip content for left/right tooltips.
 .tooltip-left::after,
 .tooltip-right::after {
     margin-bottom: -$spacer * 2;
     margin-left: 0;
+}
+
+.tooltip-top:hover::after {
+    @include tooltipFrames('top');
+}
+
+.tooltip-left:hover::after {
+    @include tooltipFrames('left');
+}
+
+.tooltip-bottom:hover::after {
+    @include tooltipFrames('bottom');
+}
+
+.tooltip-right:hover::after {
+    @include tooltipFrames('right');
 }

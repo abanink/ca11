@@ -4,7 +4,7 @@
         v-if="!call.id && ui.layer === 'calls'"
         :disabled="!description.endpoint"
         class="c-options__option button t-btn-options-call-start tooltip tooltip-left"
-        :data-tooltip="$t('place call')"
+        :data-tooltip="$t('start new call')"
         @click="placeCall(description)"
     ><icon name="phone"/></button>
 

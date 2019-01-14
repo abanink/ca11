@@ -2,8 +2,9 @@
     <div class="options">
 
         <button
-            class="button option t-btn-menu-activity"
+            class="button option t-btn-menu-activity tooltip tooltip-right"
             :class="classes('activities')"
+            :data-tooltip="$t('activities')"
             @click="setLayer('activities')"
         ><icon name="recent"/></button>
 

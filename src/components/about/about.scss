@@ -27,11 +27,8 @@
 
     .support-l {
         display: grid;
-        // flex-flow: row wrap;
-        // margin: $spacer * 3;
         grid-template-columns: repeat(auto-fill, 100%);
         padding: var(--gutter12);
-        // justify-items: stretch;
 
         @media screen and (min-width: $breakpoint-mobile) {
             grid-template-columns: repeat(auto-fill, 50%);
@@ -40,9 +37,8 @@
         width: 100%;
 
         .support-item {
-            align-items: stretch;
             background: var(--grey-50);
-            border-bottom: var(--gutter12) solid transparent;
+            border-bottom: var(--border) solid transparent;
             display: flex;
             margin: var(--gutter12);
 
@@ -69,6 +65,7 @@
                 font-family: 'Rajdhani';
                 font-size: var(--text-large);
                 font-weight: 600;
+                width: 100%;
             }
 
             &__description {
@@ -76,7 +73,7 @@
             }
 
             &:hover {
-                border-bottom: var(--gutter12) solid var(--primary-base);
+                border-bottom: var(--border) solid var(--primary-base);
                 cursor: pointer;
             }
         }

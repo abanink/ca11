@@ -476,7 +476,11 @@ class PluginCalls extends Plugin {
 
 
     connect() {
-        this.sip.connect()
+        if (this.app.state.calls.sip.status === 'registered') {
+            this.sip.disconnect(true)
+        } else {
+            this.sip.connect()
+        }
     }
 
 

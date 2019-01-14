@@ -121,6 +121,7 @@ class PluginUser extends Plugin {
             console.error(err)
             this.app.notify({icon: 'warning', message: this.app.$t('failed to login; please check your credentials.'), type: 'warning'})
         } finally {
+            this.app.media.query()
             this.app.setState({user: {status: null}})
         }
     }
@@ -136,8 +137,9 @@ class PluginUser extends Plugin {
         await this.app.changeSession(null, {}, {logout: true})
 
         // Disconnect without reconnect attempt.
-        // this.app.plugins.calls.disconnect(false)
+        this.app.plugins.calls.disconnect(false)
         this.app.emit('bg:user:logged_out', {}, true)
+        this.app.media.stop()
         this.app._languagePresets()
     }
 
@@ -175,6 +177,7 @@ class PluginUser extends Plugin {
             const message = this.app.$t('failed to unlock; check your password')
             this.app.notify({icon: 'warning', message, type: 'danger'})
         } finally {
+            this.app.media.query()
             this.app.setState({user: {status: null}})
         }
     }

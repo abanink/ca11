@@ -9,14 +9,16 @@
         ><icon name="ext-tab"/></button>
 
         <button
-            class="c-status__option t-btn-settings"
+            class="c-status__option t-btn-settings tooltip tooltip-bottom"
             :class="{active: layer === 'settings'}"
+            :data-tooltip="$t('settings')"
             @click="setLayer('settings')"
         ><icon name="settings"/></button>
 
         <button
-            class="c-status__option"
+            class="c-status__option tooltip tooltip-bottom"
             :class="{active: layer === 'about'}"
+            :data-tooltip="$t('about {name}', {name: app.name})"
             @click="setLayer('about')"
         ><icon name="help"/></button>
 
@@ -53,7 +55,11 @@
             </div>
         </button>
 
-        <button class="c-status__option" @click="logout">
+        <button
+            class="c-status__option tooltip tooltip-left"
+            @click="logout"
+            :data-tooltip="$t('quit session')"
+        >
             <icon name="logout"/>
         </button>
     </div>
