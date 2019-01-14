@@ -250,7 +250,7 @@ class PowerOn extends Sound {
 
 class RingTone extends Sound {
     constructor(app) {
-        super(app, `audio/ringtones/default.ogg`)
+        super(app, 'audio/ringtones/default.ogg')
     }
 
     play(...args) {

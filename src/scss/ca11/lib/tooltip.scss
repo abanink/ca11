@@ -2,7 +2,7 @@
 
 @import 'variables';
 
-@mixin tooltipFrames($direction) {
+@mixin tooltip-frames($direction) {
 
     // Touch devices.
     @media (hover: none) {
@@ -125,17 +125,17 @@
 }
 
 .tooltip-top:hover::after {
-    @include tooltipFrames('top');
+    @include tooltip-frames('top');
 }
 
 .tooltip-left:hover::after {
-    @include tooltipFrames('left');
+    @include tooltip-frames('left');
 }
 
 .tooltip-bottom:hover::after {
-    @include tooltipFrames('bottom');
+    @include tooltip-frames('bottom');
 }
 
 .tooltip-right:hover::after {
-    @include tooltipFrames('right');
+    @include tooltip-frames('right');
 }
