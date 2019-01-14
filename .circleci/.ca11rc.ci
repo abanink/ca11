@@ -1,0 +1,102 @@
+{
+    "brands": {
+        "ca11": {
+            "colors": {
+                "primary-color": "#601111",
+                "green-color": "#508654",
+                "orange-color": "#f98644",
+                "red-color": "#a75147"
+            },
+            "plugins": {
+                "builtin": {
+                    "contacts": {
+                        "i18n": [],
+                        "providers": []
+                    }
+                },
+                "custom": {}
+            },
+            "name": {
+                "alpha": "CA11-alpha",
+                "beta": "CA11-beta",
+                "production": "CA11"
+            },
+            "permissions": "",
+            "sig11": {
+                "endpoint": "localhost"
+            },
+            "sip": {
+                "endpoint": "sip.ca11.io"
+            },
+            "stun": [
+                "stun:stun3.l.google.com:19302",
+                "stun:stun4.l.google.com:19302"
+            ],
+            "store": {
+                "chrome": {
+                    "clientId": "",
+                    "clientSecret": "",
+                    "extensionId_alpha": "",
+                    "extensionId_beta": "",
+                    "extensionId_production": "",
+                    "refreshToken": ""
+                }
+            },
+            "telemetry": {
+                "sentry": {
+                    "apiKey": "",
+                    "dsn": "",
+                    "host": "",
+                    "org": "",
+                    "project": "ca11"
+                }
+            },
+            "tests": {
+                "alice": {
+                    "session": {
+                        "username": "alice",
+                        "password": "testing"
+                    },
+                    "sip": {
+                        "username": "1000",
+                        "password": ""
+                    }
+                },
+                "bob": {
+                    "session": {
+                        "username": "bob",
+                        "password": "testing"
+                    },
+                    "sip": {
+                        "username": "2000",
+                        "password": ""
+                    }
+                },
+                "charlie": {
+                    "session": {
+                        "username": "charlie",
+                        "password": "testing"
+                    },
+                    "sip": {
+                        "username": "3000",
+                        "password": ""
+                    }
+                },
+                "headless": false,
+                "port": 3000
+            },
+            "theme": "@garage11/ca11-theme-default",
+            "vendor": {
+                "name": "CA11",
+                "support": {
+                    "email": "",
+                    "phone": "",
+                    "website": ""
+                }
+            }
+        }
+    },
+    "sig11": {
+        "port": 3001
+    }
+}
