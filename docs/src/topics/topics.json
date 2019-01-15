@@ -8,10 +8,11 @@
         ],
         "user": [
             {"name": "introduction", "title": "Introduction"},
-            {"name": "login", "title": "Start a session"},
-            {"name": "wizard", "title": "Follow setup wizard"},
-            {"name": "sip-setup", "title": "Setup SIP softphone"},
-            {"name": "sip-calling", "title": "Calling with SIP softphone"},
+            {"name": "session", "title": "Begin Session"},
+            {"name": "wizard", "title": "Complete Wizard"},
+            {"name": "sig11-call", "title": "SIG11 Calling"},
+            {"name": "sip-call", "title": "SIP Calling"},
+            {"name": "call-features", "title": "Call Features"},
             {"name": "accessibility", "title": "Accessibility"}
         ]
     }

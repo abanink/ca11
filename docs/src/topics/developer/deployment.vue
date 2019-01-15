@@ -1,4 +1,4 @@
-<component class="view-page">
+<component class="c-page">
 <h1>Deployment</h1>
 
 <h2>Release cycle</h2>

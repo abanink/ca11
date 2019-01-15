@@ -1,4 +1,4 @@
-<component class="view-page">
+<component class="c-page">
     <h1>Quickstart</h1>
 
     <p>

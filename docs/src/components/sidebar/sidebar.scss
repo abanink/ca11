@@ -3,7 +3,11 @@
 .c-sidebar {
     background: var(--grey-50);
     display: flex;
+    flex: 1;
     flex-direction: column;
+    height: 100vh;
+    position: fixed;
+    width: 300px;
 
     .header {
         align-items: center;
@@ -48,6 +52,8 @@
     }
 
     .navigation {
+        font-family: 'Rajdhani';
+
         .navigation-header {
             background: var(--grey-100);
             color: var(--primary-base);
@@ -61,6 +67,7 @@
             border-left: var(--border) solid transparent;
             color: var(--grey-400);
             display: block;
+
             padding: var(--spacer);
             width: 100%;
 

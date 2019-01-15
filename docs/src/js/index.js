@@ -17,8 +17,8 @@ class AppDocs extends App {
         super(options)
 
         const components = {
+            Page: require('../components/page'),
             Sidebar: require('../components/sidebar'),
-            ViewPage: require('../components/view_page'),
         }
 
         this.components = {}

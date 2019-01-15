@@ -1,6 +1,6 @@
 module.exports = (app) => {
 
-    const ViewStory = {
+    const Page = {
         computed: {
             page: function() {
                 let topic
@@ -26,8 +26,8 @@ module.exports = (app) => {
                 return classes
             },
         },
-        render: templates.view_page.r,
-        staticRenderFns: templates.view_page.s,
+        render: templates.page.r,
+        staticRenderFns: templates.page.s,
         store: {
             app: 'app',
             topics: 'pages.topics',
@@ -35,5 +35,5 @@ module.exports = (app) => {
         },
     }
 
-    return ViewStory
+    return Page
 }

@@ -1,4 +1,4 @@
-<component class="view-page">
+<component class="c-page">
     <h1>Platforms</h1>
 
     <h2>Build system</h2>

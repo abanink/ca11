@@ -1,31 +1,30 @@
-<component class="view-page">
-    <h1>Calling with SIP softphone</h1>
-    <div class="steps-images">
-        <div class="cell"><img src="/screens/7-alice-ready-to-use.png"/></div>
-        <div class="cell"><img src="/screens/9-alice-dialpad-call.png"/></div>
-        <div class="cell"><img src="/screens/10-alice-calldialog-outgoing.png"/></div>
-    </div>
-    <div class="steps-images">
-        <div class="cell"><img src="/screens/11-bob-calldialog-incoming.png"/></div>
-        <div class="cell"><img src="/screens/12-alice-calldialog-outgoing-accepted.png"/></div>
-    </div>
+<component class="c-page">
+    <h1>Call Features</h1>
 
-    <h1>Call options</h1>
     <p>
-        During a call, there are several typical softphone options you can use.
-    </p>
-
-    <h2>Mute microphone</h2>
-    <p>
-        Press on the button with the micrphone to mute the microphone input
-        during a call. Press again on the same button to undo this.
+        During a call, there are several softphone features you can use. Please
+        note that these features are derived from the SIP softphone. Most of
+        them currently don't work with SIG11 calling.
     </p>
 
     <h2>Transfer</h2>
+
     <p>
-        You can use both attended and blind transfers. Press the <em>Transfer</em>
-        button during a call.
+        Transfer is currently a SIP-only feature. Both attended and
+        blind transfers are supported. Press the <em>Transfer</em> button
+        during a call.
     </p>
+
+    <div class="instruction">
+        <div class="instruction__image">
+            <img src="/screens/bob-transfers-alice-to-charlie-attended.png"/>
+        </div>
+        <div class="instruction__text">
+        Saving Settings should show the green SIP status icon.
+        Then go to the Calls menu option(left) to view the keypad.
+        Select SIP protocol, type a number and start a new call.
+        </div>
+    </div>
 
     <h3>Attended transfer</h3>
     <p>
@@ -44,8 +43,10 @@
     </p>
 
     <h2>On-hold</h2>
+    <p>
     Put a call on-hold by pressing the <em>On-hold</em> button. You can get
     the callee out of on-hold by pressing the same button again.
+    </p>
 
     <h2>Do-not-disturb</h2>
     <p>
@@ -53,7 +54,12 @@
         Select the availability menu item on the leftside menu and switch the DnD
         option on. Now any incoming calls will be dropped, but you can still call out.
         Switching this option off will make you become available for incoming calls again.
+    </p>
 
+    <h2>Mute microphone</h2>
+    <p>
+        Press on the button with the micrphone to mute the microphone input
+        during a call. Press again on the same button to undo this.
     </p>
 
 </component>

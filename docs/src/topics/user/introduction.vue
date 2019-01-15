@@ -1,35 +1,50 @@
-<component class="view-page">
+<component class="c-page">
     <h1>Welcome to {{app.name}}!</h1>
-    <p>
 
+    <p>
+        {{app.name}} lets you communicate privately and freely with your family,
+        friends and colleagues via decentralized network SIG11. With {{app.name}},
+        you can also receive and make calls on a telephony network when you have
+        an account from a compatible VoIP provider.
     </p>
 
     <h2>Requirements</h2>
 
-    <h3>Headset</h3>
+    <h3>Compatible Platform</h3>
     <p>
-        In order to get a good calling experience, it is important to use a decent headset
-        with the right ergonomics and sound quality. Also you should verify that the correct
-        audio device is being used by {{app.name}}.
-        <div class="illustration"><img src="/screens/6-alice-wizard-devices.png"/></div>
+        CA11 runs as a PWA on Android, Linux, Windows, OSX and on Chromebooks.
+        The Electron desktop app and the WebExtension can be used on desktop
+        Operating Systems (Linux, Windows and OSX). Screensharing only works
+        on desktop operating systems.
     </p>
 
-    <h4>Bluetooth</h4>
+    <h3>A Headset</h3>
+    <img class="illustration" src="/screens/alice-wizard-devices.png"/>
     <p>
-        Bluetooth headsets should work just fine, but there are more potential
-        problems with it. We have tested succesfully with some Plantronics headsets,
-        but other headsets should work fine as well.
+        The microphone of a laptop/webcam will work, but in order to have
+        a good calling experience, it is important to use a proper
+        headset with good ergonomics and a decent microphone. There are 3
+        types of headsets: Bluetooth, USB and Jack. Bluetooth headsets should
+        work just fine in most cases, but there are more situations
+        where a bluetooth headset can cause user-related audio issues.
     </p>
 
-    <h4>USB</h4>
     <p>
-        While there is not a list of supported headsets, it is generally save to
-        say that any USB headset should work.
+        While there is not a list of supported headsets, it is generally
+        save to say that any decent USB headset should work. Headsets with a
+        Jack should also be fine, but those don't show up as a separate device
+        in the Devices list, which makes it a bit harder to distinguish the
+        device that's going to be used.
+
+        {{app.name}} has a separate device settings screen that shows up during
+        the wizard, which you can use to verify your audio settings. The same
+        device settings can be found in Settings.
     </p>
 
-    <h4>Jack</h4>
+
+    <h3>A webcam</h3>
     <p>
-        Headsets with a jack should be fine, but they don't show up as a
-        separate device in the Devices list.
+        To make video calls, you need to have a webcam installed on your computer.
     </p>
+
 </component>

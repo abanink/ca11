@@ -1,4 +1,4 @@
-<component class="view-page">
+<component class="c-page">
     <h1>Customization</h1>
 
     <h2>Branding</h2>

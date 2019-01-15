@@ -1,19 +1,15 @@
-@import "ca11/lib/variables";
+@import 'ca11/lib/variables';
 
-.component-main {
+.c-main {
     display: flex;
-    height: 100%;
-    width: 100%;
-
-    .app-view-sidebar {
-        width: 300px;
-    }
+    overflow-y: scroll;
 
     .app-view-main {
-        // background: $white-tint-color-light;
+        background: $white-color;
         height: 100vh;
-        overflow: auto;
+        margin-left: 300px;
         padding: $spacer * 4;
         padding-bottom: $spacer * 8;
+        width: 100%;
     }
 }

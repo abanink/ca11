@@ -1,4 +1,4 @@
-<component class="view-page">
+<component class="c-page">
     <h1>Accessibility</h1>
     <h2>Keyboard shortcuts</h2>
     <p>
@@ -12,9 +12,8 @@
         </ul>
     </p>
 
-
     <h2>Screenreaders</h2>
     <p>
-        VoiceOver on MacOS works with {{app.name}}. More information about this later.
+        UNDER CONSTRUCTION
     </p>
 </component>
