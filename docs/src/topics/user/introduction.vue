@@ -1,10 +1,7 @@
 <component class="view-page">
     <h1>Welcome to {{app.name}}!</h1>
     <p>
-        We aim to make {{app.name}} enjoyable to use and as intuitive as possible.
-        A lot of issues and topics can be dealt with by adapting the user-interface, but
-        we found that there are still some areas that may need some explanation. Here you can
-        find some more background information about using {{app.name}}.
+
     </p>
 
     <h2>Requirements</h2>
