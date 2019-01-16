@@ -9,7 +9,7 @@
   "scripts": {
     "commitlint-ci": "commitlint-circle",
     "eslint": "eslint '{src/**/*.js,gulpfile.js,gulp/**/*.js,tests/**/*.js}'",
-    "link": "yarn link @garage11/ca11-theme-default;yarn link @garage11/vue-compiler-gulp; yarn link @garage11/vue-i18n",
+    "link": "npm link @garage11/ca11-theme-default;npm link @garage11/vue-compiler-gulp; npm link @garage11/vue-i18n",
     "lint": "npm run eslint;npm run stylelint",
     "release-alpha": "standard-version --prerelease alpha",
     "release-beta": "standard-version --prerelease beta",
@@ -114,6 +114,7 @@
     "tap-spec": "^5.x.x",
     "tape": "4.x.x",
     "tape-catch": "^1.x.x",
+    "through2": "^3.0.0",
     "tildify": "^1.2.0",
     "uglify-es": "3.x.x",
     "v-runtime-template": "1.x.x",

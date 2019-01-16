@@ -7,20 +7,14 @@ class PluginPage extends Plugin {
 
         app.router.addRoutes([{
             component: app.components.Page,
-            name: 'view_quickstart',
-            path: '/',
-        }])
-
-        app.router.addRoutes([{
-            component: app.components.Page,
             name: 'view_developer_topic',
-            path: '/developer/:topic_id',
+            path: '/developers/:topic_id',
         }])
 
         app.router.addRoutes([{
             component: app.components.Page,
             name: 'view_user_topic',
-            path: '/user/:topic_id',
+            path: '/users/:topic_id',
         }])
     }
 

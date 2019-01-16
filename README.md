@@ -11,7 +11,7 @@
     cd projects
     git clone git@github.com:garage11/ca11.git
     cd ca11
-    yarn
+    npm i
     gulp develop
 
 

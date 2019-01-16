@@ -9,22 +9,14 @@
         <div class="header-brand">{{version.current}}</div>
     </header>
     <nav class="navigation">
-        <div class="navigation-header">User documentation</div>
-
-        <router-link
-            v-if="topic.name === 'introduction'"
-            v-for="(topic, name) in topics.user"
-            :to="{name: 'view_quickstart'}"
-            class="navigation-link"
-        >{{topic.title}}</router-link>
+        <div class="navigation-header">CA11 for Users</div>
 
         <router-link
             class="navigation-link"
-            v-if="topic.name !== 'introduction'"
             :to="{name: 'view_user_topic', params: {topic_id: topic.name}}" v-for="(topic, name) in topics.user"
         >{{topic.title}}</router-link>
 
-        <div class="navigation-header">Developer documentation</div>
+        <div class="navigation-header">CA11 for Developers</div>
         <router-link class="navigation-link" :to="{name: 'view_developer_topic', params: {topic_id: topic.name}}" v-for="(topic, name) in topics.developer">
             {{topic.title}}
         </router-link>

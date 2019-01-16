@@ -1,21 +1,17 @@
 <component class="c-page">
-    <h1>Begin Session</h1>
+    <h1>New Session</h1>
     <p>
-        CA11 is a softphone software project; not a cloud service that
-        collects your data. Your personal data belongs to you. Instead
-        of storing data on a cloud service, your data is stored encrypted
-        in a vault on this computer.
+        CA11 stores your data stored locally on this computer unless indicated
+        otherwise. CA11 uses encrypted local <em>session</em> storage to persist
+        application state. This session is protected using the password
+        that you provide here. Contacts, activity history, SIP credentials
+        and settings; everything is stored in the session.
     </p>
     <p>
-        CA11 uses a concept of a <em>session</em> to store its data in.
-        Contacts, Activities, SIP credentials and Settings are all
-        stored in that session. Don't worry, it is easy to use!
         When you open up CA11 for the first time<i class="instruction__ref">1</i>,
-        you'll see it will ask you for a username and a password.
-        This is not to log you in to a service, but to create and identify
-        a local vault on your computer. The username/password can be any
-        combination; just make sure that it is easy for you(and just you)
-        to remember.
+        you'll notice it will ask you for a Session Name and a Session Password.
+        This is used solely to create and identify a local session on the
+        computer that you're using.
     </p>
 
     <p class="instruction__note">
@@ -34,10 +30,9 @@
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            The welcome screen acts as a landing page for the wizard.
-            Nothing special, but you can decide here to go a step back
-            and logout if you don't wish to proceed. Proceed with the
-            wizard if you want to start calling.
+            The Session Name and Session Password can be anything;
+            just make sure that it is easy for you(and just you)
+            to remember.
             </div>
         </li>
         <li class="instruction">
@@ -46,20 +41,20 @@
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            This wizard step checks if {{app.name}} has permission to use
-            the microphone and webcam of your computer. Check the browser
-            navigation bar in case it indicates no permission.
+            After filling the Session Name and Session Password,
+            all you have to do is to click on the <em>Start Session</em>
+            button, which will start the initial CA11 setup.
             </div>
         </li>
     </ol>
 
     <p class="instruction__warn">
-        Be aware that removing a session means that it will remove ALL of
-        your settings. Localstorage data is also removed when you use CA11
-        as a PWA, and you decide to clear all browser data.
-        There is no way at the moment to backup or import this data at
-        the moment...
+        Be aware that removing a session implies removing all of
+        your settings, contacts and local activity history as well.
+
+        Session data is stored in a browser's local storage. The CA11
+        PWA shares storage with the rest of the browser. Clearing your
+        browser history will also remove your CA11 session data.
+        This doesn't affect CA11 Electron and CA11 WebExtension.
     </p>
-
-
 </component>

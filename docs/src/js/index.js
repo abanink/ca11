@@ -19,6 +19,7 @@ class AppDocs extends App {
         const components = {
             Page: require('../components/page'),
             Sidebar: require('../components/sidebar'),
+            Welcome: require('../components/welcome'),
         }
 
         this.components = {}

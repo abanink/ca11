@@ -14,6 +14,7 @@
 .c-page {
     display: flex;
     flex-direction: column;
+    margin-bottom: var(--space-4);
     max-width: $breakpoint-tablet;
 
     pre {
@@ -35,6 +36,7 @@
         color: var(--grey-300);
         font-size: var(--text-base);
         letter-spacing: 0.3px;
+        line-height: 1.5rem;
         margin: $spacer 0;
     }
 
@@ -66,6 +68,10 @@
         font-size: 1.2rem;
     }
 
+    pre {
+        padding: 0;
+    }
+
     strong {
         font-weight: 500;
     }
@@ -90,100 +96,23 @@
             }
         }
     }
+
+    &__quote {
+        display: block;
+        font-family: 'Rajdhani';
+        font-style: italic;
+        line-height: 2.5rem;
+    }
 }
 
-
-.instructions {
-    counter-reset: instruction-counter;
+.columns {
     display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    margin: 0;
-    margin-top: $spacer * 5;
-    padding: 0;
-    width: 100%;
 
-    &.steps {
-        .instruction {
-            counter-increment: instruction-counter;
-
-            &__image {
-                &::before {
-                    align-items: center;
-                    color: var(--primary-base);
-                    content: 'Step ' counter(instruction-counter);
-                    display: flex;
-                    font-family: 'Rajdhani';
-                    font-size: var(--text-base);
-                    font-weight: bold;
-                    height: 20px;
-                    justify-content: center;
-                    margin-top: -$spacer * 3;
-                    position: absolute;
-                    z-index: 100000;
-                }
-            }
-        }
-    }
-
-
-    @at-root .instruction {
-        display: flex;
-        font-weight: bold;
-        margin-bottom: $spacer * 5;
-        position: relative;
+    .column {
         width: 50%;
 
-        &__image {
-            flex: 0 0 175px;
-
-            img {
-                border: var(--border) solid var(--grey-50);
-                box-shadow: 0 0 $spacer rgba(palette('grey', 400), 0.8);
-                position: relative;
-                transition: all 0.5s ease-in-out;
-                width: 175px;
-                z-index: 100000000;
-
-                &:hover {
-                    transform: scale(2);
-                    z-index: 100000001;
-                }
-            }
-        }
-
-        &__text {
-            color: var(--grey-300);
-            font-family: 'Rajdhani';
-            font-weight: 500;
-            margin: 0 $spacer;
-
-            &::first-letter {
-                font-weight: 600;
-            }
-        }
-
-
-        &__note {
-            background: var(--grey-50);
-            border: var(--border) dotted var(--grey-100);
-            padding: var(--gutter);
-        }
-
-        &__warn {
-            background: var(--grey-50);
-            border: var(--border) dashed $red-color;
-            padding: var(--gutter);
-        }
-
-        &__ref {
-            color: var(--primary-base);
-            font-family: 'Rajdhani';
-            font-size: var(--text-small);
-            font-weight: 600;
-            position: relative;
-            top: -$spacer;
-            width: 0;
+        &:first-child {
+            margin-right: var(--gutter);
         }
     }
 }

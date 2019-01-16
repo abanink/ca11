@@ -1,0 +1,12 @@
+.illustration {
+    float: right;
+    width: 250px;
+
+    &.right {
+        float: right;
+    }
+
+    img {
+        width: 100%;
+    }
+}

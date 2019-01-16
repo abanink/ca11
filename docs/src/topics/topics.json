@@ -1,19 +1,18 @@
 {
     "topics": {
         "developer": [
-            {"name": "introduction", "title": "Quickstart"},
+            {"name": "quickstart", "title": "Quickstart"},
             {"name": "platforms", "title": "Platforms"},
-            {"name": "customization", "title": "Customization"},
-            {"name": "deployment", "title": "Deployment"}
+            {"name": "plugins", "title": "Plugins"},
+            {"name": "asterisk", "title": "Asterisk SFU"}
         ],
         "user": [
-            {"name": "introduction", "title": "Introduction"},
-            {"name": "session", "title": "Begin Session"},
-            {"name": "wizard", "title": "Complete Wizard"},
+            {"name": "requirements", "title": "Requirements"},
+            {"name": "session", "title": "New Session"},
+            {"name": "setup", "title": "Initial Setup"},
             {"name": "sig11-call", "title": "SIG11 Calling"},
             {"name": "sip-call", "title": "SIP Calling"},
-            {"name": "call-features", "title": "Call Features"},
-            {"name": "accessibility", "title": "Accessibility"}
+            {"name": "call-features", "title": "Call Features"}
         ]
     }
 }

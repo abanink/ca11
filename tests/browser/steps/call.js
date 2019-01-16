@@ -59,7 +59,7 @@ module.exports = function(_) {
             await transfer.page.waitFor('.t-btn-options-call-accept')
             await transfer.page.click('.t-btn-options-call-accept')
 
-            _.step(transfer, `accepted incoming call from ${callee.session.username}`)
+            await _.step(transfer, `accepted incoming call from ${callee.session.username}`)
 
             await callee.page.waitFor('.t-btn-options-transfer-finalize')
             await callee.page.click('.t-btn-options-transfer-finalize')

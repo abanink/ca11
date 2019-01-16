@@ -1,9 +1,11 @@
 <component class="c-page">
-    <h1>Complete Wizard</h1>
+    <h1>Initial Setup</h1>
     <p>
-        CA11 will show you a wizard welcome screen<i class="instruction__ref">1</i> when you start
-        a new session. This wizard goes through the minimal amount of steps to
-        get you ready to make your first CA11.
+        CA11 shows you a wizard welcome screen<i class="instruction__ref">1</i>
+        just after you started a new session. This wizard guides you through
+        the minimal amount of setup steps to make your first SIG11 call. SIP
+        calling is currently not part of the wizard, because this requires
+        an account from a compatible VoIP-provider.
     </p>
 
     <ol class="instructions steps">
@@ -13,10 +15,10 @@
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            The welcome screen acts as a landing page for the wizard.
-            Nothing special, but you can decide here to go a step back
-            and logout if you don't wish to proceed. Proceed with the
-            wizard if you want to start calling.
+            The welcome screen is the landing page of the Wizard.
+            You can decide here to go a step back and close the session
+            if you are not sure if you wish to proceed. Proceed with the
+            wizard if you want to setup CA11.
             </div>
         </li>
         <li class="instruction">

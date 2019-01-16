@@ -10,7 +10,7 @@
     >
 
         <div slot="context">
-            <Soundmeter v-if="stream[stream.type].id" class="soundmeter" :stream="stream[stream.type]"/>
+            <!-- <Soundmeter v-if="stream[stream.type].id" class="soundmeter" :stream="stream[stream.type]"/> -->
         </div>
     </FieldSelect>
 

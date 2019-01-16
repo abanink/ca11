@@ -180,6 +180,11 @@ class SipCalls {
         // Overwrite the existing instance with a new one every time.
         // SIP.js doesn't handle resetting configuration well.
 
+        let wsServers = this.app.state.calls.sip.endpoint
+        if (!wsServers.includes('ws://') && !wsServers.includes('wss://')) {
+            wsServers = `wss://${wsServers}`
+        }
+
         this.ua = new SIP.UA({
             authorizationUser: username,
             autostart: false,
@@ -211,8 +216,7 @@ class SipCalls {
             transportOptions: {
                 // Reconnects are handled manually.
                 maxReconnectionAttempts: 0,
-                // Don't allow unencrypted websocket connections.
-                wsServers: `wss://${this.app.state.calls.sip.endpoint}`,
+                wsServers: wsServers,
             },
             uri: `${username}@${this.app.state.calls.sip.endpoint.split('/')[0]}`,
             userAgentString: this._userAgent(),

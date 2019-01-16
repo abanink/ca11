@@ -12,7 +12,7 @@ module.exports = function(_) {
             await page.type('.t-txt-sip-username', actor.sip.username)
             await page.type('.t-txt-sip-password', actor.sip.password)
 
-            _.screenshot(actor, 'enable-sip')
+            await _.screenshot(actor, 'enable-sip')
 
             await page.click('.t-btn-settings-save')
             // Wait until the status indicates a registered device.

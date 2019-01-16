@@ -1,63 +1,46 @@
 <component class="c-page">
     <h1>Platforms</h1>
-
-    <h2>Build system</h2>
+    <h2>CA11 PWA</h2>
     <p>
-        {{app.name}} uses <a href="https://gulpjs.com/">Gulp</a> as its build system.
-        The build system is using a configuration file(<code>.ca11rc</code>) and
-        runtime flags to determine how to build {{app.name}}. There are several
-        configuration options that can be used to customize the build, as well
-        as flags that indicate which brand to build and what platform to build for.
+    CA11 PWA is the default and preferred platform at the moment.
+    CA11 Electron and CA11 WebExtension are valid build targets as
+    well, but this is the preferred workflow during development. It has
+    the fastest development feedback loop. Code automatically rebuilds as
+    you make filechanges, while the buildsystem automatically reloads the
+    browser using <a href="https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)">
+    livereload</a>. Use it whenever you are not developing platform-specific
+    code. It can be developed using:
+<pre v-highlightjs><code class="bash">gulp develop</code></pre>
+    </p>
 
-        The preferred workflow during development is to use the webview build target,
-        because it will get you the fastest development feedback loop. Code automatically
-        rebuilds as you make filechanges, while the webview automatically reloads
-        with the <a href="https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei)">
-        livereload extension</a>. Use it whenever you are not developing
-        platform-specific code! A handy trick to test API-calls during development
-        without the need for CORS:
-
-<pre v-highlightjs><code class="bash"># --ignore-certificate-errors may be useful in certain cases as well.
-chromium --disable-web-security --user-data-dir=~/.chromium-temp
-# Visit localhost:3000 to see the built webview.
-</code></pre>
-
-    <h2>Build targets</h2>
-    <h3>WebExtension</h3>
+    <h2>CA11 WebExtension</h2>
     <p>
-        Auto-reloading can not be used while developing a WebExtension. There is a manual
-        reload option in <code>chrome://extensions/</code> which works reliable for
-        the background and foreground script. A slightly faster way to reload all
-        cripts is to use <a href="https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid">
-        extension reloader</a>. Keep in mind that you still have to close/open a
-        tab in case you want a tab script to reload.
+        A WebExtension can not easily be auto-reloaded during development.
+        There is a manual reload option in <code>chrome://extensions/</code> which
+        works reliable for the background and foreground script. A slightly faster
+        way to reload all cripts is to use <a href="https://chrome.google.com/webstore/detail/extensions-reloader/fimgfedafeadlieiabdeeaodndnlbhid">
+        extension reloader</a>.
     </p>
     <h4>Chrome</h4>
 
-<pre v-highlightjs><code class="bash"># Generate a development build for Chrome.
-gulp build --brand ca11 --target chrome
-</code></pre>
-
+<pre v-highlightjs><code class="bash">gulp develop --target chrome</code></pre>
     <p>
-        Navigate to <code>chrome://extension</code>, make sure developer mode is enabled, and load
-        the <code>./build/ca11/chrome</code> directory as an unpacked extension in Chrome.
+        Navigate to <code>chrome://extension</code>, make sure developer mode is enabled,
+        and load the directory <code>./build/ca11/chrome</code> as an unpacked extension.
         You can drag-and-drop the distribution zip file from <code>dist/chrome</code> on the
-        Chrome extension page. Notice that this may not work on Chrome Windows.
+        Chrome extension page, but this may fail on Chrome Windows.
     </p>
 
     <h4>Firefox</h4>
     <p>
-        We would like to be able to support Ca11 on Firefox, but WebRTC support in
-        Firefox WebExtensions is problematic at the moment, because of at least one
-        <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1278100">blocking ticket</a>
-        that prevents Ca11 from running properly in Firefox. There is currently
-        a build target for Firefox, but don't expect it to work for calling.
-        We will update this section when the situation changes.
+        We would like to have a CA11 WebExtension for Firefox, but WebRTC support in
+        Firefox WebExtensions is lacking a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1278100">
+        certain permission handling</a>, that doesn't make it feasible to run CA11
+        in Firefox. There is a build target for Firefox WebExtension though,
+        in case that this situation changes.
     </p>
 
-<pre v-highlightjs><code class="bash"># Generate a development build for Firefox.
-gulp build --brand ca11 --target firefox
-</code></pre>
+<pre v-highlightjs><code class="bash">gulp build --target firefox</code></pre>
 
     <p>
         Navigate to <code>about:debugging</code> and switch <i>Enable add-on debugging</i> on. Select
@@ -65,20 +48,14 @@ gulp build --brand ca11 --target firefox
         directory.
     </p>
 
-    <h2>Electron</h2>
+    <h2>CA11 Electron</h2>
     <p>
-        Ca11 runs as a Linux/Windows/MacOS desktop application using the Electron runtime.
+        CA11 Electron uses the Electron runtime to execute CA11 as a desktop app.
         A compatible Electron version from npm is already installed on your system
         after you installed the dependencies through npm. To make a desktop build:
     </p>
 
-<pre v-highlightjs><code class="bash"># A simple development build.
-gulp build --brand ca11 --target electron
+<pre v-highlightjs><code class="bash">gulp build --target electron
 ./node_modules/electron/dist/electron build/ca11/electron/main.js
-# Or build and run in one step.
-gulp build-run --target electron
-# Package the app for a platform.
-gulp build-dist --target electron --arch x64 --platform linux
-./dist/ca11/ca11-linux-x64/ca11
 </code></pre>
 </component>
