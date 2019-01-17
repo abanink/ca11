@@ -1,12 +1,13 @@
 <component class="c-page">
-    <h1>SIP Calling</h1>
+    <h1>SIP Calls</h1>
     <p>
         CA11 supports receiving and placing video and audio calls over a VoIP network,
         using a SIP-over-WSS and WebRTC backend. WebRTC is still relatively uncharted
         territory for most VoIP providers. Ask your VoIP provider when you're not sure
-        about this, or setup your own PBX if you are tech-minded. SIP integration
-        needs to be manually enabled from the <em>Settings</em> menu<i class="instruction__ref">1</i>
-        at the SIP tab section.
+        about WebRTC support, or setup
+        <router-link :to="{name: 'view_developer_topic', params: {topic_id: 'asterisk'}}">your own PBX</router-link>
+        if you have a technical background. SIP integration needs to be manually enabled from the
+        <em>Settings</em> menu<i class="instruction__ref">1</i>at the SIP tab section.
     </p>
 
     <ol class="instructions steps">

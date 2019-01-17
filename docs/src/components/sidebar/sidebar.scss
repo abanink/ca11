@@ -1,47 +1,60 @@
+@import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
 .c-sidebar {
     background: var(--grey-50);
     display: flex;
-    flex: 1;
+    flex: 0 0 250px;
     flex-direction: column;
-    height: 100vh;
+    font-family: 'Rajdhani';
     position: fixed;
-    width: 300px;
+    width: var(--sidebar-width);
 
     .header {
         align-items: center;
-        background: var(--grey-50);
+        background: var(--primary-base);
+        border-bottom: var(--spacer-05) solid var(--primary-base);
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: $spacer;
+        padding: $spacer-05;
+        position: relative;
 
-        .header-logo {
-            height: 90px;
+        &__version {
+            color: var(--grey-50);
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+
+        &__logo {
+            height: $space-4;
+            position: relative;
             text-align: center;
             width: 100%;
 
-            img {
-                margin: 0 auto;
-                max-height: 100%;
-                max-width: 100%;
+            svg {
+                display: none;
+                height: 100px;
+                opacity: 0.3;
             }
         }
 
-        .header-title {
-            color: var(--primary-base);
-            font-family: 'Rajdhani';
-            font-size: 1.4rem;
+        &__title {
+            color: $white-color;
+            font-size: 1.5rem;
             font-weight: 600;
-            letter-spacing: 0;
-            text-align: center;
+            letter-spacing: -2px;
+            margin-top: $spacer-05;
+            position: absolute;
             text-transform: uppercase;
+            transform: rotate(90deg);
             width: 100%;
+            z-index: 10000;
         }
 
-        .header-brand {
-            color: var(--grey-300);
+        &__description {
+            color: var(--grey-100);
+            display: none;
             font-family: 'Rajdhani';
             font-size: var(--text-small);
             font-weight: bold;
@@ -49,34 +62,99 @@
             text-transform: uppercase;
             width: 100%;
         }
+
+        @media screen and (min-width: $breakpoint-mobile) {
+            &__description {
+                display: block;
+            }
+
+            &__logo {
+                height: auto;
+
+                svg {
+                    display: inline;
+                }
+            }
+
+            &__title {
+                font-size: 2rem;
+                margin-top: 60px;
+                transform: rotate(0deg);
+            }
+
+            &__version {
+                bottom: 0;
+                position: absolute;
+                right: $spacer-05;
+            }
+        }
     }
 
     .navigation {
         font-family: 'Rajdhani';
 
-        .navigation-header {
+        &__button,
+        &__header {
+            align-items: center;
             background: var(--grey-100);
-            color: var(--primary-base);
-            font-family: 'Rajdhani';
+            display: flex;
+            height: $spacer * 5;
+            justify-content: center;
+            padding: var(--spacer);
+            width: 100%;
+
+            span {
+                display: none;
+            }
+
+            svg {
+                @include icon-size(var(--icon-small));
+                fill: var(--grey-300);
+            }
+        }
+
+        &__header {
+            background: var(--grey-400);
+            border-bottom: 1px solid var(--grey-300);
+            border-top: 1px solid var(--grey-300);
+            color: var(--grey-50);
             font-weight: 600;
             padding: var(--spacer);
             text-transform: uppercase;
         }
 
-        .navigation-link {
-            border-left: var(--border) solid transparent;
-            color: var(--grey-400);
-            display: block;
-
-            padding: var(--spacer);
-            width: 100%;
+        &__button {
+            background: var(--grey-100);
+            border-bottom: var(--border) solid transparent;
+            border-top: var(--border) solid transparent;
+            color: var(--grey-300);
+            font-weight: 500;
 
             &.active,
             &:hover {
                 background: $white-color;
-                border-right: var(--border) solid var(--primary-base);
+                border-bottom: var(--border) solid var(--primary-base);
                 color: var(--primary-base);
                 cursor: pointer;
+
+                svg {
+                    fill: var(--primary-base);
+                }
+            }
+        }
+
+        @media screen and (min-width: $breakpoint-mobile) {
+            &__button,
+            &__header {
+                justify-content: flex-start;
+
+                svg {
+                    margin-right: $spacer;
+                }
+            }
+
+            span {
+                display: block;
             }
         }
     }

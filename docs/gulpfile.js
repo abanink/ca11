@@ -30,7 +30,13 @@ tasks.codeApp = async function codeApp() {
 
 
 tasks.codeVendor = async function codeVendor() {
-    await code.helpers.compile({entry: './src/js/vendor.js', name: 'vendor'})
+    await code.helpers.compile({
+        addons: [
+            path.join(settings.TEMP_DIR, settings.BRAND_TARGET, 'build', 'index.js'),
+        ],
+        entry: './src/js/vendor.js',
+        name: 'vendor',
+    })
 }
 
 tasks.html = assets.tasks.html
@@ -71,12 +77,22 @@ tasks.pages = async function pages(done) {
 
     for (const [i, file] of developerFiles.entries()) {
         let topic = description.topics.developer
-        data.topics.developer.push({content: file.toString('utf8'), name: topic[i].name, title: topic[i].title})
+        data.topics.developer.push({
+            content: file.toString('utf8'),
+            icon: topic[i].icon,
+            name: topic[i].name,
+            title: topic[i].title,
+        })
     }
 
     for (const [i, file] of userFiles.entries()) {
         let topic = description.topics.user
-        data.topics.user.push({content: file.toString('utf8'), name: topic[i].name, title: topic[i].title})
+        data.topics.user.push({
+            content: file.toString('utf8'),
+            icon: topic[i].icon,
+            name: topic[i].name,
+            title: topic[i].title,
+        })
     }
 
     await mkdirp(path.join(settings.BUILD_DIR, 'js'))
@@ -84,7 +100,7 @@ tasks.pages = async function pages(done) {
 }
 
 
-tasks.stylesApp = function stylesApp() {
+tasks.styles = function() {
     const addons = [
         path.join(settings.SRC_DIR, 'components', '**', '*.scss'),
         path.join(settings.NODE_DIR, 'highlight.js', 'styles', 'atom-one-dark.css'),
@@ -113,7 +129,7 @@ tasks.watch = function watchProject() {
     gulp.watch([
         path.join(settings.SRC_DIR, 'components', '**', '*.scss'),
         path.join(settings.SRC_DIR, 'scss', '**', '*.scss'),
-    ], gulp.series(tasks.stylesApp, misc.helpers.reload('app.css')))
+    ], gulp.series(tasks.styles, misc.helpers.reload('app.css')))
 
     gulp.watch([
         // Watch for changes from App code.
@@ -123,10 +139,13 @@ tasks.watch = function watchProject() {
         `!${path.join(settings.SRC_DIR, 'js', 'vendor.js')}`,
     ], gulp.series(tasks.codeApp, misc.helpers.reload('app.js')))
 
-
     gulp.watch([
         path.join(settings.SRC_DIR, 'js', 'vendor.js'),
-    ], gulp.series(tasks.codeVendor, misc.helpers.reload('vendor.js')))
+    ], gulp.series(
+        assets.tasks.icons,
+        tasks.codeVendor,
+        misc.helpers.reload('vendor.js'),
+    ))
 
     gulp.watch([
         path.join(settings.SRC_DIR, 'topics', 'topics.json'),
@@ -148,12 +167,12 @@ gulp.task('assets', gulp.parallel(
 
 gulp.task('code', gulp.parallel(
     tasks.codeApp,
-    tasks.codeVendor,
+    gulp.series(assets.tasks.icons, tasks.codeVendor),
 ))
 
 gulp.task('pages', tasks.pages)
 gulp.task('screens', tasks.screens)
-gulp.task('styles', tasks.stylesApp)
+gulp.task('styles', tasks.styles)
 
 
 const build = gulp.series(misc.tasks.buildClean, function build(done) {

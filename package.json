@@ -1,7 +1,7 @@
 {
   "name": "@garage11/ca11",
   "productName": "CA11",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "Free unified WebRTC communication platform",
   "engines": {
     "node": ">=11.0.0"

@@ -1,6 +1,14 @@
 .illustration {
-    float: right;
-    width: 250px;
+    display: block;
+    margin: 0 auto;
+    padding: 10vw;
+    width: 100%;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+        display: inline;
+        max-width: 225px;
+        padding: $spacer;
+    }
 
     &.right {
         float: right;

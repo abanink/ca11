@@ -37,21 +37,22 @@
         font-weight: bold;
         margin-bottom: $spacer * 5;
         position: relative;
-        width: 50%;
+        width: 100%;
+
 
         &__image {
-            flex: 0 0 175px;
+            flex: 0 0 75px;
 
             img {
                 border: 1px solid var(--grey-200);
                 box-shadow: 0 0 $spacer rgba(palette('grey', 400), 0.8);
                 position: relative;
                 transition: all 0.5s ease-in-out;
-                width: 175px;
+                width: 75px;
                 z-index: 100000000;
 
                 &:hover {
-                    transform: scale(2);
+                    transform: scale(3);
                     z-index: 100000001;
                 }
             }
@@ -68,6 +69,19 @@
                 font-weight: 600;
             }
         }
+
+        @media screen and (min-width: $breakpoint-desktop) {
+            width: 50%;
+
+            &__image {
+                flex: 0 0 100px;
+
+                img {
+                    width: 100px;
+                }
+            }
+        }
+
 
 
         &__note {

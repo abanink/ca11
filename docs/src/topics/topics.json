@@ -1,18 +1,18 @@
 {
     "topics": {
         "developer": [
-            {"name": "quickstart", "title": "Quickstart"},
-            {"name": "platforms", "title": "Platforms"},
-            {"name": "plugins", "title": "Plugins"},
-            {"name": "asterisk", "title": "Asterisk SFU"}
+            {"icon": "star", "name": "quickstart", "title": "Quickstart"},
+            {"icon": "share", "name": "platforms", "title": "Platforms"},
+            {"icon": "edit", "name": "customize", "title": "Customizing"},
+            {"icon": "protocol-sip", "name": "asterisk", "title": "SIP Backend"}
         ],
         "user": [
-            {"name": "requirements", "title": "Requirements"},
-            {"name": "session", "title": "New Session"},
-            {"name": "setup", "title": "Initial Setup"},
-            {"name": "sig11-call", "title": "SIG11 Calling"},
-            {"name": "sip-call", "title": "SIP Calling"},
-            {"name": "call-features", "title": "Call Features"}
+            {"icon": "requirements", "name": "requirements", "title": "Requirements"},
+            {"icon": "contact", "name": "session", "title": "New Session"},
+            {"icon": "sim-card", "name": "setup", "title": "Initial Setup"},
+            {"icon": "protocol-sig11", "name": "sig11-call", "title": "SIG11 Calls"},
+            {"icon": "protocol-sip", "name": "sip-call", "title": "SIP Calls"},
+            {"icon": "phone", "name": "call-features", "title": "In-call Features"}
         ]
     }
 }

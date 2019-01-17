@@ -44,6 +44,13 @@ class AppDocs extends App {
         })
 
         this.router = this.setupRouter()
+
+        this.router.addRoutes([{
+            component: this.components.Welcome,
+            name: 'view_welcome',
+            path: '/',
+        }])
+
         this.__loadPlugins(this.__plugins)
 
         this.__initViewModel({

@@ -1,5 +1,5 @@
 <component class="c-page">
-    <h1>Call Features</h1>
+    <h1>In-call Features</h1>
 
     <p>
         CA11 has several features to control an ongoing call. Please note
@@ -43,10 +43,12 @@
 
     <h2>Transfer [SIP]</h2>
     <p>
-        <img class="illustration" src="/screens/bob-transfers-alice-to-charlie-attended.png"/>
+
         Charlie is still on the phone with Bob; who just solved Charlie's
         financial perils. Besides, Charlie also has complaints about a
-        malfunctioning internet router, that he leases from Acme Corporation.<br/><br/>
+        malfunctioning internet router, that he leases from Acme Corporation.
+        <img class="illustration right" src="/screens/bob-transfers-alice-to-charlie-attended.png"/>
+        <br/><br/>
 
         Bob explains that he can transfer Charlie to the technical support
         division, so someone like Alice can further help Charlie.

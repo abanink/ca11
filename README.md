@@ -15,51 +15,47 @@
     gulp develop
 
 
-# Open WebRTC Softphone
-CA11 is an open WebRTC softphone being developed by [Garage11](https://garage11.tech).
-It can be described as a hybrid softphone with an aim for maximum reach. It does this
-by wiring the ecosystem of VoIP and the web together. CA11 is a suitable client for
-modern VoIP backends like Asterisk and Kamailio using the [SIP-WSS](https://tools.ietf.org/html/rfc7118) protocol.
+# WebRTC Softphone
+CA11 is an open WebRTC softphone developed by [Garage11](https://garage11.tech).
+It could be described as a hybrid softphone with an aim for maximum reach. It's maximizing
+reach by wiring the ecosystems of VoIP and Web together. CA11 can be used with
+modern WebRTC-compatible VoIP backends like Asterisk and Freeswitch using the
+[SIP-WSS](https://tools.ietf.org/html/rfc7118) protocol.
 
-CA11 could be of interest for VoIP-providers, who want to give customers
-access to unified communication, without first having to invest heavily in
-development, in order to build yet another proprietary softphone solution.
-CA11's SIP functionality could also be useful for call centers,
-CRM vendors and other companies looking for flexible communication
-channels to customers. Feel free to contact [Garage11](mailto:jeroen@garage11.tech)
-for more information about CA11's integration options.
+CA11 is of interest to VoIP-providers that would like to integrate WebRTC in their
+VoIP stack, without having to invest heavily in development cost for yet another
+proprietary WebRTC softphone. CA11 can easily be adapted to a custom brand
+and extended with the use of plugins. The CA11 softphone is also useful for
+industries like Call centers, CRM vendors, Telehealth professionals and
+businesses that rely on remote work and collaboration. Feel free to contact [Garage11](mailto:info@garage11.tech) for more information.
 
 
-# Decentralized Network
-*CA11* was started from a deep conviction that communication technology should
-enforce privacy, while being uncomplicated, open and free at the same time.
+# D-Telephone Network
+CA11 is driven by the conviction that communication technology should
+enforce privacy, while being simple, open, free and enjoyable to use.
 VoIP is an amazing technology with a lot of benefits, but its centralized
-nature makes it less scalable than p2p and an unwelcome target for government
-regulations and monitoring. The SIP protocol itself is also overcomplicated
-for the majority of use-cases that involve realtime communication with WebRTC.
+media flow makes it costly to scale and a target for government
+regulation and monitoring. The SIP protocol itself is also quite
+complicated for the majority of WebRTC applications.
 
-The bread-and-butter of WebRTC - p2p media streams and a simple API
-for generating SDP messages - can just as well be handled by a much simpler
-signalling mechanism. This is what several startups have done in the past;
-pivotting towards single-url p2p conferencing rooms, and limiting WebRTC
-signalling logic to their own service. Nowadays, p2p communication on the
-web is accessable and ubiquitous, but there is nothing similar yet to a
-standardized VoIP network for decentralized calling. The *CA11* softphone
-reuses some of the concepts and paradigms from VoIP to design a
-decentralized telephony system; *SIG11*. It envisions an open protocol
-and decentralized network of signalling nodes, that relay encrypted
-messages on behalf of its users, with the purpose to establish p2p
-calls and to exchange relayed messages with.
-
+The bread-and-butter of WebRTC - p2p media streams and ICE negotation can
+just as well be handled by a simple signalling mechanism. *SIG11* is a simple
+protocol that features public key encryption between nodes, and a network of
+signalling super-nodes that relay encrypted messages between peer candidates.
+Peers on the network can call each other by calling the other's public key.
+A public key can be bound to a simpler identifier, like a phone number,
+but a phone number is assigned by the peer itself. Identity trust is
+established by storing the public key on urls that only the trusted
+user has access to.
 
 # Development
-CA11 is an environment-agnostic ES2017 codebase that applies a simple
+CA11 is written in an environment-agnostic JavaScript codebase that applies a simple
 but powerful reactive data-oriented design based on [Vue.js](https://vuejs.org/).
 This architecture allows CA11 to be developed at a very fast pace while keeping
-the code maintainable and easy to adapt. The project is primary targetting desktop
-and mobile web. It currently builds as a Chrome WebExtension, a PWA and as an
-Electron desktop application. Headless mode in Node.js is implemented partially
-for tests. Head over to the [quickstart guide](https://ca11.io/developer/introduction)
+the code maintainable and easy to adapt. The CA11 softphone is primary targetting
+desktop and mobile web environments. It currently builds as a Chrome WebExtension,
+a PWA and as an Electron desktop application. Headless mode in Node.js is
+implemented partially for tests. Head over to the [developer quickstart](https://docs.ca11.io/developers/quickstart)
 to learn more about CA11. Please be aware of the [code of conduct](https://github.com/garage11/ca11/blob/develop/.github/CODE_OF_CONDUCT.md)
 and [contributing guide](https://github.com/garage11/ca11/blob/develop/.github/CONTRIBUTING.md) if you're interested in contributing.
 

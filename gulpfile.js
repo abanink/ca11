@@ -26,8 +26,6 @@ const build = gulp.series(misc.tasks.buildClean, function build(done) {
 })
 
 
-// The `assets-icons` task is a dependency of `code.tasks.vendorFg`,
-// because the icons JavaScript is included in the fg vendor file.
 gulp.task('assets', gulp.parallel(assets.tasks.files, assets.tasks.html, assets.tasks.templates))
 gulp.task('build', build)
 gulp.task('clean', misc.tasks.buildClean)
@@ -126,7 +124,5 @@ gulp.task('test-publish', gulp.series(
 ))
 
 gulp.task('test-unit', test.tasks.unit)
-
-
 // Add instructions to gulp tasks.
 helpers.helpProject()

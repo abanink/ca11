@@ -14,14 +14,11 @@
 .c-page {
     display: flex;
     flex-direction: column;
-    margin-bottom: var(--space-4);
-    max-width: $breakpoint-tablet;
 
     pre {
-        // background: none;
         margin: 0;
-        overflow: visible;
-        padding: $spacer;
+        max-width: 100%;
+        white-space: pre-line;
     }
 
     h1,

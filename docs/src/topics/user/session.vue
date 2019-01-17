@@ -1,20 +1,18 @@
 <component class="c-page">
     <h1>New Session</h1>
     <p>
-        CA11 stores your data stored locally on this computer unless indicated
-        otherwise. CA11 uses encrypted local <em>session</em> storage to persist
-        application state. This session is protected using the password
-        that you provide here. Contacts, activity history, SIP credentials
-        and settings; everything is stored in the session.
-    </p>
-    <p>
         When you open up CA11 for the first time<i class="instruction__ref">1</i>,
         you'll notice it will ask you for a Session Name and a Session Password.
         This is used solely to create and identify a local session on the
         computer that you're using.
     </p>
+    <p>
+        CA11 stores your data stored locally on this computer unless indicated
+        otherwise. CA11 uses encrypted local <em>session</em> storage to persist
+        application state. This session is protected using the password
+        that you provide here. Contacts, activity history, SIP credentials
+        and settings; everything is stored in the session.
 
-    <p class="instruction__note">
         The default behaviour for a session is <em>Remember Session</em>.
 
         This stores the local data encryption key along with the data, allowing

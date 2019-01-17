@@ -33,8 +33,9 @@ module.exports = function(settings) {
         const robotoPath = path.join(settings.NODE_DIR, 'roboto-fontface', 'fonts', 'roboto')
         return gulp.src(path.join(robotoPath, '{Roboto-Light.woff2,Roboto-Regular.woff2,Roboto-Medium.woff2}'))
             .pipe(flatten({newPath: './fonts'}))
+            .pipe(addsrc(path.join(settings.SRC_DIR, 'img', '{*.png,*.jpg}'), {base: settings.SRC_DIR}))
             .pipe(addsrc(path.join(settings.THEME_DIR, 'fonts', '*.woff2'), {base: settings.THEME_DIR}))
-            .pipe(addsrc(path.join(settings.THEME_DIR, 'img', '{*.icns,*.png,*.jpg,*.gif}'), {base: settings.THEME_DIR}))
+            .pipe(addsrc(path.join(settings.THEME_DIR, 'img', '{*.icns,*.png,*.jpg}'), {base: settings.THEME_DIR}))
             .pipe(addsrc(path.join(settings.THEME_DIR, 'audio', '**', '*'), {base: settings.THEME_DIR}))
             .pipe(ifElse(settings.BUILD_OPTIMIZED, imagemin))
             .pipe(ifElse(settings.BUILD_TARGET === 'electron', () => {
@@ -58,7 +59,7 @@ module.exports = function(settings) {
 
     tasks.icons = function assetsIcons(done) {
         // Use relative paths or vsvg will choke.
-        gulp.src(path.join(settings.SRC_DIR, 'svg', '*.svg'), {base: settings.SRC_DIR})
+        gulp.src(path.join(settings.ROOT_DIR, 'src', 'svg', '*.svg'), {base: path.join(settings.ROOT_DIR, 'src')})
             .pipe(addsrc(path.join(settings.THEME_DIR, 'svg', '*.svg'), {base: settings.THEME_DIR}))
             .pipe(svgo())
             .pipe(size(_extend({title: 'icons'}, settings.SIZE_OPTIONS)))
@@ -66,10 +67,12 @@ module.exports = function(settings) {
             .on('end', () => {
                 const iconSrc = path.join(settings.TEMP_DIR, settings.BRAND_TARGET, 'svg')
                 const iconBuildDir = path.join(settings.TEMP_DIR, settings.BRAND_TARGET, 'build')
-                const execCommand = `node_modules/vue-svgicon/dist/lib/index.js -s ${iconSrc} -t ${iconBuildDir}`
-                childExec(execCommand, undefined, (_err, stdout, stderr) => {
-                    if (stderr) logger.debug(stderr)
-                    if (stdout) logger.debug(stdout)
+                const svgCommand = path.join(settings.NODE_DIR, 'vue-svgicon', 'dist', 'lib', 'index.js')
+                const exec = `${svgCommand} -s ${iconSrc} -t ${iconBuildDir}`
+
+                childExec(exec, undefined, (_err, stdout, stderr) => {
+                    if (stderr) logger.warn(stderr)
+                    if (stdout) logger.warn(stdout)
                     done()
                 })
             })

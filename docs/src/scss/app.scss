@@ -4,5 +4,21 @@
 @import 'ca11/lib/defaults';
 
 
+:root {
+    --sidebar-width: 250px;
+}
+
+@media screen and (max-width: $breakpoint-desktop) {
+    :root {
+        --sidebar-width: 200px;
+    }
+}
+
+@media screen and (max-width: $breakpoint-mobile) {
+    :root {
+        --sidebar-width: #{$spacer * 5};
+    }
+}
+
 @import './elements/illustration';
 @import './elements/instruction';
