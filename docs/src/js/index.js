@@ -47,7 +47,7 @@ class AppDocs extends App {
 
         this.router.addRoutes([{
             component: this.components.Welcome,
-            name: 'view_welcome',
+            name: 'welcome',
             path: '/',
         }])
 

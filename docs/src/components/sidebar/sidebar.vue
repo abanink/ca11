@@ -9,26 +9,37 @@
         <div class="header__version">{{version.current}}</div>
 
         <div class="header__description">
-            WebRTC Softphone<br/>
-            D-Telephone Network<br/>
+            Decentralized<br/>WebRTC Phone Network
         </div>
     </header>
     <nav class="navigation">
-        <div class="navigation__header"><icon name="user"/><span>CA11 for Users</span></div>
-
-        <router-link
-            v-for="(topic, name) in topics.user"
-            class="button navigation__button"
-            :to="{name: 'view_user_topic', params: {topic_id: topic.name}}"
-        ><icon :name="topic.icon"/><span>{{topic.title}}</span></router-link>
-
-        <div class="navigation__header">
-            <icon name="developer"/><span>CA11 for Developers</span>
+        <div class="l-accordion navigation__user">
+            <input id="accordion-1" name="accordion" type="radio" :checked="isSection('users')"/>
+            <label class="navigation__header" for="accordion-1">
+                <icon name="user"/><span>CA11 for Users</span>
+            </label>
+            <section class="accordion">
+                <router-link
+                    v-for="(topic, name) in topics.user"
+                    class="button navigation__button"
+                    :to="{name: 'users', params: {topic_id: topic.name}}"
+                ><icon :name="topic.icon"/><span>{{topic.title}}</span></router-link>
+            </section>
         </div>
-        <router-link
-            class="button navigation__button"
-            :to="{name: 'view_developer_topic', params: {topic_id: topic.name}}"
-            v-for="(topic, name) in topics.developer"
-        ><icon :name="topic.icon"/><span>{{topic.title}}</span></router-link>
+
+        <div class="l-accordion navigation__developer">
+            <input id="accordion-2" name="accordion" type="radio" :checked="isSection('developers')"/>
+            <label class="navigation__header" for="accordion-2">
+                <icon name="developer"/><span>CA11 for Developers</span>
+            </label>
+
+            <section class="accordion">
+                <router-link
+                    class="button navigation__button"
+                    :to="{name: 'developers', params: {topic_id: topic.name}}"
+                    v-for="(topic, name) in topics.developer"
+                ><icon :name="topic.icon"/><span>{{topic.title}}</span></router-link>
+            </section>
+        </div>
     </nav>
 </component>

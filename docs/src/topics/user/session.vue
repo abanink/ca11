@@ -1,24 +1,14 @@
 <component class="c-page">
-    <h1>New Session</h1>
+    <h1>Start Session</h1>
     <p>
-        When you open up CA11 for the first time<i class="instruction__ref">1</i>,
-        you'll notice it will ask you for a Session Name and a Session Password.
-        This is used solely to create and identify a local session on the
-        computer that you're using.
-    </p>
-    <p>
-        CA11 stores your data stored locally on this computer unless indicated
-        otherwise. CA11 uses encrypted local <em>session</em> storage to persist
-        application state. This session is protected using the password
-        that you provide here. Contacts, activity history, SIP credentials
-        and settings; everything is stored in the session.
+        When you start CA11<i class="instruction__ref">1</i>, you'll notice it asks
+        for a <em>Session Name</em> and a <em>Session Password</em>.
+        This is to store a local <em>session</em> on your computer, which is used
+        to keep your data local on your computer.
 
-        The default behaviour for a session is <em>Remember Session</em>.
-
-        This stores the local data encryption key along with the data, allowing
-        auto-login without a password. This key is removed when you quit CA11
-        with the quit button. You can optionally disable auto unlock to force
-        a password unlock action after a restart of the browser.
+        CA11 applies encryption on the stored <em>session</em>. Nobody without
+        the password provided here, can read your data. Contacts, activity history,
+        SIP credentials and settings; everything is stored in the encrypted session.
     </p>
 
     <ol class="instructions steps">
@@ -45,6 +35,15 @@
             </div>
         </li>
     </ol>
+
+    <p>
+        The default behaviour for a session is <em>Auto-unlock</em>.
+        This means that the key to decrypt your data is stored <em>with</em> the
+        data, so you don't have to unlock your session after a browser
+        restart. You can close the CA11 session manually, by logging out.
+        This removes the key and requires you to enter the password again
+        on next login.
+    </p>
 
     <p class="instruction__warn">
         Be aware that removing a session implies removing all of

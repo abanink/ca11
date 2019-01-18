@@ -1,10 +1,12 @@
 <component class="c-page">
-    <h1>In-call Features</h1>
+    <h1>Call Options</h1>
 
     <p>
         CA11 has several features to control an ongoing call. Please note
-        that these features were initially developed for the SIP softphone and
-        that it will take some time to port these to SIG11 calls.
+        that not all features are available for each protocol. Each feature
+        has a tag next to it, indicating which protocols it supports. At this moment,
+        a lot of SIG11 functionality is being implemented, while SIP features were
+        already in-place. This will change pretty soon though, so bear with us!
     </p>
 
     <h2>IVR [SIP]</h2>
@@ -47,7 +49,7 @@
         Charlie is still on the phone with Bob; who just solved Charlie's
         financial perils. Besides, Charlie also has complaints about a
         malfunctioning internet router, that he leases from Acme Corporation.
-        <img class="illustration right" src="/screens/bob-transfers-alice-to-charlie-attended.png"/>
+        <img class="illustration right shadow" src="/screens/bob-transfers-alice-to-charlie-attended.png"/>
         <br/><br/>
 
         Bob explains that he can transfer Charlie to the technical support

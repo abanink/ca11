@@ -94,7 +94,7 @@
     >
 
         <div v-for="session in app.session.available" class="session">
-            <i class="icon-session" @click="selectSession(session)"><icon name="contact"/></i>
+            <i class="icon-session" @click="selectSession(session)"><icon name="session"/></i>
             <div class="description" @click="selectSession(session)">{{session}}</div>
             <i class="icon-remove status-indicator tooltip tooltip-left" :data-tooltip="$t('remove session')" @click="removeSession(session)">
                 <icon name="delete"/>
@@ -103,7 +103,7 @@
 
         <div class="session new-session" @click="newSession()">
             <i class="icon-session">
-                <icon class="icon-session" name="contact-add"/>
+                <icon class="icon-session" name="session"/>
             </i>
             <div class="description cf">
                 {{$t('new session')}}
@@ -113,7 +113,7 @@
 
     <footer>
         <div class="help-message cf" @click="openTab(vendor.support.website)">
-            {{$t('what is {name}', {name: app.name})}}?<br/>
+            {{$t('learn more about {name}', {name: app.name})}}<br/>
         </div>
     </footer>
 </section>

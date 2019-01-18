@@ -15,38 +15,38 @@
     gulp develop
 
 
-# WebRTC Softphone
-CA11 is an open WebRTC softphone developed by [Garage11](https://garage11.tech).
-It could be described as a hybrid softphone with an aim for maximum reach. It's maximizing
-reach by wiring the ecosystems of VoIP and Web together. CA11 can be used with
-modern WebRTC-compatible VoIP backends like Asterisk and Freeswitch using the
-[SIP-WSS](https://tools.ietf.org/html/rfc7118) protocol.
+# WebRTC Phone
+CA11 is a free WebRTC softphone that enables people to receive and make
+peer-to-peer calls, video calls and screen sharing sessions. CA11 is being developed by [Garage11](https://garage11.tech), and could be described as a hybrid softphone with an aim for maximum reach. This is done by wiring the ecosystems of VoIP and
+WebRTC together; combining the best of both worlds. CA11 can be used with modern WebRTC-compatible PBX software like Asterisk and Freeswitch over the [SIP-WSS](https://tools.ietf.org/html/rfc7118) protocol.
 
-CA11 is of interest to VoIP-providers that would like to integrate WebRTC in their
-VoIP stack, without having to invest heavily in development cost for yet another
-proprietary WebRTC softphone. CA11 can easily be adapted to a custom brand
-and extended with the use of plugins. The CA11 softphone is also useful for
-industries like Call centers, CRM vendors, Telehealth professionals and
-businesses that rely on remote work and collaboration. Feel free to contact [Garage11](mailto:info@garage11.tech) for more information.
+CA11 is interesting for VoIP-providers that like to integrate WebRTC in their
+VoIP stack, without having to invest heavily in development costs to build yet
+another proprietary WebRTC softphone solution. CA11 can easily be adapted to a
+custom brand and extended through the use of plugins. CA11's premise of free,
+privacy-friendly calling targets the internet community as a whole, but could
+also be an interesting solution for industries like Call centers, CRM vendors, Telehealth professionals and other businesses that rely on remote work and collaboration. Feel free to contact [Garage11](mailto:info@garage11.tech)
+for more information.
 
 
-# D-Telephone Network
-CA11 is driven by the conviction that communication technology should
-enforce privacy, while being simple, open, free and enjoyable to use.
+# Decentralized Phone Network
+CA11 is developed from the conviction that communication technology should
+enforce privacy, while remaining simple, open, free and enjoyable to use.
 VoIP is an amazing technology with a lot of benefits, but its centralized
-media flow makes it costly to scale and a target for government
-regulation and monitoring. The SIP protocol itself is also quite
-complicated for the majority of WebRTC applications.
+media flow makes it costly to scale and a target for government regulation
+and monitoring. The SIP protocol itself is also quite complicated for the
+majority of WebRTC applications.
 
-The bread-and-butter of WebRTC - p2p media streams and ICE negotation can
-just as well be handled by a simple signalling mechanism. *SIG11* is a simple
-protocol that features public key encryption between nodes, and a network of
-signalling super-nodes that relay encrypted messages between peer candidates.
-Peers on the network can call each other by calling the other's public key.
-A public key can be bound to a simpler identifier, like a phone number,
-but a phone number is assigned by the peer itself. Identity trust is
-established by storing the public key on urls that only the trusted
-user has access to.
+The essence of WebRTC, P2P media streams and ICE negotation, can
+better be handled by a simpler signalling mechanism. *SIG11* is
+an overlay network with public key encryption between nodes. Peers
+on the network call each other by their public key. Because a
+public key is hard to remember, a public key can be also be linked
+to a simpler identifier, like a phone number. There is no central
+authority that assigns these numbers. Instead, a peer assigns its
+own number. Identity trust is established by a peer showing that its
+public key is stored on domains that are known to be controlled by
+the expected user.
 
 # Development
 CA11 is written in an environment-agnostic JavaScript codebase that applies a simple

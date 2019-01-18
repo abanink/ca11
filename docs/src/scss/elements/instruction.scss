@@ -44,14 +44,15 @@
             flex: 0 0 75px;
 
             img {
-                border: 1px solid var(--grey-200);
-                box-shadow: 0 0 $spacer rgba(palette('grey', 400), 0.8);
+                border: 1px solid var(--grey-50);
+                box-shadow: 0 0 $spacer-05 rgba(palette('grey', 400), 0.8);
                 position: relative;
                 transition: all 0.5s ease-in-out;
                 width: 75px;
                 z-index: 100000000;
 
                 &:hover {
+                    cursor: zoom-in;
                     transform: scale(3);
                     z-index: 100000001;
                 }

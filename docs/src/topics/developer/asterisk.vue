@@ -1,5 +1,5 @@
 <component class="c-page">
-    <h1>SIP Backend</h1>
+    <h1>Asterisk PBX</h1>
     <p>
         CA11's SIP integration is developed and tested with Asterisk 16, which
         supports SFU video conferencing and WebRTC. Compiling and setup

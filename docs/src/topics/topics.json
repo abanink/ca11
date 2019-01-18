@@ -4,15 +4,15 @@
             {"icon": "star", "name": "quickstart", "title": "Quickstart"},
             {"icon": "share", "name": "platforms", "title": "Platforms"},
             {"icon": "edit", "name": "customize", "title": "Customizing"},
-            {"icon": "protocol-sip", "name": "asterisk", "title": "SIP Backend"}
+            {"icon": "protocol-sip", "name": "asterisk", "title": "Asterisk PBX"}
         ],
         "user": [
             {"icon": "requirements", "name": "requirements", "title": "Requirements"},
-            {"icon": "contact", "name": "session", "title": "New Session"},
+            {"icon": "session", "name": "session", "title": "Start Session"},
             {"icon": "sim-card", "name": "setup", "title": "Initial Setup"},
-            {"icon": "protocol-sig11", "name": "sig11-call", "title": "SIG11 Calls"},
-            {"icon": "protocol-sip", "name": "sip-call", "title": "SIP Calls"},
-            {"icon": "phone", "name": "call-features", "title": "In-call Features"}
+            {"icon": "protocol-sig11", "name": "sig11-call", "title": "SIG11 Call"},
+            {"icon": "protocol-sip", "name": "sip-call", "title": "SIP Call"},
+            {"icon": "phone", "name": "call-features", "title": "Call Options"}
         ]
     }
 }

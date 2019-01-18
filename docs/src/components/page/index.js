@@ -4,9 +4,10 @@ module.exports = (app) => {
         computed: {
             page: function() {
                 let topic
-                if (this.$route.name === 'view_developer_topic') {
+
+                if (this.$route.name === 'developers') {
                     topic = this.topics.developer.find((i) => i.name === this.$route.params.topic_id)
-                } else if (this.$route.name === 'view_user_topic') {
+                } else if (this.$route.name === 'users') {
                     topic = this.topics.user.find((i) => i.name === this.$route.params.topic_id)
                 }
 

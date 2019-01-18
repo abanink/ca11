@@ -2,18 +2,19 @@
     <h1>Requirements</h1>
     <h2>Platform</h2>
     <p>
+         <img class="illustration right" src="/img/illustration-2.jpg"/>
         CA11 is a flexible web-based softphone and runs in
         multiple environments. <a href="https://ca11.io">CA11 PWA</a>
-        is at this point the most promising direction and is the advised
-        way to use CA11. It covers the broadest amount of platforms,
-        and doesn't have to deal with vendor store distribution politics.
-        CA11 PWA can be installed on ChromeOS, Android, Linux, Windows and OSX.
-        CA11 Electron and CA11 WebExtension are at this point unsupported.
+        is at this point the most promising direction, because it covers
+        the broadest amount of platforms, and doesn't have to deal with
+        vendor store distribution politics. CA11 PWA can be installed on
+        ChromeOS, Android, Linux, Windows and OSX. CA11 Electron and
+        CA11 WebExtension are at this point unsupported.
     </p>
 
     <h2>Earbuds/Headset</h2>
     <p>
-        <img class="illustration" src="/screens/alice-wizard-devices.png"/>
+        <img class="illustration right shadow" src="/screens/alice-wizard-devices.png"/>
         Audio-only calls only require a microphone. Most audio problems are
         caused by incorrect audio settings and bad microphone quality.
         The microphone on your laptop or webcam may sound to your caller,
