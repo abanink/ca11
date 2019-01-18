@@ -97,7 +97,7 @@
             <FieldCheckbox
                 v-model="calls.sig11.toggled"
                 name="sig11_enabled"
-                :help="$t('secure, privacy-friendly calling on decentralized network SIG11.')"
+                :help="$t('free, privacy-friendly calling on SIG11 network.')"
                 :label="`SIG11 ${$t('network')} (${$t('decentralized')})`"
             />
 
@@ -106,8 +106,8 @@
                 v-model="calls.sig11.endpoint"
                 name="sig11_endpoint"
                 placeholder="e.g. sig11.websocket.tld"
-                :help="`SIG11 ${$t('websocket node used for signalling.')}`"
-                :label="$t('signalling node')"
+                help="SIG11 WebSocket Service"
+                :label="`SIG11 ${$t('domain')}`"
                 :validation="$v.calls.sig11.endpoint"
             />
 
@@ -128,7 +128,7 @@
                 v-model="calls.sip.toggled"
                 elementclass="t-cb-sip-toggled"
                 name="sip_enabled"
-                :help="$t('monitored calling with a VoIP provider subscription.')"
+                :help="$t('calling on SIP network with a VoIP provider subscription.')"
                 :label="`SIP ${$t('network')} (${$t('centralized')})`"
             />
 
@@ -138,8 +138,8 @@
                 elementclass="t-txt-sip-endpoint"
                 name="sip_endpoint"
                 placeholder="e.g. sip.websocket.tld"
-                :label="`SIP ${$t('domain')} (WSS)`"
-                help="SIP WebSockets Secure service"
+                :label="`SIP-WSS ${$t('domain')}`"
+                help="SIP WebSocket Service"
                 :validation="$v.calls.sip.endpoint"
             />
 

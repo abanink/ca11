@@ -45,6 +45,12 @@
         #{$self}__action {
             padding-right: var(--gutter12);
 
+            &.active {
+                svg {
+                    fill: var(--primary-base);
+                }
+            }
+
             svg {
                 @include icon-size(var(--icon-normal));
             }

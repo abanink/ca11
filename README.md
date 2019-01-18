@@ -1,9 +1,10 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![CircleCI](https://circleci.com/gh/garage11/ca11/tree/develop.svg?style=svg)](https://circleci.com/gh/garage11/ca11/tree/develop)
 
-**Learn more**
+
+**Resources**
+* [CA11 PWA](https://ca11.io/)
 * [CA11 Documentation](https://docs.ca11.io)
-* [CA11 Softphone](https://ca11.io/)
 
 
 **Install**
@@ -29,7 +30,7 @@ also be an interesting solution for industries like Call centers, CRM vendors, T
 for more information.
 
 
-# Decentralized Phone Network
+# Decentralized Network
 CA11 is developed from the conviction that communication technology should
 enforce privacy, while remaining simple, open, free and enjoyable to use.
 VoIP is an amazing technology with a lot of benefits, but its centralized
