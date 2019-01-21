@@ -133,9 +133,9 @@ class CallSIP extends Call {
             id: remoteStreamId,
             kind: e.track.kind,
             local: false,
-            muted: true,
+            muted: false,
+            ready: false,
             selected: false,
-            visible: false,
         }
 
         const path = `calls.calls.${this.id}.streams.${remoteStreamId}`
@@ -159,6 +159,10 @@ class CallSIP extends Call {
             this.streams[remoteStreamId] = new MediaStream()
             this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
             this.streams[remoteStreamId].addTrack(e.track)
+
+            // ALL remote tracks share one audio track. Add the audio track
+            // to all, which makes recording possible.
+            this.streams[remoteStreamId].addTrack(this.streams[this.audioStreamId].getAudioTracks()[0])
             stream.audio = this.audioStreamId
 
             this.app.setState(stream, {path})

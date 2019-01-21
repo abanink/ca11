@@ -49,6 +49,8 @@ module.exports = function(settings) {
 
     helpers.serveHttp = function({reload = true, mounts = [], port = 3000} = {}) {
         const app = connect()
+        // Served so Puppeteer is able to retrieve all necessary
+        // assets to run the functional tests.
         app.use(serveStatic(settings.BUILD_DIR))
         app.use((req, res, next) => {
             return fs.createReadStream(path.join(settings.BUILD_DIR, 'index.html')).pipe(res)

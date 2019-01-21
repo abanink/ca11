@@ -1,14 +1,18 @@
 module.exports = (app) => {
-    // let intervalId
+    let recorder, recorderData, types
+    // Android crashes at the moment on getDisplayMedia.
+    if (app.env.isAndroid) types = ['audio', 'video']
+    else types = ['audio', 'video', 'display']
+
     /**
     * @memberof fg.components
     */
     const MediaStream = {
-        // beforeDestroy: function() {
-        //     if (intervalId) clearInterval()
-
-        //     console.log("DESTROY:", intervalId)
-        // },
+        data: function() {
+            return {
+                recording: false,
+            }
+        },
         methods: {
             classes: function(block) {
                 const classes = {
@@ -16,43 +20,90 @@ module.exports = (app) => {
                     selected: this.stream.selected,
                 }
 
-                classes[`t-btn-media-stream-${this.stream.kind}`] = true
+                classes['no-progress'] = (!this.progress && !this.stream.ready)
+
+                if (this.stream.ready) classes[`t-btn-media-stream-${this.stream.kind}`] = true
                 return classes
             },
-            toggleSelect: function() {
-                this.stream.selected = !this.stream.selected
+            switchStream: function() {
+                // Step through streamTypes.
+                const nextStreamType = types[(types.indexOf(this.stream.kind) + 1) % types.length]
+                // Maintain selected state between streams.
+                app.media.query(nextStreamType, {selected: this.stream.selected})
+            },
+            toggleFullscreen: function() {
+                const mediaElement = this.$refs[this.stream.kind]
+                mediaElement.requestFullscreen({navigationUI: 'hide'})
+            },
+            toggleRecord: function() {
+                if (!this.recording) {
+                    this.recording = true
+                    recorder = new MediaRecorder(app.media.streams[this.stream.id])
+                    recorderData = []
+                    recorder.ondataavailable = (event) => {
+                        recorderData.push(event.data)
+                    }
+
+                    recorder.onstop = function(e) {
+                        let recordedBlob = new Blob(recorderData)
+                        var audioURL = URL.createObjectURL(recordedBlob)
+                        var link = document.createElement('a')
+                        link.setAttribute('href', audioURL)
+                        link.setAttribute('download', 'recording.webm')
+                        document.body.appendChild(link)
+                        link.click()
+                        document.body.removeChild(link)
+                    }
+                    recorder.start()
+                } else {
+                    recorder.stop()
+                    this.recording = false
+                }
+
             },
         },
         mounted: function() {
-            // if (['display', 'video'].includes(this.stream.kind)) {
-            //     this.$refs[this.stream.kind].display = 'none'
+            if (this.stream.id) {
+                Vue.nextTick(() => {
+                    const mediaElement = this.$refs[this.stream.kind]
+                    mediaElement.srcObject = app.media.streams[this.stream.id]
 
-            //     // A remote video is only visible when it started playing.
-            //     // This is mainly to hide Asterisk's ghost video track.
-            //     if (!this.stream.local && this.stream.kind === 'video') {
-            //         intervalId = setInterval(() => {
-            //             if (this.stream.kind !== 'audio') {
-            //                 if (this.$refs[this.stream.kind].videoWidth < 10) {
-            //                     this.stream.visible = false
-            //                 } else {
-            //                     this.stream.visible = true
-            //                     clearInterval(intervalId)
-            //                 }
-            //             }
+                    if (this.stream.muted) mediaElement.muted = true
 
-            //         }, 250)
-            //     }
-            // }
-
-            this.$refs[this.stream.kind].srcObject = app.media.streams[this.stream.id]
-            this.stream.visible = true
+                    mediaElement.addEventListener('loadeddata', () => {
+                        this.stream.ready = true
+                    })
+                })
+            }
         },
-        props: ['stream'],
+        props: {
+            controls: {
+                default: true,
+                type: Boolean,
+            },
+            progress: {
+                default: true,
+                type: Boolean,
+            },
+            stream: {
+                default: null,
+                type: Object,
+            },
+        },
         render: templates.media_stream.r,
         staticRenderFns: templates.media_stream.s,
         watch: {
             'stream.id': function(streamId) {
-                this.$refs[this.stream.kind].srcObject = app.media.streams[streamId]
+                Vue.nextTick(() => {
+                    const mediaElement = this.$refs[this.stream.kind]
+                    mediaElement.srcObject = app.media.streams[streamId]
+                    if (this.stream.muted) mediaElement.muted = true
+
+                    mediaElement.addEventListener('loadeddata', () => {
+                        this.stream.ready = true
+                    })
+                })
+
             },
         },
     }

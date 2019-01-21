@@ -18,13 +18,14 @@
         position: relative;
 
         input {
-            @include no-outline;
+
             border: 0;
             border-bottom: var(--border) solid var(--grey-100);
             color: var(--primary-base);
             font-size: var(--text-huge);
             font-weight: 600;
             height: $spacer * 6;
+            outline: none;
             overflow: hidden;
             padding: 0 $spacer * 4;
             text-align: center;
@@ -105,7 +106,6 @@
             width: 100%;
 
             #{$self}__key {
-                @include no-outline;
                 background: none;
                 border: 0;
                 break-inside: avoid;
@@ -115,6 +115,7 @@
                 font-weight: 600;
                 height: 80px;
                 margin: 0;
+                outline: none;
                 width: 100%;
 
                 &:hover {

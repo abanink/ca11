@@ -1,7 +1,8 @@
-<section component class="media-view" :class="classes('component')">
+<section component class="c-media-view" :class="classes('component')">
     <!-- remote streams -->
     <MediaStream :stream="stream" v-for="stream of selectedStreams"/>
 
+    <!-- call information/placeholder -->
     <div
         v-if="!stream[stream.type].selected && !selectedStreams.length"
         class="media-stream media-stream__placeholder"

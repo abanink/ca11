@@ -1,43 +1,20 @@
-// Prevent firefox from showing the cursor: text for normal elements like divs etc.
-@mixin no-select {
-    user-select: none;
-}
+@mixin glow($name, $color) {
+    @keyframes #{$name} {
+        0% {
+            fill: $color;
+            filter: drop-shadow(0 0 1px $color);
+        }
 
-@mixin no-outline {
-    outline: none;
-}
+        75% {
+            fill: $color;
+            filter: drop-shadow(0 0 3px $color);
+        }
 
-
-// Source: http://joshbroton.com/quick-fix-sass-mixins-for-css-keyframe-animations/
-@mixin animation($animate...) {
-    $max: length($animate);
-    $animations: '';
-
-    @for $i from 1 through $max {
-        $animations: #{$animations + nth($animate, $i)};
-
-        @if $i < $max {
-            $animations: #{$animations + ', '};
+        100% {
+            fill: $color;
+            filter: drop-shadow(0 0 1px $color);
         }
     }
-    animation: $animations;
-}
-
-// Source: http://joshbroton.com/quick-fix-sass-mixins-for-css-keyframe-animations/
-@mixin keyframes($animation-name) {
-    @keyframes #{$animation-name} {
-        @content;
-    }
-}
-
-@mixin bullet($color) {
-    background: $color;
-    border-radius: 100%;
-    content: '';
-    display: inline-block;
-    height: $spacer;
-    margin-right: 5px;
-    width: $spacer;
 }
 
 @mixin icon-size($size) {
@@ -45,10 +22,3 @@
     width: $size;
 }
 
-@mixin item-slider-activate {
-    .item-slider {
-        animation: slide 0.15s ease-in-out;
-        animation-play-state: running;
-        height: 100%;
-    }
-}

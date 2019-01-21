@@ -1,43 +1,5 @@
 @import 'variables';
 
-@keyframes glowing {
-    0% {
-        fill: var(--primary-base);
-        filter: drop-shadow(0 0 1px var(--primary-base));
-    }
-
-    75% {
-        fill: var(--primary-base);
-        filter: drop-shadow(0 0 3px var(--primary-base));
-    }
-
-    100% {
-        fill: var(--primary-base);
-        filter: drop-shadow(0 0 1px var(--primary-base));
-    }
-}
-
-
-@keyframes slide {
-    0% {
-        max-height: 0;
-    }
-
-    100% {
-        max-height: 100%;
-    }
-}
-
-@keyframes slide-out {
-    0% {
-        max-height: 100%;
-    }
-
-    100% {
-        max-height: 0%;
-    }
-}
-
 @keyframes spin {
     100% {
         transform: rotate(360deg);

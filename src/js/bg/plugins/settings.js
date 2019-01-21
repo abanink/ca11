@@ -60,24 +60,27 @@ class PluginSettings extends Plugin {
                         audio: {
                             id: null,
                             kind: 'audio',
+                            local: true,
                             muted: false,
+                            ready: false,
                             selected: false,
-                            visible: true,
                         },
                         display: {
                             id: null,
                             kind: 'display',
+                            local: true,
                             muted: false,
+                            ready: false,
                             selected: false,
-                            visible: true,
                         },
                         type: 'video', // Switch between audio, display and video stream.
                         video: {
                             id: null,
                             kind: 'video',
+                            local: true,
                             muted: false,
+                            ready: false,
                             selected: false,
-                            visible: true,
                         },
                     },
                     type: {

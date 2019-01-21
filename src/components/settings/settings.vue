@@ -128,7 +128,7 @@
                 v-model="calls.sip.toggled"
                 elementclass="t-cb-sip-toggled"
                 name="sip_enabled"
-                :help="$t('calling on SIP network with a VoIP provider subscription.')"
+                :help="$t('calling on SIP network using a VoIP provider.')"
                 :label="`SIP ${$t('network')} (${$t('centralized')})`"
             />
 

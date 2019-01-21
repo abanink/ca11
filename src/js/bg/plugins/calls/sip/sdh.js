@@ -84,24 +84,11 @@ SessionDescriptionHandler.prototype = Object.create(SIP.SessionDescriptionHandle
                 if (constraints.audio || constraints.video) {
                     // Instead of acquiring media here, we
                     // pass the already acquired stream from
-                    // the app.
+                    // CA11.
                     const app = this.observer.app
                     const streamState = app.state.settings.webrtc.media.stream
                     const localStreamId = streamState[streamState.type].id
                     resolve(app.media.streams[localStreamId])
-                    // this.observer.app.state.s
-                    // this.observer.app.media.streams
-                    // console.log("GET USER MEDIA!!!!!!!!", )
-                    // this.WebRTC.getUserMedia(constraints)
-                    //     .then(function(streams) {
-                    //         console.log("STREAMS:", streams)
-                    //         this.observer.trackAdded()
-                    //         this.emit('userMedia', streams)
-                    //         resolve(streams)
-                    //     }.bind(this)).catch(function(e) {
-                    //         this.emit('userMediaFailed', e)
-                    //         reject(e)
-                    //     }.bind(this))
                 } else {
                     // Local streams were explicitly excluded.
                     resolve([])

@@ -42,11 +42,10 @@
             }
         }
 
+        &:hover,
         &.active {
             border-bottom: var(--border) solid var(--primary-base);
-        }
-
-        &:hover {
+            color: var(--primary-base);
             cursor: pointer;
         }
     }

@@ -18,9 +18,17 @@
     </header>
     <CallMediaPreview v-else-if="callActive.id" :call="callActive"/>
 
-    <!-- calling disabled -->
     <main class="main">
-        <div v-if="callingDisabled" class="call-disabled">
+
+
+        <Call v-if="callActive.id" :call="callActive"/>
+        <MediaStream
+            v-else-if="stream[stream.type].selected"
+            class="local-stream-preview"
+            :stream="stream[stream.type]"
+        />
+        <!-- calling disabled -->
+        <div v-else-if="callingDisabled" class="call-disabled">
             <icon class="disabled-icon" name="phone"/>
             <div class="disabled-text">
                 <span class="cf">{{$t('service unavailable.')}}</span><br/>
@@ -34,8 +42,6 @@
                 </ul>
             </div>
         </div>
-
-        <Call v-else-if="callActive.id" :call="callActive"/>
         <!-- starting without any active call -->
         <Keypad
             v-else

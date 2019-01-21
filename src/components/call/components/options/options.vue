@@ -22,7 +22,9 @@
         @click="callTerminate(call)"
     ><icon name="call-end"/></button>
 
-    <button v-if="call.id"
+    <template v-if="call.id && call.status === 'accepted'">
+
+    <button
         class="c-options__option button tooltip tooltip-left"
         :class="classes('dialpad-button')"
         :data-tooltip="$t('toggle keypad')"
@@ -30,7 +32,7 @@
         @click="keypadToggle"
     ><icon name="dialpad"/></button>
 
-    <button v-if="call.id"
+    <button
         class="c-options__option button tooltip tooltip-left"
         :class="classes('hold-button')"
         :data-tooltip="$t('toggle on-hold')"
@@ -39,7 +41,7 @@
     ><icon name="pause"/></button>
 
     <button
-        v-if="call.id && call.transfer.type !== 'accept'"
+        v-if="call.transfer.type !== 'accept'"
         class="c-options__option t-btn-options-transfer-toggle button tooltip tooltip-left"
         :class="classes('transfer-button')"
         :data-tooltip="$t('toggle transfer')"
@@ -48,11 +50,12 @@
     ><icon name="transfer"/></button>
 
     <button
-        v-else-if="call.id"
-        class="c-options__option t-btn-options-transfer-finalize button tooltip tooltip-left hint"
+        v-else
+        class="c-options__option t-btn-options-transfer-finalize button tooltip tooltip-left"
         :data-tooltip="$t('finalize transfer')"
         :disabled="call.status !== 'accepted'"
         @click="transferFinalize"
     ><icon name="merge"/></button>
+    </template>
 
 </component>

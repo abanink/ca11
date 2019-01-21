@@ -187,24 +187,17 @@ class Media {
             this.app.apps.bg.media.streams = this.streams
         }
 
-        // The local stream is not part of a particular call.
-        // That is why it is kept apart from the other streams.
-        const media = {
+        this.app.setState({settings: {webrtc: {media: {
             permission: true,
             stream: {
                 type,
-                [type]: {
-                    muted: true,
-                    selected: false,
-                    visible: true,
-                },
             },
-        }
-
-        this.app.setState({settings: {webrtc: {media}}}, {persist: true})
+        }}}}, {persist: true})
         // (!) The stream id is never persisted; there is stream
         // initialization logic that relies on the absence of the id.
-        this.app.setState({settings: {webrtc: {media: {stream: {[type]: {id: stream.id}}}}}})
+        this.app.setState({settings: {webrtc: {media: {
+            stream: {[type]: {id: stream.id, muted: true}},
+        }}}})
         return stream
     }
 

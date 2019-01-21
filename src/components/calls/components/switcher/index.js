@@ -6,7 +6,10 @@ module.exports = (app) => {
         computed: app.helpers.sharedComputed(),
         methods: Object.assign({
             activateCall: function(call) {
-                app.setState({ui: {layer: 'calls'}})
+                app.setState({settings: {webrtc: {media: {stream: {
+                    [this.stream.type]: {selected: false},
+                }}}}, ui: {layer: 'calls'}}, {persist: true})
+
                 if (call) {
                     app.emit('bg:calls:call_activate', {
                         callId: call.id,
@@ -64,6 +67,7 @@ module.exports = (app) => {
         store: {
             calls: 'calls.calls',
             description: 'calls.description',
+            stream: 'settings.webrtc.media.stream',
             ui: 'ui',
             user: 'user',
         },

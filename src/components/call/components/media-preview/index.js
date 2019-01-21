@@ -16,6 +16,9 @@ module.exports = (app) => {
                 }
                 return classes
             },
+            toggleSelect: function(stream) {
+                stream.selected = !stream.selected
+            },
         },
         mounted: function() {
             // Start with a selected local stream.

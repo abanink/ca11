@@ -1,16 +1,5 @@
 @import 'ca11/lib/variables';
 
-@mixin instruction-zoom() {
-    animation: tooltip-#{$direction} 1s ease-in both;
-
-    @keyframes tooltip-#{$direction} {
-        0% {opacity: 0;}
-        50% {opacity: 100;}
-        100% {opacity: 0;}
-    }
-}
-
-
 .c-page {
     display: flex;
     flex-direction: column;

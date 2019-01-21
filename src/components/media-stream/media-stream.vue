@@ -3,25 +3,39 @@
     component
     class="media-stream"
     :class="classes()"
-    @click="toggleSelect"
+    @click="$emit('click', $event)"
 >
-
-    <slot name="single-action"></slot>
     <icon class="media-stream-icon" :name="stream.kind"/>
-    <audio :class="{hidden: !(stream.kind === 'audio')}"
+
+    <div v-if="!stream.ready" class="content">
+        <icon name="spinner" class="spinner media-stream__loading" />
+    </div>
+
+    <audio
+        v-if="stream.id && stream.kind === 'audio'"
         autoplay="true"
-        :muted="stream.muted || stream.kind !== 'audio'"
+        muted="true"
         ref="audio"
     />
-    <video :class="{hidden: stream.kind !== 'video'}"
+
+    <video
+        v-else-if="stream.id && stream.kind === 'video'"
         autoplay="true"
         :muted="stream.muted || stream.kind !== 'video'"
         ref="video"
     />
-    <video :class="{hidden: stream.kind !== 'display'}"
+
+    <video
+        v-else-if="stream.id && stream.kind === 'display'"
         autoplay="true"
         :muted="stream.muted || stream.kind !== 'display'"
         ref="display"
     />
+
+    <div v-if="stream.ready && controls" class="media-stream__controls">
+        <icon name="fullscreen" @click.stop="toggleFullscreen()"/>
+        <icon name="record-rec" :class="{active: recording}" @click.stop="toggleRecord()"/>
+        <icon v-if="stream.local" :name="stream.kind" @click.stop="switchStream()"/>
+    </div>
 </article>
 </transition>

@@ -27,7 +27,7 @@ module.exports = {
     'callee is busy': 'ontvanger bezet',
     'callee is unavailable': 'ontvanger niet beschikbaar',
     'calling': 'bellen',
-    'calling on SIP network with a VoIP provider subscription.': 'bellen via SIP netwerk met een VoIP provider abonnement.',
+    'calling on SIP network using a VoIP provider.': 'bellen via SIP netwerk van een VoIP provider.',
     'cancel': 'afbreken',
     'centralized': 'gecentralizeerd',
     'change session': 'andere sessie',

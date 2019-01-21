@@ -12,7 +12,7 @@
 
         <button
             class="button call placeholder tooltip tooltip-left"
-            :class="{active: callActive.status === 'new' && ui.layer === 'calls'}"
+            :class="{active: callActive.status === 'new' && ui.layer === 'calls', hint: 'true'}"
             :data-tooltip="$t('add new call')"
             @click="activateCall()"
         >

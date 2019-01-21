@@ -30,6 +30,7 @@ module.exports = (app) => {
             description: 'calls.description',
             sig11: 'calls.sig11',
             sip: 'calls.sip',
+            stream: 'settings.webrtc.media.stream',
             ui: 'ui',
         },
     }

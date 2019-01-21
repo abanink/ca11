@@ -2,7 +2,7 @@
 @import 'ca11/lib/variables';
 
 
-.media-view {
+.c-media-view {
     display: grid;
     grid-template-columns: repeat(auto-fill, 1fr);
     // account for scrollbar.
