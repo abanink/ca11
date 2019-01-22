@@ -34,6 +34,7 @@
 
     <div v-if="stream.ready && controls" class="media-stream__controls">
         <icon name="fullscreen" @click.stop="toggleFullscreen()"/>
+        <icon name="pip" :class="{active: recording}" @click.stop="togglePip()"/>
         <icon name="record-rec" :class="{active: recording}" @click.stop="toggleRecord()"/>
         <icon v-if="stream.local" :name="stream.kind" @click.stop="switchStream()"/>
     </div>

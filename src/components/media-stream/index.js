@@ -35,6 +35,10 @@ module.exports = (app) => {
                 const mediaElement = this.$refs[this.stream.kind]
                 mediaElement.requestFullscreen({navigationUI: 'hide'})
             },
+            togglePip: function() {
+                const mediaElement = this.$refs[this.stream.kind]
+                mediaElement.requestPictureInPicture()
+            },
             toggleRecord: function() {
                 if (!this.recording) {
                     this.recording = true
