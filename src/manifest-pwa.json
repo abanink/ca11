@@ -19,7 +19,7 @@
         }
     ],
     "name": "CA11 | Free Communication For Everyone",
-    "orientation": "landscape",
+    "orientation": "portrait",
     "short_name": "CA11",
     "start_url": "/",
     "theme_color": "#601111"
