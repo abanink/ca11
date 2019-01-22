@@ -23,10 +23,11 @@
     }
 
     &__element {
-        border: 1px solid var(--grey-100);
+        border: 0;
+        border-bottom: 1px solid var(--grey-200);
         color: var(--grey-300);
         font-size: var(--text-small);
-        padding: $spacer;
+        padding: $spacer 0;
 
         &::placeholder {
             color: var(--grey-200);
@@ -34,8 +35,9 @@
 
         &:focus,
         &:active {
-            border: 1px solid var(--primary-base);
-            box-shadow: 0 0 var(--border) var(--primary-base);
+            border: 0;
+            border-bottom: 1px solid var(--primary-base);
+            // box-shadow: 0 0 var(--border) var(--primary-base);
         }
     }
 

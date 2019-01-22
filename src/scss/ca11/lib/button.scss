@@ -3,6 +3,12 @@
     padding: var(--spacer) 0;
     width: 100%;
 
+    &.stretched {
+        button {
+            width: 100%;
+        }
+    }
+
     &.is-centered {
         justify-content: center;
     }
@@ -14,8 +20,9 @@
 
 .button {
     background: var(--grey-50);
+    border: 1px solid var(--grey-100);
     border-bottom: var(--border) solid var(--grey-100);
-    border-top: var(--border) solid transparent;
+    // border-top: var(--border) solid transparent;
     color: var(--grey-300);
     font-family: 'Rajdhani';
     font-weight: 600;

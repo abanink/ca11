@@ -1,33 +1,32 @@
 <component class="c-telemetry t-telemetry">
-    <header class="c-wizard__header">{{$t('telemetry')}}</header>
+    <header class="c-wizard__header">{{$t('quality metrics')}}</header>
 
     <div class="c-wizard__description">
-        {{$t('automated application error logging helps to improve {name}.', {name: app.name}).ca()}}
-        {{$t('do you want to improve {name} by automatically sending application errors to', {name: app.name}).ca()}}
-        <a href="https://sentry.io/">Sentry</a>?
+        {{$t('do you mind if {name} sends any application exceptions to a service for quality metrics? This helps us to responds faster to software issues.', {name: app.name}).ca()}}
 
-        <div class="c-wizard__help">
-            {{$t('you can always change your choice afterwards from Settings.')}}
+
+        <div class="cf c-wizard__help">
+            {{$t('you can also change your choice later from Settings.')}}
+            <a class="cf" href="https://sentry.io/">{{$t('about')}} Sentry {{$t('quality metrics')}}</a>.
         </div>
     </div>
 
     <slot name="progress"></slot>
 
-    <div class="buttons is-centered">
+    <div class="buttons stretched">
         <button class="button t-btn-telemetry-back" @click="stepBack()">
             {{$t('back')}}
         </button>
+
         <button
             class="button t-btn-telemetry-next-no"
             @click="toggleTelemetry(false)"
-        >
-            {{$t('not really')}}
-        </button>
+        >{{$t('deny')}}</button>
+
         <button
             class="button t-btn-telemetry-next-yes"
             @click="toggleTelemetry(true)"
-        >
-            {{$t('no problem')}}
-        </button>
+        >{{$t('allow')}}</button>
+
     </div>
 </component>

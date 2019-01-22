@@ -12,9 +12,9 @@
 
         <icon name="logo" class="c-login__logo"/>
 
-        <div class="c-login__subtitle">
-            {{$t('decentralized')}}<br/>
-            WebRTC {{$t('phone network')}}</br>
+        <div class="c-login__slogan">
+            {{$t('free communication')}}<br/>
+            {{$t('for everyone')}}!
         </div>
     </header>
 
@@ -27,9 +27,9 @@
             elementclass="t-txt-session-id"
             name="session-id"
             :autofocus="true"
-            :help="$t('your session is stored encrypted on this computer.', {name: app.name})"
-            :label="$t('session name')"
-            :placeholder="$t('session name')"
+            :help="$t('your phone is safely stored on this computer.', {name: app.name})"
+            :label="$t('phone name')"
+            :placeholder="$t('james,maria,robert,susan,...')"
             :validation="$v.user.username"
         />
 
@@ -38,9 +38,9 @@
             elementclass="t-txt-session-pw"
             name="session-pw"
             :autofocus="true"
-            :help="$t('password that will decrypt this session.')"
-            :label="$t('session password')"
-            :placeholder="$t('session password')"
+            :help="$t('a password that will unlock your phone.')"
+            :label="$t('phone password')"
+            :placeholder="$t('some-secret-123')"
             :validation="$v.password"
         />
 
@@ -56,7 +56,7 @@
                 :class="{'is-loading': user.status === 'login'}"
                 :disabled="$v.$invalid || user.status === 'login'"
                 @click="login"
-            >{{$t('begin session')}}</button>
+            >{{$t('start your phone')}}</button>
         </div>
     </div>
 
@@ -68,8 +68,8 @@
             name="session-pw"
             :autofocus="true"
             :help="$t('password that opens vault {name}.', {name: app.session.active})"
-            :label="$t('session password')"
-            :placeholder="$t('session password')"
+            :label="$t('phone password')"
+            :placeholder="$t('some-secret-123')"
             :validation="$v.password"
         />
 
@@ -86,7 +86,7 @@
                 :class="{'is-loading': user.status === 'login'}"
                 :disabled="$v.$invalid || user.status === 'login'"
                 @click="login"
-            >{{$t('log in')}}</button>
+            >{{$t('unlock phone')}}</button>
         </div>
     </div>
 
@@ -116,10 +116,10 @@
 
     <footer class="footer" >
         <div class="footer__docs"  @click="openTab(vendor.support.website)">
-            {{$t('more information')}}
+            <icon name="school"/><br/>{{$t('about {name}', {name: app.name})}}
         </div>
         <div class="footer__version">
-            v{{app.version.current}}
+            <a target="_blank" href="https://github.com/garage11/ca11">{{app.version.current}}</a>
         </div>
     </footer>
 </section>

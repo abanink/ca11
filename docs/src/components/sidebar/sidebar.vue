@@ -9,7 +9,7 @@
         <div class="header__version">{{version.current}}</div>
 
         <div class="header__description">
-            Decentralized<br/>WebRTC Phone Network
+            Free Communication<br/>For Everyone
         </div>
     </header>
     <nav class="navigation">

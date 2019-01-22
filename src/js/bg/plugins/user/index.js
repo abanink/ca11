@@ -166,7 +166,7 @@ class PluginUser extends Plugin {
             this.app._watchersActivate()
             this.app._languagePresets()
             this.app.setState({ui: {layer: 'calls'}}, {encrypt: false, persist: true})
-            this.app.notify({icon: 'contact', message: this.app.$t('your session is unlocked'), type: 'info'})
+            this.app.notify({icon: 'contact', message: this.app.$t('welcome back {username}', {username}), type: 'info'})
             this.app.__initServices()
         } catch (err) {
             // Wrong password, resulting in a failure to decrypt.

@@ -14,6 +14,11 @@
     padding: $spacer * 3;
     width: 100%;
 
+    .buttons button {
+        margin: 0;
+        width: 100%;
+    }
+
     header {
         text-align: center;
         width: 100%;
@@ -33,53 +38,15 @@
         fill: var(--primary-base);
     }
 
-    &__subtitle {
+    &__slogan {
         color: var(--grey-300);
         font-size: var(--text-base);
         font-weight: 500;
         letter-spacing: 0;
-        padding: var(--spacer);
+        margin-bottom: var(--gutter);
+        margin-top: var(--spacer);
         text-transform: uppercase;
     }
-
-
-    .footer {
-        color: $grey-color;
-        position: relative;
-        text-align: center;
-
-        svg {
-            color: var(--primary-base);
-            margin-top: -2px;
-            padding: 0 ($spacer / 6);
-            width: $spacer * 2.5;
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-
-        &__docs {
-            font-size: var(--text-base);
-            text-transform: uppercase;
-            // padding: calc(var(--spacer) * 2);
-
-            &:hover {
-                color: var(--primary-base);
-                cursor: pointer;
-            }
-        }
-
-        &__version {
-            color: var(--primary-base);
-            font-size: var(--text-small);
-            font-weight: 500;
-            padding-bottom: var(--spacer);
-            position: absolute;
-            right: 0;
-        }
-    }
-
 
     .sessions {
         display: flex;
@@ -94,6 +61,8 @@
         }
 
         .new-session {
+            margin-top: var(--spacer);
+
             svg {
                 margin-right: $spacer;
             }
@@ -110,7 +79,6 @@
             border-bottom: 2px solid var(--grey-100);
             border-top: 2px solid transparent;
             display: flex;
-            margin-bottom: $spacer / 2;
             width: 100%;
 
             svg {
@@ -150,6 +118,51 @@
                 white-space: nowrap;
                 width: 100%;
             }
+        }
+    }
+
+    .footer {
+        color: $grey-color;
+        margin-top: var(--gutter);
+        position: relative;
+        text-align: center;
+
+        svg {
+            color: var(--primary-base);
+            margin-top: -2px;
+            padding: 0 ($spacer / 6);
+            width: $spacer * 2.5;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &__docs {
+            color: var(--grey-300);
+            font-size: var(--text-base);
+            text-transform: uppercase;
+
+            svg {
+                fill: var(--grey-300);
+            }
+
+            &:hover {
+                color: var(--primary-base);
+                cursor: pointer;
+
+                svg {
+                    fill: var(--primary-base);
+                }
+            }
+        }
+
+        &__version {
+            color: var(--primary-base);
+            font-size: var(--text-small);
+            font-weight: 500;
+            padding-bottom: var(--spacer);
+            right: 0;
         }
     }
 }

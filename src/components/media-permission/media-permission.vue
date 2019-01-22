@@ -8,8 +8,8 @@
                     <icon name="cam" class="cam"/>
                 </div>
             </div>
-            <span class="cf permission-message">
-                {{$t('the webcam/microphone is accessable')}}
+            <span class="permission-message">
+                {{$t('media is ready to use')}}!
             </span><br/>
         </div>
         <div v-else>
@@ -18,7 +18,7 @@
                     <icon name="cam-disabled" class="cam"/>
                 </div>
             </div>
-            <span class="cf permission-message">
+            <span class="permission-message">
                 {{$t('no media device permission', {name: app.name})}}
             </span><br/>
 

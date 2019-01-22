@@ -163,10 +163,10 @@ class Media {
                     stream = userMedia
                 }
             } catch (err) {
-                // eslint-disable-next-line no-console
-                console.error(err)
                 // There are no devices at all. Spawn a warning.
                 if (err.message === 'Requested device not found') {
+                    // eslint-disable-next-line no-console
+                    console.error(err)
                     if (this.app.env.section.fg) {
                         this.app.notify({icon: 'warning', message: this.app.$t('no audio devices found.'), type: 'warning'})
                     }

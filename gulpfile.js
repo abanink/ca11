@@ -18,7 +18,7 @@ const test = require('./gulp/tasks/test')(settings)
 const build = gulp.series(misc.tasks.buildClean, function build(done) {
     helpers.showBuildConfig()
     const tasks = ['assets', 'code', 'styles']
-    if (['chrome'].includes(settings.BUILD_TARGET)) {
+    if (['chrome', 'firefox', 'pwa'].includes(settings.BUILD_TARGET)) {
         tasks.push(misc.tasks.manifest)
     }
 
@@ -41,6 +41,8 @@ gulp.task('code', (done) => {
     ]
     if (settings.BUILD_TARGET === 'electron') {
         runTasks.push(code.tasks.electron)
+    } else if (settings.BUILD_TARGET === 'pwa') {
+        runTasks.push(code.tasks.serviceWorker)
     }
 
     return gulp.parallel(runTasks)(done)

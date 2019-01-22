@@ -8,7 +8,7 @@
 
     <slot name="progress"></slot>
 
-    <div class="buttons is-centered" v-if="selected.ready !== null">
+    <div class="buttons is-centered stretched" v-if="selected.ready !== null">
         <button
             class="button t-btn-welcome-cancel"
             @click="stepBackFirst()"
@@ -18,6 +18,6 @@
         <button
             class="button is-primary t-btn-welcome-next"
             @click="stepNext()"
-        >{{$t('start wizard')}}</button>
+        >{{$t('next')}}</button>
     </div>
 </component>

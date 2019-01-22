@@ -14,7 +14,7 @@
 
     <slot name="progress"></slot>
 
-    <div class="buttons is-centered">
+    <div class="buttons stretched">
         <button
             class="button t-btn-devices-back"
             @click="stepBack()"

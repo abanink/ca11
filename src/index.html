@@ -4,6 +4,9 @@
         <meta charset="utf-8" />
         <meta name="theme-color" content="<%=settings.brands[settings.BRAND_TARGET].colors['brand-color']%>"/>
         <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
+        <%if (settings.BUILD_TARGET === 'pwa') { %>
+        <link rel="manifest" href="manifest.json">
+        <% } %>
         <link rel="icon" href="img/logo-16.png"/>
         <link href="css/app.css" rel="stylesheet"/>
     </head>
@@ -15,7 +18,7 @@
     <script src="js/templates.js"></script>
     <script src="js/app_i18n_plugins.js"></script>
     <script src="js/app_i18n.js"></script>
-    <%if (['electron', 'webview'].includes(settings.BUILD_TARGET)) { %>
+    <%if (['electron', 'pwa', 'webview'].includes(settings.BUILD_TARGET)) { %>
     <script src="js/vendor_bg.js"></script>
     <script src="js/app_fg_plugins.js"></script>
     <script src="js/app_bg_plugins.js"></script>
@@ -26,8 +29,8 @@
     <script src="js/app_fg.js"></script>
     <% } %>
 
-    <%if (['electron', 'webview'].includes(settings.BUILD_TARGET)) { %>
     <script>
+    <%if (['electron', 'pwa', 'webview'].includes(settings.BUILD_TARGET)) { %>
     Raven.context(function() {
         this.bg = new AppBackground(bgOptions)
         this.bg.on('ready', () => {
@@ -35,6 +38,11 @@
             this.fg = new AppForeground(fgOptions)
         })
     })
-    </script>
     <% } %>
+    <%if (settings.BUILD_TARGET === 'pwa') { %>
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+        console.log('Registered events at scope: ', registration.scope);
+    })
+    <% } %>
+    </script>
 </html>

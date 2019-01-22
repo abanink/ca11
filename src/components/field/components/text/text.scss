@@ -2,6 +2,12 @@
     display: flex;
     flex-direction: column;
 
+    &:focus-within {
+        &__label {
+            background: #f00;
+        }
+    }
+
     &__label {
         width: 100%;
     }
