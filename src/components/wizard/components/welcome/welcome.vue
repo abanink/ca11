@@ -2,8 +2,8 @@
     <header class="c-wizard__header">{{greeting}}!</header>
 
     <div class="c-wizard__description">
-        {{$t('{name} lets you communicate privately and freely with your family, friends and colleagues via decentralized network SIG11!', {name: app.name}).ca()}}
-        {{$t('with {name}, you can also receive and make calls on a telephony network when you have an account from a compatible VoIP provider.', {name: app.name}).ca()}}
+        {{$t('{name} lets you communicate privately and freely with family, friends and colleagues via decentralized network SIG11!', {name: app.name}).ca()}}
+        {{$t('this onboarding wizard helps you to make your first call as quickly as possible.', {name: app.name}).ca()}}
     </div>
 
     <slot name="progress"></slot>

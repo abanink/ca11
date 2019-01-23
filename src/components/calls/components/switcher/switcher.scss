@@ -35,7 +35,7 @@
 
         &.active,
         &:hover {
-            background: var(--grey-400);
+            background: var(--primary-base);
             border-bottom: var(--border) solid var(--grey-300);
             color: var(--grey-50);
             svg {fill: var(--grey-50);}

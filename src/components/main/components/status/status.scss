@@ -17,8 +17,8 @@
     }
 
     &__indicator,
-    &__option {
-        border-bottom: var(--border) solid transparent;
+    &__option,
+    &__button {
         border-top: var(--border) solid transparent;
         height: 100%;
         width: calc(var(--space-4));
@@ -28,7 +28,10 @@
         }
     }
 
-    &__option {
+    &__button {
+        border-left: 0;
+        border-right: 0;
+
         /// Account for the grid-gap.
         &:first-child {
             margin-right: var(--spacer-05);

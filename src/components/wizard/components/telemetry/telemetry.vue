@@ -6,8 +6,8 @@
 
 
         <div class="cf c-wizard__help">
-            {{$t('you can also change your choice later from Settings.')}}
-            <a class="cf" href="https://sentry.io/">{{$t('about')}} Sentry {{$t('quality metrics')}}</a>.
+            {{$t('you can always change your choice later from Settings.')}}
+            <a class="cf" target="_blank" href="https://sentry.io/">{{$t('about')}} Sentry {{$t('quality metrics')}}</a>.
         </div>
     </div>
 
