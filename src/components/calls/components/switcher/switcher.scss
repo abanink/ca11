@@ -5,23 +5,25 @@
 // The most upper box containing account info and
 // icon-links to several locations.
 .c-call-switcher {
-    border-top: var(--spacer-05) solid $white-color;
+    // border-top: $spacer-05 solid $white-color;
 
     .container {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        margin-bottom: $spacer-05;
         z-index: 10000000;
     }
 
     .call {
         @include icon-size($spacer * 6.25);
         align-items: center;
-        background: var(--grey-500);
-        border-bottom: var(--border) solid transparent;
-        color: var(--grey-300);
+        background: var(--grey-400);
+        border: 0;
+        border-bottom: 1px solid var(--grey-50);
+        color: var(--grey-50);
         display: flex;
-        height: var(--space-433);
+        height: $space-4;
         justify-content: center;
         width: 100%;
 
@@ -36,7 +38,6 @@
         &.active,
         &:hover {
             background: var(--primary-base);
-            border-bottom: var(--border) solid var(--grey-300);
             color: var(--grey-50);
             svg {fill: var(--grey-50);}
         }

@@ -3,21 +3,21 @@
     <button
         v-if="!call.id && ui.layer === 'calls'"
         :disabled="!description.endpoint"
-        class="button c-options__option t-btn-options-call-start tooltip tooltip-left"
+        class="button button--menu c-options__option t-btn-options-call-start tooltip tooltip-left"
         :data-tooltip="$t('start new call')"
         @click="placeCall(description)"
     ><icon name="phone"/></button>
 
     <button
         v-if="call.status === 'invite'"
-        class="button c-options__option t-btn-options-call-accept tooltip tooltip-left hint"
+        class="button button--menu c-options__option t-btn-options-call-accept tooltip tooltip-left hint"
         :data-tooltip="$t('accept call')"
         @click="callAccept(call)"
     ><icon name="phone"/></button>
 
     <button
         v-if="call.id && callCanTerminate"
-        class="button c-options__option t-btn-options-call-stop tooltip tooltip-left"
+        class="button button--menu c-options__option t-btn-options-call-stop tooltip tooltip-left"
         :data-tooltip="$t('end call')"
         @click="callTerminate(call)"
     ><icon name="call-end"/></button>
@@ -25,7 +25,7 @@
     <template v-if="call.id && call.status === 'accepted'">
 
     <button
-        class="button c-options__option tooltip tooltip-left"
+        class="button button--menu c-options__option tooltip tooltip-left"
         :class="classes('dialpad-button')"
         :data-tooltip="$t('toggle keypad')"
         :disabled="call.status !== 'accepted' || call.transfer.active"
@@ -33,7 +33,7 @@
     ><icon name="dialpad"/></button>
 
     <button
-        class="button c-options__option tooltip tooltip-left"
+        class="button button--menu c-options__option tooltip tooltip-left"
         :class="classes('hold-button')"
         :data-tooltip="$t('toggle on-hold')"
         :disabled="call.status !== 'accepted'"
@@ -42,7 +42,7 @@
 
     <button
         v-if="call.transfer.type !== 'accept'"
-        class="button c-options__option t-btn-options-transfer-toggle button tooltip tooltip-left"
+        class="button button--menu c-options__option t-btn-options-transfer-toggle button tooltip tooltip-left"
         :class="classes('transfer-button')"
         :data-tooltip="$t('toggle transfer')"
         :disabled="call.status !== 'accepted'"
@@ -51,7 +51,7 @@
 
     <button
         v-else
-        class="button c-options__option t-btn-options-transfer-finalize button tooltip tooltip-left"
+        class="button button--menu c-options__option t-btn-options-transfer-finalize button tooltip tooltip-left"
         :data-tooltip="$t('finalize transfer')"
         :disabled="call.status !== 'accepted'"
         @click="transferFinalize"

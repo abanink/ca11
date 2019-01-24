@@ -14,17 +14,17 @@
     <slot name="progress"></slot>
 
     <div class="buttons stretched">
-        <button class="button t-btn-telemetry-back" @click="stepBack()">
+        <button class="button button--widget t-btn-telemetry-back" @click="stepBack()">
             {{$t('back')}}
         </button>
 
         <button
-            class="button t-btn-telemetry-next-no"
+            class="button button--widget t-btn-telemetry-next-no"
             @click="toggleTelemetry(false)"
         >{{$t('deny')}}</button>
 
         <button
-            class="button t-btn-telemetry-next-yes"
+            class="button button--widget t-btn-telemetry-next-yes"
             @click="toggleTelemetry(true)"
         >{{$t('allow')}}</button>
 

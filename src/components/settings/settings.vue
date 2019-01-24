@@ -5,7 +5,7 @@
 
         <ul class="header__tabs">
             <li
-                class="tooltip tooltip-bottom"
+                class="button tooltip tooltip-bottom"
                 :class="classes('tabs', 'general')"
                 :data-tooltip="$t('general')"
                 @click="setTab('settings', 'general')"
@@ -13,7 +13,7 @@
                 <icon name="settings-misc"/>
             </li>
             <li
-                class="tooltip tooltip-bottom"
+                class="button tooltip tooltip-bottom"
                 :class="classes('tabs', 'devices')"
                 :data-tooltip="$t('devices')"
                 @click="setTab('settings', 'devices', settings.webrtc.enabled)"
@@ -21,7 +21,7 @@
                 <icon name="headset_mic"/>
             </li>
             <li
-                class="tooltip tooltip-bottom"
+                class="button tooltip tooltip-bottom"
                 :class="classes('tabs', 'sig11')"
                 data-tooltip="SIG11"
                 @click="setTab('settings', 'sig11')"
@@ -29,7 +29,7 @@
                 <icon name="protocol-sig11"/>
             </li>
             <li
-                class="tooltip tooltip-bottom t-tab-sip"
+                class="button tooltip tooltip-bottom t-tab-sip"
                 :class="classes('tabs', 'sip')"
                 data-tooltip="SIP"
                 @click="setTab('settings', 'sip')"
@@ -166,10 +166,10 @@
 
         <div class="tabs-actions">
             <button
-                class="button t-btn-settings-save"
+                class="button button--widget t-btn-settings-save"
                 :disabled="$v.$invalid"
                 @click="save"
-            >{{$t('save changes')}}</button>
+            >{{$t('save settings')}}</button>
         </div>
     </main>
 

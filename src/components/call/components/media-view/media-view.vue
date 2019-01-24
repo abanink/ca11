@@ -1,10 +1,7 @@
-<section component class="c-media-view" :class="classes('component')">
-    <!-- remote streams -->
-    <MediaStream :stream="stream" v-for="stream of selectedStreams"/>
-
+<transition-group class="c-media-view" :class="classes('component')" appear name="tr-stream" tag="component">
     <!-- call information/placeholder -->
-    <div
-        v-if="!stream[stream.type].selected && !selectedStreams.length"
+    <article
+        key="placeholder"
         class="media-stream media-stream__placeholder"
     >
         <icon class="media-stream-icon" name="call-active"/>
@@ -15,5 +12,8 @@
                 <div class="media-stream__status">{{callStatus}}</div>
             </div>
         </div>
-    </div>
-</section>
+    </article>
+     <!-- all selected streams, including the local stream -->
+    <MediaStream :key="stream.id" :stream="stream" v-for="stream of selectedStreams"/>
+</transition-group>
+

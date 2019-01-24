@@ -16,12 +16,12 @@
 
     <div class="buttons stretched">
         <button
-            class="button t-btn-devices-back"
+            class="button button--widget t-btn-devices-back"
             @click="stepBack()"
         >{{$t('back')}}</button>
 
         <button
-            class="button is-primary t-btn-devices-next"
+            class="button button--widget is-primary t-btn-devices-next"
             @click="storeDevices()"
             :disabled="!stepValid"
         >{{$t('next')}}</button>

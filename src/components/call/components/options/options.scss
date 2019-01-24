@@ -7,19 +7,11 @@
         border-left: 0;
         border-right: 0;
         color: $grey-color;
-        height: var(--space-433);
+        height: $space-4;
         padding: $spacer * 1.5 0;
         text-align: center;
         user-select: none;
         width: 100%;
-
-        svg {
-            @include icon-size($spacer * 3);
-
-            @media screen and (min-width: $breakpoint-mobile) {
-                @include icon-size($spacer * 3.5);
-            }
-        }
 
         &:not([disabled]):hover {
             color: var(--primary-base);

@@ -5,6 +5,7 @@
 .c-status {
     align-items: center;
     background: var(--grey-50);
+    box-shadow: 0 0 2px 1px palette('grey', 200);
     color: var(--grey-200);
 
     // The icon links container at the right top of the popup.
@@ -17,15 +18,8 @@
     }
 
     &__indicator,
-    &__option,
-    &__button {
-        border-top: var(--border) solid transparent;
-        height: 100%;
-        width: calc(var(--space-4));
-
-        svg {
-            @include icon-size(var(--icon-normal));
-        }
+    &__option {
+        width: $space-4;
     }
 
     &__button {
@@ -34,7 +28,7 @@
 
         /// Account for the grid-gap.
         &:first-child {
-            margin-right: var(--spacer-05);
+            margin-right: $spacer-05;
         }
 
         &.disabled {
@@ -47,7 +41,7 @@
 
         &:hover,
         &.active {
-            border-bottom: var(--border) solid var(--primary-base);
+            border-bottom: 1px solid var(--primary-base);
             color: var(--primary-base);
             cursor: pointer;
         }
@@ -84,22 +78,6 @@
             &.disabled {background: var(--grey-100);};
         }
     }
-
-
-    &__menu-side {
-        // Don't wrap but put dots at the end if it doesn't fit.
-        align-items: stretch;
-        background: var(--grey-50);
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        justify-content: space-between;
-        white-space: nowrap;
-
-        .option {
-            width: var(--space-4);
-        }
-    }
 }
 
 
@@ -107,10 +85,8 @@
 .main-status {
     display: flex;
     font-family: 'Rajdhani';
-    // font-size: text-scale('sm');
     font-weight: 600;
     justify-content: space-between;
-    // margin-bottom: var(--spacer-05);
     transition: background 0.5s ease;
     z-index: 100;
 

@@ -1,4 +1,4 @@
-<transition name="tr-stream">
+
 <article
     component
     class="media-stream"
@@ -39,4 +39,3 @@
         <icon v-if="stream.local" :name="stream.kind" @click.stop="switchStream()"/>
     </div>
 </article>
-</transition>

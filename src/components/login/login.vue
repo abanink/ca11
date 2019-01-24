@@ -47,12 +47,12 @@
         <div class="buttons is-centered">
             <button
                 v-if="app.session.available.length"
-                class="button t-btn-change-session"
+                class="button button--widget t-btn-change-session"
                 @click="selectSession()"
                 :disabled="user.status === 'login'"
             >{{$t('change session')}}</button>
             <button
-                class="button t-btn-login"
+                class="button button--widget t-btn-login"
                 :class="{'is-loading': user.status === 'login'}"
                 :disabled="$v.$invalid || user.status === 'login'"
                 @click="login"
@@ -76,13 +76,13 @@
         <div class="buttons is-centered">
             <button
                 v-if="app.session.available.length"
-                class="button t-btn-login"
+                class="button button--widget t-btn-login"
                 :disabled="user.status === 'login'"
                 @click="selectSession()"
             >{{$t('change session')}}</button>
 
             <button
-                class="button t-btn-login"
+                class="button button--widget t-btn-login"
                 :class="{'is-loading': user.status === 'login'}"
                 :disabled="$v.$invalid || user.status === 'login'"
                 @click="login"

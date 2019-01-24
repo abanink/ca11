@@ -10,13 +10,13 @@
 
     <div class="buttons is-centered stretched" v-if="selected.ready !== null">
         <button
-            class="button t-btn-welcome-cancel"
+            class="button button--widget t-btn-welcome-cancel"
             @click="stepBackFirst()"
         >
             {{$t('cancel')}}
         </button>
         <button
-            class="button is-primary t-btn-welcome-next"
+            class="button button--widget is-primary t-btn-welcome-next"
             @click="stepNext()"
         >{{$t('next')}}</button>
     </div>

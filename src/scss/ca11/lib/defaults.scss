@@ -110,9 +110,21 @@ video {
 
 .hide {display: none;}
 
+.scrollable {
+    overflow-y: scroll;
+
+    &--dark {
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            background: var(--grey-500);
+            width: $spacer-05;
+        }
+    }
+}
 
 ::-webkit-scrollbar {
-    width: var(--gutter12);
+    width: $spacer-05;
 }
 
 ::-webkit-scrollbar-track {

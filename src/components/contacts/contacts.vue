@@ -141,7 +141,7 @@
 
            <div v-if="contact.selected" class="item__context context">
                 <div class="context__empty" v-if="!Object.keys(contact.endpoints).length">
-                    <span class="cf">{{$t('no endpoints')}}...</span>
+                    <span class="cf">{{$t('no contact info')}}...</span>
                 </div>
 
                 <!-- Contains all collapsed endpoints -->

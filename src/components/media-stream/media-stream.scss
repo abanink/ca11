@@ -7,7 +7,7 @@
     // Needed with object-fit: cover.
     overflow: hidden;
     position: relative;
-    transition: all 0.25s;
+    transition: all 0.5s;
 
     &.no-progress {
         display: none;
@@ -69,7 +69,7 @@
         z-index: 100000000;
 
         svg {
-            @include icon-size(var(--icon-large));
+            @include icon-size($icon-large);
             fill: var(--grey-100);
 
             &.active:hover,
@@ -101,26 +101,41 @@
 
     &__stats {
         color: var(--grey-100);
+        text-align: center;
     }
 }
 
 
 .tr-stream-enter {
     opacity: 0;
-    transform: scale(0);
+    // transform: scale(0);
 }
 
 .tr-stream-enter-to {
-    background: var(--primary-base);
     opacity: 1;
-    transform: scale(1);
+    // transform: scale(1);
+}
+
+.tr-stream-leave-to {
+    // position: absolute;
+    opacity: 0;
+    // transform: scale(0);
+}
+
+.tr-stream-enter-active {
+    transition: all 0.5s;
 }
 
 .tr-stream-leave-active {
-    transform: scale(0);
+    // position: absolute;
+    transition: all 0.5s;
+
+    .content {
+        display: none;
+    }
 }
 
 .tr-stream-move {
-    opacity: 1;
-    transition: all 0.5s;
+    opacity: 0.75;
+    transition: all 0.25s;
 }

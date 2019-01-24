@@ -2,21 +2,21 @@
     <div class="options">
 
         <button
-            class="button c-menu__option t-btn-menu-activity tooltip tooltip-right"
+            class="button button--menu c-menu__option t-btn-menu-activity tooltip tooltip-right"
             :class="classes('activities')"
             :data-tooltip="$t('activities')"
             @click="setLayer('activities')"
         ><icon name="recent"/></button>
 
         <button
-            class="button c-menu__option t-btn-menu-contacts tooltip tooltip-right"
+            class="button button--menu c-menu__option t-btn-menu-contacts tooltip tooltip-right"
             :class="classes('contacts', true)"
             :data-tooltip="$t('contacts')"
             @click="setLayer('contacts')"
         ><icon name="contacts"/></button>
 
         <button
-            class="button c-menu__option t-btn-menu-calls tooltip tooltip-right"
+            class="button button--menu c-menu__option t-btn-menu-calls tooltip tooltip-right"
             :class="classes('calls')"
             :data-tooltip="$t('calls')"
             @click="setLayer('calls')"

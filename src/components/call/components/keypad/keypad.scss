@@ -6,7 +6,9 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    padding: var(--gutter);
+    margin: 0 auto;
+    max-width: 700px;
+    // padding: var(--gutter);
 
     &__input {
         align-items: center;
@@ -14,17 +16,18 @@
         display: flex;
         justify-content: center;
         margin-bottom: $spacer * 3;
-        max-width: 700px;
+        // max-width: 700px;
         position: relative;
+        width: 100%;
 
         input {
-
             border: 0;
-            border-bottom: var(--border) solid var(--grey-100);
+            border-bottom: 1px solid var(--grey-100);
+            // background: #f00;
             color: var(--primary-base);
             font-size: var(--text-huge);
             font-weight: 600;
-            height: $spacer * 6;
+            height: $spacer * 8;
             outline: none;
             overflow: hidden;
             padding: 0 $spacer * 4;

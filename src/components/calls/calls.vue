@@ -19,8 +19,6 @@
     <CallMediaPreview v-else-if="callActive.id" :call="callActive"/>
 
     <main class="main">
-
-
         <Call v-if="callActive.id" :call="callActive"/>
         <MediaStream
             v-else-if="stream[stream.type].selected"

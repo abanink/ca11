@@ -4,12 +4,12 @@
 
 .c-main {
     display: grid;
-    grid-gap: var(--spacer-05);
+    grid-gap: $spacer-05;
     grid-template-areas:
         'main-status main-status main-status'
         'main-menu main-content media-controls';
-    grid-template-columns: var(--space-4) 1fr var(--space-4); // menu content
-    grid-template-rows: calc(#{$space-4} + var(--spacer-05)) 1fr; // status height remains static.
+    grid-template-columns: $space-4 1fr $space-4; // menu content
+    grid-template-rows: #{$space-4} 1fr; // status height remains static.
 
     .c-media-controls {
         grid-area: media-controls;
@@ -18,7 +18,7 @@
     &__menu {
         grid-area: main-menu;
         // Make space for main-content-header's negative left margin.
-        margin-top: var(--space-433);
+        margin-top: $space-4 + $spacer-05;
     }
 
     &__status {
@@ -28,20 +28,20 @@
     &__content {
         display: grid;
         grid-area: main-content;
-        grid-gap: var(--spacer-05);
+        grid-gap: $spacer-05;
         grid-template-areas:
             'main-content-header'
             'main-content-base';
-        grid-template-rows: var(--space-433) fit-content(100%);
+        grid-template-rows: #{$space-4} fit-content(100%);
         justify-items: start;
 
         .header {
             grid-area: main-content-header;
 
             &__icon {
-                margin-left: calc(var(--space-4) * -1 - var(--spacer-05));
-                margin-right: var(--spacer-05);
-                width: var(--space-4);
+                margin-left: #{(-$space-4 - $spacer-05)};
+                margin-right: $spacer-05;
+                width: $space-4;
             }
         }
 

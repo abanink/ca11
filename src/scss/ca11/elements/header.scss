@@ -7,6 +7,7 @@
 
     align-items: stretch;
     background: linear-gradient(to right, var(--grey-50), var(--grey-100));
+    border-right: $spacer-05 solid var(--primary-base);
     display: flex;
     justify-content: flex-start;
     position: relative;
@@ -16,7 +17,7 @@
         background: var(--primary-base);
         fill: $white-color;
         height: 100%;
-        padding: var(--spacer);
+        padding: $spacer-05;
     }
 
     &__text {
@@ -36,7 +37,6 @@
     &__actions {
         align-items: center;
         // Border in the same style as the scroll trackbar.
-        border-right: var(--gutter12) solid var(--primary-base);
         color: var(--primary-base);
         display: flex;
         flex-direction: row-reverse;
@@ -52,7 +52,7 @@
             }
 
             svg {
-                @include icon-size(var(--icon-normal));
+                @include icon-size($spacer * 3);
             }
         }
     }
@@ -62,18 +62,17 @@
         display: flex;
         flex: 1;
         height: 100%;
-        margin-left: var(--gutter);
 
         #{$self}__filter {
             align-items: center;
             color: var(--grey-200);
             display: flex;
+            filter: drop-shadow(0 0 1px var(--grey-200));
             justify-content: center;
             // Override .field's margin-bottom.
             margin: 0;
-            margin-right: $spacer;
+            margin-left: $spacer;
             padding: 0;
-            padding-right: var(--spacer);
             user-select: none;
 
             &.active {
@@ -90,11 +89,11 @@
             }
 
             svg {
-                @include icon-size(var(--icon-large));
+                @include icon-size($spacer * 4.5);
                 background: var(--grey-50);
                 border: $spacer / 4 solid $white-color;
                 border-radius: 50%;
-                padding: var(--spacer-05);
+                padding: $spacer-05;
             }
         }
     }
@@ -106,21 +105,19 @@
 
         li {
             align-items: center;
-            border-bottom: var(--border) solid transparent;
-            border-top: var(--border) solid transparent;
+            border-left: 0;
+            border-right: 0;
+            // border-bottom: var(--border) solid transparent;
+            // border-top: var(--border) solid transparent;
             color: var(--grey-200);
             display: flex;
             // flex: 1;
             justify-content: center;
-            width: var(--space-4);
+            width: $space-4;
 
             &.active {
-                border-bottom: var(--border) solid var(--primary-base);
+                // border-bottom: var(--border) solid var(--primary-base);
                 color: var(--primary-base);
-            }
-
-            svg {
-                @include icon-size(var(--icon-normal));
             }
 
             &.disabled {

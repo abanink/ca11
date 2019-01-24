@@ -3,13 +3,14 @@
 
 
 .c-media-controls {
-    background: linear-gradient(to left, var(--grey-50), var(--grey-100));
+    // background: linear-gradient(to left, var(--grey-50), var(--grey-100));
+    background: var(--grey-50);
     z-index: 100;
 
     .media-stream {
         filter: grayscale(100%);
-        height: calc(var(--space-433));
-
+        height: $space-4;
+        margin-bottom: $spacer-05;
 
         &.selected {
             filter: grayscale(0%);

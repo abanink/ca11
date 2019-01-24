@@ -3,22 +3,23 @@
 
 .c-media-preview {
     background: var(--grey-100);
-    border-right: var(--gutter12) solid var(--primary-base);
+    // Visual trackbar extension.
+    // border-right: $spacer-05 solid var(--grey-300);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
 
     .streams-container {
+        // border-right: $spacer-05 solid $white-color;
         display: flex;
         flex-direction: row-reverse;
-        margin-right: var(--spacer-05);
         width: 100%;
     }
 
     .media-stream {
         filter: grayscale(100%);
-        width: var(--space-4);
+        width: $space-4;
 
         &.selected {
             filter: grayscale(0%);

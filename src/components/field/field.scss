@@ -6,9 +6,11 @@
     max-width: $breakpoint-mobile;
 
     &__label {
+        align-items: center;
         color: var(--grey-300);
+        display: flex;
         font-family: 'Rajdhani';
-        font-size: var(--text-base);
+        font-size: $text-base;
         font-weight: 600;
         text-transform: capitalize;
     }
