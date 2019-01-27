@@ -26,7 +26,7 @@ function env({section}) {
         isLinux: false,
         isMacOS: false,
         isNode: false,
-        isPopout: false,
+        isStandalone: false,
         isWindows: false,
         name: 'unknown',
         section: {
@@ -79,11 +79,9 @@ function env({section}) {
                 $('html').classList.add('test')
             }
 
-            if (location.search.includes('popout=true')) {
-                _env.isPopout = true
-                $('html').classList.add('popout')
-            } else {
-                $('html').classList.add('popup')
+            if (location.search.includes('mode=standalone')) {
+                _env.isStandalone = true
+                $('html').classList.add('standalone')
             }
 
             if (_env.isChrome) $('html').classList.add('chrome')

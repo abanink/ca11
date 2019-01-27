@@ -39,12 +39,15 @@ module.exports = (app) => {
                 if (this.mode === 'dtmf') {
                     app.emit('bg:calls:dtmf', {callId: this.call.id, key})
                 }
-                navigator.vibrate(50)
+                navigator.vibrate(100)
                 app.sounds.beep(5, 750, 50)
             },
             removeLastNumber: function() {
                 if (this.callingDisabled) return
-                if (this.endpoint) this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
+                if (this.endpoint) {
+                    navigator.vibrate(100)
+                    this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
+                }
             },
         }, app.helpers.sharedMethods()),
         mounted: function() {

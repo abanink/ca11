@@ -1,14 +1,13 @@
 
-<article
-    component
-    class="media-stream"
+<component
+    class="c-stream"
     :class="classes()"
     @click="$emit('click', $event)"
 >
-    <icon class="media-stream-icon" :name="stream.kind"/>
+    <icon class="c-stream__icon" :name="stream.kind"/>
 
     <div v-if="!stream.ready" class="content">
-        <icon name="spinner" class="spinner media-stream__loading" />
+        <icon name="spinner" class="spinner c-stream__loading" />
     </div>
 
     <audio
@@ -32,10 +31,10 @@
         ref="display"
     />
 
-    <div v-if="stream.ready && controls" class="media-stream__controls">
+    <div v-if="stream.ready && controls" class="c-stream__controls">
         <icon name="fullscreen" @click.stop="toggleFullscreen()"/>
         <icon name="pip" :class="{active: recording}" @click.stop="togglePip()"/>
         <icon name="record-rec" :class="{active: recording}" @click.stop="toggleRecord()"/>
         <icon v-if="stream.local" :name="stream.kind" @click.stop="switchStream()"/>
     </div>
-</article>
+</component>

@@ -16,15 +16,11 @@
         <span class="header__text">{{$t('calling')}}</span>
         <div class="header__actions"></div>
     </header>
-    <CallMediaPreview v-else-if="callActive.id" :call="callActive"/>
+    <StreamPreview v-else-if="callActive.id" :call="callActive"/>
 
     <main class="main">
         <Call v-if="callActive.id" :call="callActive"/>
-        <MediaStream
-            v-else-if="stream[stream.type].selected"
-            class="local-stream-preview"
-            :stream="stream[stream.type]"
-        />
+        <StreamView v-else-if="stream[stream.type].selected" :call="null"/>
         <!-- calling disabled -->
         <div v-else-if="callingDisabled" class="call-disabled">
             <icon class="disabled-icon" name="phone"/>
@@ -42,11 +38,14 @@
         </div>
         <!-- starting without any active call -->
         <Keypad
-            v-else
+            v-else-if="description.protocol === 'sip'"
             display="touch"
             mode="call"
             :endpoint="description.endpoint"
             :model.sync="description.endpoint"
+        />
+        <Network
+            v-else="description.protocol === 'sig11'"
         />
     </main>
 </component>

@@ -227,8 +227,14 @@ class CallSIP extends Call {
             // the old name is keps in assertedIdentity, unless a timeout
             // is added.
             setTimeout(() => {
-                this.state.displayName = session.assertedIdentity.uri.user
-                this.state.endpoint = session.assertedIdentity.uri.user
+                if (session.assertedIdentity) {
+                    this.state.displayName = session.assertedIdentity.uri.user
+                    this.state.endpoint = session.assertedIdentity.uri.user
+                } else {
+                    this.state.displayName = session.remoteIdentity.uri.user
+                    this.state.endpoint = session.remoteIdentity.uri.user
+                }
+
             }, 0)
         })
 

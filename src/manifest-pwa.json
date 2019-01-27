@@ -21,6 +21,6 @@
     "name": "CA11 | Free Communication For Everyone",
     "orientation": "portrait",
     "short_name": "CA11",
-    "start_url": "/",
+    "start_url": "/?mode=standalone",
     "theme_color": "#601111"
 }

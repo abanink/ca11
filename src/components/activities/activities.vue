@@ -64,7 +64,7 @@
 
     </header>
 
-    <main class="main items" v-click-outside="toggleSelectItem">
+    <main class="main scrollable items" v-click-outside="toggleSelectItem">
 
         <div v-if="!filteredActivities.length" class="items__empty">
             <icon class="items__empty-icon" name="recent"/>

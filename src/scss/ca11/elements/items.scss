@@ -83,7 +83,6 @@
             border: $spacer / 4 solid $white-color;
             border-radius: 50%;
             fill: var(--grey-200);
-            filter: drop-shadow(0 0 1px var(--grey-200));
             // Force a static width.
             flex: 0 0 $icon-large;
             margin-right: $spacer;

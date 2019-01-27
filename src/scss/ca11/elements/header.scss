@@ -5,7 +5,7 @@
 .header {
     $self: &;
 
-    align-items: stretch;
+    align-items: center;
     background: linear-gradient(to right, var(--grey-50), var(--grey-100));
     border-right: $spacer-05 solid var(--primary-base);
     display: flex;

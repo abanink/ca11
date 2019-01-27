@@ -8,9 +8,13 @@ module.exports = (app) => {
              * Always go the calls layer when clicked.
              */
             toggleSelect: function() {
-                app.setState({settings: {webrtc: {media: {stream: {
-                    [this.stream.type]: {selected: !this.stream[this.stream.type].selected},
-                }}}}, ui: {layer: 'calls'}}, {persist: true})
+                let selected = this.stream[this.stream.type].selected
+                if (!selected) selected = new Date().getTime()
+                else selected = null
+                app.setState({
+                    settings: {webrtc: {media: {stream: {[this.stream.type]: {selected}}}}},
+                    ui: {layer: 'calls'},
+                }, {persist: true})
             },
         },
         props: ['call'],

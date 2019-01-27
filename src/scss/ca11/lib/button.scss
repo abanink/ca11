@@ -43,8 +43,6 @@
         }
 
         &[disabled] {
-            border-bottom: 1px solid var(--grey-200);
-
             &:hover {
                 border-bottom: 1px solid var(--grey-200);
             }

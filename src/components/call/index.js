@@ -1,7 +1,5 @@
 module.exports = (app) => {
     const components = {
-        CallMediaPreview: require('./components/media-preview'),
-        CallMediaView: require('./components/media-view'),
         CallOptions: require('./components/options'),
         CallStatus: require('./components/status'),
         CallTransfer: require('./components/transfer'),

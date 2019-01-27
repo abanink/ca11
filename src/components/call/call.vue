@@ -11,5 +11,5 @@
         :model.sync="call.keypad.endpoint"
     />
     <!-- the default view -->
-    <CallMediaView v-else :call="call"/>
+    <StreamView v-else :call="call"/>
 </component>

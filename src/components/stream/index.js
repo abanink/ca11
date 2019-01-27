@@ -7,7 +7,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const MediaStream = {
+    const Stream = {
         data: function() {
             return {
                 recording: false,
@@ -94,8 +94,8 @@ module.exports = (app) => {
                 type: Object,
             },
         },
-        render: templates.media_stream.r,
-        staticRenderFns: templates.media_stream.s,
+        render: templates.stream.r,
+        staticRenderFns: templates.stream.s,
         watch: {
             'stream.id': function(streamId) {
                 Vue.nextTick(() => {
@@ -112,5 +112,5 @@ module.exports = (app) => {
         },
     }
 
-    return MediaStream
+    return Stream
 }

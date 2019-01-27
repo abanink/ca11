@@ -4,30 +4,30 @@
 .c-keypad {
     $self: &;
     align-items: center;
+    background: linear-gradient(to right, var(--grey-50), var(--grey-100));
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    max-width: 700px;
-    // padding: var(--gutter);
+    margin-top: $spacer-05;
+    width: 100%;
 
     &__input {
         align-items: center;
         color: var(--primary-base);
         display: flex;
         justify-content: center;
-        margin-bottom: $spacer * 3;
-        // max-width: 700px;
+        max-width: $breakpoint-desktop;
         position: relative;
         width: 100%;
 
         input {
+            background: none;
             border: 0;
             border-bottom: 1px solid var(--grey-100);
-            // background: #f00;
             color: var(--primary-base);
             font-size: var(--text-huge);
             font-weight: 600;
-            height: $spacer * 8;
+            height: $space-4 * 2;
             outline: none;
             overflow: hidden;
             padding: 0 $spacer * 4;
@@ -42,14 +42,14 @@
             }
 
             &::placeholder {
-                color: var(--primary-base);
+                color: var(--grey-200);
             }
         }
 
         #{$self}__correct {
-            color: var(--primary-base);
+            color: var(--grey-200);
             position: absolute;
-            right: 0;
+            right: $spacer-05;
             user-select: none;
 
             &.disabled {
@@ -84,8 +84,9 @@
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        height: 100%;
         justify-content: space-between;
-        max-width: 700px;
+        max-width: $breakpoint-desktop;
         width: 100%;
 
         &.disabled {
@@ -104,25 +105,25 @@
 
         #{$self}__key-row {
             display: flex;
-            flex-grow: 1;
+            flex: 1;
             justify-content: center;
+            // Don't allow the mobile virtual keyboard to distort the
+            // key layout when the input is active.
+            min-height: 80px;
             width: 100%;
 
             #{$self}__key {
-                background: none;
                 border: 0;
                 break-inside: avoid;
-                color: var(--primary-base);
+                color: var(--grey-200);
                 font-family: 'Rajdhani';
                 font-size: 1.5rem;
                 font-weight: 600;
-                height: 80px;
-                margin: 0;
+                height: 100%;
                 outline: none;
                 width: 100%;
 
                 &:hover {
-                    background: var(--grey-50);
                     color: var(--primary-base);
                     cursor: pointer;
                 }
@@ -133,7 +134,7 @@
                 }
 
                 .sub {
-                    color: $grey-color;
+                    color: var(--grey-300);
                     font-size: 0.9rem;
                 }
             }

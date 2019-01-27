@@ -8,7 +8,6 @@
 
     &__content {
         .main {
-            overflow-y: scroll;
             padding-right: 0;
             width: 100%;
         }
@@ -16,9 +15,11 @@
 }
 
 // 100vh on Android doesn't take the toolbar in account.
-html.android {
-    .c-main {
-        height: calc(100vh - 56px);
+html.chrome.android {
+    &:not(.standalone) {
+        .c-main {
+            height: calc(100vh - #{$android-toolbar-height});
+        }
     }
 }
 

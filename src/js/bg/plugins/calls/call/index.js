@@ -211,6 +211,7 @@ class Call {
         this._started = true
         this.app.sounds.ringbackTone.stop()
         this.app.sounds.ringTone.stop()
+
         this.setState({
             status: 'accepted',
             timer: {
@@ -222,7 +223,11 @@ class Call {
         const title = this.translations.accepted[this.state.type]
         this.app.plugins.ui.notification({endpoint: this.state.endpoint, force, message, title})
 
-        this.app.setState({ui: {menubar: {event: 'calling'}}})
+        const streamType = this.app.state.settings.webrtc.media.stream.type
+        this.app.setState({
+            settings: {webrtc: {media: {stream: {[streamType]: {selected: new Date().getTime()}}}}},
+            ui: {menubar: {event: 'calling'}},
+        })
         this.timerId = window.setInterval(() => {
             this.setState({timer: {current: new Date().getTime()}})
         }, 1000)
@@ -284,13 +289,22 @@ class Call {
         this.setState({keypad: {active: false}})
         // Reset the transfer state of target calls in case the transfer mode
         // of this Call is active and the callee ends the call.
-        if (this.state.transfer.active) this.plugin.__setTransferState(this, false)
+        if (this.state.transfer.active) {
+            this.plugin.__setTransferState(this, false)
+        }
 
         window.setTimeout(() => {
             this.busyTone.stop()
             this.plugin.deleteCall(this)
             // Signal browser tabs to remove the click-to-dial notification label.
             this.app.plugins.ui.notification({endpoint: this.state.endpoint})
+
+
+            const streamType = this.app.state.settings.webrtc.media.stream.type
+            this.app.setState({
+                settings: {webrtc: {media: {stream: {[streamType]: {selected: null}}}}},
+            })
+
         }, timeout)
     }
 

@@ -1,7 +1,7 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.c-media-preview {
+.c-stream-preview {
     background: var(--grey-100);
     // Visual trackbar extension.
     // border-right: $spacer-05 solid var(--grey-300);
@@ -17,8 +17,9 @@
         width: 100%;
     }
 
-    .media-stream {
+    .c-stream {
         filter: grayscale(100%);
+        height: $space-4;
         width: $space-4;
 
         &.selected {

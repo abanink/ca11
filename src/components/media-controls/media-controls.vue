@@ -1,7 +1,6 @@
 <aside component="media-controls" class="c-media-controls">
 
-    <!-- A preview of the current local stream -->
-    <MediaStream
+    <Stream
         :controls="false"
         :stream="stream[stream.type]"
         class="local"
@@ -9,5 +8,9 @@
     />
 
     <CallsSwitcher :call="callActive"/>
-    <CallOptions :call="call"/>
+
+    <!-- A preview of the current local stream -->
+    <div class="c-media-controls__bar">
+        <CallOptions :call="call"/>
+    </div>
 </aside>

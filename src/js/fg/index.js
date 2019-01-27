@@ -49,10 +49,13 @@ class AppForeground extends App {
             Login: require('../../components/login'),
             MediaControls: require('../../components/media-controls'),
             MediaPermission: require('../../components/media-permission'),
-            MediaStream: require('../../components/media-stream'),
+            Network: require('../../components/network'),
             Notifications: require('../../components/notifications'),
             Settings: require('../../components/settings'),
             Soundmeter: require('../../components/soundmeter'),
+            Stream: require('../../components/stream'),
+            StreamPreview: require('../../components/stream-preview'),
+            StreamView: require('../../components/stream-view'),
             Wizard: require('../../components/wizard'),
         }
 
