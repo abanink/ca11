@@ -4,7 +4,7 @@
 * Node and Browsers.
 */
 module.exports = (function() {
-    const env = require('../../lib/env')({section: 'bg'})
+    const env = require('../lib/env')({})
 
     let options = {
         env,
@@ -54,11 +54,6 @@ module.exports = (function() {
         contactsPlugin.providers = process.env.BUILTIN_CONTACTS_PROVIDERS
         contactsPlugin.i18n = process.env.BUILTIN_CONTACTS_I18N
         options.plugins.custom = process.env.CUSTOM_MOD
-
-        // Add an extra extension-specific module.
-        if (env.isExtension) {
-            options.plugins.builtin.push({module: require('../plugins/extension'), name: 'extension'})
-        }
     }
 
     return options

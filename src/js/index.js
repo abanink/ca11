@@ -2,34 +2,20 @@
 * The Background app namespace.
 * @namespace AppBackground
 */
-const App = require('../lib/app')
+const App = require('./lib/app')
 const Crypto = require('./lib/crypto')
 const Devices = require('./lib/devices')
 const Store = require('./lib/store')
-const Media = require('../lib/media')
-const Sounds = require('../lib/sounds')
+const Media = require('./lib/media')
+const Sounds = require('./lib/sounds')
 
-const Timer = require('./lib/timer')
 
-/**
-* The Ca11 `AppBackground` is a separate running script.
-* Functionality that is considered to be part of the backend
-* is placed in this context, because this process keeps running
-* after the AppForeground (the popup) is closed; at least, when running
-* the application as WebExtension. In that sense, this is a typical
-* client-server model. When running as a flat webview, the background is
-* just as volatile as the foreground, but the same concept and
-* code structure is used. The only difference between the
-* environments is the involved EventEmitter logic.
-*
-* @memberof app
-*/
-class AppBackground extends App {
+class CA11 extends App {
     /**
     * @param {Object} opts - Options to initialize AppBackground with.
     * @param {Object} opts.env - The environment sniffer.
     * @param {Object} opts.plugins - Plugins to load.
-    * @namespace AppBackground.plugins
+    * @namespace CA11.plugins
     */
     constructor(opts) {
         super(opts)
@@ -40,12 +26,45 @@ class AppBackground extends App {
 
         this.store = new Store(this)
         this.crypto = new Crypto(this)
-        this.timer = new Timer(this)
+
         // Encrypted asynchronous writes are queued here.
         this.__writeQueue = []
         // Keep a reference of Vue watchers, so they can be toggled
         // when switching between sessions.
         this._registeredWatchers = []
+
+        if (this.env.isBrowser) {
+            /**
+            * @namespace AppForeground.components
+            */
+            this.components = {
+                About: require('../components/about'),
+                Activities: require('../components/activities'),
+                Availability: require('../components/availability'),
+                Call: require('../components/call'),
+                Calls: require('../components/calls'),
+                Contacts: require('../components/contacts'),
+                DeviceControls: require('../components/device-controls'),
+                Field: require('../components/field'),
+                Login: require('../components/login'),
+                Main: require('../components/main'),
+                MediaControls: require('../components/media-controls'),
+                MediaPermission: require('../components/media-permission'),
+                Network: require('../components/network'),
+                Notifications: require('../components/notifications'),
+                Settings: require('../components/settings'),
+                Soundmeter: require('../components/soundmeter'),
+                Stream: require('../components/stream'),
+                StreamPreview: require('../components/stream-preview'),
+                StreamView: require('../components/stream-view'),
+                Wizard: require('../components/wizard'),
+            }
+
+            for (const name of Object.keys(this.components)) {
+                Vue.component(name, this.components[name](this))
+            }
+        }
+
 
         // Send the background script's state to the requesting event.
         this.on('bg:get_state', ({callback}) => callback(JSON.stringify(this.state)))
@@ -194,17 +213,21 @@ class AppBackground extends App {
             ui: {menubar: {base: 'inactive', event: null}},
         })
 
+        let main = null
+        // eslint-disable-next-line new-cap
+        if (this.env.isBrowser) main = this.components.Main(this)
+
         if (this.state.app.vault.key) {
             this.logger.info(`${this}opening session '${this.state.user.username}'...`)
             await this.__initSession({key: this.state.app.vault.key})
             // (!) State is reactive after initializing the view-model.
-            this.__initViewModel({main: null})
+            this.__initViewModel({main})
             this._watchersActivate()
             this.__initServices()
 
         } else {
             // No session yet.
-            this.__initViewModel({main: null})
+            this.__initViewModel({main})
         }
 
         this.devices = new Devices(this)
@@ -213,6 +236,8 @@ class AppBackground extends App {
         for (let module of Object.keys(this.plugins)) {
             if (this.plugins[module]._ready) this.plugins[module]._ready()
         }
+
+        if (this.state.user.authenticated) this.media.query()
     }
 
 
@@ -494,14 +519,6 @@ class AppBackground extends App {
         // Merge state in the context of the executing script.
         if (!encrypt) this.__mergeState({action, encrypt, path, persist, state})
         else await this.__mergeState({action, encrypt, path, persist, state})
-        // Sync the state to the other script context(bg/fg).
-        // Make sure that we don't pass a state reference over the
-        // EventEmitter in case of a webview; this would create
-        // unpredicatable side-effects.
-        let stateClone = state
-        if (!this.env.isExtension) stateClone = JSON.parse(JSON.stringify(state))
-        this.emit('fg:set_state', {action, encrypt, path, persist, state: stateClone})
-        return
     }
 
 
@@ -518,16 +535,10 @@ class AppBackground extends App {
 const options = require('./lib/options')
 
 if (options.env.isBrowser) {
-
-    if (options.env.isExtension) {
-        Raven.context(function() {
-            this.bg = new AppBackground(options)
-        })
-    } else {
-        global.AppBackground = AppBackground
-        global.bgOptions = options
-    }
+    Raven.context(function() {
+        this.ca11 = new CA11(options)
+    })
 } else {
     // Help modules find the ca11 module alias from package.json
-    module.exports = {AppBackground, options}
+    module.exports = {CA11, options}
 }

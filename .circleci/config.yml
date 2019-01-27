@@ -10,13 +10,13 @@ jobs:
       - restore_cache:
           name: Restore node modules cache
           keys:
-            - node_modules-v5-{{ checksum "package-lock.json" }}
+            - node_modules-v1-{{ checksum "yarn.lock" }}
       - run:
           name: Install node modules
-          command: npm i
+          command: yarn
       - save_cache:
           name: Save node modules cache
-          key: node_modules-v5-{{ checksum "package-lock.json" }}
+          key: node_modules-v1-{{ checksum "yarn.lock" }}
           paths:
             - ~/ca11/node_modules/
       - run: npm run commitlint-ci

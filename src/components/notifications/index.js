@@ -18,8 +18,7 @@ module.exports = function(app) {
                 app.setState({app: {notifications}})
             },
             openUrl: function(url) {
-                if (app.env.isExtension) browser.tabs.create({url})
-                else window.open(url, '_blank')
+                window.open(url, '_blank')
             },
         },
         props: ['notification'],

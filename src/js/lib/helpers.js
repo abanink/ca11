@@ -173,23 +173,9 @@ function helpers(app) {
 
 
     _helpers.openTab = function(url) {
-        if (app.env.isExtension) browser.tabs.create({url})
-        else window.open(url, '_blank')
+        window.open(url, '_blank')
     }
 
-
-    _helpers.openWindow = function(windowParams = {}, center = true) {
-        if (center) {
-            windowParams.left = (screen.width / 2) - (windowParams.width / 2)
-            windowParams.top = (screen.height / 2) - (windowParams.height / 2)
-        }
-
-        if (app.env.isExtension) browser.windows.create(windowParams)
-        else {
-            window.open(windowParams.url, '', Object.entries(windowParams).map((i) => i.join('=')).join(','))
-            window.focus()
-        }
-    }
 
     _helpers.playSound = function(soundName, sinkTarget) {
         this.playing[sinkTarget] = true
@@ -243,12 +229,6 @@ function helpers(app) {
 
                 return true
             },
-            openPopoutView: function() {
-                // This is only available in extensions.
-                if (app.env.isExtension) {
-                    browser.tabs.create({url: browser.runtime.getURL('index.html?popout=true')})
-                }
-            },
             openTab: _helpers.openTab,
             playSound: _helpers.playSound,
             setLayer: function(layerName) {
@@ -301,12 +281,6 @@ function helpers(app) {
                     return translations.accepted[this.call.type]
                 }
                 return translations[this.call.status]
-            },
-            greeting: function() {
-                let hours = new Date().getHours()
-                if (hours < 12) return this.$t('good morning')
-                else if (hours >= 12 && hours <= 17) return this.$t('good afternoon').ca()
-                else return this.$t('good evening')
             },
             hours: function() {
                 return Math.trunc((this.call.timer.current - this.call.timer.start) / 1000 / 60 / 60) % 24

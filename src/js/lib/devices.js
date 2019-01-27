@@ -5,11 +5,6 @@ class Devices {
     constructor(app) {
         this.app = app
 
-        this.app.on('bg:devices:verify-sinks', async({callback}) => {
-            await this.verifySinks()
-            if (callback) callback()
-        })
-
         // Detect changes in connected devices while running.
         if (this.app.env.isBrowser) {
             navigator.mediaDevices.ondevicechange = async(event) => {

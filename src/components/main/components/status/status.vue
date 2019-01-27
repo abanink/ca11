@@ -1,13 +1,6 @@
 <component class="c-status main-status t-status">
     <transition name="c-status">
     <div class="c-status__menu">
-        <!-- Popout link in WebExtension -->
-        <button
-            v-if="env.isExtension && !env.isPopout"
-            class="button c-status__button"
-            @click="openPopoutView"
-        ><icon name="ext-tab"/></button>
-
         <button
             class="button button--menu c-status__button t-btn-settings tooltip tooltip-bottom"
             :class="{active: layer === 'settings'}"

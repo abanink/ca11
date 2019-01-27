@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "/home/jeroen/projects/ca11-asterisk"
+		},
+		{
+			"path": "/home/jeroen/projects/ca11-theme-default"
 		}
 	],
 	"settings": {

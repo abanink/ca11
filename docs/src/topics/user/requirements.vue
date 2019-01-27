@@ -3,13 +3,9 @@
     <h2>Platform</h2>
     <p>
          <img class="illustration right" src="/img/illustration-2.jpg"/>
-        CA11 is a flexible web-based softphone and runs in
-        multiple environments. <a href="https://ca11.io">CA11 PWA</a>
-        is at this point the most promising direction, because it covers
-        the broadest amount of platforms, and doesn't have to deal with
-        vendor store distribution politics. CA11 PWA can be installed on
-        ChromeOS, Android, Linux, Windows and OSX. CA11 Electron and
-        CA11 WebExtension are at this point unsupported.
+        CA11 PWA can be installed on ChromeOS, Android, Linux, Windows and OSX.
+        CA11 Electron is currently not available as a download, but will be available
+        soon for Linux, Windows and OSX.
     </p>
 
     <h2>Earbuds/Headset</h2>

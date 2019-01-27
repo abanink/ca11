@@ -9,7 +9,7 @@
         <div class="header__version">{{version.current}}</div>
 
         <div class="header__description">
-            Free Communication<br/>For Everyone
+            Free Communication<br/>To Everyone
         </div>
     </header>
     <nav class="navigation">

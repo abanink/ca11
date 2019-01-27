@@ -325,9 +325,6 @@ class Call {
     setState(state) {
         // This merges to the call's local state; not the app's state!
         this.app.__mergeDeep(this.state, state)
-        // Allows a Call to come in without disturbing the UI.
-        if (this.silent) return
-        this.app.emit('fg:set_state', {action: 'upsert', path: `calls.calls.${this.id}`, state})
     }
 
 

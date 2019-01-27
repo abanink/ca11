@@ -111,8 +111,6 @@
         }
 
         .accordion {
-            // height: 0;
-            background: #f00 !important;
             max-height: 0;
             overflow: hidden;
             position: relative;
@@ -146,6 +144,10 @@
             font-weight: 600;
             padding: var(--spacer);
             text-transform: uppercase;
+
+            &:hover {
+                cursor: pointer;
+            }
         }
 
         &__button {

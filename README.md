@@ -9,10 +9,9 @@
 
 **Install**
 
-    cd projects
     git clone git@github.com:garage11/ca11.git
     cd ca11
-    npm i
+    yarn
     gulp develop
 
 
@@ -54,9 +53,9 @@ CA11 is written in an environment-agnostic JavaScript codebase that applies a si
 but powerful reactive data-oriented design based on [Vue.js](https://vuejs.org/).
 This architecture allows CA11 to be developed at a very fast pace while keeping
 the code maintainable and easy to adapt. The CA11 softphone is primary targetting
-desktop and mobile web environments. It currently builds as a Chrome WebExtension,
-a PWA and as an Electron desktop application. Headless mode in Node.js is
-implemented partially for tests. Head over to the [developer quickstart](https://docs.ca11.io/developers/quickstart)
+desktop and mobile web environments. It currently builds as a PWA and as an
+Electron desktop application. Headless mode in Node.js is implemented partially
+for tests. Head over to the [developer quickstart](https://docs.ca11.io/developers/quickstart)
 to learn more about CA11. Please be aware of the [code of conduct](https://github.com/garage11/ca11/blob/develop/.github/CODE_OF_CONDUCT.md)
 and [contributing guide](https://github.com/garage11/ca11/blob/develop/.github/CONTRIBUTING.md) if you're interested in contributing.
 

@@ -1,10 +1,9 @@
 <component class="c-page">
-    <h1>Glad you ask!</h1>
+    <h1>Welcome!</h1>
     <p>
-        CA11 is a decentralized phone network for free, accessible, user- and privacy-friendly calling,
-        conferencing and collaboration. <img class="illustration right" src="/img/illustration-1.jpg"/>
-        Call privacy is protected with <a href="https://tools.ietf.org/html/rfc5764">standards-based</a>
-        encryption technology and offers high quality
+        CA11 is a decentralized internet telephony platform for secure free calling, conferencing and collaboration.<img class="illustration right" src="/img/illustration-1.jpg"/>
+        Calls are protected with <a href="https://tools.ietf.org/html/rfc5764">standards-based</a>
+        encryption and use high quality
         <a href="https://www.webmproject.org/vp9/">video</a> and
         <a href="http://opus-codec.org/">audio</a>.<br/><br/>
 

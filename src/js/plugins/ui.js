@@ -1,7 +1,6 @@
 /**
-* This module is responsible for handling all UI-related state and
-* respond with UI-specific calls to watchers. UI changes may
-* be related to WebExtension-, Electron- or WebView-specific actions
+* This module is responsible for handling all UI-related
+* state and respond with UI-specific calls to watchers.
 * @module ModuleUI
 */
 const Plugin = require('ca11/lib/plugin')
@@ -34,45 +33,11 @@ class PluginUI extends Plugin {
 
 
     /**
-    * Add an animating dot to the menubar by using the setIcon
-    * method for the menubar as a way to set animation frames.
-    * @param {String} name - One of the animation presets defined in `this.animations`.
-    */
-    __menubarAnimation(name) {
-        // Clear all previously set animations.
-        if (!name) {
-            for (let _name of Object.keys(this.animations)) {
-                if (this.animations[_name].intervalId) {
-                    clearInterval(this.animations[_name].intervalId)
-                }
-            }
-            return
-        }
-        let animation = this.animations[name]
-        animation.intervalId = window.setInterval(() => {
-            browser.browserAction.setIcon({path: `img/menubar-ringing-${this.animations[name].frame}.png`})
-            if (animation.direction === 1) {
-                animation.frame += 1
-                // Reverse the direction on the last frame.
-                if (animation.frame === (animation.frames - 1)) animation.direction = -animation.direction
-            } else {
-                animation.frame -= 1
-                // Reverse the direction on the first frame.
-                if (animation.frame === 0) animation.direction = -animation.direction
-            }
-        }, 100)
-    }
-
-
-    /**
-    * Set the menubar icon in WebExtensions.
+    * Set the menubar icon in environments with
+    * a menubar icon (Electron).
     * @param {String} name - The name of the menubar png to set.
     */
-    __menubarIcon(name) {
-        if (this.app.env.isExtension && name) {
-            browser.browserAction.setIcon({path: `img/menubar-${name}.png`})
-        }
-    }
+    __menubarIcon(name) {}
 
 
     /**
@@ -98,48 +63,9 @@ class PluginUI extends Plugin {
     }
 
 
-    /**
-    * Keep track of the popup state in a WebExtension by
-    * establishing a connection between the popup script
-    * and the background script.
-    */
     _ready() {
         this.__menubarIcon(this.app.state.ui.menubar.base)
-        if (this.app.env.isExtension) {
-            this.app.setState({ui: {visible: false}})
-            // A connection between the popup script and the background
-            // is made. A new connection means the popup just opened, while
-            // a closing connecting means that the popup closed.
-            browser.runtime.onConnect.addListener((port) => {
-                this.app.setState({ui: {visible: true}})
-                for (let moduleName of Object.keys(this.app.plugins)) {
-                    if (this.app.plugins[moduleName]._onPopupAction) {
-                        this.app.plugins[moduleName]._onPopupAction('open')
-                    }
-                }
-
-                // Triggered when the popup closes.
-                port.onDisconnect.addListener((msg) => {
-                    // Remove any overlay when the popup closes.
-                    this.app.setState({ui: {overlay: null, visible: false}})
-                    for (let moduleName of Object.keys(this.app.plugins)) {
-                        if (this.app.plugins[moduleName]._onPopupAction) {
-                            this.app.plugins[moduleName]._onPopupAction('close')
-                        }
-                    }
-                })
-            })
-        } else {
-            // There is no concept of a popup without an extension.
-            // However, the event tis still triggered to start timers
-            // and such that rely on the event.
-            this.app.setState({ui: {visible: true}})
-            for (let moduleName of Object.keys(this.app.plugins)) {
-                if (this.app.plugins[moduleName]._onPopupAction) {
-                    this.app.plugins[moduleName]._onPopupAction('open')
-                }
-            }
-        }
+        this.app.setState({ui: {visible: true}})
     }
 
 
@@ -165,23 +91,6 @@ class PluginUI extends Plugin {
         return {
             'store.ui.menubar.base': (menubarIcon) => {
                 this.__menubarIcon(menubarIcon)
-            },
-            'store.ui.menubar.event': (eventName) => {
-                if (this.app.env.isExtension) {
-                    // Reset all animations.
-                    this.__menubarAnimation()
-                    if (eventName) {
-                        if (eventName === 'ringing') {
-                            this.__menubarAnimation('ringing')
-                        } else if (eventName === 'calling') {
-                            browser.browserAction.setIcon({path: 'img/menubar-ringing-4.png'})
-                        } else {
-                            browser.browserAction.setIcon({path: `img/menubar-${eventName}.png`})
-                        }
-                    } else {
-                        browser.browserAction.setIcon({path: `img/menubar-${this.app.state.ui.menubar.base}.png`})
-                    }
-                }
             },
         }
     }
@@ -244,24 +153,6 @@ class PluginUI extends Plugin {
             type: 'basic',
         }
         options.iconUrl = 'img/notification.png'
-
-        if (this.app.env.isExtension) {
-            // Only create a notification under the right conditions.
-            if (!message || !title || (this.app.state.ui.visible && !force)) return
-
-            options.iconUrl = browser.runtime.getURL(options.iconUrl)
-            if (!stack) browser.notifications.clear('c2d')
-            browser.notifications.create('c2d', options)
-            setTimeout(() => browser.notifications.clear('c2d'), timeout)
-            return
-        }
-
-
-        // Only create a notification under the right conditions.
-        if (this.app.state.ui) {
-            if (!message || !title || (this.app.state.ui.visible && !force)) return
-        }
-
         options.icon = options.iconUrl
         options.body = message
 

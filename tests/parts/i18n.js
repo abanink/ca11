@@ -4,7 +4,7 @@ const glob = util.promisify(require('glob'))
 
 const _ = require('../test')
 
-const {AppBackground, options} = require('../../src/js/bg')
+const {CA11, options} = require('../../src/js')
 const BRAND = process.env.BRAND ? process.env.BRAND : 'ca11'
 
 
@@ -50,12 +50,12 @@ _.test('[parts] i18n: translations missing', async function(t) {
     t.plan(1)
     if (!translations.length) translations = await getTranslations()
 
-    const bg = new AppBackground(options)
+    const ca11 = new CA11(options)
 
     let missing = []
 
     for (const translation of translations) {
-        if (!(translation in bg.i18n.translations.nl)) {
+        if (!(translation in ca11.i18n.translations.nl)) {
             missing.push(translation)
         }
     }
@@ -68,11 +68,11 @@ _.test('[parts] i18n: translations missing', async function(t) {
 _.test('[parts] i18n: translations redundant', async function(t) {
     t.plan(1)
     if (!translations.length) translations = await getTranslations()
-    const bg = new AppBackground(options)
+    const ca11 = new CA11(options)
 
     let redundant = []
     // Check if we have translations that are not defined; i.e. that are redundant.
-    for (const translation of Object.keys(bg.i18n.translations.nl)) {
+    for (const translation of Object.keys(ca11.i18n.translations.nl)) {
         if (!(translations.includes(translation))) {
             redundant.push(translation)
         }

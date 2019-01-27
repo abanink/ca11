@@ -1,21 +1,19 @@
 <component class="c-page">
     <h1>Quickstart</h1>
     <p>
-        CA11 is written in an environment-agnostic JavaScript codebase that applies a simple but powerful
-        reactive data-oriented design based on Vue.js. This architecture allows CA11 to be developed at a
-        very fast pace while keeping the code maintainable and easy to adapt. The CA11 softphone is primary
-        targetting desktop and mobile web environments.
+        CA11 applies a simple but powerful reactive data-oriented design based on Vue.js. This allows CA11
+        to be developed at a very fast pace while keeping code maintainable and flexible to adapt. The CA11
+        softphone is targetting desktop and mobile web platforms.
     </p>
     <p>
-        It currently builds as a Chrome WebExtension, a PWA
-        and as an Electron desktop application. Headless mode in Node.js is implemented partially for tests.
-        Let's start with building CA11 to begin with. You need a recent version of Chrome or Chromium (70+),
-        Node.js(11+), NPM and GIT. Then install CA11 like:
+        CA11 builds as a PWA and as an Electron desktop application. Headless mode in Node.js is implemented
+        partially for tests. Let's start with building CA11 to begin with. You need a recent version of Chrome
+        or Chromium (70+), Node.js(11+), Yarn and GIT. Then install CA11 like:
     </p>
 
 <pre v-highlightjs><code class="bash">git clone git@github.com:ca11/ca11.git
 cd ca11
-npm i
+yarn
 cp ./.ca11rc.example ~/.ca11rc
 </code></pre>
 

@@ -1,12 +1,6 @@
 /**
 * UserMedia related class that interacts with Ca11
-* and the getUserMedia API. The `getUserMedia` call with
-* WebExtensions is rather cumbersome. The background script
-* can only check the permission, while the foreground script
-* triggers an actual request to the user to modify the
-* permission. The browser UI status is updated after every
-* call to getUserMedia, that's why we use a poller here to
-* keep the media status up-to-date.
+* and the getUserMedia API.
 */
 class Media {
 
@@ -20,19 +14,7 @@ class Media {
 
         if (!this.app.env.isBrowser) return
 
-        if (this.app.env.isExtension) {
-            this.__createFallbackMedia()
-        } else {
-            if (this.app.env.section.bg) {
-                this.__createFallbackMedia()
-            } else {
-                this.fallback.local = document.querySelector('video#local')
-                this.fallback.remote = document.querySelector('video#remote')
-            }
-        }
-
-        document.body.prepend(this.fallback.local)
-        document.body.prepend(this.fallback.remote)
+        this.__createFallbackMedia()
     }
 
 
@@ -48,6 +30,8 @@ class Media {
         // to play during a call.
         this.fallback.local.addEventListener('canplay', () => this.fallback.local.play())
         this.fallback.remote.addEventListener('canplay', () => this.fallback.remote.play())
+        document.body.prepend(this.fallback.local)
+        document.body.prepend(this.fallback.remote)
     }
 
 
@@ -103,9 +87,8 @@ class Media {
             if (this.app.state.user.authenticated) {
                 try {
                     const stream = await this.query()
-                    if (this.app.env.section.bg && !this.app.devices.cached) {
-                        await this.app.devices.verifySinks()
-                    }
+                    if (!this.app.devices.cached) await this.app.devices.verifySinks()
+
                     // Disable this poller as soon we got permission.
                     if (stream) {
                         this.app.logger.debug(`${this}media poller stopped (approved)`)
@@ -167,9 +150,8 @@ class Media {
                 if (err.message === 'Requested device not found') {
                     // eslint-disable-next-line no-console
                     console.error(err)
-                    if (this.app.env.section.fg) {
-                        this.app.notify({icon: 'warning', message: this.app.$t('no audio devices found.'), type: 'warning'})
-                    }
+                    this.app.notify({icon: 'warning', message: this.app.$t('no audio devices found.'), type: 'warning'})
+
                     throw new Error(err)
                 }
 
@@ -182,10 +164,6 @@ class Media {
         if (!stream) return null
 
         this.streams[stream.id] = stream
-        // Share streams between bg and fg when in the same context.
-        if (this.app.env.section.fg && !this.app.env.isExtension) {
-            this.app.apps.bg.media.streams = this.streams
-        }
 
         this.app.setState({settings: {webrtc: {media: {
             permission: true,

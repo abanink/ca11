@@ -36,7 +36,7 @@ module.exports = function(settings) {
         code: `bundle application javascript code for ${helpers.format.context()}`,
         default: 'show this task list',
         develop: `start developing on ${helpers.format.context()}`,
-        naWebExtensionOnly: c.bold.red(`<not available> ${helpers.format.selected(settings.BUILD_WEBEXTENSION)}`),
+        naPWAOnly: c.bold.red('<not available> (PWA-only)'),
         styles: `bundle app scss styling for ${helpers.format.context()}`,
     }
 
@@ -85,12 +85,11 @@ module.exports = function(settings) {
             '--release': `using version <${c.bold.green(settings.SENTRY_RELEASE)}>`,
         }
 
-        if (settings.BUILD_WEBEXTENSION.includes(settings.BUILD_TARGET)) {
-            tasks.publish.description = `publish ${helpers.format.context()} version ${c.bold.red(settings.PACKAGE.version)}`
-            tasks.manifest.description = `build ${helpers.format.context()} webextension manifest.json`
+        tasks.publish.description = `publish ${helpers.format.context()} version ${c.bold.red(settings.PACKAGE.version)}`
+        if (settings.BUILD_TARGET === 'pwa') {
+            tasks.manifest.description = `build ${helpers.format.context()} pwa manifest.json`
         } else {
-            tasks.publish.description = helpers.desc.naWebExtensionOnly
-            tasks.manifest.description = helpers.desc.naWebExtensionOnly
+            tasks.manifest.description = helpers.desc.naPWAOnly
         }
 
         tasks.package.description = `package distribution-ready build for ${helpers.format.context()}`
@@ -99,13 +98,11 @@ module.exports = function(settings) {
                 '--arch': `using architecture ${helpers.format.selected(settings.ELECTRON_ARCHES, settings.ELECTRON_ARCH)}`,
                 '--platform': `on platform ${helpers.format.selected(settings.ELECTRON_PLATFORMS, settings.ELECTRON_PLATFORM)}`,
             }
+        } else if (settings.BUILD_TARGET === 'pwa') {
+            tasks.package.description = 'not available'
         }
 
         tasks['test-browser'].description = `run functional tests on a forced webview for ${settings.BRAND_TARGET} `
-        if (settings.BUILD_TARGET === 'webview') {
-            tasks.package.description = helpers.desc.naWebExtensionOnly
-        }
-
         tasks.styles.description = helpers.desc.styles
         tasks['test-lint'].description = 'lint project consistency and styleguides'
         tasks['test-unit'].description = `run unit tests for ${settings.BRAND_TARGET}`

@@ -11,7 +11,7 @@ require('./i18n')
 * generated. It is also a good testingground to optimize
 * the App & Skeleton abstraction.
 */
-class AppDocs extends App {
+class Docs extends App {
 
     constructor(options) {
         super(options)
@@ -52,13 +52,10 @@ class AppDocs extends App {
         }])
 
         this.__loadPlugins(this.__plugins)
-
         this.__initViewModel({
             main: require('../components/main')(this),
             settings: {router: this.router},
         })
-
-        this.vm.$mount('#app')
     }
 
 
@@ -77,5 +74,5 @@ class AppDocs extends App {
 
 global.options = require('./lib/options')
 
-global.AppDocs = AppDocs
-module.exports = AppDocs
+global.Docs = Docs
+module.exports = Docs

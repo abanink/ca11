@@ -1,10 +1,9 @@
 <component class="c-page">
-    <h1>Start Session</h1>
+    <h1>Start Phone</h1>
     <p>
         When you start CA11<i class="instruction__ref">1</i>, you'll notice it asks
-        for a <em>Session Name</em> and a <em>Session Password</em>.
-        This is to store a local <em>session</em> on your computer, which is used
-        to keep your data local on your computer.
+        for a <em>Phone Name</em> and a <em>Phone Password</em>.
+        This is to store your phone data as a <em>session</em> on your computer.
 
         CA11 applies encryption on the stored <em>session</em>. Nobody without
         the password provided here, can read your data. Contacts, activity history,
@@ -52,6 +51,6 @@
         Session data is stored in a browser's local storage. The CA11
         PWA shares storage with the rest of the browser. Clearing your
         browser history will also remove your CA11 session data.
-        This doesn't affect CA11 Electron and CA11 WebExtension.
+        This doesn't affect CA11 Electron.
     </p>
 </component>

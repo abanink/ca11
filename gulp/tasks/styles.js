@@ -26,7 +26,7 @@ module.exports = function(settings) {
     * @returns {Function} Gulp stream.
     */
     helpers.compile = function({addons = [], debug = false, entry}) {
-        const brandColors = this.toScss(settings.brands[settings.BRAND_TARGET].colors)
+        const brandColors = this.toScss(settings.theme.colors)
         let includePaths = [
             settings.NODE_DIR,
             // Use a directory up to the project directory,
@@ -74,13 +74,13 @@ module.exports = function(settings) {
         const sectionModules = Object.assign(builtin, custom)
         for (const moduleName of Object.keys(sectionModules)) {
             const sectionModule = sectionModules[moduleName]
-            if (sectionModule.addons && sectionModule.addons.fg.length) {
-                for (const addon of sectionModule.addons.fg) {
+            if (sectionModule.addons && sectionModule.addons.length) {
+                for (const addon of sectionModule.addons) {
                     const dirName = addon.split('/')[0]
                     logger.info(`[fg] addon styles for ${moduleName} (${addon})`)
                     addons.push(path.join(settings.NODE_DIR, dirName, 'src', 'components', '**', '*.scss'))
                 }
-            } else if (sectionModule.parts && sectionModule.parts.includes('fg')) {
+            } else if (sectionModule.parts) {
                 logger.info(`[fg] addon styles for ${moduleName} (${sectionModule.name})`)
                 // The module may include a path to the source file.
                 addons.push(path.join(settings.NODE_DIR, sectionModule.name, 'src', 'components', '**', '*.scss'))

@@ -2,12 +2,13 @@
     <header class="c-wizard__header">{{$t('quality metrics')}}</header>
 
     <div class="c-wizard__description">
-        {{$t('do you mind if {name} sends any application exceptions to a service for quality metrics? This helps us to responds faster to software issues.', {name: app.name}).ca()}}
 
+        {{$t('do you mind if {name} sends any application exceptions to a service for quality metrics? This helps us to responds faster to software issues.', {name: app.name}).ca()}}
+        <br/><br/>
+        <a class="cf" target="_blank" href="https://sentry.io/">{{$t('about')}} Sentry {{$t('quality metrics')}}</a>
 
         <div class="cf c-wizard__help">
-            {{$t('you can always change your choice later from Settings.')}}
-            <a class="cf" target="_blank" href="https://sentry.io/">{{$t('about')}} Sentry {{$t('quality metrics')}}</a>.
+            {{$t('you can change your decision later from Settings.')}}
         </div>
     </div>
 

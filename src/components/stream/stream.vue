@@ -4,11 +4,8 @@
     :class="classes()"
     @click="$emit('click', $event)"
 >
-    <icon class="c-stream__icon" :name="stream.kind"/>
-
-    <div v-if="!stream.ready" class="content">
-        <icon name="spinner" class="spinner c-stream__loading" />
-    </div>
+    <icon v-if="stream.ready" class="c-stream__icon" :name="stream.kind"/>
+    <icon v-else name="spinner" class="spinner c-stream__icon" />
 
     <audio
         v-if="stream.id && stream.kind === 'audio'"

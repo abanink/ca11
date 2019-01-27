@@ -14,7 +14,7 @@
 
         <div class="c-login__slogan">
             {{$t('free communication')}}<br/>
-            {{$t('for everyone')}}!
+            {{$t('to everyone')}}
         </div>
     </header>
 
@@ -40,7 +40,7 @@
             :autofocus="true"
             :help="$t('a password that will unlock your phone.')"
             :label="$t('phone password')"
-            :placeholder="$t('some-secret-123')"
+            :placeholder="$t('secret password')"
             :validation="$v.password"
         />
 
@@ -69,7 +69,7 @@
             :autofocus="true"
             :help="$t('password that opens vault {name}.', {name: app.session.active})"
             :label="$t('phone password')"
-            :placeholder="$t('some-secret-123')"
+            :placeholder="$t('secret password')"
             :validation="$v.password"
         />
 
@@ -97,7 +97,7 @@
     >
 
         <div v-for="session in app.session.available" class="session">
-            <i class="icon-session" @click="selectSession(session)"><icon name="session"/></i>
+            <i class="icon-session" @click="selectSession(session)"><icon name="phone"/></i>
             <div class="session__description" @click="selectSession(session)">{{session}}</div>
             <i class="icon-remove status-indicator tooltip tooltip-left" :data-tooltip="$t('remove session')" @click="removeSession(session)">
                 <icon name="delete"/>
@@ -106,10 +106,10 @@
 
         <div class="session new-session" @click="newSession()">
             <i class="icon-session">
-                <icon class="icon-session" name="session"/>
+                <icon class="icon-session" name="phone-add"/>
             </i>
             <div class="session__description cf">
-                {{$t('new session')}}
+                {{$t('new phone')}}
             </div>
         </div>
     </div>
