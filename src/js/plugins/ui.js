@@ -145,7 +145,7 @@ class PluginUI extends Plugin {
     * @param {Boolean} [opts.stack] - Whether to stack the notifications.
     */
     notification({force = false, message, number = null, title, stack = false, timeout = 3000}) {
-        if (this.app.env.isNode) return
+        if (this.app.env.isNode || this.app.env.isAndroid) return
 
         const options = {
             message: message,
