@@ -1,5 +1,5 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![CircleCI](https://circleci.com/gh/garage11/ca11/tree/develop.svg?style=svg)](https://circleci.com/gh/garage11/ca11/tree/develop)
+[![CircleCI](https://circleci.com/gh/garage11/ca11/tree/develop.svg?style=shield)](https://circleci.com/gh/garage11/ca11/tree/develop)
 
 
 **Resources**
