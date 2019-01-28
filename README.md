@@ -4,7 +4,7 @@
 
 <img align="left" src="https://docs.ca11.io/screens/alice-new-session-input.png" height="200">
 <img align="left" src="https://docs.ca11.io/screens/alice-dialing-bob.png" height="200">
-<img src="https://docs.ca11.io/screens/bob-calling-with-alice.png" height="200">
+<img src="https://docs.ca11.io/screens/alice-calling-with-bob.png" height="200">
 
 
 * [CA11](https://ca11.io/) - Try CA11 PWA
