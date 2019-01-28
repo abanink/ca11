@@ -22,9 +22,8 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
         BASE_DIR: path.join(projectDir, './'),
         BUILD_OPTIMIZED: argv.optimized ? true : (process.env.NODE_ENV === 'production'),
         BUILD_TARGET: argv.target ? argv.target : 'webview',
-        BUILD_TARGETS: ['chrome', 'electron', 'firefox', 'pwa', 'node', 'webview'],
+        BUILD_TARGETS: ['electron', 'pwa', 'node', 'webview'],
         BUILD_VERBOSE: argv.verbose ? true : false,
-        BUILD_WEBEXTENSION: ['chrome', 'firefox'],
         DEBUG_MODE: process.env.DEBUG === '1' ? true : false,
         ELECTRON_ARCH: argv.arch ? argv.arch : 'x64',
         ELECTRON_ARCHES: ['all', 'ia32', 'x64', 'armv7l', 'arm64', 'mips64el'],
@@ -37,7 +36,7 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
         // Safest default deploy target is `alpha`.
         PUBLISH_CHANNEL: argv.channel ? argv.channel : 'alpha',
         PUBLISH_CHANNELS: ['alpha', 'beta', 'production'],
-        PUBLISH_TARGETS: ['chrome'],
+        PUBLISH_TARGETS: ['pwa'],
         ROOT_DIR: path.join(__dirname, '../'),
         // Generate screenshots during browser tests?
         SIZE_OPTIONS: {showFiles: true, showTotal: true},
@@ -78,6 +77,8 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
     settings.NODE_DIR = path.join(settings.ROOT_DIR, 'node_modules') || process.env.NODE_DIR
     settings.TEMP_DIR = path.join(settings.BUILD_ROOT_DIR, '.tmp')
     settings.THEME_DIR = path.join(settings.NODE_DIR, settings.BRAND.theme, 'src')
+    // The theme-config from ca11-theme.json
+    settings.theme = require(path.join(settings.NODE_DIR, settings.BRAND.theme, 'ca11-theme.json'))
 
     // Setup environment config.
     if (process.env.HEADLESS) settings.HEADLESS = process.env.HEADLESS === '1' ? true : false

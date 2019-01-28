@@ -1,8 +1,9 @@
 <component class="c-page">
-    <h1>Customizing</h1>
+    <h1>Themes & Plugins</h1>
+
+    <h2>Themes</h2>
     <p>
-        CA11 has several parts that can be customized. Its styling is SCSS-based and depends
-        on a couple of variables. The color palette itself can be changed in <code>.ca11rc</code>
+        CA11's styling is SCSS-based and depends on a couple of variables. The color palette itself can be changed in <code>.ca11rc</code>
         to match a custom brand. The theme is a <a href="https://github.com/garage11/ca11-theme-default">package</a>
         that can be swapped in the config. Just fork the repository and include your own branding files.
         All brand-related material is separated from the CA11 core, to make it easy to adapt
@@ -33,7 +34,8 @@
     }
 }
 </code></pre>
-    <h2>API's</h2>
+<br/>
+    <h3>API's</h3>
     <p>
         CA11 doesn't include an API client like Axios by default. All communication
         flows through Websockets(SIP/SIG11). You're free to add REST API functionality

@@ -9,10 +9,9 @@ module.exports = (app, shared) => {
             },
         }, app.helpers.sharedComputed()),
         methods: Object.assign({
-            queryDevices: function() {
-                app.emit('bg:devices:verify-sinks', {callback: () => {
-                    this.stepNext()
-                }})
+            queryDevices: async function() {
+                await app.devices.verifySinks()
+                this.stepNext()
             },
         }, shared().methods),
         mounted: function() {

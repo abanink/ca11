@@ -23,20 +23,6 @@ class App extends Skeleton {
         // Contains all registered App modules.
         this.plugins = {}
         this.__plugins = options.plugins
-
-        // Use shorthand naming for the event target, because
-        // the script context is part of the event name as a
-        // convention.
-        if (this.env.section.bg) {
-            this._emitTarget = 'fg'
-            this._appSection = 'bg'
-        } else if (this.env.section.fg) {
-            this._emitTarget = 'bg'
-            this._appSection = 'fg'
-        } else if (this.env.section.app) {
-            this._emitTarget = 'app'
-            this._appSection = 'app'
-        } else throw new Error(`invalid app section: ${this.env.section}`)
     }
 
 
@@ -113,6 +99,8 @@ class App extends Skeleton {
             data: {store: this.state},
             render: h => h(main),
         }, settings))
+
+        if (this.env.isBrowser) this.vm.$mount(document.querySelector('#app'))
     }
 
 
@@ -330,14 +318,6 @@ class App extends Skeleton {
         if (!action) action = 'upsert'
         // Merge state in the context of the executing script.
         this.__mergeState({action, encrypt, path, persist, state})
-        // Sync the state to the other script context(bg/fg).
-        // Make sure that we don't pass a state reference over the
-        // EventEmitter in case of a webview; this would create
-        // unpredicatable side-effects.
-        let stateClone = state
-        if (!this.env.isExtension) stateClone = JSON.parse(JSON.stringify(state))
-        this.emit(`${this._emitTarget}:set_state`, {action, encrypt, path, persist, state: stateClone})
-        return
     }
 }
 

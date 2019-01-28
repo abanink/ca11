@@ -105,18 +105,16 @@
 
         li {
             align-items: center;
+            border-bottom: var(--border) solid transparent;
             border-left: 0;
             border-right: 0;
-            // border-bottom: var(--border) solid transparent;
-            // border-top: var(--border) solid transparent;
             color: var(--grey-200);
             display: flex;
-            // flex: 1;
             justify-content: center;
             width: $space-4;
 
             &.active {
-                // border-bottom: var(--border) solid var(--primary-base);
+                border-bottom: var(--border) solid var(--primary-base);
                 color: var(--primary-base);
             }
 

@@ -119,7 +119,7 @@ class PluginCalls extends Plugin {
         */
         this.app.on('bg:calls:call_terminate', ({callId}) => this.calls[callId].terminate())
 
-        this.app.on('bg:calls:connect', ({}) => this.connect())
+        this.app.on('bg:calls:connect', this.connect.bind(this))
         this.app.on('bg:calls:disconnect', ({reconnect}) => this.disconnect(reconnect))
 
         this.app.on('bg:calls:hold_toggle', ({callId}) => {
@@ -311,16 +311,14 @@ class PluginCalls extends Plugin {
     _newCall(description = null) {
         let call = this.callFactory(description)
         this.calls[call.id] = call
-        // Set the number and propagate the call state to the foreground.
+
         call.state.endpoint = description.endpoint
         call.setState(call.state)
-        // Sync the store's reactive properties to the foreground.
+
         if (!this.app.state.calls.calls[call.id]) {
             Vue.set(this.app.state.calls.calls, call.id, call.state)
-            this.app.emit('fg:set_state', {action: 'upsert', path: `calls.calls.${call.id}`, state: call.state})
         }
 
-        // Always set the number in the local state.
         this.app.logger.info(`${this}created new ${call.constructor.name} call`)
         return call
     }
@@ -517,8 +515,6 @@ class PluginCalls extends Plugin {
         this.app.logger.debug(`${this}delete call ${call.id}`)
         Vue.delete(this.app.state.calls.calls, call.id)
         delete this.calls[call.id]
-
-        this.app.emit('fg:set_state', {action: 'delete', path: `calls.calls.${call.id}`})
     }
 
 

@@ -50,17 +50,6 @@
                 <icon name="eye"/>
             </button>
         </div>
-
-        <!-- <div class="actions"> -->
-            <!-- <div class="field field-text search">
-                <div class="control">
-                    <input class="input" autofocus type="input"
-                        :placeholder="$t('search') + '...'"
-                        :disabled="search.disabled"
-                        v-model="search.input"/>
-                </div>
-            </div> -->
-        <!-- </div> -->
     </header>
 
     <main class="main items" v-click-outside="toggleSelectItem">

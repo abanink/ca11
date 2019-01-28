@@ -32,52 +32,6 @@ module.exports = function(settings) {
     }
 
 
-    helpers.uploadChrome = async function(brand, done) {
-        const api = settings.BRAND.store.chrome
-        const target = path.join(settings.DIST_DIR, brand, helpers.buildName(brand))
-        const zipFile = fs.createReadStream(target)
-
-        let token
-
-        const webStore = require('chrome-webstore-upload')({
-            clientId: api.clientId,
-            clientSecret: api.clientSecret,
-            // Determines publishing to production, alpha or beta(!)
-            extensionId: api[`extensionId_${settings.PUBLISH_CHANNEL}`],
-            refreshToken: api.refreshToken,
-        })
-
-        try {
-            logger.info('Retrieving Google store access token')
-            token = await webStore.fetchToken()
-            logger.info(`Access token retrieved; uploading ${target}`)
-            const upload = await webStore.uploadExisting(zipFile, token)
-            if (upload.uploadState !== 'SUCCESS') {
-                logger.info(`An error occured after uploading: ${JSON.stringify(upload, null, 4)}`)
-                return
-            }
-            logger.info(`Uploaded ${brand} Chrome WebExtension version ${PACKAGE.version}.`)
-        } catch (err) {
-            logger.info(`An error occured during uploading: ${JSON.stringify(err, null, 4)}`)
-            return
-        }
-
-        try {
-            const publish = await webStore.publish('default', token)
-            if (publish.status.includes('OK')) {
-                // Upload stacktrace related files to Sentry.
-                logger.info(`Published ${brand} Chrome WebExtension version ${PACKAGE.version}.`)
-            } else {
-                logger.info(`An error occured during publishing: ${JSON.stringify(publish, null, 4)}`)
-            }
-            done()
-        } catch (err) {
-            logger.info(err)
-            done()
-        }
-    }
-
-
     /**
      * Create a Sentry release manager with
      * the correct API settings.
@@ -93,15 +47,6 @@ module.exports = function(settings) {
             sourceMapBasePath: '~/js/',
             version: settings.SENTRY_RELEASE,
         })
-    }
-
-
-    /**
-     * Deployment task for the Google webstore.
-     * @param {Function} done Gulp task callback.
-     */
-    tasks.googleStore = function publishGoogleStore(done) {
-        helpers.uploadChrome(settings.BRAND_TARGET, done)
     }
 
 
@@ -127,13 +72,7 @@ module.exports = function(settings) {
                 resolve()
             })
 
-            if (settings.BUILD_WEBEXTENSION.includes(settings.BUILD_TARGET)) {
-                // FIXME: not all files are present in the zip on a fresh build otherwise.
-                setTimeout(() => {
-                    archive.directory(settings.BUILD_DIR, false)
-                    archive.finalize()
-                }, 500)
-            } else if (settings.BUILD_TARGET === 'electron') {
+            if (settings.BUILD_TARGET === 'electron') {
                 const iconParam = `--icon=${settings.BUILD_DIR}/img/electron-icon.png`
                 let buildParams = `--arch=${settings.ELECTRON_ARCH} --asar --overwrite --platform=${settings.ELECTRON_PLATFORM} --prune=true`
                 // This is broken when used in combination with Wine due to rcedit.

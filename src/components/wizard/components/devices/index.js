@@ -5,7 +5,7 @@ module.exports = (app, shared) => {
     const WizardDevices = {
         beforeMount: function() {
             if (!this.devices.input.length || !this.devices.output.length) {
-                app.emit('bg:devices:verify-sinks')
+                app.devices.verifySinks()
             }
         },
         computed: Object.assign({

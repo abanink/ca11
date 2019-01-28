@@ -64,12 +64,6 @@ module.exports = function(settings) {
             bundlers[name].ignore('rc')
             bundlers[name].ignore('module-alias/register')
 
-            // Exclude the webextension polyfill from non-webextension builds.
-            if (!settings.BUILD_WEBEXTENSION.includes(settings.BUILD_TARGET)) {
-                bundlers[name].ignore('webextension-polyfill')
-            }
-
-            if (name === 'webview') bundlers[name].ignore('webextension-polyfill')
             helpers.transform(bundlers[name])
         }
 
@@ -116,40 +110,34 @@ module.exports = function(settings) {
     }
 
 
-    helpers.plugins = async function(sectionModules, appSection) {
+    helpers.plugins = async function(sectionModules) {
         let requires = []
 
         for (const moduleName of Object.keys(sectionModules)) {
             const sectionModule = sectionModules[moduleName]
 
-            // Builtin modules use special markers.
-            if (['bg', 'i18n'].includes(appSection)) {
-                if (sectionModule.adapter) {
-                    logger.info(`[${appSection}] adapter plugin ${moduleName} (${sectionModule.adapter})`)
-                    requires.push(`${sectionModule.adapter}/src/js/${appSection}`)
-                } else if (sectionModule.providers) {
-                    for (const provider of sectionModule.providers) {
-                        logger.info(`[${appSection}] provider plugin ${moduleName} (${provider})`)
-                        requires.push(`${provider}/src/js/${appSection}`)
-                    }
+            if (sectionModule.adapter) {
+                logger.info(`adapter plugin ${moduleName} (${sectionModule.adapter})`)
+                requires.push(`${sectionModule.adapter}/src/js`)
+            } else if (sectionModule.providers) {
+                for (const provider of sectionModule.providers) {
+                    logger.info(`provider plugin ${moduleName} (${provider})`)
+                    requires.push(`${provider}/src/js`)
                 }
             }
 
             if (sectionModule.addons) {
-                for (const addon of sectionModule.addons[appSection]) {
-                    logger.info(`[${appSection}] addon plugin ${moduleName} (${addon})`)
-                    requires.push(`${addon}/src/js/${appSection}`)
+                for (const addon of sectionModule.addons) {
+                    logger.info(`addon plugin ${moduleName} (${addon})`)
+                    requires.push(`${addon}/src/js`)
                 }
             } else if (sectionModule.name) {
-                logger.info(`[${appSection}] custom plugin ${moduleName} (${sectionModule.name})`)
-                // A custom module is limited to a bg or fg section.
-                if (sectionModule.parts.includes(appSection)) {
-                    requires.push(`${sectionModule.name}/src/js/${appSection}`)
-                }
+                logger.info(`custom plugin ${moduleName} (${sectionModule.name})`)
+                requires.push(`${sectionModule.name}/src/js/`)
             }
         }
 
-        await helpers.compile({name: `app_${appSection}_plugins`, requires})
+        await helpers.compile({name: 'app_plugins', requires})
     }
 
 
@@ -174,23 +162,14 @@ module.exports = function(settings) {
     }
 
 
-    tasks.appBg = async function codeAppBg(done) {
-        await helpers.compile({entry: './src/js/bg/index.js', name: 'app_bg'})
-        done()
-    }
-
-
-    tasks.appFg = async function codeAppFg(done) {
-        await helpers.compile({entry: './src/js/fg/index.js', name: 'app_fg'})
+    tasks.app = async function codeApp(done) {
+        await helpers.compile({entry: './src/js/index.js', name: 'app'})
         done()
     }
 
 
     tasks.appI18n = async function codeAppI18n(done) {
-        const builtin = settings.brands[settings.BRAND_TARGET].plugins.builtin
-        const custom = settings.brands[settings.BRAND_TARGET].plugins.custom
         await Promise.all([
-            helpers.plugins(Object.assign(builtin, custom), 'i18n'),
             helpers.compile({entry: './src/js/i18n/index.js', name: 'app_i18n'}),
         ])
         done()
@@ -219,8 +198,7 @@ module.exports = function(settings) {
         const custom = settings.brands[settings.BRAND_TARGET].plugins.custom
 
         Promise.all([
-            helpers.plugins(Object.assign(builtin, custom), 'bg'),
-            helpers.plugins(Object.assign(builtin, custom), 'fg'),
+            helpers.plugins(Object.assign(builtin, custom)),
         ]).then(() => {
             done()
         })
@@ -233,19 +211,14 @@ module.exports = function(settings) {
     }
 
 
-    tasks.vendorBg = async function codeVendorBg(done) {
-        await helpers.compile({entry: './src/js/bg/vendor.js', name: 'vendor_bg'})
-        done()
-    }
-
-
-    tasks.vendorFg = async function codeVendorFg(done) {
+    tasks.vendor = async function codeVendor(done) {
         await helpers.compile({
+            // Add the compiled svg icon components to the vendor build.
             addons: [
                 path.join(settings.TEMP_DIR, settings.BRAND_TARGET, 'build', 'index.js'),
             ],
-            entry: './src/js/fg/vendor.js',
-            name: 'vendor_fg',
+            entry: './src/js/vendor.js',
+            name: 'vendor',
         })
         done()
     }

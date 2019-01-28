@@ -1,9 +1,9 @@
 <component class="c-welcome">
-    <header class="c-wizard__header">{{greeting}}!</header>
+    <header class="c-wizard__header">{{$t('welcome')}}!</header>
 
     <div class="c-wizard__description">
-        {{$t('{name} lets you communicate privately and freely with family, friends and colleagues via decentralized network SIG11!', {name: app.name}).ca()}}
-        {{$t('this onboarding wizard helps you to make your first call as quickly as possible.', {name: app.name}).ca()}}
+        {{$t('{name} is a decentralized internet telephony platform for secure free calling, conferencing and collaboration.', {name: app.name}).ca()}}
+        {{$t('click on the "next" button to start with verifying your phone settings.').ca()}}
     </div>
 
     <slot name="progress"></slot>

@@ -84,47 +84,18 @@ module.exports = function(settings) {
     * from the build configuration.
     */
     tasks.manifest = async function miscManifest() {
-        const brand = settings.brands[settings.BRAND_TARGET]
-        let target = path.join(settings.BUILD_DIR, 'manifest.json')
-
-        let manifest
-
-        if (settings.BUILD_WEBEXTENSION.includes(settings.BUILD_TARGET)) {
-            manifest = require(path.join(settings.SRC_DIR, 'manifest.json'))
-            // Distinguish between the test-version and production name.
-            manifest.name = brand.name[settings.PUBLISH_CHANNEL]
-
-            if (settings.BUILD_TARGET === 'edge') {
-                manifest.background.persistent = true
-                manifest.browser_specific_settings = {
-                    edge: {
-                        browser_action_next_to_addressbar: true,
-                    },
-                }
-            } else if (settings.BUILD_TARGET === 'firefox') {
-                manifest.applications = {
-                    gecko: {
-                        // (!) Deploys to production, alpha or beta environment.
-                        id: brand.store.firefox.gecko[`id_${settings.PUBLISH_CHANNEL}`],
-                        strict_min_version: brand.store.firefox.gecko.strict_min_version,
-                    },
-                }
-            }
-
-            manifest.browser_action.default_title = manifest.name
-            // Make sure this permission is not pushed multiple times to the same manifest.
-            if (!manifest.permissions.includes(brand.permissions)) {
-                manifest.permissions.push(brand.permissions)
-            }
-
-            manifest.homepage_url = brand.vendor.support.website
-            manifest.version = PACKAGE.version
-        } else if (settings.BUILD_TARGET === 'pwa') {
-            manifest = require(path.join(settings.SRC_DIR, 'manifest-pwa.json'))
-        }
+        let manifest = require(path.join(settings.SRC_DIR, 'manifest.json'))
+        manifest.description = PACKAGE.description
+        manifest.name = PACKAGE.productName
+        manifest.short_name = PACKAGE.productName
+        const colors = settings.brands[settings.BRAND_TARGET].colors
+        manifest.theme_color = colors['primary-color']
 
         await mkdirp(settings.BUILD_DIR)
-        await writeFileAsync(target, JSON.stringify(manifest, null, 4))
+        await writeFileAsync(
+            path.join(settings.BUILD_DIR, 'manifest.json'),
+            JSON.stringify(manifest, null, 4),
+        )
     }
 
 
@@ -170,19 +141,21 @@ module.exports = function(settings) {
             gulp.watch([
                 path.join(settings.SRC_DIR, 'js', 'main.js'),
             ], gulp.series(code.tasks.electron))
-        } else if (settings.BUILD_WEBEXTENSION.includes(settings.BUILD_TARGET)) {
+        } else if (settings.BUILD_TARGET === 'pwa') {
             gulp.watch([
                 path.join(settings.SRC_DIR, 'manifest.json'),
-            ], gulp.series(misc.tasks.manifest, helpers.reload('app_fg.js')))
+            ], gulp.series(misc.tasks.manifest, helpers.reload('app.js')))
         }
 
         gulp.watch([
+            path.join(settings.SRC_DIR, 'js', 'vendor.js'),
             path.join(settings.SRC_DIR, 'svg', '*.svg'),
         ], gulp.series(
             assets.tasks.icons,
-            code.tasks.vendorFg,
-            helpers.reload('vendor_fg.js')
+            code.tasks.vendor,
+            helpers.reload('vendor.js')
         ))
+
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'js', 'i18n', '*.js'),
@@ -192,37 +165,24 @@ module.exports = function(settings) {
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'index.html'),
-        ], gulp.series(assets.tasks.html, helpers.reload('app_fg.js')))
-
-
-        gulp.watch([
-            path.join(settings.SRC_DIR, 'js', 'bg', '**', '*.js'),
-            path.join(settings.SRC_DIR, 'js', 'lib', '**', '*.js'),
-        ], gulp.series(code.tasks.appBg, helpers.reload('app_bg.js')))
+        ], gulp.series(assets.tasks.html, helpers.reload('app.js')))
 
 
         gulp.watch([
             path.join(settings.SRC_DIR, 'components', '**', '*.js'),
+            path.join(settings.SRC_DIR, 'js', '**', '*.js'),
             path.join(settings.SRC_DIR, 'js', 'lib', '**', '*.js'),
-            path.join(settings.SRC_DIR, 'js', 'fg', '**', '*.js'),
-        ], gulp.series(code.tasks.appFg, helpers.reload('app_fg.js')))
+            `!${path.join(settings.SRC_DIR, 'js', 'vendor.js')}`,
+        ], gulp.series(code.tasks.app, helpers.reload('app.js')))
+
 
         gulp.watch([
             path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', '**', '*.js'),
         ], gulp.series(
-            gulp.parallel(code.tasks.appI18n, code.tasks.appBg, code.tasks.appFg),
+            gulp.parallel(code.tasks.appI18n, code.tasks.app),
             code.tasks.plugins,
-            helpers.reload('app_fg_plugins.js'),
+            helpers.reload('app_plugins.js'),
         ))
-
-        gulp.watch([
-            path.join(settings.SRC_DIR, 'js', 'bg', 'vendor.js'),
-        ], gulp.series(code.tasks.vendorBg, helpers.reload('vendor_bg.js')))
-
-
-        gulp.watch([
-            path.join(settings.SRC_DIR, 'js', 'fg', 'vendor.js'),
-        ], gulp.series(code.tasks.vendorFg, helpers.reload('vendor_fg.js')))
 
 
         gulp.watch([
@@ -231,6 +191,7 @@ module.exports = function(settings) {
             path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', 'components', '**', '*.scss'),
         ], {followSymlinks: true}, gulp.series(styles.tasks.app, helpers.reload('app.css')))
 
+
         gulp.watch([
             path.join(settings.SRC_DIR, 'components', '**', '*.vue'),
             path.join(settings.ROOT_DIR, '../', 'ca11-*', 'src', 'components', '**', '*.vue'),
@@ -238,7 +199,7 @@ module.exports = function(settings) {
 
 
         gulp.watch([
-            path.join(settings.BASE_DIR, 'test', 'bg', '**', '*.js'),
+            path.join(settings.BASE_DIR, 'tests', 'parts', '**', '*.js'),
         ], gulp.series(test.tasks.unit))
     }
 

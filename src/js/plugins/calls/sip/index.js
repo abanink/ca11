@@ -101,9 +101,8 @@ class SipCalls {
         } else {
             this.app.logger.info(`${this}incoming call ${session.request.call_id} allowed by invite handler`)
             Vue.set(this.app.state.calls.calls, call.id, call.state)
-            this.app.emit('fg:set_state', {action: 'upsert', path: `calls.calls.${call.id}`, state: call.state})
         }
-        // Save CAll reference.
+        // Save call reference.
         this.plugin.calls[call.id] = call
     }
 
@@ -152,10 +151,8 @@ class SipCalls {
      */
     _userAgent() {
         const env = this.app.env
-        // Don't use dynamic extension state here as version.
-        // CA11 may run outside of an extension's (manifest)
-        // context. Also don't use template literals, because envify
-        // can't deal with string replacement otherwise.
+        // Don't use template literals, because envify
+        // can't deal with string replacement.
         let userAgent = 'CA11/' + process.env.VERSION + ' '
         if (env.isLinux) userAgent += '(Linux/'
         else if (env.isMacOS) userAgent += '(MacOS/'

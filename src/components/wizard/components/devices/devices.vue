@@ -1,10 +1,11 @@
 <component class="c-devices t-devices">
     <header class="c-wizard__header">
-        {{$t('audio settings')}}
+        {{$t('your audio settings')}}
     </header>
 
     <div class="c-wizard__description">
-        {{$t('please check your headset setup').ca()}}:
+        {{$t('please notice that call sound quality depends a great deal on your audio setup.').ca()}}
+        {{$t('a USB headset or earbuds with a microphone are recommended.').ca()}}
 
         <DeviceControls
             v-if="media.stream[media.stream.type].id && media.permission"

@@ -1,4 +1,4 @@
-require('../src/js/bg/vendor')
+require('../src/js/vendor')
 require('../src/js/i18n')
 
 const {promisify} = require('util')

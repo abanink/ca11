@@ -88,12 +88,12 @@ module.exports = function(settings) {
         for (const moduleName of Object.keys(sectionPlugins)) {
             const sectionPlugin = sectionPlugins[moduleName]
 
-            if (sectionPlugin.addons && sectionPlugin.addons.fg.length) {
-                for (const addon of sectionPlugin.addons.fg) {
+            if (sectionPlugin.addons && sectionPlugin.addons.length) {
+                for (const addon of sectionPlugin.addons) {
                     logger.info(`[fg] addon templates for ${moduleName} (${addon})`)
                     sources.push(path.join(settings.NODE_DIR, addon, 'src', 'components', '**', '*.vue'))
                 }
-            } else if (sectionPlugin.parts && sectionPlugin.parts.includes('fg')) {
+            } else if (sectionPlugin.parts) {
                 logger.info(`[fg] custom templates for ${moduleName} (${sectionPlugin.name})`)
                 // The module may include a path to the source file.
                 sources.push(path.join(settings.NODE_DIR, sectionPlugin.name, 'src', 'components', '**', '*.vue'))

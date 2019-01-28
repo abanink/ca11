@@ -3,19 +3,6 @@
     <header class="content__header header">
         <icon class="header__icon" name="recent"/>
 
-        <!-- <div class="actions"> -->
-            <!-- <div class="field field-text search">
-                <div class="control">
-                    <input class="input" autofocus type="input"
-                        :placeholder="$t('search') + '...'"
-                        :disabled="search.disabled"
-                        v-model="search.input"/>
-                </div>
-            </div> -->
-
-
-        <!-- </div> -->
-
         <div class="header__filters">
             <button
                 class="header__filter tooltip tooltip-bottom"

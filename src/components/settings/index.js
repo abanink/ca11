@@ -62,7 +62,7 @@ module.exports = (app) => {
                 app.notify({icon: 'settings', message: app.$t('your settings are stored'), type: 'success'})
 
                 // Verify currently selected devices after saving settings again.
-                app.emit('bg:devices:verify-sinks')
+                app.devices.verifySinks()
             },
         }, app.helpers.sharedMethods()),
         mounted: async function() {
