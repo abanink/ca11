@@ -10,18 +10,10 @@ class Crypto {
     constructor(app) {
         this.app = app
 
-        this.__cryptoParams = {
-            aes: {
-                params: {
-                    length: 256,
-                    name: 'AES-GCM',
-                },
-            },
+        this.params = {
+            aes: {params: {length: 256, name: 'AES-GCM'}},
             ecdh: {
-                params: {
-                    name: 'ECDH',
-                    namedCurve: 'P-256',
-                },
+                params: {name: 'ECDH', namedCurve: 'P-256'},
                 uses: ['deriveKey', 'deriveBits'],
             },
             rsa: {
@@ -76,16 +68,13 @@ class Crypto {
     * @returns {String} - The base-64 encoded string of the DataArray.
     */
     __dataArrayToBase64(data) {
-        if (this.app.env.isBrowser) {
-            let binary = ''
-            let bytes = new Uint8Array(data)
-            let len = bytes.byteLength
-            for (let i = 0; i < len; i++) {
-                binary += String.fromCharCode(bytes[i])
-            }
-            return btoa(binary)
+        let binary = ''
+        let bytes = new Uint8Array(data)
+        let len = bytes.byteLength
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i])
         }
-        return data.toString('base64')
+        return btoa(binary)
     }
 
 
@@ -131,7 +120,7 @@ class Crypto {
     */
     async __deriveAESKeyFromECDH(publicKey) {
         this.app.logger.debug(`${this}deriving common aes-gcm key from ecdh secret`)
-        const sessionKey = await crypto.subtle.deriveKey({
+        const aesKey = await crypto.subtle.deriveKey({
             name: 'ECDH',
             namedCurve: 'P-256',
             public: publicKey,
@@ -139,7 +128,7 @@ class Crypto {
             length: 256,
             name: 'AES-GCM',
         }, true, ['encrypt', 'decrypt'])
-        return sessionKey
+        return aesKey
     }
 
 
@@ -266,19 +255,44 @@ class Crypto {
 
 
     /**
-    * The session key is generated from the user's password and is
-    * cached in-memory. The user has to refill it's password as soon
-    * the plugin is restarted. All application data is decrypted using
-    * the session key.
+    * Generate a RSA keypair. This keypair is used to
+    * sign transient ECDH keys to provide PFS.
+    * See https://webkit.org/blog/7790/update-on-web-cryptography/
+    * @returns {Object} - Public/Private keypair.
+    */
+    async createIdentity() {
+        try {
+            this.identity = await crypto.subtle.generateKey(this.params.rsa.params, true, this.params.rsa.uses)
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(err)
+        }
+
+        let [privateKey, publicKey] = await Promise.all([
+            this.__exportPrivateKey(this.identity.privateKey),
+            this.__exportPublicKey(this.identity.publicKey),
+        ])
+
+        return {privateKey, publicKey}
+    }
+
+
+    /**
+    * The vault AES key is generated from the user's password using
+    * PBKDF2 and is cached in-memory. By default, it is also stored
+    * in the unencrypted part of local storage, allowing the user to
+    * auto-login. Logging out or disable auto-login only uses the
+    * cached key. In this case, the user needs to refill it's password
+    * as soon the plugin is restarted.
     * @param {String} username - Username to generate an AES key for.
     * @param {String} password - Password to generate an AES key for.
     * @returns {Promise} - Resolves with an AES-GCM key.
     */
-    async _generateVaultKey(username, password) {
+    async createVaultKey(username, password) {
         let base64Salt = this.app.state.app.vault.salt
         let salt
 
-        // The salt is bound to the username and is therefor required.
+        // The salt is bound to the username and is required.
         if (base64Salt) {
             salt = this.__base64ToDataArray(base64Salt)
         } else {
@@ -287,73 +301,55 @@ class Crypto {
             this.app.setState({app: {vault: {salt: base64Salt}}}, {encrypt: false, persist: true})
         }
 
-
-        let sessionKey = await crypto.subtle.importKey(
+        let vaultKey = await crypto.subtle.importKey(
             'raw', this.__stringToDataArray(`${username}${password}`),
             {name: 'PBKDF2'}, false, ['deriveKey', 'deriveBits'],
         )
 
         // Use a decent iteration count to make the hashing mechanism slow
         // enough, to make it less likely that the password can be brute-forced.
-        sessionKey = await crypto.subtle.deriveKey(
+        this.vaultKey = await crypto.subtle.deriveKey(
             {hash: {name: 'SHA-256'}, iterations: 500000, name: 'PBKDF2', salt},
-            sessionKey, {length: 256, name: 'AES-GCM'}, true, ['encrypt', 'decrypt'])
-        return sessionKey
-    }
+            vaultKey, {length: 256, name: 'AES-GCM'}, true, ['encrypt', 'decrypt'])
 
-
-    /**
-    * Import a base64 AES vault key. This key is stored as base64
-    * in localStorage when the user enabled it. The user is informed about
-    * the security implications.
-    * @param {String} vaultKey - Base64 encoded version of the Vault key (AES-GCM).
-    */
-    async _importVaultKey(vaultKey) {
-        try {
-            this.sessionKey = await crypto.subtle.importKey(
-                'raw', this.__base64ToDataArray(vaultKey), this.__cryptoParams.aes.params,
-                true, ['encrypt', 'decrypt'])
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(err)
-        }
+        return this.vaultKey
     }
 
 
     /**
     * Decrypt a cypher object with an AES-GCM session key.
-    * @param {CryptoKey} sessionKey - The AES-GCM CryptoKey to decrypt a message with.
+    * @param {CryptoKey} aesKey - The AES-GCM CryptoKey to decrypt a message with.
     * @param {Object} ciphertext - The cipher object.
     * @param {Object} [ciphertext.additionalData] - Additional authenticated data.
     * @param {Object} [ciphertext.cipher] - The actual encrypted payload.
     * @param {Object} [ciphertext.iv] - The initialization vector.
     * @returns {Promise} - Resolves with the decrypted plaintext message.
     */
-    async decrypt(sessionKey, ciphertext) {
+    async decrypt(aesKey, ciphertext) {
         let decrypted = await crypto.subtle.decrypt({
             additionalData: this.__base64ToDataArray(ciphertext.additionalData),
             iv: this.__base64ToDataArray(ciphertext.iv),
             name: 'AES-GCM',
             tagLength: 128,
-        }, sessionKey, this.__base64ToDataArray(ciphertext.cipher))
+        }, aesKey, this.__base64ToDataArray(ciphertext.cipher))
         return this.__dataArrayToString(decrypted)
     }
 
 
     /**
-    * Encrypt a plaintext string with AES-GCM.
-    * @param {CryptoKey} sessionKey - An AES-GCM key used to encrypt session data with.
+    * Encrypt a plaintext string with an AES-GCM session key.
+    * @param {CryptoKey} aesKey - An AES-GCM key used to encrypt session data with.
     * @param {String} plaintext - The message data to encrypt.
     * @param {String} additionalData - Additional AES-GCM data that must be verifiable.
     * @returns {Promise} - Resolves with an AES cipher data object.
     */
-    async encrypt(sessionKey, plaintext, additionalData = null) {
+    async encrypt(aesKey, plaintext, additionalData = null) {
         const iv = crypto.getRandomValues(this.__dataArray(16))
         if (additionalData) additionalData = this.__stringToDataArray(additionalData)
         else additionalData = this.__dataArray(0)
         const encrypted = await crypto.subtle.encrypt(
             {additionalData, iv, name: 'AES-GCM', tagLength: 128},
-            sessionKey, this.__stringToDataArray(plaintext))
+            aesKey, this.__stringToDataArray(plaintext))
         return {
             additionalData: this.__dataArrayToBase64(additionalData),
             cipher: this.__dataArrayToBase64(encrypted),
@@ -363,48 +359,46 @@ class Crypto {
 
 
     /**
-    * An identity is foremost a sessionkey that is used to encrypt
-    * locally stored data with. It can also provide means to setup a secure
-    * communication channel with between two endpoints. In that case a transient
-    * ECDH key and a static RSA-PSS key is used to negotiate a PFS secret key
-    * between the two endpoints.
-    * @param {String} username - The username to unlock local data with.
-    * @param {String} password - The password to unlock local data with.
-    * @returns {Object} - Public/private keypair.
-    */
-    async identityCreate(username, password) {
-        this.sessionKey = await this._generateVaultKey(username, password)
+     * A hashed version of the public key is the
+     * identity of a node in the network.
+     */
+    async hashIdentity() {
 
-        try {
-            this.rsa = await crypto.subtle.generateKey(this.__cryptoParams.rsa.params, true, this.__cryptoParams.rsa.uses)
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(err)
-        }
-
-        let [privateKey, publicKey] = await Promise.all([
-            this.__exportPrivateKey(this.rsa.privateKey),
-            this.__exportPublicKey(this.rsa.publicKey),
-        ])
-
-        return {privateKey, publicKey}
     }
 
 
     /**
-    * Import a RSA keypair
+    * Import a previously created RSA identity.
     */
-    async identityImport({publicKey, privateKey}) {
+    async importIdentity({publicKey, privateKey}) {
         try {
             let [_privateKey, _publicKey] = await Promise.all([
-                this.__importPrivateKey(privateKey, this.__cryptoParams.rsa.params, ['sign']),
-                this.__importPublicKey(publicKey, this.__cryptoParams.rsa.params, ['verify']),
+                this.__importPrivateKey(privateKey, this.params.rsa.params, ['sign']),
+                this.__importPublicKey(publicKey, this.params.rsa.params, ['verify']),
             ])
-            this.rsa = {privateKey: _privateKey, publicKey: _publicKey}
+            this.identity = {privateKey: _privateKey, publicKey: _publicKey}
         } catch (err) {
             // eslint-disable-next-line no-console
             console.error(`${this}unable to decrypt rsa identity`)
             throw err
+        }
+    }
+
+
+    /**
+    * Import a base64 AES vault key. This key is stored as base64
+    * in localStorage when the user enabled it. The user is informed about
+    * the security implications.
+    * @param {String} vaultKey - Base64 encoded version of the Vault key (AES-GCM).
+    */
+    async importVaultKey(vaultKey) {
+        try {
+            this.vaultKey = await crypto.subtle.importKey(
+                'raw', this.__base64ToDataArray(vaultKey), this.params.aes.params,
+                true, ['encrypt', 'decrypt'])
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(err)
         }
     }
 
@@ -417,9 +411,9 @@ class Crypto {
     */
     async storeVaultKey() {
         this.app.logger.debug(`${this}enable auto session recovery`)
-        const sessionKey = await this.__exportAESKey(this.sessionKey)
-        this.app.setState({app: {vault: {key: sessionKey}}}, {encrypt: false, persist: true})
-        return sessionKey
+        const vaultKey = await this.__exportAESKey(this.vaultKey)
+        this.app.setState({app: {vault: {key: vaultKey}}}, {encrypt: false, persist: true})
+        return vaultKey
     }
 
 

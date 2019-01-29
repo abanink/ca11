@@ -1,5 +1,5 @@
 module.exports = (function() {
-    const env = require('ca11/lib/env')({section: 'app'})
+    const env = require('ca11/lib/env')()
 
     let options = {
         env,

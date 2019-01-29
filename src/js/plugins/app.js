@@ -150,7 +150,6 @@ class PluginApp extends Plugin {
                 }
             },
             'store.app.vault.store': (storeVaultKey) => {
-                // Only respond as long the user is logged in.
                 if (!this.app.state.user.authenticated) return
 
                 if (storeVaultKey) {

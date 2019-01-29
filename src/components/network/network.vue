@@ -3,14 +3,12 @@
 
     <div class="svg-container" ref="container">
         <svg xmlns="http://www.w3.org/2000/svg"
-            :width="width+'px'"
-            :height="height+'px'"
             @mousemove="drag($event)"
             @mouseup="drop()"
             v-if="bounds.minX"
         >
 
-            <line v-for="link in links"
+            <line v-for="link in edges"
                 :x1="coords[link.source.index].x"
                 :y1="coords[link.source.index].y"
                 :x2="coords[link.target.index].x"
@@ -18,14 +16,12 @@
                 stroke="#aaa" stroke-width="2"
             />
 
-            <circle
+            <circle class="node" :class="classes('node', node)"
                 v-for="(node, i) in nodes"
                 :cx="coords[i].x"
                 :cy="coords[i].y"
-                :r="node.super ? 20 : 10"
+                :r="node.super ? 15 : 10"
                 :fill="color(node)"
-                stroke="white"
-                stroke-width="1"
                 @mousedown="currentMove = {x: $event.screenX, y: $event.screenY, node: node}"
             />
 

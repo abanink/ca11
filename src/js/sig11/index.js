@@ -1,8 +1,14 @@
+const WebCrypto = require('node-webcrypto-ossl')
+
 const WebSocket = require('ws')
 const http = require('http')
 
-const Network = require('./network')
+global.EventEmitter = require('eventemitter3')
+global.btoa = require('btoa')
 
+const Network = require('./network')
+const Skeleton = require('../lib/skeleton')
+const Crypto = require('../lib/crypto')
 
 /**
 * Sig11 is a signalling layer used to setup p2p calls with.
@@ -14,13 +20,27 @@ const Network = require('./network')
 * in the first iteration will include a routing
 * strategy.
 */
-class Sig11 {
+class Sig11 extends Skeleton {
 
     constructor(settings) {
+        const env = require('../lib/env')({})
+        super({env})
         process.title = 'sig11'
+
+        global.crypto = new WebCrypto({
+            // directory: settings.ROOT_DIR,
+        })
+
+        this.crypto = new Crypto(this)
         this.settings = settings
         this.sockets = []
-        this.network = new Network()
+        this.initNetwork()
+    }
+
+
+    async initNetwork() {
+        const {publicKey} = await this.crypto.createIdentity()
+        this.network = new Network(this, publicKey)
     }
 
 
@@ -28,9 +48,12 @@ class Sig11 {
         if (req.headers.cookie) {
             let cookieMap = new Map(req.headers.cookie.replace(/\"/g, '').split(';').map((i) => i.split('=')))
             const identity = cookieMap.get('identity')
-
             this.network.addNode({id: identity, transport: ws})
-
+            ws.send(JSON.stringify({
+                id: this.network.id,
+                network: this.network.serialize(),
+            }))
+            // Send the network layout to the connected party.
             ws.on('message', (message) => {
                 message = JSON.parse(message)
                 if (message.node) {
@@ -102,4 +125,5 @@ class Sig11 {
 
 let settings = require('../../../gulp/settings')(__dirname)
 const sig11 = new Sig11(settings)
+
 module.exports = sig11

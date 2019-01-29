@@ -32,6 +32,7 @@ module.exports = function config(projectDir, {overrides = {}} = {}) {
         // Default loglevel is info.
         LOG_LEVEL: (argv.L && argv.L.length <= 4) ? argv.L.length : 3,
         LOG_LEVELS: ['error', 'warning', 'info', 'debug'],
+        NO_SIG11: argv.nosig11 ? true : false,
         NODE_ENVS: ['development', 'production'],
         // Safest default deploy target is `alpha`.
         PUBLISH_CHANNEL: argv.channel ? argv.channel : 'alpha',

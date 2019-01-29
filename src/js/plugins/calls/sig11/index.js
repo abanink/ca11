@@ -14,23 +14,41 @@ class Sig11Calls {
     }
 
 
-    async _onMessage(message) {
-        let data = JSON.parse(message.data)
-        if (data.sdp && data.sdp.type === 'offer') {
-            //incoming call.
-            const call = this.plugin.callFactory({}, {silent: false}, 'CallSIG11')
-            this.plugin.calls[call.id] = call
-            call.start()
+    async _onMessage(e) {
+        const data = JSON.parse(e.data)
+        // console.log('NETWORK:', network)
+        // Translate to d3 graph representation.
+        const nodes = data.network.nodes.map((i) => {
+            let node = Object.assign({id: i.v, x: null, y: null}, i.value)
+            if (i.v === this.app.state.user.identity.publicKey) {
+                // Object.assign(node, {fx: 200, fy: 100})
+            }
+            // console.log(node)
+            return node
+        })
 
-            this.pc = new RTCPeerConnection({
-                iceServers: [{
-                    urls: 'stun:stun3.l.google.com:19302',
-                }],
-            })
+        const edges = data.network.edges.map((i) => {
+            return {
+                source: {index: data.network.nodes.findIndex((j) => j.v === i.v)},
+                target: {index: data.network.nodes.findIndex((j) => j.v === i.w)},
+            }
+        })
 
-            await this.pc.setRemoteDescription(data.sdp)
-            await this.pc.createAnswer()
-        }
+        this.app.setState({calls: {sig11: {network: {edges, nodes}}}})
+    //     let data = JSON.parse(message.data)
+    //     if (data.sdp && data.sdp.type === 'offer') {
+    //         //incoming call.
+    //         const call = this.plugin.callFactory({}, {silent: false}, 'CallSIG11')
+    //         this.plugin.calls[call.id] = call
+    //         call.start()
+
+    //         this.pc = new RTCPeerConnection({
+    //             iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
+    //         })
+
+    //         await this.pc.setRemoteDescription(data.sdp)
+    //         await this.pc.createAnswer()
+    //     }
     }
 
 

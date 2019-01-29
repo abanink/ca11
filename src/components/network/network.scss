@@ -10,19 +10,38 @@
         box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
         height: 100%;
         width: 100%;
+
+        svg {
+            height: 100%;
+            width: 100%;
+        }
     }
 
     label {
         display: block;
     }
 
-    .links line {
-        stroke: #999;
+    line {
+        stroke: var(--grey-100);
         stroke-opacity: 0.6;
     }
 
+    .node {
+        // width: $spacer * 10;
+        // height: $spacer * 10;
+        fill: var(--grey-200);
+
+        &.own {
+            fill: $green-color;
+        }
+
+        &.super {
+            fill: var(--primary-base);
+        }
+    }
+
     .nodes circle {
-        stroke: #fff;
+        // stroke: #fff;
         stroke-width: 1.5px;
     }
 }

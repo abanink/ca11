@@ -37,7 +37,14 @@ module.exports = function(settings) {
             logger.info('Restarting SIG11 service...')
             await helpers.sig11.stop()
             // Allows updated code to load.
-            delete require.cache[require.resolve('../../src/js/sig11')]
+            // console.log(Object.keys(require.cache))
+            for (const key of Object.keys(require.cache)) {
+                // This module has issues registering properly.
+                if (!key.includes('node-webcrypto-ossl')) {
+                    delete require.cache[key]
+                }
+            }
+
             helpers.sig11 = require('../../src/js/sig11')
             await helpers.sig11.start()
         }
@@ -114,13 +121,16 @@ module.exports = function(settings) {
         const test = require('./test')(settings)
 
         helpers.serveHttp()
-        helpers.serveSig11()
 
-        gulp.watch([
-            path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
-        ], function reloadSIG11(done) {
-            helpers.serveSig11(true, done)
-        })
+        if (!settings.NO_SIG11) {
+            helpers.serveSig11()
+
+            gulp.watch([
+                path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
+            ], function reloadSIG11(done) {
+                helpers.serveSig11(true, done)
+            })
+        }
 
         if (settings.BUILD_TARGET === 'node') {
             // Node development doesn't have transpilation.
@@ -173,6 +183,7 @@ module.exports = function(settings) {
             path.join(settings.SRC_DIR, 'js', '**', '*.js'),
             path.join(settings.SRC_DIR, 'js', 'lib', '**', '*.js'),
             `!${path.join(settings.SRC_DIR, 'js', 'vendor.js')}`,
+            `!${path.join(settings.SRC_DIR, 'js', 'sig11', '*.js')}`,
         ], gulp.series(code.tasks.app, helpers.reload('app.js')))
 
 

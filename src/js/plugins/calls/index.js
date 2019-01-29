@@ -274,6 +274,10 @@ class PluginCalls extends Plugin {
             sig11: {
                 enabled: true,
                 endpoint: process.env.SIG11_ENDPOINT,
+                network: {
+                    edges: [],
+                    nodes: [],
+                },
                 status: 'loading',
                 toggled: true,
             },

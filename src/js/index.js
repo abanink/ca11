@@ -22,7 +22,7 @@ class CA11 extends App {
 
         // Allow context debugging during development.
         // Avoid leaking this global in production mode.
-        if (!(process.env.NODE_ENV === 'production')) global.bg = this
+        if (!(process.env.NODE_ENV === 'production')) global.ca11 = this
 
         this.store = new Store(this)
         this.crypto = new Crypto(this)
@@ -152,21 +152,23 @@ class CA11 extends App {
         let newIdentity = {}
         if (key) {
             this.logger.info(`${this}init session storage with vault key`)
-            await this.crypto._importVaultKey(key)
+            await this.crypto.importVaultKey(key)
         } else if (password) {
             const sessionId = this.state.app.session.active
+            await this.crypto.createVaultKey(sessionId, password)
+
             this.logger.debug(`${this}init session identity for "${sessionId}"`)
-            Object.assign(newIdentity, await this.crypto.identityCreate(sessionId, password))
+            Object.assign(newIdentity, await this.crypto.createIdentity())
+
         } else {
             throw new Error('failed to unlock (no session key or credentials)')
         }
 
         await this._restoreState()
-
         // Either restore the user identity from the previously stored
         // state, store the created identity into the state.
         if (key) {
-            await this.crypto.identityImport(this.state.user.identity)
+            await this.crypto.importIdentity(this.state.user.identity)
         } else if (password) {
             this.setState({user: {identity: newIdentity}}, {persist: true})
         }
@@ -176,8 +178,8 @@ class CA11 extends App {
             user: {authenticated: true},
         }, {encrypt: false, persist: true})
 
-        this.plugins.calls.sig11.connect()
 
+        this.plugins.calls.sig11.connect()
 
         // Set the default layer if it's still set to login.
         if (this.state.ui.layer === 'login') {
@@ -316,7 +318,7 @@ class CA11 extends App {
         const storeEndpoint = this.state.app.session.active
         if (!storeEndpoint) return
 
-        let storeState = await this.crypto.encrypt(this.crypto.sessionKey, JSON.stringify(this.store.cache.encrypted))
+        let storeState = await this.crypto.encrypt(this.crypto.vaultKey, JSON.stringify(this.store.cache.encrypted))
         this.store.set(`${storeEndpoint}/state/vault`, storeState)
         item.status = 2
         // Process the next queue item in case other write actions were
@@ -369,7 +371,7 @@ class CA11 extends App {
         let decryptedState = {}
         if (cipherData) {
             try {
-                decryptedState = JSON.parse(await this.crypto.decrypt(this.crypto.sessionKey, cipherData))
+                decryptedState = JSON.parse(await this.crypto.decrypt(this.crypto.vaultKey, cipherData))
             } catch (err) {
                 this.logger.debug(`${this}failed to restore encrypted state`)
                 throw new Error('failed to decrypt; wrong password?')
