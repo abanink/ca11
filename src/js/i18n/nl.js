@@ -137,7 +137,6 @@ module.exports = {
     'starts a new call with {endpoint}': 'begint nieuw gesprek met {endpoint}',
     'the documentation is here to help you make the most out of the {vendor} softphone': 'de documentatie is er om je te helpen het meeste uit je {vendor} telefoon te halen',
     'this update requires you to re-login and setup your account again; our apologies.': 'deze update vereist dat je opnieuw inlogt en je account weer moet instellen; onze excuses hiervoor.',
-    'to everyone': 'naar iedereen',
     'toggle keypad': 'toggle keypad',
     'toggle on-hold': 'toggle in-wacht',
     'toggle transfer': 'toggle doorverbinden',

@@ -44,7 +44,7 @@ gulp.task('code', (done) => {
 })
 
 gulp.task('default', helpers.taskDefault)
-gulp.task('develop', gulp.series(build, misc.tasks.watch))
+gulp.task('develop', misc.tasks.watch)
 gulp.task('manifest', misc.tasks.manifest)
 gulp.task('package', gulp.series(build, publish.tasks.package))
 

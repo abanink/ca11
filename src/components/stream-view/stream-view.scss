@@ -12,7 +12,7 @@ html.chrome.android {
 
 .c-stream-view {
     align-items: stretch;
-    background: linear-gradient(to right, var(--grey-50), var(--grey-100));
+    background: linear-gradient(to right, $white-color, var(--grey-100));
     display: flex;
     flex: 1;
     flex-direction: row;

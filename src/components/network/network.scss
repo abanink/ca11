@@ -1,20 +1,41 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
+html.chrome.android {
+    .c-network {
+        .svg-container {
+            height: calc(100vh - #{$space-4 * 2 + $spacer * 1.5} - #{$android-toolbar-height});
+
+            svg {
+                height: calc(100vh - #{$space-4 * 2 + $spacer * 1.5} - #{$android-toolbar-height});
+            }
+        }
+    }
+}
+
+
 .c-network {
     margin-top: $spacer-05;
     width: 100%;
 
     .svg-container {
-        border: 1px solid #f8f8f8;
-        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
-        height: 100%;
+        background: linear-gradient(to right, $white-color, var(--grey-100));
+        height: calc(100vh - #{$space-4 * 2 + $spacer * 1.5});
+        position: relative;
         width: 100%;
 
         svg {
-            height: 100%;
+            height: calc(100vh - #{$space-4 * 2 + $spacer * 1.5});
             width: 100%;
+            z-index: 10000;
+
+            .node-id {
+                fill: var(--grey-200);
+                font-size: 0.7rem;
+            }
         }
+
+
     }
 
     label {
@@ -22,21 +43,31 @@
     }
 
     line {
-        stroke: var(--grey-100);
-        stroke-opacity: 0.6;
+        stroke: var(--grey-200);
     }
 
     .node {
-        // width: $spacer * 10;
-        // height: $spacer * 10;
-        fill: var(--grey-200);
+        fill: var(--grey-400);
+        stroke: var(--grey-400);
+        stroke-width: 5;
 
-        &.own {
-            fill: $green-color;
+        &:hover {
+            cursor: move;
         }
 
-        &.super {
-            fill: var(--primary-base);
+        &.selected {
+            stroke-width: 15;
+            transition: stroke-width 0.25s ease-in-out;
+        }
+
+        &.own {
+            fill: $white-color;
+            stroke: $green-color;
+        }
+
+        &.headless {
+            fill: $red-color;
+            stroke: $red-color;
         }
     }
 

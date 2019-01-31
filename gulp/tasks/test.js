@@ -22,7 +22,7 @@ module.exports = function(settings) {
         // Force the build target.
         const misc = require('./misc')(settings)
         misc.helpers.serveHttp({reload: false})
-        misc.helpers.serveSig11()
+        misc.helpers.serveSIG11()
 
         const reporter = through.obj()
         reporter.pipe(tapSpec()).pipe(process.stdout)

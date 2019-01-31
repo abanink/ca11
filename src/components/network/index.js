@@ -24,75 +24,88 @@ module.exports = (app) => {
                 })
             },
         },
-
-        created() {
-
+        created: function() {
+            this.identity = app.plugins.calls.sig11.network.identity
         },
         data: function() {
             return {
-                currentMove: null,
                 height: 0,
+                identity: null,
+                move: null,
                 padding: 15,
                 simulation: null,
                 width: 0,
             }
         },
         methods: {
-            classes(block, modifier) {
+            classes(block, entity) {
+
                 const classes = {}
                 if (block === 'node') {
-                    classes.super = modifier.super
-                    if (modifier.id === app.state.user.identity.publicKey) {
+                    classes.headless = entity.headless
+                    if (entity.id === this.identity.id) {
                         classes.own = true
                     }
                 }
                 return classes
             },
-            color(node) {
-                // if (node.id === app.state.user.identity.publicKey) return '#601111'
-                // console.log(node)
-                if (!node.selected) return '#aaaaaa'
-                else return '#601111'
-            },
             drag(e) {
-                if (this.currentMove) {
-                    this.currentMove.node.fx = (
-                        this.currentMove.node.x - (this.currentMove.x - e.screenX) *
+                if (this.move) {
+                    this.move.node.fx = (
+                        this.move.node.x - (this.move.x - e.screenX) *
                         (this.bounds.maxX - this.bounds.minX) / (this.width - 2 * this.padding)
                     )
-                    this.currentMove.node.fy = (
-                        this.currentMove.node.y - (this.currentMove.y - e.screenY) *
+                    this.move.node.fy = (
+                        this.move.node.y - (this.move.y - e.screenY) *
                         (this.bounds.maxY - this.bounds.minY) / (this.height - 2 * this.padding)
                     )
-                    this.currentMove.x = e.screenX
-                    this.currentMove.y = e.screenY
+                    this.move.x = e.screenX
+                    this.move.y = e.screenY
                 }
             },
             drop() {
-                delete this.currentMove.node.fx
-                delete this.currentMove.node.fy
-                this.currentMove = null
-                this.simulation.alpha(1)
-                this.simulation.restart()
+                if (this.move) {
+                    this.move.node.fx = null
+                    this.move.node.fy = null
+                    this.move = null
+                    this.simulation.alpha(1).restart()
+                }
+            },
+            fixHeadless() {
+                // For now, just center the first headless node.
+                this.node = this.nodes.find((n) => n.headless)
+                if (this.node) {
+                    this.node.fx = this.width / 2
+                    this.node.fy = this.height / 2
+                }
             },
             onResize() {
                 this.width = this.$refs.container.clientWidth
                 this.height = this.$refs.container.clientHeight
+                this.fixHeadless()
             },
             simulate: function() {
-                if (this.simulation) this.simulation.stop()
-                this.simulation = d3.forceSimulation(this.nodes, this.links)
-                    .force('charge', d3.forceManyBody())
-                    .force('center', d3.forceCenter(this.width / 2, this.height / 2))
-                    .force('link', d3.forceLink(this.edges).distance(100).strength(0.1))
-
-                this.simulation.restart()
+                if (this.simulation) {
+                    this.simulation.alpha(1).restart()
+                } else {
+                    this.simulation = d3.forceSimulation(this.nodes, this.edges)
+                        .force('link', d3.forceLink(this.edges).distance(0.5).strength(1000))
+                        .force('charge', d3.forceManyBody())
+                        .force('center', d3.forceCenter(this.width / 2, this.height / 2))
+                }
+                this.fixHeadless()
+            },
+            toggleSelect: function(node) {
+                // Only allow one selected node at a time for now.
+                for (const _node of this.nodes) {
+                    if (_node.id !== node.id) _node.selected = false
+                    else _node.selected = !_node.selected
+                }
             },
         },
         mounted: function() {
             this.onResizeHandler = this.onResize.bind(this)
             this.onResize()
-
             window.addEventListener('resize', this.onResizeHandler)
             this.simulate()
         },
@@ -103,8 +116,21 @@ module.exports = (app) => {
             nodes: 'calls.sig11.network.nodes',
         },
         watch: {
+            edges: function() {
+                this.simulation.nodes(this.nodes, this.edges)
+                // this.simulation.nodes(this.nodes, this.edges)
+                this.simulate()
+            },
             nodes: function() {
-                this.simulation.nodes(this.nodes)
+                for (const node of this.nodes) {
+                    if (node.super) {
+                        node.fx = this.width / 2
+                        node.fy = this.height / 2
+                    }
+                }
+
+                this.simulation.nodes(this.nodes, this.edges)
+                this.simulate()
             },
         },
     }

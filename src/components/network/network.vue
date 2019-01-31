@@ -1,30 +1,37 @@
 
 <component class="c-network">
-
     <div class="svg-container" ref="container">
         <svg xmlns="http://www.w3.org/2000/svg"
             @mousemove="drag($event)"
             @mouseup="drop()"
-            v-if="bounds.minX"
+            :viewBox="`0 0 ${width} ${height}`"
         >
+            <text
+                v-if="node.selected"
+                v-for="(node, i) in nodes"
+                writing-mode="tb"
+                :x="`${width - 12}`"
+                y="8"
+                class="node-id"
+            >{{node.id}}</text>
 
-            <line v-for="link in edges"
-                :x1="coords[link.source.index].x"
-                :y1="coords[link.source.index].y"
-                :x2="coords[link.target.index].x"
-                :y2="coords[link.target.index].y"
-                stroke="#aaa" stroke-width="2"
+            <line v-for="edge in edges"
+                :x1="coords[edge.source.index].x"
+                :y1="coords[edge.source.index].y"
+                :x2="coords[edge.target.index].x"
+                :y2="coords[edge.target.index].y"
             />
 
-            <circle class="node" :class="classes('node', node)"
+            <circle
                 v-for="(node, i) in nodes"
+                class="node"
+                :class="{headless: node.headless, own: node.id === identity.id, selected: node.selected}"
                 :cx="coords[i].x"
                 :cy="coords[i].y"
-                :r="node.super ? 15 : 10"
-                :fill="color(node)"
-                @mousedown="currentMove = {x: $event.screenX, y: $event.screenY, node: node}"
+                :r="5"
+                @click="toggleSelect(node)"
+                @mousedown="move = {x: $event.screenX, y: $event.screenY, node}"
             />
-
         </svg>
     </div>
 

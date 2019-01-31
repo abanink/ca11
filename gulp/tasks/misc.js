@@ -29,7 +29,7 @@ module.exports = function(settings) {
     }
 
 
-    helpers.serveSig11 = async function(reload = false, done) {
+    helpers.serveSIG11 = async function serveSIG11(done, reload = true) {
         if (!helpers.sig11) {
             helpers.sig11 = require('../../src/js/sig11')
             await helpers.sig11.start()
@@ -122,16 +122,6 @@ module.exports = function(settings) {
 
         helpers.serveHttp()
 
-        if (!settings.NO_SIG11) {
-            helpers.serveSig11()
-
-            gulp.watch([
-                path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
-            ], function reloadSIG11(done) {
-                helpers.serveSig11(true, done)
-            })
-        }
-
         if (settings.BUILD_TARGET === 'node') {
             // Node development doesn't have transpilation.
             // No other watchers are needed.
@@ -178,12 +168,35 @@ module.exports = function(settings) {
         ], gulp.series(assets.tasks.html, helpers.reload('app.js')))
 
 
+        if (!settings.NO_SIG11) {
+            helpers.serveSIG11(null, false)
+
+            gulp.watch([
+                path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
+                `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'd3.js')}`,
+                `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'network.js')}`,
+                `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'node.js')}`,
+                `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'protocol.js')}`,
+            ], helpers.serveSIG11)
+
+            // SIG11 logic that is shared between CA11 and SIG11 super node service.
+            gulp.watch([
+                path.join(settings.SRC_DIR, 'js', 'sig11', 'node.js'),
+                path.join(settings.SRC_DIR, 'js', 'sig11', 'network.js'),
+                path.join(settings.SRC_DIR, 'js', 'sig11', 'protocol.js'),
+            ], gulp.series(
+                code.tasks.app,
+                helpers.serveSIG11,
+                helpers.reload('app.js'),
+            ))
+        }
+
         gulp.watch([
             path.join(settings.SRC_DIR, 'components', '**', '*.js'),
-            path.join(settings.SRC_DIR, 'js', '**', '*.js'),
+            path.join(settings.SRC_DIR, 'js', 'sig11', 'd3.js'),
+            path.join(settings.SRC_DIR, 'js', 'index.js'),
             path.join(settings.SRC_DIR, 'js', 'lib', '**', '*.js'),
-            `!${path.join(settings.SRC_DIR, 'js', 'vendor.js')}`,
-            `!${path.join(settings.SRC_DIR, 'js', 'sig11', '*.js')}`,
+            path.join(settings.SRC_DIR, 'js', 'plugins', '**', '*.js'),
         ], gulp.series(code.tasks.app, helpers.reload('app.js')))
 
 

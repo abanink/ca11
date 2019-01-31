@@ -4,12 +4,14 @@
     <div class="c-wizard__description">
 
         {{$t('do you mind if {name} sends any application exceptions to a service for quality metrics? This helps us to responds faster to software issues.', {name: app.name}).ca()}}
-        <br/><br/>
-        <a class="cf" target="_blank" href="https://sentry.io/">{{$t('about')}} Sentry {{$t('quality metrics')}}</a>
 
         <div class="cf c-wizard__help">
-            {{$t('you can change your decision later from Settings.')}}
+            {{$t('you can change your decision later from Settings.')}}<br/>
+            <a class="cf" target="_blank" href="https://sentry.io/">
+                {{$t('about')}} {{$t('quality metrics')}}
+            </a>
         </div>
+
     </div>
 
     <slot name="progress"></slot>

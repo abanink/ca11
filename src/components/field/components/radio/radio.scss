@@ -8,6 +8,15 @@
         position: absolute !important;
         width: 0;
 
+        &[disabled='disabled'] + label {
+            background: var(--grey-100);
+            color: var(--grey-200);
+
+            &:hover {
+                cursor: not-allowed;
+            }
+        }
+
         &:checked + label {
             background: var(--primary-base);
             color: $white-color;
@@ -16,7 +25,7 @@
 
     label {
         background: var(--grey-50);
-        color: var(--grey-200);
+        color: var(--grey-300);
         display: inline-block;
         font-family: 'Rajdhani';
         font-size: 0.9rem;

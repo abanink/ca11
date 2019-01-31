@@ -175,20 +175,6 @@ class Crypto {
 
 
     /**
-    * Generate a SHA-256 checksum hash from a string.
-    * @param {String} data - The data to hash.
-    * @returns {Promise} - Resolves with the SHA-256 hash of the supplied data.
-    */
-    __hashString(data) {
-        return crypto.subtle.digest({name: 'SHA-256'}, this.__stringToDataArray(data))
-            .then(generatedIdArrayBuffer => {
-                let hash = this.__dataArrayToHex(generatedIdArrayBuffer)
-                return hash
-            })
-    }
-
-
-    /**
     * Import a base-64 encoded ECDH private key as CryptoKey. The browser
     * version replaces the OID for Chrome, because Chrome's BoringSSL doesn't
     * follow the OID as set out by WebCrypto yet.
@@ -233,24 +219,6 @@ class Crypto {
         }
 
         return crypto.subtle.importKey('spki', publicKeyData, params, true, uses)
-    }
-
-
-    /**
-    * Convert an ASCII string to an ArrayBuffer/Uint8Array.
-    * @param {String} data - The string to convert.
-    * @returns {ArrayBuffer|Uint8Array} - Return a Buffer in Node.js; an Uint8Array in the browser.
-    */
-    __stringToDataArray(data) {
-        if (this.app.env.isBrowser) {
-            let bytes = new Uint8Array(data.length)
-            for (let iii = 0; iii < data.length; iii++) {
-                bytes[iii] = data.charCodeAt(iii)
-            }
-            return bytes
-        }
-
-        return new Buffer(data)
     }
 
 
@@ -302,7 +270,7 @@ class Crypto {
         }
 
         let vaultKey = await crypto.subtle.importKey(
-            'raw', this.__stringToDataArray(`${username}${password}`),
+            'raw', this.stringToData(`${username}${password}`),
             {name: 'PBKDF2'}, false, ['deriveKey', 'deriveBits'],
         )
 
@@ -345,11 +313,11 @@ class Crypto {
     */
     async encrypt(aesKey, plaintext, additionalData = null) {
         const iv = crypto.getRandomValues(this.__dataArray(16))
-        if (additionalData) additionalData = this.__stringToDataArray(additionalData)
+        if (additionalData) additionalData = this.stringToData(additionalData)
         else additionalData = this.__dataArray(0)
         const encrypted = await crypto.subtle.encrypt(
             {additionalData, iv, name: 'AES-GCM', tagLength: 128},
-            aesKey, this.__stringToDataArray(plaintext))
+            aesKey, this.stringToData(plaintext))
         return {
             additionalData: this.__dataArrayToBase64(additionalData),
             cipher: this.__dataArrayToBase64(encrypted),
@@ -359,11 +327,13 @@ class Crypto {
 
 
     /**
-     * A hashed version of the public key is the
-     * identity of a node in the network.
-     */
-    async hashIdentity() {
-
+    * Generate a SHA-256 checksum hash from a string.
+    * @param {String} data - The data to hash.
+    * @returns {Promise} - Resolves with the SHA-256 hash of the supplied data.
+    */
+    async hash(data) {
+        const ab = await crypto.subtle.digest({name: 'SHA-256'}, this.stringToData(data))
+        return this.__dataArrayToHex(ab)
     }
 
 
@@ -414,6 +384,24 @@ class Crypto {
         const vaultKey = await this.__exportAESKey(this.vaultKey)
         this.app.setState({app: {vault: {key: vaultKey}}}, {encrypt: false, persist: true})
         return vaultKey
+    }
+
+
+    /**
+    * Convert an ASCII string to an ArrayBuffer/Uint8Array.
+    * @param {String} data - The string to convert.
+    * @returns {ArrayBuffer|Uint8Array} - Return a Buffer in Node.js; an Uint8Array in the browser.
+    */
+    stringToData(data) {
+        if (this.app.env.isBrowser) {
+            let bytes = new Uint8Array(data.length)
+            for (let iii = 0; iii < data.length; iii++) {
+                bytes[iii] = data.charCodeAt(iii)
+            }
+            return bytes
+        }
+
+        return new Buffer(data)
     }
 
 

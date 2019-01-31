@@ -14,7 +14,6 @@
 
         <div class="c-login__slogan">
             {{$t('free communication')}}<br/>
-            {{$t('to everyone')}}
         </div>
     </header>
 

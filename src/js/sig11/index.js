@@ -1,11 +1,13 @@
 const WebCrypto = require('node-webcrypto-ossl')
 
+const Protocol = require('./protocol')
 const WebSocket = require('ws')
 const http = require('http')
 
 global.EventEmitter = require('eventemitter3')
 global.btoa = require('btoa')
 
+const Endpoint = require('./endpoint')
 const Network = require('./network')
 const Skeleton = require('../lib/skeleton')
 const Crypto = require('../lib/crypto')
@@ -31,51 +33,53 @@ class Sig11 extends Skeleton {
             // directory: settings.ROOT_DIR,
         })
 
+        this.protocol = new Protocol(this)
         this.crypto = new Crypto(this)
         this.settings = settings
         this.sockets = []
+
         this.initNetwork()
     }
 
 
     async initNetwork() {
         const {publicKey} = await this.crypto.createIdentity()
-        this.network = new Network(this, publicKey)
+        this.network = new Network(this)
+        this.network.identify({key: publicKey})
     }
 
 
-    onConnection(ws, req) {
-        if (req.headers.cookie) {
-            let cookieMap = new Map(req.headers.cookie.replace(/\"/g, '').split(';').map((i) => i.split('=')))
-            const identity = cookieMap.get('identity')
-            this.network.addNode({id: identity, transport: ws})
-            ws.send(JSON.stringify({
-                id: this.network.id,
-                network: this.network.serialize(),
-            }))
-            // Send the network layout to the connected party.
-            ws.on('message', (message) => {
-                message = JSON.parse(message)
-                if (message.node) {
-                    let node = this.network.findNode(message.node)
+    async onConnection(ws, req) {
+        const endpoint = new Endpoint(this, {transport: ws})
 
-                    if (node) {
-                        node.transport.send(JSON.stringify(message))
-                    }
-                }
-            })
+        // Transport data handler.
+        ws.on('message', (msg) => {
+            this.protocol.in(msg, endpoint)
+        })
 
-            ws.on('close', () => {
-                this.network.removeNode(identity)
+        endpoint.once('sig11:identified', () => {
+            this.network.addEndpoint(endpoint, this.network.identity)
+            endpoint.send(this.protocol.out('network', this.network.export()))
+
+            const msg = this.protocol.out('node-added', {
+                node: endpoint.serialize(),
+                parent: this.network.identity,
             })
-        }
+            // Notify others about the new node.
+            this.network.broadcast(msg, {excludes: [endpoint]})
+        })
+
+        ws.on('close', () => {
+            this.network.removeEndpoint(endpoint)
+            const msg = this.protocol.out('node-removed', endpoint.serialize())
+            this.network.broadcast(msg)
+        })
     }
 
 
     onRequest(request) {
         var connection = request.accept(null, request.origin)
-        // This is the most important callback for us, we'll handle
-        // all messages from users here.
+
         connection.on('message', function(message) {
             if (message.type === 'utf8') {
             // process WebSocket message

@@ -179,8 +179,6 @@ class CA11 extends App {
         }, {encrypt: false, persist: true})
 
 
-        this.plugins.calls.sig11.connect()
-
         // Set the default layer if it's still set to login.
         if (this.state.ui.layer === 'login') {
             this.setState({ui: {layer: 'calls'}}, {encrypt: false, persist: true})
@@ -193,7 +191,7 @@ class CA11 extends App {
             await this.crypto.storeVaultKey()
         }
 
-        this.emit('bg:user-unlocked', {}, 'both')
+        this.emit('core:session-ready', {})
     }
 
 
