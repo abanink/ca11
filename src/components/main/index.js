@@ -13,14 +13,14 @@ module.exports = (app) => {
                 if (block === 'component') {
                     classes[`theme-${this.ui.theme}`] = true
                 } else if (block === 'notifications') {
-                    if (this.user.authenticated) {
+                    if (this.session.authenticated) {
                         if (this.wizard.completed) {
                             classes.sidebar = true
                             classes.topbar = true
                         }
                     }
                 } else if (block === 'panel') {
-                    if (this.user.authenticated) classes.sidebar = true
+                    if (this.session.authenticated) classes.sidebar = true
                     if (this.overlay) classes['no-scroll'] = true
                 }
 
@@ -30,13 +30,13 @@ module.exports = (app) => {
         render: templates.main.r,
         staticRenderFns: templates.main.s,
         store: {
-            calls: 'calls.calls',
-            description: 'calls.description',
+            calls: 'caller.calls',
+            description: 'caller.description',
             layer: 'ui.layer',
             overlay: 'ui.overlay',
+            session: 'session',
             telemetry: 'settings.telemetry',
             ui: 'ui',
-            user: 'user',
             wizard: 'settings.wizard',
         },
     }

@@ -13,7 +13,7 @@ module.exports = (app) => {
                 else selected = null
                 app.setState({
                     settings: {webrtc: {media: {stream: {[this.stream.type]: {selected}}}}},
-                    ui: {layer: 'calls'},
+                    ui: {layer: 'caller'},
                 }, {persist: true})
             },
         },
@@ -21,9 +21,7 @@ module.exports = (app) => {
         render: templates.media_controls.r,
         staticRenderFns: templates.media_controls.s,
         store: {
-            app: 'app',
             stream: 'settings.webrtc.media.stream',
-            user: 'user',
         },
     }
 

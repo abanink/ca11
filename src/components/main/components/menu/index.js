@@ -22,7 +22,7 @@ module.exports = (app) => {
                     if (this.dnd) classes.dnd = true
                     else if (this.available) classes.available = true
                     else classes.unavailable = true
-                } else if (block === 'calls') {
+                } else if (block === 'caller') {
                     classes.disabled = !this.app.online
                 } else if (transferHint) {
                     classes.hint = (this.transferStatus === 'select')

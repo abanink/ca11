@@ -1,7 +1,7 @@
 <component class="c-options">
 
     <button
-        v-if="!call.id && ui.layer === 'calls'"
+        v-if="!call.id && ui.layer === 'caller'"
         :disabled="!description.endpoint"
         class="button button--menu c-options__option t-btn-options-call-start tooltip tooltip-left"
         :data-tooltip="$t('start new call')"

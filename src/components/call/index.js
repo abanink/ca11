@@ -30,8 +30,8 @@ module.exports = (app) => {
         render: templates.call.r,
         staticRenderFns: templates.call.s,
         store: {
-            calls: 'calls.calls',
-            description: 'calls.description',
+            calls: 'caller.calls',
+            description: 'caller.description',
         },
     }
 

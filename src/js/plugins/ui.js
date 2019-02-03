@@ -3,13 +3,6 @@
 * state and respond with UI-specific calls to watchers.
 * @module ModuleUI
 */
-const Plugin = require('ca11/lib/plugin')
-
-
-/**
-* Main entrypoint for UI.
-* @memberof AppBackground.plugins
-*/
 class PluginUI extends Plugin {
     /**
     * Setup some menubar and click-to-dial icon related properties.
@@ -102,8 +95,7 @@ class PluginUI extends Plugin {
     * @param {String} [base] -
     */
     menubarState(base = null) {
-        const user = this.app.state.user
-        const sipStatus = this.app.state.calls.sip.status
+        const sipStatus = this.app.state.sip.status
 
         if (base) {
             this.app.setState({ui: {menubar: {base}}})
@@ -111,8 +103,9 @@ class PluginUI extends Plugin {
         }
 
         // Generic menubar behaviour.
-        if (this.app.state.app.session.active && !user.authenticated) base = 'lock'
-        else if (!user.authenticated) base = 'inactive'
+        if (this.app.state.app.session.active && !this.app.state.session.authenticated) {
+            base = 'lock'
+        } else if (!this.app.state.session.authenticated) base = 'inactive'
         else if (sipStatus === 'disconnected') base = 'disconnected'
         else {
             if (sipStatus === 'registered') {

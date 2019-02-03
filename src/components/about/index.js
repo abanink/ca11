@@ -8,7 +8,6 @@ module.exports = (app) => {
         staticRenderFns: templates.about.s,
         store: {
             app: 'app',
-            user: 'user',
             vendor: 'app.vendor',
         },
     }

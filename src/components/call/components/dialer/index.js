@@ -61,9 +61,9 @@ module.exports = (app) => {
         staticRenderFns: templates.call_dialer.s,
         store: {
             contacts: 'contacts.contacts',
-            description: 'calls.description',
-            sig11: 'calls.sig11',
-            sip: 'calls.sip',
+            description: 'caller.description',
+            sig11: 'sig11',
+            sip: 'sip',
         },
         watch: {
             endpoint: function(endpoint) {

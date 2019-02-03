@@ -1,11 +1,3 @@
-/**
-* The Activity module is mainly used to show recent Call
-* history and allow the user to make reminders from
-* activity entries.
-* @module ModuleActivity
-*/
-const Plugin = require('ca11/lib/plugin')
-
 // Cap the maximum amount of stored activities, so the
 // localStorage won't be grinded to a halt.
 const MAX_ACTIVITIES = 50
@@ -21,7 +13,7 @@ class PluginActivity extends Plugin {
     constructor(app) {
         super(app)
 
-        this.app.on('bg:calls:call_rejected', ({call}) => {
+        this.app.on('caller:call-rejected', ({call}) => {
             let activity = {
                 description: {
                     endpoint: call.endpoint,
@@ -35,7 +27,7 @@ class PluginActivity extends Plugin {
             this.addActivity(activity)
         })
 
-        this.app.on('bg:calls:call_ended', ({call}) => {
+        this.app.on('caller:call-ended', ({call}) => {
             let activity = {
                 description: {
                     endpoint: call.endpoint,

@@ -1,16 +1,8 @@
 /**
-* The User module deals with everything that requires some
-* form of authentication.
-* @module ModuleUser
+* Session plugin controls personal preferences.
+* @memberof CA11.plugins
 */
-const Plugin = require('ca11/lib/plugin')
-
-
-/**
-* Main entrypoint for User.
-* @memberof AppBackground.plugins
-*/
-class PluginUser extends Plugin {
+class PluginSession extends Plugin {
     /**
     * Setup events that can be called upon from `AppForeground`.
     * @param {AppBackground} app - The background application.
@@ -18,29 +10,27 @@ class PluginUser extends Plugin {
     constructor(app) {
         super(app)
 
-        this.app.on('bg:user:account_select', this._selectAccount.bind(this))
-
         // Other implementation may use other user identifiers than email,
         // that's why the main event uses `username` instead of `email`.
-        this.app.on('bg:user:login', (...args) => {
+        this.app.on('session:start', (...args) => {
             app.sounds.powerOn.play()
             this.login(...args)
         })
 
-        this.app.on('bg:user:logout', (...args) => {
+        this.app.on('session:close', (...args) => {
             this.logout(...args)
         })
 
-        this.app.on('bg:user:unlock', (...args) => {
+        this.app.on('session:unlock', (...args) => {
             app.sounds.powerOn.play()
             this.unlock(...args)
         })
 
-        this.app.on('bg:user:set_session', ({session}) => {
+        this.app.on('session:select', ({session}) => {
             app.changeSession(session)
         })
 
-        this.app.on('bg:user:remove_session', ({session}) => {
+        this.app.on('session:destroy', ({session}) => {
             app.removeSession(session)
         })
     }
@@ -54,27 +44,10 @@ class PluginUser extends Plugin {
         return {
             authenticated: false,
             developer: false,
-            identity: {
-                privateKey: null,
-                publicKey: null,
-            },
             status: null,
             username: null,
         }
     }
-
-
-    /**
-    * Placeholder that warns that this method
-    * needs to be implemented in the adapter.
-    * @param {Object} options - Options to pass.
-    * @param {Object} options.account - The account credentials.
-    * @param {Function} options.callback - Called when the account is set.
-    */
-    _selectAccount({account, callback}) {
-        this.app.logger.info(`${this}account selection not implemented!`)
-    }
-
 
 
     /**
@@ -86,7 +59,7 @@ class PluginUser extends Plugin {
     * @param {String} options.username - The username the user is identified with.
     */
     async login({password, userFields, username}) {
-        this.app.setState({user: {status: 'login'}})
+        this.app.setState({session: {status: 'login'}})
         let sessionName = username
         username = username.split('@')[0]
 
@@ -96,7 +69,7 @@ class PluginUser extends Plugin {
 
         if (this.app.state.app.session.active !== sessionName) {
             // State is reinitialized, but we are not done loading yet.
-            let keptState = {user: {status: 'login'}}
+            let keptState = {session: {status: 'login'}}
             await this.app.changeSession(sessionName, keptState)
         }
 
@@ -108,11 +81,11 @@ class PluginUser extends Plugin {
             this.app.setState({
                 // The `installed` and `updated` flag are toggled off after login.
                 app: {installed: false, updated: false},
-                ui: {layer: 'calls'},
-                user: {username},
+                session: {username},
+                ui: {layer: 'caller'},
             }, {encrypt: false, persist: true})
 
-            await this.app.setState({user: userFields}, {persist: true})
+            await this.app.setState({session: userFields}, {persist: true})
             // Update the state with language presets from the browser if applicable.
             this.app._languagePresets()
 
@@ -122,7 +95,7 @@ class PluginUser extends Plugin {
             this.app.notify({icon: 'warning', message: this.app.$t('failed to login; please check your credentials.'), type: 'warning'})
         } finally {
             this.app.media.query()
-            this.app.setState({user: {status: null}})
+            this.app.setState({session: {status: null}})
         }
     }
 
@@ -138,7 +111,6 @@ class PluginUser extends Plugin {
 
         // Disconnect without reconnect attempt.
         this.app.plugins.calls.disconnect(false)
-        this.app.emit('bg:user:logged_out', {}, true)
         this.app.media.stop()
         this.app._languagePresets()
     }
@@ -158,29 +130,29 @@ class PluginUser extends Plugin {
     * selected. No need to change sessions again.
     */
     async unlock({username, password}) {
-        this.app.setState({user: {status: 'unlock'}})
+        this.app.setState({session: {status: 'unlock'}})
         this.app.logger.info(`${this}unlocking session "${username}"`)
 
         try {
             await this.app.__initSession({password})
             this.app._watchersActivate()
             this.app._languagePresets()
-            this.app.setState({ui: {layer: 'calls'}}, {encrypt: false, persist: true})
+            this.app.setState({ui: {layer: 'caller'}}, {encrypt: false, persist: true})
             this.app.notify({icon: 'contact', message: this.app.$t('welcome back {username}', {username}), type: 'info'})
             this.app.__initServices()
         } catch (err) {
             // Wrong password, resulting in a failure to decrypt.
             this.app.setState({
-                ui: {layer: 'login'},
-                user: {authenticated: false},
+                session: {authenticated: false},
+                ui: {layer: 'session'},
             }, {encrypt: false, persist: true})
             const message = this.app.$t('failed to unlock; check your password')
             this.app.notify({icon: 'warning', message, type: 'danger'})
         } finally {
             this.app.media.query()
-            this.app.setState({user: {status: null}})
+            this.app.setState({session: {status: null}})
         }
     }
 }
 
-module.exports = PluginUser
+module.exports = PluginSession

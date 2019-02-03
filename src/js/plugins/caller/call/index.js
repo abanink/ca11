@@ -19,7 +19,6 @@ class Call {
      */
     constructor(app, description, {active, silent} = {}) {
         this.app = app
-        this.plugin = app.plugins.calls
         this.silent = silent
         // References to MediaStream objects related to this call.
         this.streams = {}
@@ -104,7 +103,7 @@ class Call {
      * @param {MediaStreamTrack} streamId - Id of the stream to clean up.
      */
     _cleanupStream(streamId) {
-        const path = `calls.calls.${this.id}.streams.${streamId}`
+        const path = `caller.calls.${this.id}.streams.${streamId}`
         this.app.setState(null, {action: 'delete', path})
         delete this.app.media.streams[streamId]
     }
@@ -119,7 +118,7 @@ class Call {
         this.setState(this.state)
         // Signal the user about the incoming call.
         if (!this.silent) {
-            this.app.setState({ui: {layer: 'calls', menubar: {event: 'ringing'}}})
+            this.app.setState({ui: {layer: 'caller', menubar: {event: 'ringing'}}})
 
             this.app.plugins.ui.notification({
                 endpoint: this.state.endpoint,
@@ -128,7 +127,7 @@ class Call {
             })
 
             this.app.sounds.ringTone.play({loop: true})
-            this.plugin.activateCall(this, true)
+            this.app.plugins.caller.activateCall(this, true)
         }
     }
 
@@ -175,7 +174,7 @@ class Call {
         }
 
         // Always set this call to be the active call.
-        this.plugin.activateCall(this, true)
+        this.app.plugins.caller.activateCall(this, true)
         let message = ''
         if (displayName) {
             message = `${this.state.endpoint}: ${displayName}`
@@ -187,7 +186,7 @@ class Call {
         this.setState({displayName: displayName, status: this._statusMap.create})
 
         if (!this.silent) {
-            this.app.setState({ui: {layer: 'calls', menubar: {event: 'ringing'}}})
+            this.app.setState({ui: {layer: 'caller', menubar: {event: 'ringing'}}})
         }
     }
 
@@ -250,7 +249,7 @@ class Call {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
 
         if (this.silent) {
-            this.plugin.deleteCall(this)
+            this.app.plugins.caller.deleteCall(this)
             return
         }
 
@@ -275,7 +274,7 @@ class Call {
 
         // An ongoing call is closed. Signal listeners like activity about it.
         if (this.state.status === 'bye') {
-            this.app.emit('bg:calls:call_ended', {call: this.state}, true)
+            this.app.emit('caller:call-ended', {call: this.state}, true)
         }
 
         // Remove the streams that are associated with this call.
@@ -290,12 +289,12 @@ class Call {
         // Reset the transfer state of target calls in case the transfer mode
         // of this Call is active and the callee ends the call.
         if (this.state.transfer.active) {
-            this.plugin.__setTransferState(this, false)
+            this.app.plugins.caller.__setTransferState(this, false)
         }
 
         window.setTimeout(() => {
             this.busyTone.stop()
-            this.plugin.deleteCall(this)
+            this.app.plugins.caller.deleteCall(this)
             // Signal browser tabs to remove the click-to-dial notification label.
             this.app.plugins.ui.notification({endpoint: this.state.endpoint})
 

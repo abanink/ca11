@@ -9,7 +9,7 @@ module.exports = function(app) {
                 if (block === 'notification') {
                     classes[`is-${notification.type}`] = true
                 } else if (block === 'component') {
-                    if (this.user.authenticated) classes.topbar = true
+                    if (this.session.authenticated) classes.topbar = true
                 }
                 return classes
             },
@@ -26,7 +26,7 @@ module.exports = function(app) {
         staticRenderFns: templates.notifications.s,
         store: {
             notifications: 'app.notifications',
-            user: 'user',
+            session: 'session',
         },
     }
 

@@ -19,9 +19,9 @@
 
     <!-- Login when there are no sessions or when starting a new session-->
     <div
-        v-if="!app.session.available.length || app.session.active === 'new' || user.status === 'login'">
+        v-if="!app.session.available.length || app.session.active === 'new' || session.status === 'login'">
         <FieldText
-            v-model="user.username"
+            v-model="session.username"
             autocomplete="off"
             elementclass="t-txt-session-id"
             name="session-id"
@@ -29,7 +29,7 @@
             :help="$t('your phone is safely stored on this computer.', {name: app.name})"
             :label="$t('phone name')"
             :placeholder="$t('james,maria,robert,susan,...')"
-            :validation="$v.user.username"
+            :validation="$v.session.username"
         />
 
         <FieldPassword
@@ -48,12 +48,12 @@
                 v-if="app.session.available.length"
                 class="button button--widget t-btn-change-session"
                 @click="selectSession()"
-                :disabled="user.status === 'login'"
+                :disabled="session.status === 'login'"
             >{{$t('change session')}}</button>
             <button
                 class="button button--widget t-btn-login"
-                :class="{'is-loading': user.status === 'login'}"
-                :disabled="$v.$invalid || user.status === 'login'"
+                :class="{'is-loading': session.status === 'login'}"
+                :disabled="$v.$invalid || session.status === 'login'"
                 @click="login"
             >{{$t('start your phone')}}</button>
         </div>
@@ -76,14 +76,14 @@
             <button
                 v-if="app.session.available.length"
                 class="button button--widget t-btn-login"
-                :disabled="user.status === 'login'"
+                :disabled="session.status === 'login'"
                 @click="selectSession()"
             >{{$t('change session')}}</button>
 
             <button
                 class="button button--widget t-btn-login"
-                :class="{'is-loading': user.status === 'login'}"
-                :disabled="$v.$invalid || user.status === 'login'"
+                :class="{'is-loading': session.status === 'login'}"
+                :disabled="$v.$invalid || session.status === 'login'"
                 @click="login"
             >{{$t('unlock phone')}}</button>
         </div>

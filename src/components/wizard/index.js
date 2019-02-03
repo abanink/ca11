@@ -31,22 +31,16 @@ module.exports = (app) => {
     const Wizard = {
         computed: app.helpers.sharedComputed(),
         created: function() {
-            if (!this.calls.sip.account.selection) {
-                app.setState({
-                    settings: {
-                        wizard: {steps: {options: this.steps.options.filter((step) => step.name !== 'WizardAccount')}},
-                    },
-                }, {persist: true})
-            }
+            app.setState({
+                settings: {
+                    wizard: {steps: {options: this.steps.options.filter((step) => step.name !== 'WizardAccount')}},
+                },
+            }, {persist: true})
         },
         render: templates.wizard.r,
         staticRenderFns: templates.wizard.s,
         store: {
-            app: 'app',
-            calls: 'calls',
-            settings: 'settings',
             steps: 'settings.wizard.steps',
-            user: 'user',
         },
     }
 

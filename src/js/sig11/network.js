@@ -73,9 +73,7 @@ class Network {
         }
 
         if (this.d3) {
-            this.app.setState({
-                calls: {sig11: {network: this.d3.graph(this.graph)}},
-            })
+            this.app.setState({sig11: {network: this.d3.graph(this.graph)}})
         }
     }
 

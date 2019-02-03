@@ -84,7 +84,7 @@ class Media {
         this.intervalId = setInterval(async() => {
             // Only do this when being authenticated; e.g. when there
             // is an active state container around.
-            if (this.app.state.user.authenticated) {
+            if (this.app.state.session.authenticated) {
                 try {
                     const stream = await this.query()
                     if (!this.app.devices.cached) await this.app.devices.verifySinks()

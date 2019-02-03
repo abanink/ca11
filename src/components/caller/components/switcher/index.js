@@ -8,16 +8,16 @@ module.exports = (app) => {
             activateCall: function(call) {
                 app.setState({settings: {webrtc: {media: {stream: {
                     [this.stream.type]: {selected: false},
-                }}}}, ui: {layer: 'calls'}}, {persist: true})
+                }}}}, ui: {layer: 'caller'}}, {persist: true})
 
                 if (call) {
-                    app.emit('bg:calls:call_activate', {
+                    app.emit('caller:call-activate', {
                         callId: call.id,
                         holdInactive: false,
                         unholdActive: false,
                     })
                 } else {
-                    app.emit('bg:calls:call_activate', {callId: null})
+                    app.emit('caller:call-activate', {callId: null})
                 }
 
             },
@@ -59,17 +59,16 @@ module.exports = (app) => {
                 // This method is also called on enter. The keypad may
                 // be in dtmf mode at that moment; block the call request.
                 if (!this.mode === 'call') return
-                app.emit('bg:calls:call_create', {description: this.call, start: false, transfer: false})
+                app.emit('caller:call-add', {description: this.call, start: false, transfer: false})
             },
         }, app.helpers.sharedMethods()),
-        render: templates.calls_switcher.r,
-        staticRenderFns: templates.calls_switcher.s,
+        render: templates.caller_switcher.r,
+        staticRenderFns: templates.caller_switcher.s,
         store: {
-            calls: 'calls.calls',
-            description: 'calls.description',
+            calls: 'caller.calls',
+            description: 'caller.description',
             stream: 'settings.webrtc.media.stream',
             ui: 'ui',
-            user: 'user',
         },
     }
 

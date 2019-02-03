@@ -30,7 +30,7 @@ function helpers(app) {
 
     _helpers.callAccepted = function() {
         let accepted = false
-        const calls = app.state.calls.calls
+        const calls = app.state.caller.calls
 
         for (const callId of Object.keys(calls)) {
             const status = calls[callId].status
@@ -51,7 +51,7 @@ function helpers(app) {
     _helpers.callingDisabled = function() {
         let errors = []
 
-        let selectedProtocol = app.state.calls.description.protocol
+        const protocol = app.state.caller.description.protocol
 
         if (!app.state.app.online) errors.push('offline')
         else {
@@ -59,7 +59,7 @@ function helpers(app) {
             if (!(app.state.settings.webrtc.devices.ready)) errors.push('device')
         }
 
-        if (!['loading', 'registered'].includes(app.state.calls[selectedProtocol].status)) {
+        if (!['loading', 'registered'].includes(app.state[protocol].status)) {
             errors.push('disconnected')
         }
 
@@ -74,7 +74,7 @@ function helpers(app) {
     * @returns {Array} - Closing Call ids.
     */
     _helpers.callsClosing = function() {
-        const calls = app.state.calls.calls
+        const calls = app.state.caller.calls
         return Object.keys(calls).filter((i) => closingStatus.includes(calls[i].status))
     }
 
@@ -85,7 +85,7 @@ function helpers(app) {
     * @returns {Boolean} - Whether one or more calls is active.
     */
     _helpers.callOngoing = function() {
-        const calls = app.state.calls.calls
+        const calls = app.state.caller.calls
         const callIds = Object.keys(calls)
 
         for (const callId of callIds) {
@@ -107,7 +107,7 @@ function helpers(app) {
     */
     _helpers.callsReady = function() {
         let ready = true
-        const callIds = Object.keys(app.state.calls.calls)
+        const callIds = Object.keys(app.state.caller.calls)
         for (let callId of callIds) {
             if (!['accepted', 'new'].includes(this.calls[callId].status)) {
                 ready = false
@@ -214,7 +214,7 @@ function helpers(app) {
             getTranslations: _helpers.getTranslations,
             isTransferTarget: function(contact, number) {
                 let numbers = []
-                const calls = this.$store.calls.calls
+                const calls = this.$store.caller.calls
                 for (let callId of Object.keys(calls)) {
                     numbers.push(parseInt(calls[callId].number))
                 }
@@ -244,7 +244,7 @@ function helpers(app) {
                 app.setState({ui: {tabs: {[category]: {active: name}}}}, {encrypt: false, persist: true})
             },
             setupCall: function(description) {
-                app.emit('bg:calls:call_create', {description, start: true, transfer: false})
+                app.emit('caller:call-add', {description, start: true, transfer: false})
                 // Clean up the number so it is gone when the keypad reappears after the call.
                 description.endpoint = ''
             },
@@ -301,7 +301,7 @@ function helpers(app) {
             },
             transferStatus: function() {
                 let transferStatus = false
-                const calls = this.$store.calls.calls
+                const calls = this.$store.caller.calls
                 const callKeys = Object.keys(calls)
 
                 for (let callId of callKeys) {
@@ -362,7 +362,7 @@ function helpers(app) {
     * Set user state to unauthenticated and notify the background.
     */
     _helpers.logout = function() {
-        app.emit('bg:user:logout')
+        app.emit('session:close')
     }
 
     return _helpers

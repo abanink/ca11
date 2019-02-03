@@ -20,14 +20,14 @@ module.exports = (app) => {
             },
             transferMode: function(type) {
                 if (this.transferStatus !== 'select') return
-                app.setState({transfer: {type}}, {path: `calls.calls.${this.call.id}`})
+                app.setState({transfer: {type}}, {path: `caller.calls.${this.call.id}`})
             },
         },
         props: ['call'],
         render: templates.call_transfer.r,
         staticRenderFns: templates.call_transfer.s,
         store: {
-            description: 'calls.description',
+            description: 'caller.description',
         },
     }
 

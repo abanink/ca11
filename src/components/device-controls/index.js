@@ -45,16 +45,9 @@ module.exports = (app) => {
         render: templates.device_controls.r,
         staticRenderFns: templates.device_controls.s,
         store: {
-            app: 'app',
-            availability: 'availability',
             devices: 'settings.webrtc.devices',
-            env: 'env',
-            permission: 'settings.webrtc.media.permission',
-            ringtones: 'settings.ringtones',
             settings: 'settings',
             stream: 'settings.webrtc.media.stream',
-            user: 'user',
-            vendor: 'app.vendor',
         },
         validations: function() {
             const sinkErrormessage = app.$t('selected audio device is not available.')
@@ -87,7 +80,9 @@ module.exports = (app) => {
                                             message: sinkErrormessage,
                                             type: 'customValid',
                                         }, (valid, headsetOutput) => {
-                                            const storedDevice = this.devices.output.find((i) => i.id === headsetOutput.id)
+                                            const storedDevice = this.devices.output.find((i) => {
+                                                return i.id === headsetOutput.id
+                                            })
                                             if (storedDevice) return storedDevice.valid
                                             return false
                                         }),
@@ -99,7 +94,9 @@ module.exports = (app) => {
                                             message: sinkErrormessage,
                                             type: 'customValid',
                                         }, (valid, ringOutput) => {
-                                            const storedDevice = this.devices.output.find((i) => i.id === ringOutput.id)
+                                            const storedDevice = this.devices.output.find((i) => {
+                                                return i.id === ringOutput.id
+                                            })
                                             if (storedDevice) return storedDevice.valid
                                             return true
                                         }),

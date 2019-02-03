@@ -285,7 +285,7 @@ class App extends Skeleton {
         }
 
         this.logger.info(`${this}selected language: ${language.id}`)
-        this.setState({language: {selected: language}}, {persist: this.state.user && this.state.user.authenticated})
+        this.setState({language: {selected: language}}, {persist: this.state.user && this.state.session.authenticated})
         Vue.i18n.set(language.id)
     }
 

@@ -9,6 +9,8 @@ const Store = require('./lib/store')
 const Media = require('./lib/media')
 const Sounds = require('./lib/sounds')
 
+global.Plugin = require('ca11/lib/plugin')
+
 
 class CA11 extends App {
     /**
@@ -42,16 +44,16 @@ class CA11 extends App {
                 Activities: require('../components/activities'),
                 Availability: require('../components/availability'),
                 Call: require('../components/call'),
-                Calls: require('../components/calls'),
+                Caller: require('../components/caller'),
                 Contacts: require('../components/contacts'),
                 DeviceControls: require('../components/device-controls'),
                 Field: require('../components/field'),
-                Login: require('../components/login'),
                 Main: require('../components/main'),
                 MediaControls: require('../components/media-controls'),
                 MediaPermission: require('../components/media-permission'),
                 Network: require('../components/network'),
                 Notifications: require('../components/notifications'),
+                Session: require('../components/session'),
                 Settings: require('../components/settings'),
                 Soundmeter: require('../components/soundmeter'),
                 Stream: require('../components/stream'),
@@ -64,15 +66,6 @@ class CA11 extends App {
                 Vue.component(name, this.components[name](this))
             }
         }
-
-
-        // Send the background script's state to the requesting event.
-        this.on('bg:get_state', ({callback}) => callback(JSON.stringify(this.state)))
-        this.on('bg:refresh_api_data', this._platformData.bind(this))
-        // Calls to setState from the foreground.
-        this.on('bg:set_state', (...args) => {
-            this.__mergeState(...args)
-        })
 
         this.__init()
     }
@@ -128,17 +121,9 @@ class CA11 extends App {
     * @param {Boolean} contacts - Whether to subsribe to Contact Presence.
     */
     __initServices() {
-        if (this.state.app.online) {
-            this.logger.info(`${this}init platform services`)
-
-            if (this.state.calls.sip.enabled) {
-                this.logger.info(`${this}init calling service`)
-                this.plugins.calls.connect()
-            }
-
-            this.setState({ui: {menubar: {event: null}}})
-            this._platformData()
-        }
+        if (!this.state.app.online) return
+        this.emit('core:services')
+        this.setState({ui: {menubar: {event: null}}})
     }
 
 
@@ -168,20 +153,23 @@ class CA11 extends App {
         // Either restore the user identity from the previously stored
         // state, store the created identity into the state.
         if (key) {
-            await this.crypto.importIdentity(this.state.user.identity)
+            await this.crypto.importIdentity({
+                privateKey: this.state.sig11.identity.privateKey,
+                publicKey: this.state.sig11.identity.publicKey,
+            })
         } else if (password) {
-            this.setState({user: {identity: newIdentity}}, {persist: true})
+            this.setState({sig11: {identity: newIdentity}}, {persist: true})
         }
 
         this.setState({
             app: {vault: {unlocked: true}},
-            user: {authenticated: true},
+            session: {authenticated: true},
         }, {encrypt: false, persist: true})
 
 
         // Set the default layer if it's still set to login.
         if (this.state.ui.layer === 'login') {
-            this.setState({ui: {layer: 'calls'}}, {encrypt: false, persist: true})
+            this.setState({ui: {layer: 'caller'}}, {encrypt: false, persist: true})
         }
 
         // Store the vault key on login when the setting is on,
@@ -218,12 +206,11 @@ class CA11 extends App {
         if (this.env.isBrowser) main = this.components.Main(this)
 
         if (this.state.app.vault.key) {
-            this.logger.info(`${this}opening session '${this.state.user.username}'...`)
+            this.logger.info(`${this}opening session '${this.state.session.username}'...`)
             await this.__initSession({key: this.state.app.vault.key})
             // (!) State is reactive after initializing the view-model.
             this.__initViewModel({main})
             this._watchersActivate()
-            this.__initServices()
 
         } else {
             // No session yet.
@@ -237,7 +224,10 @@ class CA11 extends App {
             if (this.plugins[module]._ready) this.plugins[module]._ready()
         }
 
-        if (this.state.user.authenticated) this.media.query()
+        if (this.state.session.authenticated) {
+            this.media.query()
+            this.__initServices()
+        }
     }
 
 
@@ -323,25 +313,6 @@ class CA11 extends App {
         // added in the meantime.
         resolve()
         this.__processWriteQueue()
-    }
-
-
-    /**
-    * Each background module can use a `_platformData` implementation
-    * to update their store properties at certain points in the application.
-    * This is called at the start after login and when using the refresh
-    * option.
-    */
-    async _platformData() {
-        this.logger.info(`${this}<platform> refreshing all data`)
-        const platformDataPlugins = Object.keys(this.plugins).filter((m) => this.plugins[m]._platformData)
-        try {
-            const dataRequests = platformDataPlugins.map((m) => this.plugins[m]._platformData())
-            await Promise.all(dataRequests)
-        } catch (err) {
-            // Network changed in the meanwhile or a timeout error occured.
-            this.logger.warn(err)
-        }
     }
 
 
@@ -459,7 +430,7 @@ class CA11 extends App {
         if (logout) {
             this.setState({
                 app: {vault: {key: null, unlocked: false}},
-                user: {authenticated: false},
+                session: {authenticated: false},
             }, {encrypt: false, persist: true})
             this.store.cache.unencrypted = {}
         }
@@ -484,7 +455,7 @@ class CA11 extends App {
                 this.state.app.vault.unlocked = false
             }
             this.plugins.ui.menubarState()
-            Object.assign(this.state.user, {authenticated: false, username: sessionId})
+            Object.assign(this.state.session, {authenticated: false, username: sessionId})
         }
 
         // Set the info of the current sessions in the store again.

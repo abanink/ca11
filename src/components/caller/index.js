@@ -3,7 +3,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const Calls = {
+    const Caller = {
         computed: Object.assign({
             protocols: function() {
                 let protocols = [
@@ -17,23 +17,23 @@ module.exports = (app) => {
             classes: function(block) {
                 let classes = {}
                 if (block === 'component') {
-                    if (this.callOngoing) classes['t-st-calls-ongoing'] = true
-                    else classes['t-st-calls-idle'] = true
+                    if (this.callOngoing) classes['t-st-caller-ongoing'] = true
+                    else classes['t-st-caller-idle'] = true
                 }
                 return classes
             },
         }, app.helpers.sharedMethods()),
-        render: templates.calls.r,
-        staticRenderFns: templates.calls.s,
+        render: templates.caller.r,
+        staticRenderFns: templates.caller.s,
         store: {
-            calls: 'calls.calls',
-            description: 'calls.description',
-            sig11: 'calls.sig11',
-            sip: 'calls.sip',
+            calls: 'caller.calls',
+            description: 'caller.description',
+            sig11: 'sig11',
+            sip: 'sip',
             stream: 'settings.webrtc.media.stream',
             ui: 'ui',
         },
     }
 
-    return Calls
+    return Caller
 }

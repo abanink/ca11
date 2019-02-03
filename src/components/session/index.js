@@ -6,7 +6,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const Login = {
+    const Session = {
         computed: app.helpers.sharedComputed(),
         data: function() {
             return {
@@ -19,38 +19,33 @@ module.exports = (app) => {
                 if (this.$v.$invalid) return
 
                 if (this.app.session.active === 'new' || !this.app.session.available.length) {
-                    app.emit('bg:user:login', {
+                    app.emit('session:start', {
                         password: this.password,
-                        username: this.user.username,
+                        username: this.session.username,
                     })
                 } else {
-                    app.emit('bg:user:unlock', {
+                    app.emit('session:unlock', {
                         password: this.password,
                         username: this.app.session.active,
                     })
                 }
             },
             newSession: function() {
-                app.setState({app: {session: {active: 'new'}}, user: {username: ''}})
+                app.setState({app: {session: {active: 'new'}}, session: {username: ''}})
             },
             removeSession: function(session) {
-                app.emit('bg:user:remove_session', {session})
+                app.emit('session:destroy', {session})
             },
             selectSession: function(session = null) {
                 this.password = ''
-                app.emit('bg:user:set_session', {session})
+                app.emit('session:select', {session})
             },
         }, app.helpers.sharedMethods()),
-        render: templates.login.r,
-        staticRenderFns: templates.login.s,
+        render: templates.session.r,
+        staticRenderFns: templates.session.s,
         store: {
-            account: 'settings.sip.account',
             app: 'app',
-            availability: 'availability',
-            calls: 'calls',
-            settings: 'settings',
-            url: 'settings.platform.url',
-            user: 'user',
+            session: 'session',
             vendor: 'app.vendor',
         },
         updated: function() {
@@ -66,7 +61,7 @@ module.exports = (app) => {
                     minLength: v.minLength(6),
                     required: v.required,
                 },
-                user: {
+                session: {
                     username: {
                         requiredIf: v.requiredIf(() => {
                             return !this.app.session.active
@@ -78,12 +73,12 @@ module.exports = (app) => {
             return validations
         },
         watch: {
-            'user.username': function(username) {
-                app.setState({user: {username}})
+            'session.username': function(username) {
+                app.setState({session: {username}})
             },
         },
     }
 
 
-    return Login
+    return Session
 }

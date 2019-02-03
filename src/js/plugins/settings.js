@@ -3,13 +3,6 @@
 * settings and responding to changes to it.
 * @module ModuleSettings
 */
-const Plugin = require('ca11/lib/plugin')
-
-
-/**
-* Main entrypoint for Settings.
-* @memberof AppBackground.plugins
-*/
 class PluginSettings extends Plugin {
     /**
     * Initializes the module's store.
@@ -139,8 +132,8 @@ class PluginSettings extends Plugin {
         }).install()
 
         Raven.setUserContext({
-            email: this.app.state.user.username,
-            id: `${this.app.state.user.client_id}/${this.app.state.user.id}`,
+            email: this.app.state.session.username,
+            id: this.app.state.session.id,
         })
     }
 

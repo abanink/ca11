@@ -37,7 +37,7 @@ module.exports = (app) => {
                 let newVal = app.utils.sanitizeNumber(`${this.endpoint}${key}`)
                 if (newVal) this.$emit('update:model', newVal)
                 if (this.mode === 'dtmf') {
-                    app.emit('bg:calls:dtmf', {callId: this.call.id, key})
+                    app.emit('sip:dtmf', {callId: this.call.id, key})
                 }
                 navigator.vibrate(100)
                 app.sounds.beep(5, 750, 50)
@@ -64,14 +64,13 @@ module.exports = (app) => {
         render: templates.call_keypad.r,
         staticRenderFns: templates.call_keypad.s,
         store: {
-            calls: 'calls.calls',
+            calls: 'caller.calls',
             contacts: 'contacts.contacts',
-            description: 'calls.description',
+            description: 'caller.description',
             env: 'env',
-            sig11: 'calls.sig11',
-            sip: 'calls.sip',
+            sig11: 'sig11',
+            sip: 'sip',
             ui: 'ui',
-            user: 'user',
         },
         watch: {
             'description.protocol': function(protocol) {

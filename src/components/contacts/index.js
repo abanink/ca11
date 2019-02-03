@@ -163,28 +163,27 @@ module.exports = (app) => {
             },
             toggleSubscribe: function(contact, endpoint) {
                 if (!endpoint.subscribe) {
-                    app.emit('bg:contacts:subscribe', {contact, endpoint})
+                    app.emit('contacts:subscribe', {contact, endpoint})
                 } else {
-                    app.emit('bg:contacts:unsubscribe', {contact, endpoint})
+                    app.emit('contacts:unsubscribe', {contact, endpoint})
                 }
             },
             toggleSubscribeAll: function() {
                 this.subscribeAll = !this.subscribeAll
 
-                if (this.subscribeAll) app.emit('bg:contacts:subscribe-all')
-                else app.emit('bg:contacts:unsubscribe-all')
+                if (this.subscribeAll) app.emit('contacts:subscribe-all')
+                else app.emit('contacts:unsubscribe-all')
             },
         }, app.helpers.sharedMethods()),
         render: templates.contacts.r,
         staticRenderFns: templates.contacts.s,
         store: {
-            calls: 'calls.calls',
+            calls: 'caller.calls',
             contacts: 'contacts.contacts',
             editMode: 'app.editMode',
             filters: 'contacts.filters',
             search: 'app.search',
             status: 'contacts.status',
-            user: 'user',
         },
         watch: {
             contacts: {

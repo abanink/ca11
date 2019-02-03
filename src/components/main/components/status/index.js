@@ -64,13 +64,10 @@ module.exports = (app) => {
         store: {
             app: 'app',
             dnd: 'availability.dnd',
-            env: 'env',
             layer: 'ui.layer',
             settings: 'settings',
-            sig11: 'calls.sig11',
-            sip: 'calls.sip',
-            user: 'user',
-            vendor: 'app.vendor',
+            sig11: 'sig11',
+            sip: 'sip',
         },
     }
 

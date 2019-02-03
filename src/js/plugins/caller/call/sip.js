@@ -88,7 +88,7 @@ class CallSIP extends Call {
                 this.app.logger.info(`${this}call rejected: ${this.state.stats.callId}`)
                 // `Call completed elsewhere` is not considered to be
                 // a missed call and will not end up in the activity log.
-                this.app.emit('bg:calls:call_rejected', {call: this.state}, true)
+                this.app.emit('caller:call-rejected', {call: this.state}, true)
                 // We could distinguish here between a CANCEL send by the calling
                 // party, or a cancel made by the callee. For now let's use
                 // `request_terminated` for both cases.
@@ -138,7 +138,7 @@ class CallSIP extends Call {
             selected: false,
         }
 
-        const path = `calls.calls.${this.id}.streams.${remoteStreamId}`
+        const path = `caller.calls.${this.id}.streams.${remoteStreamId}`
 
         // There is always only one audio track coming from the PBX.
         // Associate this audio track with the other tracks.
@@ -178,8 +178,8 @@ class CallSIP extends Call {
     */
     _outgoing() {
         super._outgoing()
-        const uri = `sip:${this.state.endpoint}@${this.app.state.calls.sip.endpoint.split('/')[0]}`
-        this.session = this.plugin.sip.ua.invite(uri, {
+        const uri = `sip:${this.state.endpoint}@${this.app.state.sip.endpoint.split('/')[0]}`
+        this.session = this.app.sip.ua.invite(uri, {
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
             },
@@ -256,7 +256,7 @@ class CallSIP extends Call {
                 this.setState({status: 'request_terminated'})
             }
 
-            this.app.emit('bg:calls:call_rejected', {call: this.state}, true)
+            this.app.emit('caller:call-rejected', {call: this.state}, true)
             this._stop({message: this.translations[this.state.status]})
         })
     }
@@ -306,7 +306,7 @@ class CallSIP extends Call {
     terminate() {
         if (this.state.status === 'new') {
             // An empty/new call; just delete the Call object without noise.
-            this.plugin.deleteCall(this)
+            this.app.plugins.caller.deleteCall(this)
             return
         } else if (this.state.status === 'create') {
             // A fresh outgoing Call; not yet started. There may or may not

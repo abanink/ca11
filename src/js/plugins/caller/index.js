@@ -1,21 +1,12 @@
-/**
-* The Call module takes care of the plumbing involved with setting up
-* and breaking down Calls. `AppForeground` interacts with this module
-* by emitting events. The Calls module maintains the state bookkeeping
-* of all the tracked Calls.
-* @module ModuleCalls
-*/
-const Plugin = require('ca11/lib/plugin')
 const SipCalls = require('./sip')
 const Sig11Calls = require('./sig11')
-
 
 
 /**
 * Main entrypoint for Calls.
 * @memberof AppBackground.plugins
 */
-class PluginCalls extends Plugin {
+class PluginCaller extends Plugin {
     /**
     * @param {AppBackground} app - The background application.
     */
@@ -28,7 +19,7 @@ class PluginCalls extends Plugin {
         // This flag indicates whether a reconnection attempt will be
         // made when the websocket connection is gone.
 
-        this.sig11 = new Sig11Calls(this)
+        this.app.sig11 = new Sig11Calls(this)
         this.sip = new SipCalls(this)
 
         this.reconnect = true
@@ -39,18 +30,18 @@ class PluginCalls extends Plugin {
 
         /**
          * Accept an incoming Call.
-         * @event module:ModuleCalls#bg:calls:call_accept
+         * @event module:ModuleCalls#caller:call-accept
          * @property {callId} callId - Id of the Call object to accept.
          */
-        this.app.on('bg:calls:call_accept', ({callId}) => this.calls[callId].accept())
+        this.app.on('caller:call-accept', ({callId}) => this.calls[callId].accept())
         /**
          * Set this Call to be the visible Call.
-         * @event bg:calls:call_activate
+         * @event caller:call-activate
          * @property {callId} callId - Id of the Call object to activate.
          * @property {Boolean} holdInactive - Whether to hold the other Calls.
          * @property {Boolean} unholdActive - Whether to unhold the activated Call.
          */
-        this.app.on('bg:calls:call_activate', ({callId, holdInactive, unholdActive}) => {
+        this.app.on('caller:call-activate', ({callId, holdInactive, unholdActive}) => {
             let call = null
             if (callId) call = this.calls[callId]
             this.activateCall(call, holdInactive, unholdActive)
@@ -59,14 +50,14 @@ class PluginCalls extends Plugin {
         /**
         * Create - and optionally start - a new Call. This is the main
         * event used to start a call with.
-        * @event module:ModuleCalls#bg:calls:call_create
+        * @event module:ModuleCalls#caller:call-add
         *  @property {Object} description - Information about the new Call.
         * @property {String} [description.endpoint] - The endpoint to call.
         * @property {String} [description.start] - Start calling right away or just create a Call instance.
         */
-        this.app.on('bg:calls:call_create', ({callback, description, start}) => {
+        this.app.on('caller:call-add', ({callback, description, start}) => {
             // Sanitize the number.
-            if (this.app.state.calls.description.protocol === 'sip') {
+            if (this.app.state.caller.description.protocol === 'sip') {
                 description.endpoint = this.app.utils.sanitizeNumber(description.endpoint)
             }
 
@@ -81,10 +72,8 @@ class PluginCalls extends Plugin {
                 // create or get a new Call and activate it.
                 let call = this._newCall(description)
 
-                // An actual call may only be made when calling is enabled.
-                if (start && !this.app.helpers.callingDisabled()) {
-                    call.start()
-                }
+                call.start()
+
                 // Sync the others transfer state of other calls to the new situation.
                 this.__setTransferState()
                 // A newly created call is always activated unless
@@ -99,30 +88,13 @@ class PluginCalls extends Plugin {
 
 
         /**
-        * Delete a Call instance. Only use this to cancel a new
-        * unactivated Call. Use {@linkcode module:ModuleCalls#bg:calls:call_terminate|bg:calls:call_terminate}
-        * to end a call.
-        * @event module:ModuleCalls#bg:calls:call_delete
-        * @property {callId} callId - Id of the Call object to delete.
-        * @see module:ModuleCalls#bg:calls:call_terminate
-        */
-        this.app.on('bg:calls:call_delete', ({callId}) => {
-            if (this.calls[callId]) this.deleteCall(this.calls[callId])
-            else this.app.logger.debug(`${this}trying to delete non-existent Call with id ${callId}`)
-        })
-
-
-        /**
         * Terminate/Hangup an active Call.
-        * @event module:ModuleCalls#bg:calls:call_terminate
+        * @event module:ModuleCalls#caller:call-terminate
         * @property {callId} callId - Id of the Call to delete.
         */
-        this.app.on('bg:calls:call_terminate', ({callId}) => this.calls[callId].terminate())
+        this.app.on('caller:call-terminate', ({callId}) => this.calls[callId].terminate())
 
-        this.app.on('bg:calls:connect', this.connect.bind(this))
-        this.app.on('bg:calls:disconnect', ({reconnect}) => this.disconnect(reconnect))
-
-        this.app.on('bg:calls:hold_toggle', ({callId}) => {
+        this.app.on('caller:call-hold', ({callId}) => {
             const call = this.calls[callId]
             if (!call.state.hold.active) {
                 call.hold()
@@ -142,10 +114,10 @@ class PluginCalls extends Plugin {
         /**
         * Toggle mute status on the call by manupilating the rtp
         * sender track of the Call.
-        * @event module:ModuleCalls#bg:calls:mute_toggle
+        * @event module:ModuleCalls#caller:call-mute
         * @property {callId} callId - Id of the Call to toggle mute for.
         */
-        this.app.on('bg:calls:mute_toggle', ({callId}) => {
+        this.app.on('caller:call-mute', ({callId}) => {
             const call = this.calls[callId]
             const rtpSenderTrack = call.pc.getSenders()[0].track
 
@@ -161,10 +133,10 @@ class PluginCalls extends Plugin {
 
         /**
         * Finalizes an attended transfer.
-        * @event module:ModuleCalls#bg:calls:transfer_finalize
+        * @event module:ModuleCalls#caller:transfer-finalize
         * @property {callId} callId - Id of the Call to transfer to.
         */
-        this.app.on('bg:calls:transfer_finalize', ({callId}) => {
+        this.app.on('caller:transfer-finalize', ({callId}) => {
             // Find origin.
             let sourceCall
             for (const _callId of Object.keys(this.calls)) {
@@ -179,10 +151,10 @@ class PluginCalls extends Plugin {
         /**
          * Toggle hold for the call that needs to be transferred. Set
          * transfer mode to active for this call.
-         * @event module:ModuleCalls#bg:calls:transfer_toggle
+         * @event module:ModuleCalls#caller:transfer-initialize
          * @property {callId} callId - Id of the Call to toggle transfer mode for.
          */
-        this.app.on('bg:calls:transfer_toggle', ({callId}) => {
+        this.app.on('caller:transfer-initialize', ({callId}) => {
             const sourceCall = this.calls[callId]
             this.__setTransferState(sourceCall, !sourceCall.state.transfer.active)
         })
@@ -263,7 +235,7 @@ class PluginCalls extends Plugin {
     * @returns {Object} The module's store properties.
     */
     _initialState() {
-        let state = {
+        return {
             calls: {},
             description: {
                 endpoint: '',
@@ -271,36 +243,7 @@ class PluginCalls extends Plugin {
                 status: 'new',
                 video: true,
             },
-            sig11: {
-                enabled: true,
-                endpoint: process.env.SIG11_ENDPOINT,
-                network: {
-                    edges: [],
-                    nodes: [],
-                },
-                status: 'loading',
-                toggled: true,
-            },
-            sip: {
-                account: {
-                    // <Platform> may provide account options.
-                    options: [],
-                    // Remembers the last selected option.
-                    selected: {id: null, name: null, password: null, uri: null, username: null},
-                    // Whether user can select <platform> accounts from options.
-                    selection: false,
-                },
-                enabled: false,
-                endpoint: process.env.SIP_ENDPOINT,
-                status: 'loading',
-                toggled: false,
-            },
         }
-
-        // The selection flag determines whether the UI should include endpoint selection.
-        state.sip.account.selection = Boolean(state.sip.endpoint)
-
-        return state
     }
 
 
@@ -319,8 +262,8 @@ class PluginCalls extends Plugin {
         call.state.endpoint = description.endpoint
         call.setState(call.state)
 
-        if (!this.app.state.calls.calls[call.id]) {
-            Vue.set(this.app.state.calls.calls, call.id, call.state)
+        if (!this.app.state.caller.calls[call.id]) {
+            Vue.set(this.app.state.caller.calls, call.id, call.state)
         }
 
         this.app.logger.info(`${this}created new ${call.constructor.name} call`)
@@ -359,37 +302,14 @@ class PluginCalls extends Plugin {
     _watchers() {
         return {
             /**
-            * Respond to network changes.
-            * @param {Boolean} online - Whether we are online now.
-            */
-            'store.app.online': (online) => {
-                if (online) {
-                    // We are online again, try to reconnect and refresh API data.
-                    this.app.logger.debug(`${this}reconnect sip service (online modus)`)
-                    this.connect()
-                } else {
-                    // Offline modus is not detected by Sip.js/Websocket.
-                    // Disconnect manually.
-                    this.app.logger.debug(`${this}disconnect sip service (offline modus)`)
-                    this.disconnect(false)
-                }
-            },
-            /**
             * Modify the menubar event icon when there is
             * no more ongoing call.
             */
-            'store.calls.calls': () => {
+            'store.caller.calls': () => {
                 const ongoingCall = this.findCall({ongoing: true})
                 if (!ongoingCall && ['calling', 'ringing'].includes(this.app.state.ui.menubar.event)) {
                     this.app.setState({ui: {menubar: {event: null}}})
                 }
-            },
-            /**
-            * Update menubar status when the SIP status changes.
-            * @param {String} uaStatus - The new UA status.
-            */
-            'store.calls.sip.status': (uaStatus) => {
-                this.app.plugins.ui.menubarState()
             },
         }
     }
@@ -465,7 +385,7 @@ class PluginCalls extends Plugin {
             else if (callActive) {
                 const call = this._newCall()
                 this.activateCall(call, true)
-                this.app.setState({ui: {layer: 'calls'}})
+                this.app.setState({ui: {layer: 'caller'}})
             }
         } else if (action === 'action-hold-active') {
             // Make sure the action isn't provoked on a closing call.
@@ -473,15 +393,6 @@ class PluginCalls extends Plugin {
                 if (callActive.state.hold.active) callActive.unhold()
                 else callActive.hold()
             }
-        }
-    }
-
-
-    connect() {
-        if (this.app.state.calls.sip.status === 'registered') {
-            this.sip.disconnect(true)
-        } else {
-            this.sip.connect()
         }
     }
 
@@ -517,13 +428,8 @@ class PluginCalls extends Plugin {
 
         // Finally delete the call and its references.
         this.app.logger.debug(`${this}delete call ${call.id}`)
-        Vue.delete(this.app.state.calls.calls, call.id)
+        Vue.delete(this.app.state.caller.calls, call.id)
         delete this.calls[call.id]
-    }
-
-
-    disconnect(reconnect = true){
-        this.sip.disconnect(reconnect)
     }
 
 
@@ -559,8 +465,8 @@ class PluginCalls extends Plugin {
     * @returns {String} - An identifier for this module.
     */
     toString() {
-        return `${this.app}[calls] `
+        return `${this.app}[caller] `
     }
 }
 
-module.exports = PluginCalls
+module.exports = PluginCaller

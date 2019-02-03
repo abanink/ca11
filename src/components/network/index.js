@@ -9,10 +9,10 @@ module.exports = (app) => {
         computed: {
             bounds() {
                 return {
-                    maxX: Math.max(...this.nodes.map(n => n.x)),
-                    maxY: Math.max(...this.nodes.map(n => n.y)),
-                    minX: Math.min(...this.nodes.map(n => n.x)),
-                    minY: Math.min(...this.nodes.map(n => n.y)),
+                    maxX: Math.max(...this.nodes.map(n => n.x)) || this.width,
+                    maxY: Math.max(...this.nodes.map(n => n.y)) || this.height,
+                    minX: Math.min(...this.nodes.map(n => n.x)) || 0,
+                    minY: Math.min(...this.nodes.map(n => n.y)) || 0,
                 }
             },
             coords() {
@@ -25,16 +25,16 @@ module.exports = (app) => {
             },
         },
         created: function() {
-            this.identity = app.plugins.calls.sig11.network.identity
+            this.identity = app.sig11.network.identity
         },
         data: function() {
             return {
-                height: 0,
+                height: 100,
                 identity: null,
                 move: null,
                 padding: 15,
                 simulation: null,
-                width: 0,
+                width: 100,
             }
         },
         methods: {
@@ -99,8 +99,20 @@ module.exports = (app) => {
                 // Only allow one selected node at a time for now.
                 for (const _node of this.nodes) {
                     if (_node.id !== node.id) _node.selected = false
-                    else _node.selected = !_node.selected
+                    else {
+                        _node.selected = !_node.selected
+                        if (_node.selected) {
+                            if (!_node.headless && _node.id !== this.identity.id) {
+                                this.description.endpoint = _node.key
+                            } else {
+                                this.description.endpoint = null
+                            }
+                        } else this.description.endpoint = null
+
+                    }
                 }
+                navigator.vibrate(100)
+
             },
         },
         mounted: function() {
@@ -112,8 +124,9 @@ module.exports = (app) => {
         render: templates.network.r,
         staticRenderFns: templates.network.s,
         store: {
-            edges: 'calls.sig11.network.edges',
-            nodes: 'calls.sig11.network.nodes',
+            description: 'caller.description',
+            edges: 'sig11.network.edges',
+            nodes: 'sig11.network.nodes',
         },
         watch: {
             edges: function() {

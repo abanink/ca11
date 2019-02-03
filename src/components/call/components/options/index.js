@@ -12,10 +12,10 @@ module.exports = (app) => {
         },
         methods: Object.assign({
             callAccept: function(call) {
-                app.emit('bg:calls:call_accept', {callId: call.id})
+                app.emit('caller:call-accept', {callId: call.id})
             },
             callTerminate: function(call) {
-                app.emit('bg:calls:call_terminate', {callId: call.id})
+                app.emit('caller:call-terminate', {callId: call.id})
             },
             classes: function(block) {
                 let classes = {}
@@ -36,7 +36,7 @@ module.exports = (app) => {
             },
             holdToggle: function() {
                 if (this.call.hold.disabled) return
-                app.emit('bg:calls:hold_toggle', {callId: this.call.id})
+                app.emit('caller:call-hold', {callId: this.call.id})
             },
             keypadToggle: function() {
                 // Keypad cannot be active during transfer.
@@ -44,11 +44,11 @@ module.exports = (app) => {
                 const keypadOn = (!this.call.keypad.active || this.call.keypad.mode !== 'dtmf')
                 app.setState(
                     {keypad: {active: keypadOn, display: 'touch', mode: 'dtmf'}},
-                    {path: `calls.calls.${this.call.id}`}
+                    {path: `caller.calls.${this.call.id}`}
                 )
             },
             muteToggle: function() {
-                app.emit('bg:calls:mute_toggle', {callId: this.call.id})
+                app.emit('caller:call-mute', {callId: this.call.id})
             },
             placeCall: function(description) {
                 // Prevents calling without endpoint.
@@ -56,18 +56,18 @@ module.exports = (app) => {
                 this.setupCall(description)
             },
             transferFinalize: function() {
-                app.emit('bg:calls:transfer_finalize', {callId: this.call.id})
+                app.emit('caller:transfer-finalize', {callId: this.call.id})
             },
             transferToggle: function() {
                 if (this.call.transfer.disabled) return
-                app.emit('bg:calls:transfer_toggle', {callId: this.call.id})
+                app.emit('caller:transfer-initialize', {callId: this.call.id})
             },
         }, app.helpers.sharedMethods()),
         props: ['call'],
         render: templates.call_options.r,
         staticRenderFns: templates.call_options.s,
         store: {
-            description: 'calls.description',
+            description: 'caller.description',
             ui: 'ui',
         },
     }

@@ -1,13 +1,4 @@
 /**
-* The Application background module takes care of all
-* generic state concerning the app, notifications and
-* vendor-specific handling.
-* @module ModuleApp
-*/
-const Plugin = require('ca11/lib/plugin')
-
-
-/**
 * Main entrypoint for App.
 * @memberof AppBackground.plugins
 * @extends Plugin
@@ -150,7 +141,7 @@ class PluginApp extends Plugin {
                 }
             },
             'store.app.vault.store': (storeVaultKey) => {
-                if (!this.app.state.user.authenticated) return
+                if (!this.app.state.session.authenticated) return
 
                 if (storeVaultKey) {
                     this.app.crypto.storeVaultKey()

@@ -5,7 +5,7 @@
 class D3 {
     constructor(app) {
         this.app = app
-        this.state = this.app.state.calls.sig11.network
+        this.state = this.app.state.sig11.network
     }
 
 

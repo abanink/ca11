@@ -1,6 +1,3 @@
-const Plugin = require('ca11/lib/plugin')
-
-
 /**
 * Contacts plugin takes care of managing
 * Contacts, Endpoints and Presence.
@@ -20,14 +17,14 @@ class PluginContacts extends Plugin {
         }
 
         // Start subscribing to presence info after being registered.
-        this.app.on('calls:connected', () => {
+        this.app.on('core:sip:registered', () => {
             this.subscribeAll()
         })
 
-        this.app.on('bg:contacts:subscribe', ({contact, endpoint}) => this.subscribe(contact, endpoint))
-        this.app.on('bg:contacts:subscribe-all', () => this.subscribeAll(true))
-        this.app.on('bg:contacts:unsubscribe', ({contact, endpoint}) => this.unsubscribe(contact, endpoint))
-        this.app.on('bg:contacts:unsubscribe-all', () => this.unsubscribeAll(true))
+        this.app.on('contacts:subscribe', ({contact, endpoint}) => this.subscribe(contact, endpoint))
+        this.app.on('contacts:subscribe-all', () => this.subscribeAll(true))
+        this.app.on('contacts:unsubscribe', ({contact, endpoint}) => this.unsubscribe(contact, endpoint))
+        this.app.on('contacts:unsubscribe-all', () => this.unsubscribeAll(true))
     }
 
 

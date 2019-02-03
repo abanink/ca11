@@ -32,8 +32,6 @@ var SessionDescriptionHandler = function(logger, observer, options) {
         SENDRECV: 'sendrecv',
     }
 
-    this.logger.log('SessionDescriptionHandlerOptions: ' + JSON.stringify(this.options))
-
     this.direction = this.C.DIRECTION.NULL
 
     this.modifiers = this.options.modifiers || []

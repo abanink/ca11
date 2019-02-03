@@ -1,20 +1,22 @@
 const Endpoint = require('ca11/sig11/endpoint')
-const Network = require('ca11/sig11/network')
 const Protocol = require('ca11/sig11/protocol')
+const Network = require('ca11/sig11/network')
 
+/**
+* SIG11 Network logic for CA11 clients.
+* @module ModuleUI
+*/
+class PluginSIG11 extends Plugin {
+    constructor(app) {
+        super(app)
+        app.sig11 = this
 
-class Sig11Calls {
-
-    constructor(callsPlugin) {
-        this.app = callsPlugin.app
-
-        this.plugin = callsPlugin
         this.protocol = new Protocol(this.app)
 
         this.app.on('core:session-ready', () => {
             this.network = new Network(this.app)
 
-            const key = this.app.state.user.identity.publicKey
+            const key = this.app.state.sig11.identity.publicKey
             // Identify ourselves to be the owner of this network.
             this.network.identify({key})
             this.connect()
@@ -37,13 +39,31 @@ class Sig11Calls {
             this.network.addEndpoint(endpoint)
             // Import the remove network layout.
             this.network.import({edges, nodes})
-            this.app.setState({calls: {sig11: {status: 'registered'}}})
+            this.app.setState({sig11: {status: 'registered'}})
         })
+    }
+
+    _initialState() {
+        return {
+            enabled: true,
+            endpoint: process.env.SIG11_ENDPOINT,
+            identity: {
+                id: null,
+                privateKey: null,
+                publicKey: null,
+            },
+            network: {
+                edges: [],
+                nodes: [],
+            },
+            status: 'loading',
+            toggled: true,
+        }
     }
 
 
     _onClose(event) {
-        this.app.setState({calls: {sig11: {status: 'disconnected'}}})
+        this.app.setState({sig11: {status: 'disconnected'}})
         setTimeout(() => {
             this.connect()
         }, 500)
@@ -70,10 +90,10 @@ class Sig11Calls {
 
 
     _onOpen(event) {
-        this.app.setState({calls: {sig11: {status: 'connected'}}})
+        this.app.setState({sig11: {status: 'connected'}})
         this.ws.send(this.protocol.out('identify', {
             headless: this.app.env.isNode,
-            key: this.app.state.user.identity.publicKey,
+            key: this.app.state.sig11.identity.publicKey,
         }))
 
         this.ws.onmessage = this._onMessage.bind(this)
@@ -81,7 +101,7 @@ class Sig11Calls {
 
 
     connect() {
-        const endpoint = this.app.state.calls.sig11.endpoint
+        const endpoint = this.app.state.sig11.endpoint
         this.app.logger.info(`${this}connecting to sig11 network at ${endpoint}`)
 
         if (!endpoint.includes('ws://') && !endpoint.includes('wss://')) {
@@ -93,15 +113,7 @@ class Sig11Calls {
         this.ws.onopen = this._onOpen.bind(this)
         this.ws.onclose = this._onClose.bind(this)
     }
-
-
-    /**
-    * Generate a representational name for this module. Used for logging.
-    * @returns {String} - An identifier for this module.
-    */
-    toString() {
-        return `${this.app}[calls][sig11] `
-    }
 }
 
-module.exports = Sig11Calls
+
+module.exports = PluginSIG11

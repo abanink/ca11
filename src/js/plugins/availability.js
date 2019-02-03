@@ -1,6 +1,3 @@
-const Plugin = require('ca11/lib/plugin')
-
-
 /**
 * Main entrypoint for Availability.
 * @memberof AppBackground.plugins

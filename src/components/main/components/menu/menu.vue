@@ -17,9 +17,9 @@
 
         <button
             class="button button--menu c-menu__option t-btn-menu-calls tooltip tooltip-right"
-            :class="classes('calls')"
-            :data-tooltip="$t('calls')"
-            @click="setLayer('calls')"
+            :class="classes('caller')"
+            :data-tooltip="$t('caller')"
+            @click="setLayer('caller')"
         ><icon name="phone"/></button>
 
         <button

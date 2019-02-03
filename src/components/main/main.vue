@@ -3,17 +3,17 @@
     <Notifications :class="classes('notifications')"/>
 
         <CallStatus
-            v-if="(user.authenticated && wizard.completed) && (callOngoing && callActive)"
+            v-if="(session.authenticated && wizard.completed) && (callOngoing && callActive)"
             class="c-main__status"
             :call="callActive"
         />
-        <MainStatus v-else-if="(user.authenticated && wizard.completed)" class="c-main__status"/>
+        <MainStatus v-else-if="(session.authenticated && wizard.completed)" class="c-main__status"/>
 
-    <Login v-if="!user.authenticated"/>
-    <Wizard v-else-if="!wizard.completed && user.authenticated"/>
+    <Session v-if="!session.authenticated"/>
+    <Wizard v-else-if="!wizard.completed && session.authenticated"/>
 
-    <MainMenu v-if="wizard.completed && user.authenticated" class="c-main__menu"/>
+    <MainMenu v-if="wizard.completed && session.authenticated" class="c-main__menu"/>
     <!-- Dynamic component from layer name -->
-    <main component v-if="wizard.completed && user.authenticated" :is="layer" class="c-main__content"/>
-    <MediaControls v-if="wizard.completed && user.authenticated && !['settings', 'about'].includes(layer)" :call="callActive"/>
+    <main component v-if="wizard.completed && session.authenticated" :is="layer" class="c-main__content"/>
+    <MediaControls v-if="wizard.completed && session.authenticated && !['settings', 'about'].includes(layer)" :call="callActive"/>
 </section>

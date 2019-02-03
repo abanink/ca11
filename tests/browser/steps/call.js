@@ -3,7 +3,7 @@ module.exports = function(_) {
     return {
         answerActor: async function(callee, caller) {
             await _.step(callee, `answers call from ${caller.session.username}`)
-            await callee.page.waitFor('.t-st-calls-ongoing')
+            await callee.page.waitFor('.t-st-caller-ongoing')
             await _.screenshot(callee, `call-invite-from-${caller.session.username}`)
 
             await callee.page.click('.t-btn-options-call-accept')

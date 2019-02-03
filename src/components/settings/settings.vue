@@ -95,25 +95,25 @@
         <!-- SIG11 preferences -->
         <div class="tab" :class="{active: tabs.active === 'sig11'}">
             <FieldCheckbox
-                v-model="calls.sig11.toggled"
+                v-model="sig11.toggled"
                 name="sig11_enabled"
                 :help="$t('free, privacy-friendly calling on SIG11 network.')"
                 :label="`SIG11 ${$t('network')} (${$t('decentralized')})`"
             />
 
             <FieldText
-                v-if="calls.sig11.toggled"
-                v-model="calls.sig11.endpoint"
+                v-if="sig11.toggled"
+                v-model="sig11.endpoint"
                 name="sig11_endpoint"
                 placeholder="e.g. sig11.websocket.tld"
                 help="SIG11 WebSocket Service"
                 :label="`SIG11 ${$t('domain')}`"
-                :validation="$v.calls.sig11.endpoint"
+                :validation="$v.sig11.endpoint"
             />
 
             <FieldTextarea
-                v-if="calls.sig11.toggled"
-                v-model="user.identity.publicKey"
+                v-if="sig11.toggled"
+                v-model="sig11.identity.publicKey"
                 name="sig11_identity"
                 :help="$t('automatically unlock your session after restart.')"
                 :label="$t('public identity')"
@@ -125,7 +125,7 @@
         <!-- SIP preferences -->
         <div class="tab" :class="{active: tabs.active === 'sip'}">
             <FieldCheckbox
-                v-model="calls.sip.toggled"
+                v-model="sip.toggled"
                 elementclass="t-cb-sip-toggled"
                 name="sip_enabled"
                 :help="$t('calling on SIP network using a VoIP provider.')"
@@ -133,34 +133,34 @@
             />
 
             <FieldText
-                v-if="calls.sip.toggled"
-                v-model="calls.sip.endpoint"
+                v-if="sip.toggled"
+                v-model="sip.endpoint"
                 elementclass="t-txt-sip-endpoint"
                 name="sip_endpoint"
                 placeholder="e.g. sip.websocket.tld"
                 :label="`SIP-WSS ${$t('domain')}`"
                 help="SIP WebSocket Service"
-                :validation="$v.calls.sip.endpoint"
+                :validation="$v.sip.endpoint"
             />
 
             <FieldText
-                v-if="calls.sip.toggled"
-                v-model="calls.sip.account.selected.username"
+                v-if="sip.toggled"
+                v-model="sip.account.selected.username"
                 elementclass="t-txt-sip-username"
                 name="sip_username"
                 :label="`SIP ${$t('extension')}`"
                 placeholder="1000"
-                :validation="$v.calls.sip.account.selected.username"
+                :validation="$v.sip.account.selected.username"
             />
 
             <FieldPassword
-                v-if="calls.sip.toggled"
-                v-model="calls.sip.account.selected.password"
+                v-if="sip.toggled"
+                v-model="sip.account.selected.password"
                 elementclass="t-txt-sip-password"
                 name="sip_password"
                 :label="`SIP ${$t('password')}`"
                 :placeholder="`SIP ${$t('password')}`"
-                :validation="$v.calls.sip.account.selected.password"
+                :validation="$v.sip.account.selected.password"
             />
         </div>
 

@@ -20,17 +20,13 @@ class CallSIG11 extends Call {
 
         this.state.protocol = 'sig11'
 
-        if (!description || ['string', 'number'].includes(typeof description)) {
+        if (description.endpoint) {
             app.__mergeDeep(this.state, {
-                endpoint: description,
+                endpoint: description.endpoint,
                 keypad: {mode: 'call'},
                 status: 'new',
                 type: 'outgoing',
             })
-        } else {
-            // Passing in a session as target means an incoming call.
-            app.__mergeDeep(this.state, {keypad: {mode: 'dtmf'}, status: 'invite', type: 'incoming'})
-            this.session = description
         }
     }
 
@@ -79,23 +75,25 @@ class CallSIG11 extends Call {
     async _outgoing() {
         super._outgoing()
 
+
         this.pc = new RTCPeerConnection({
-            iceServers: [{
-                urls: 'stun:stun3.l.google.com:19302',
-            }],
+            iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
         })
 
-        this.pc.addStream(this.app.localStream)
+        const stream = this.app.state.settings.webrtc.media.stream
+        const localStream = this.app.media.streams[stream[stream.type].id]
+
+        this.pc.addStream(localStream)
 
         this._events()
 
         const offer = await this.pc.createOffer()
         this.pc.setLocalDescription(offer)
 
-        this.plugin.sig11.ws.send(JSON.stringify({
-            node: this.state.endpoint,
-            sdp: this.pc.localDescription,
-        }))
+        // this.plugin.sig11.ws.send(JSON.stringify({
+        //     node: this.state.endpoint,
+        //     sdp: this.pc.localDescription,
+        // }))
     }
 
 
@@ -118,7 +116,7 @@ class CallSIG11 extends Call {
     terminate() {
         if (this.state.status === 'new') {
             // An empty/new call; just delete the Call object without noise.
-            this.plugin.deleteCall(this)
+            this.app.plugins.caller.deleteCall(this)
             return
         } else if (this.state.status === 'create') {
             // A fresh outgoing Call; not yet started. There may or may not

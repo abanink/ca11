@@ -12,7 +12,7 @@ class Devices {
                 // twice in a row nevertheless. Skip the second call.
                 const vaultUnlocked = this.app.state.app.vault.unlocked
                 const mediaPermission = this.app.state.settings.webrtc.media.permission
-                const isAuthenticated = this.app.state.user.authenticated
+                const isAuthenticated = this.app.state.session.authenticated
 
                 if (!this._throttle && vaultUnlocked && mediaPermission && isAuthenticated) {
                     this._throttle = true

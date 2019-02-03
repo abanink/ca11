@@ -41,7 +41,7 @@ module.exports = (app) => {
         },
         methods: Object.assign({
             callEndpoint: function(activity) {
-                app.emit('bg:calls:call_create', {
+                app.emit('caller:call-add', {
                     description: activity.description,
                     start: true,
                 })
@@ -107,7 +107,6 @@ module.exports = (app) => {
             editMode: 'app.editMode',
             filters: 'activities.filters',
             search: 'app.search',
-            user: 'user',
         },
         watch: {
             // Updating all activity items after one changed
