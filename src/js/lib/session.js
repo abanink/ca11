@@ -182,11 +182,8 @@ class Session {
             session: {authenticated: true},
         }, {encrypt: false, persist: true})
 
-        if (key) {
-            this.app.emit('session:imported')
-        } else if (password) {
-            this.app.emit('session:created')
-        }
+        if (key) this.app.emit('session:imported')
+        else if (password) this.app.emit('session:created')
 
         // Set the default layer if it's still set to login.
         if (this.app.state.ui.layer === 'login') {

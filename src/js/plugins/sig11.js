@@ -15,20 +15,21 @@ class PluginSIG11 extends Plugin {
         this.cryptoSIG11 = new CryptoSIG11(app)
         this.protocol = new Protocol(this.app)
 
-        this.app.on('session:created', async() => {
-            this.identity = await this.cryptoSIG11.createIdentity()
-            this.app.setState({sig11: {identity: this.identity}}, {persist: true})
+        this.reconnect = true
 
-            const enabled = this.app.state.sig11.enabled
-            app.logger.info(`${this}sig11 ${enabled ? 'enabled' : 'disabled'}`)
-            if (enabled) this.connect()
-        })
 
-        this.app.on('session:imported', async() => {
-            this.identity = await this.cryptoSIG11.importIdentity({
-                privateKey: this.app.state.sig11.identity.privateKey,
-                publicKey: this.app.state.sig11.identity.publicKey,
-            })
+        this.app.on('ca11:services', async() => {
+            if (!this.identity) {
+                if (!this.app.state.sig11.identity.publicKey) {
+                    this.identity = await this.cryptoSIG11.createIdentity()
+                    this.app.setState({sig11: {identity: this.identity}}, {persist: true})
+                } else {
+                    this.identity = await this.cryptoSIG11.importIdentity({
+                        privateKey: this.app.state.sig11.identity.privateKey,
+                        publicKey: this.app.state.sig11.identity.publicKey,
+                    })
+                }
+            }
 
             const enabled = this.app.state.sig11.enabled
             app.logger.info(`${this}sig11 ${enabled ? 'enabled' : 'disabled'}`)
@@ -78,12 +79,18 @@ class PluginSIG11 extends Plugin {
 
 
     connect() {
+        if (['connected', 'registered'].includes(this.app.state.sig11.status)) {
+            this.disconnect()
+            // Close the connection and let the onClose event
+            // do a new connection attempt.
+            return
+        }
+        // if (this.ws) this.disconnect()
         this.network = new Network(this.app)
         // Identify ourselves to be the owner of this network.
         this.network.identify({key: this.identity.publicKey})
-
         const endpoint = this.app.state.sig11.endpoint
-        this.app.logger.info(`${this}connecting to sig11 network at ${endpoint}`)
+        this.app.logger.info(`${this}connect to sig11 endpoint: ${endpoint}`)
 
         if (!endpoint.includes('ws://') && !endpoint.includes('wss://')) {
             this.ws = new WebSocket(`wss://${endpoint}`, 'sig11')
@@ -96,12 +103,23 @@ class PluginSIG11 extends Plugin {
     }
 
 
+    disconnect(reconnect = true) {
+        this.reconnect = reconnect
+        this.ws.close()
+        delete this.ws
+    }
+
+
     onClose(event) {
-        this.app.logger.debug(`${this}transport closed`)
         this.app.setState({sig11: {status: 'disconnected'}})
-        setTimeout(() => {
-            this.connect()
-        }, 500)
+        if (this.reconnect) {
+            this.app.logger.debug(`${this}transport closed (reconnect)`)
+            setTimeout(() => {
+                this.connect()
+            }, 500)
+        } else {
+            this.app.logger.debug(`${this}transport closed`)
+        }
     }
 
 

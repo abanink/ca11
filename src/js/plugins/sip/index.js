@@ -70,6 +70,11 @@ class PluginSIP extends Plugin {
      * Connect to the configured SIP backend; e.g. Asterisk 16.
      */
     async connect() {
+        if (['connected', 'registered'].includes(this.app.state.sip.status)) {
+            this.disconnect()
+            return
+        }
+
         // The default is to reconnect.
         this.reconnect = true
         const username = this.app.state.sip.account.selected.username

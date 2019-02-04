@@ -113,7 +113,7 @@ class Network {
     * @returns {String} - An identifier for this module.
     */
     toString() {
-        return `${this.app}[network] `
+        return `${this.app}[sig11] `
     }
 
 }
