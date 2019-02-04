@@ -30,7 +30,7 @@ class Docs extends App {
 
         Vue.component('VRuntimeTemplate', require('v-runtime-template/dist/v-runtime-template.cjs'))
 
-        this.__initStore({
+        this._initStore({
             app: {
                 name: process.env.APP_NAME,
             },
@@ -51,8 +51,8 @@ class Docs extends App {
             path: '/',
         }])
 
-        this.__loadPlugins(this.__plugins)
-        this.__initViewModel({
+        this._loadPlugins(this.__plugins)
+        this._initViewModel({
             main: require('../components/main')(this),
             settings: {router: this.router},
         })

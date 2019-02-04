@@ -21,7 +21,7 @@ class CallSIG11 extends Call {
         this.state.protocol = 'sig11'
 
         if (description.endpoint) {
-            app.__mergeDeep(this.state, {
+            app._mergeDeep(this.state, {
                 endpoint: description.endpoint,
                 keypad: {mode: 'call'},
                 status: 'new',

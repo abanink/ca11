@@ -4,7 +4,7 @@
     </header>
 
     <div class="c-wizard__description">
-        {{$t('please notice that call sound quality depends a great deal on your audio setup.').ca()}}
+        {{$t('the audio settings affect the call sound quality.').ca()}}
         {{$t('a USB headset or earbuds with a microphone are recommended.').ca()}}
 
         <DeviceControls

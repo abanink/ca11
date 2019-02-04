@@ -11,14 +11,6 @@ class PluginUI extends Plugin {
     constructor(app) {
         super(app)
         this.animationStep = 0
-        this.animations = {
-            ringing: {
-                direction: 1,
-                frame: 0,
-                frames: 5,
-                intervalId: null,
-            },
-        }
         // Used to restore the Click-to-dial icon label message when
         // a tab refreshes and a call is still ongoing.
         this.lastLabelMessage = null

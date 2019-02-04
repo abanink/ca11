@@ -20,7 +20,10 @@ class App extends Skeleton {
         this.filters = require('./filters')(this)
         this.helpers = require('./helpers')(this)
 
-        // Contains all registered App modules.
+        // Copied to the initial state object.
+        this._state = {}
+
+        // Contains all registered plugins.
         this.plugins = {}
         this.__plugins = options.plugins
     }
@@ -45,6 +48,25 @@ class App extends Skeleton {
 
 
     /**
+    * Initializes each module's store and combines the result
+    * in a global state object, which is converted to
+    * reactive getters/setters by Vue-stash.
+    * @returns {Object} The module's store properties.
+    */
+    _initialState() {
+        let state = this.utils.copyObject(this._state)
+        for (let name of Object.keys(this.plugins)) {
+            if (this.plugins[name]._initialState) {
+                state[name] = this.plugins[name]._initialState()
+            }
+        }
+
+        return state
+    }
+
+
+
+    /**
     * Application parts using this class should provide their own
     * initStore implementation. The foreground script for instance
     * gets its state from the background, while the background
@@ -52,7 +74,7 @@ class App extends Skeleton {
     * hardcoded default fallback.
     * @param {Object} initialState - Extra state to begin with.
     */
-    __initStore(initialState = {}) {
+    _initStore(initialState = {}) {
         /**
         * The state is a reactive store that is used to respond
         * to changes in data. The UI totally depends on the store
@@ -82,7 +104,7 @@ class App extends Skeleton {
     * @param {Object} options.main - Main component to initialize with.
     * @param {Object} options.settings - Extra settings passed to Vue.
     */
-    __initViewModel({main, settings = {}} = {}) {
+    _initViewModel({main, settings = {}} = {}) {
         this.logger.info(`${this}init viewmodel`)
         const i18nStore = new I18nStore(this.state)
         Vue.use(I18nStash, i18nStore)
@@ -109,8 +131,33 @@ class App extends Skeleton {
     * @param {Array|null|Number|Object} item - The object to check. Can be of any type.
     * @returns {Boolean} Whether the variable is an object or not.
     */
-    __isObject(item) {
+    _isObject(item) {
         return (item && typeof item === 'object' && !Array.isArray(item))
+    }
+
+
+    /**
+    * Set the language from browser presets when it
+    * can't be derived from the application state.
+    */
+    _languagePresets() {
+        let language = this.state.language.selected
+
+        if (!language.id) {
+            const options = this.state.language.options
+            // Try to figure out the language from the environment.
+            // Check only the first part of en-GB/en-US.
+            if (this.env.isBrowser) language = options.find((i) => i.id === navigator.language.split('-')[0])
+            else if (process.env.LANGUAGE) {
+                language = options.find((i) => i.id === process.env.LANGUAGE.split('_')[0])
+            }
+            // Fallback to English language as a last resort.
+            if (!language) language = options.find((i) => i.id === 'en')
+        }
+
+        this.logger.info(`${this}language: ${language.id}`)
+        this.setState({language: {selected: language}}, {persist: this.state.user && this.state.session.authenticated})
+        Vue.i18n.set(language.id)
     }
 
 
@@ -120,7 +167,7 @@ class App extends Skeleton {
     * `tools/helpers.js`.
     * @param {Object} plugins - See .ca11rc.example for the format.
     */
-    __loadPlugins(plugins) {
+    _loadPlugins(plugins) {
         // Start by initializing builtin plugins.
         for (const builtin of plugins.builtin) {
             if (builtin.addons) {
@@ -161,15 +208,15 @@ class App extends Skeleton {
     * @param {...*} sources - One or more objects to merge to target.
     * @returns {Function} - The result of this method.
     */
-    __mergeDeep(target, ...sources) {
+    _mergeDeep(target, ...sources) {
         if (!sources.length) return target
         const source = sources.shift()
 
-        if (this.__isObject(target) && this.__isObject(source)) {
+        if (this._isObject(target) && this._isObject(source)) {
             for (const key in source) {
-                if (this.__isObject(source[key])) {
+                if (this._isObject(source[key])) {
                     if (!target[key]) Object.assign(target, {[key]: {}})
-                    this.__mergeDeep(target[key], source[key])
+                    this._mergeDeep(target[key], source[key])
                 } else if (Array.isArray(source[key])) {
                     Object.assign(target, {[key]: source[key]})
                 } else {
@@ -178,7 +225,7 @@ class App extends Skeleton {
             }
         }
 
-        return this.__mergeDeep(target, ...sources)
+        return this._mergeDeep(target, ...sources)
     }
 
 
@@ -193,13 +240,13 @@ class App extends Skeleton {
     *  @param {String} [options.source=null] - Merge into a custom object instead of the default store.
     * @param {Object} state - An object to merge into the store.
     */
-    __mergeState({action = 'upsert', encrypt = true, path = null, persist = false, source = null, state}) {
+    _mergeState({action = 'upsert', encrypt = true, path = null, persist = false, source = null, state}) {
         let stateSource
         if (source) stateSource = source
         else stateSource = this.state
 
         if (!path) {
-            this.__mergeDeep(stateSource, state)
+            this._mergeDeep(stateSource, state)
             return
         }
 
@@ -208,10 +255,10 @@ class App extends Skeleton {
             let _ref = this.__getKeyPath(stateSource, path)
             // Needs to be created first.
             if (typeof _ref === 'undefined') {
-                this.__setKeyPath(stateSource, path, state)
+                this._setKeyPath(stateSource, path, state)
             } else {
                 _ref = path.reduce((o, i)=>o[i], stateSource)
-                this.__mergeDeep(_ref, state)
+                this._mergeDeep(_ref, state)
             }
         } else if (action === 'delete') {
             const _ref = path.slice(0, path.length - 1).reduce((o, i)=>o[i], stateSource)
@@ -220,7 +267,7 @@ class App extends Skeleton {
             const _ref = path.slice(0, path.length - 1).reduce((o, i)=>o[i], stateSource)
             this.vm.$set(_ref, path[path.length - 1], state)
         } else {
-            throw new Error(`invalid path action for __mergeState: ${action}`)
+            throw new Error(`invalid path action for _mergeState: ${action}`)
         }
     }
 
@@ -235,58 +282,15 @@ class App extends Skeleton {
     * @param {*} value - The value to assign to the keypath's final key.
     * @returns {Function|Object} - Recursive until the property is set. Then returns the reference object.
     */
-    __setKeyPath(obj, keypath, value) {
+    _setKeyPath(obj, keypath, value) {
         if (keypath.length === 1) {
             // Arrived at the end of the path. Make the property reactive.
             if (!obj[keypath[0]]) this.vm.$set(obj, keypath[0], value)
             return obj[keypath[0]]
         } else {
             if (!obj[keypath[0]]) obj[keypath[0]] = {}
-            return this.__setKeyPath(obj[keypath[0]], keypath.slice(1), value)
+            return this._setKeyPath(obj[keypath[0]], keypath.slice(1), value)
         }
-    }
-
-
-    /**
-    * Initializes each module's store and combines the result
-    * in a global state object, which is converted to
-    * reactive getters/setters by Vue-stash.
-    * @returns {Object} The module's store properties.
-    */
-    _initialState() {
-        let state = {}
-        for (let moduleName of Object.keys(this.plugins)) {
-            if (this.plugins[moduleName]._initialState) {
-                state[moduleName] = this.plugins[moduleName]._initialState()
-            }
-        }
-
-        return state
-    }
-
-
-    /**
-    * Set the language from browser presets when it
-    * can't be derived from the application state.
-    */
-    _languagePresets() {
-        let language = this.state.language.selected
-
-        if (!language.id) {
-            const options = this.state.language.options
-            // Try to figure out the language from the environment.
-            // Check only the first part of en-GB/en-US.
-            if (this.env.isBrowser) language = options.find((i) => i.id === navigator.language.split('-')[0])
-            else if (process.env.LANGUAGE) {
-                language = options.find((i) => i.id === process.env.LANGUAGE.split('_')[0])
-            }
-            // Fallback to English language as a last resort.
-            if (!language) language = options.find((i) => i.id === 'en')
-        }
-
-        this.logger.info(`${this}selected language: ${language.id}`)
-        this.setState({language: {selected: language}}, {persist: this.state.user && this.state.session.authenticated})
-        Vue.i18n.set(language.id)
     }
 
 
@@ -317,7 +321,7 @@ class App extends Skeleton {
     setState(state, {action, encrypt, path, persist} = {}) {
         if (!action) action = 'upsert'
         // Merge state in the context of the executing script.
-        this.__mergeState({action, encrypt, path, persist, state})
+        this._mergeState({action, encrypt, path, persist, state})
     }
 }
 

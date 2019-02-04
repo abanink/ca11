@@ -323,7 +323,7 @@ class Call {
      */
     setState(state) {
         // This merges to the call's local state; not the app's state!
-        this.app.__mergeDeep(this.state, state)
+        this.app._mergeDeep(this.state, state)
     }
 
 

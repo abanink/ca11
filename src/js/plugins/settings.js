@@ -12,9 +12,6 @@ class PluginSettings extends Plugin {
     */
     _initialState() {
         let state = {
-            platform: {
-                url: process.env.PLATFORM_URL,
-            },
             ringtones: {
                 options: [
                     {id: 'default', name: 'default'},

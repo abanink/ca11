@@ -173,6 +173,7 @@ module.exports = function(settings) {
 
             gulp.watch([
                 path.join(settings.SRC_DIR, 'js', 'sig11', '**', '*.js'),
+                `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'crypto.js')}`,
                 `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'd3.js')}`,
                 `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'network.js')}`,
                 `!${path.join(settings.SRC_DIR, 'js', 'sig11', 'node.js')}`,
@@ -181,6 +182,7 @@ module.exports = function(settings) {
 
             // SIG11 logic that is shared between CA11 and SIG11 super node service.
             gulp.watch([
+                path.join(settings.SRC_DIR, 'js', 'sig11', 'crypto.js'),
                 path.join(settings.SRC_DIR, 'js', 'sig11', 'node.js'),
                 path.join(settings.SRC_DIR, 'js', 'sig11', 'network.js'),
                 path.join(settings.SRC_DIR, 'js', 'sig11', 'protocol.js'),

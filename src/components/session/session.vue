@@ -13,7 +13,8 @@
         <icon name="logo" class="c-login__logo"/>
 
         <div class="c-login__slogan">
-            {{$t('free communication')}}<br/>
+            {{$t('free calling')}}<br/>
+            {{$t('open communication')}}<br/>
         </div>
     </header>
 

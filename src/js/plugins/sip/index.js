@@ -11,10 +11,10 @@ class PluginSIP extends Plugin {
         super(app)
         app.sip = this
 
-        this.app.on('core:services', () => {
+        this.app.on('ca11:services', () => {
             const enabled = this.app.state.sip.enabled
+            app.logger.info(`${this}sip ${enabled ? 'enabled' : 'disabled'}`)
             if (enabled) this.connect()
-            app.logger.info(`${this}SIP service ${enabled ? 'enabled' : 'disabled'}`)
         })
     }
 
@@ -121,9 +121,11 @@ class PluginSIP extends Plugin {
 
         this.ua.on('registered', this.onRegistered.bind(this))
         this.ua.on('registrationFailed', this.onRegistrationFailed.bind(this))
-        this.ua.on('transportCreated', this.onTransportCreated.bind(this))
+        this.ua.on('transportCreated', () => {
+            this.ua.transport.on('connected', this.onConnected.bind(this))
+            this.ua.transport.on('disconnected', this.onDisconnected.bind(this))
+        })
         this.ua.on('unregistered', this.onUnregistered.bind(this))
-
         this.app.emit('sip:ua')
 
         this.ua.start()
@@ -135,7 +137,7 @@ class PluginSIP extends Plugin {
      * @param {Boolean} reconnect - Whether try to reconnect.
      */
     disconnect(reconnect = true) {
-        this.app.logger.info(`${this}disconnect ua (reconnect: ${reconnect ? 'yes' : 'no'})`)
+        this.app.logger.info(`${this}ua disconnect (reconnect: ${reconnect ? 'yes' : 'no'})`)
         this.reconnect = reconnect
         this.retry.timeout = 0
 
@@ -150,14 +152,14 @@ class PluginSIP extends Plugin {
 
 
     onConnected() {
-        this.app.logger.debug(`${this}<event:connected>`)
+        this.app.logger.debug(`${this}ua connected`)
         // Reset the retry interval timer..
         this.retry = Object.assign({}, this.retryDefault)
     }
 
 
     onDisconnected() {
-        this.app.logger.debug(`${this}<event:disconnected>`)
+        this.app.logger.debug(`${this}ua disconnected`)
         this.app.setState({sip: {status: 'disconnected'}})
 
         this.retry = Object.assign({}, this.retryDefault)
@@ -176,7 +178,7 @@ class PluginSIP extends Plugin {
 
 
     onRegistered() {
-        this.app.logger.debug(`${this}<event:registered>`)
+        this.app.logger.debug(`${this}ua registered`)
         if (this.__registerPromise) {
             this.__registerPromise.resolve()
             delete this.__registerPromise
@@ -187,7 +189,7 @@ class PluginSIP extends Plugin {
 
 
     onRegistrationFailed() {
-        this.app.logger.debug(`${this}<event:registrationFailed>`)
+        this.app.logger.debug(`${this}ua registrationFailed`)
         if (this.__registerPromise) {
             this.__registerPromise.reject()
             this.disconnect()
@@ -197,16 +199,18 @@ class PluginSIP extends Plugin {
     }
 
 
-    onTransportCreated() {
-        this.app.logger.debug(`${this}<event:transportCreated>`)
-        this.ua.transport.on('connected', this.onConnected.bind(this))
-        this.ua.transport.on('disconnected', this.onDisconnected.bind(this))
+    onUnregistered() {
+        this.app.logger.debug(`${this}ua unregistered>`)
+        this.app.setState({sip: {status: this.ua.transport.isConnected() ? 'connected' : 'disconnected'}})
     }
 
 
-    onUnregistered() {
-        this.app.logger.debug(`${this}<event:unregistered>`)
-        this.app.setState({sip: {status: this.ua.transport.isConnected() ? 'connected' : 'disconnected'}})
+    /**
+    * Generate a representational name for this module. Used for logging.
+    * @returns {String} - An identifier for this module.
+    */
+    toString() {
+        return `${this.app}[sip] `
     }
 
 

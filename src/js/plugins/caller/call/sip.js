@@ -22,14 +22,14 @@ class CallSIP extends Call {
         // already there, e.g. this is an incoming call.
         if (description.session) {
             // Passing in a session as target means an incoming call.
-            app.__mergeDeep(this.state, {
+            app._mergeDeep(this.state, {
                 status: 'invite',
                 type: 'incoming',
             })
             this.session = description.session
         } else {
             // Passing in no target or a number means an outgoing call.
-            app.__mergeDeep(this.state, {
+            app._mergeDeep(this.state, {
                 endpoint: description.endpoint,
                 status: 'new', type: 'outgoing',
             })

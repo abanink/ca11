@@ -1,3 +1,4 @@
+const CryptoSIG11 = require('ca11/sig11/crypto')
 const Endpoint = require('ca11/sig11/endpoint')
 const Protocol = require('ca11/sig11/protocol')
 const Network = require('ca11/sig11/network')
@@ -11,16 +12,29 @@ class PluginSIG11 extends Plugin {
         super(app)
         app.sig11 = this
 
+        this.cryptoSIG11 = new CryptoSIG11(app)
         this.protocol = new Protocol(this.app)
 
-        this.app.on('core:session-ready', () => {
-            this.network = new Network(this.app)
+        this.app.on('session:created', async() => {
+            this.identity = await this.cryptoSIG11.createIdentity()
+            this.app.setState({sig11: {identity: this.identity}}, {persist: true})
 
-            const key = this.app.state.sig11.identity.publicKey
-            // Identify ourselves to be the owner of this network.
-            this.network.identify({key})
-            this.connect()
+            const enabled = this.app.state.sig11.enabled
+            app.logger.info(`${this}sig11 ${enabled ? 'enabled' : 'disabled'}`)
+            if (enabled) this.connect()
         })
+
+        this.app.on('session:imported', async() => {
+            this.identity = await this.cryptoSIG11.importIdentity({
+                privateKey: this.app.state.sig11.identity.privateKey,
+                publicKey: this.app.state.sig11.identity.publicKey,
+            })
+
+            const enabled = this.app.state.sig11.enabled
+            app.logger.info(`${this}sig11 ${enabled ? 'enabled' : 'disabled'}`)
+            if (enabled) this.connect()
+        })
+
 
         this.app.on('sig11:node-removed', (node) => {
             this.network.removeNode(node)
@@ -43,6 +57,7 @@ class PluginSIG11 extends Plugin {
         })
     }
 
+
     _initialState() {
         return {
             enabled: true,
@@ -62,7 +77,27 @@ class PluginSIG11 extends Plugin {
     }
 
 
-    _onClose(event) {
+    connect() {
+        this.network = new Network(this.app)
+        // Identify ourselves to be the owner of this network.
+        this.network.identify({key: this.identity.publicKey})
+
+        const endpoint = this.app.state.sig11.endpoint
+        this.app.logger.info(`${this}connecting to sig11 network at ${endpoint}`)
+
+        if (!endpoint.includes('ws://') && !endpoint.includes('wss://')) {
+            this.ws = new WebSocket(`wss://${endpoint}`, 'sig11')
+        } else {
+            this.ws = new WebSocket(endpoint, 'sig11')
+        }
+
+        this.ws.onopen = this.onOpen.bind(this)
+        this.ws.onclose = this.onClose.bind(this)
+    }
+
+
+    onClose(event) {
+        this.app.logger.debug(`${this}transport closed`)
         this.app.setState({sig11: {status: 'disconnected'}})
         setTimeout(() => {
             this.connect()
@@ -70,7 +105,7 @@ class PluginSIG11 extends Plugin {
     }
 
 
-    async _onMessage(e) {
+    async onMessage(e) {
         this.protocol.in(e.data)
     //     let data = JSON.parse(message.data)
     //     if (data.sdp && data.sdp.type === 'offer') {
@@ -89,29 +124,24 @@ class PluginSIG11 extends Plugin {
     }
 
 
-    _onOpen(event) {
+    onOpen(event) {
+        this.app.logger.debug(`${this}transport open`)
         this.app.setState({sig11: {status: 'connected'}})
         this.ws.send(this.protocol.out('identify', {
             headless: this.app.env.isNode,
             key: this.app.state.sig11.identity.publicKey,
         }))
 
-        this.ws.onmessage = this._onMessage.bind(this)
+        this.ws.onmessage = this.onMessage.bind(this)
     }
 
 
-    connect() {
-        const endpoint = this.app.state.sig11.endpoint
-        this.app.logger.info(`${this}connecting to sig11 network at ${endpoint}`)
-
-        if (!endpoint.includes('ws://') && !endpoint.includes('wss://')) {
-            this.ws = new WebSocket(`wss://${endpoint}`, 'sig11')
-        } else {
-            this.ws = new WebSocket(endpoint, 'sig11')
-        }
-
-        this.ws.onopen = this._onOpen.bind(this)
-        this.ws.onclose = this._onClose.bind(this)
+    /**
+    * A representational name for this module for logging.
+    * @returns {String} - An identifier for this module.
+    */
+    toString() {
+        return `${this.app}[sig11] `
     }
 }
 

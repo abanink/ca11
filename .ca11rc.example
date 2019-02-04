@@ -1,12 +1,6 @@
 {
     "brands": {
         "ca11": {
-            "colors": {
-                "primary-color": "#601111",
-                "green-color": "#508654",
-                "orange-color": "#f98644",
-                "red-color": "#a75147"
-            },
             "plugins": {
                 "builtin": {
                     "contacts": {
@@ -21,7 +15,6 @@
                 "beta": "CA11-beta",
                 "production": "CA11"
             },
-            "permissions": "",
             "sig11": {
                 "endpoint": "sig11.dev.ca11.io"
             },

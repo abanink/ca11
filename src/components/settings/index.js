@@ -60,7 +60,7 @@ module.exports = (app) => {
 
                 // Verify currently selected devices after saving settings again.
                 app.devices.verifySinks()
-                app.emit('core:services')
+                app.emit('ca11:services')
             },
         }, app.helpers.sharedMethods()),
         mounted: async function() {

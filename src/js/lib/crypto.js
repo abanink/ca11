@@ -10,21 +10,13 @@ class Crypto {
     constructor(app) {
         this.app = app
 
-        this.params = {
-            aes: {params: {length: 256, name: 'AES-GCM'}},
-            ecdh: {
-                params: {name: 'ECDH', namedCurve: 'P-256'},
-                uses: ['deriveKey', 'deriveBits'],
-            },
-            rsa: {
-                params: {
-                    hash: {name: 'SHA-256'},
-                    modulusLength: 2048,
-                    name: 'RSA-PSS',
-                    publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-                },
-                uses: ['sign', 'verify'],
-            },
+        this.aes = {
+            params: {length: 256, name: 'AES-GCM'},
+        }
+
+        this.ecdh = {
+            params: {name: 'ECDH', namedCurve: 'P-256'},
+            uses: ['deriveKey', 'deriveBits'],
         }
     }
 
@@ -112,140 +104,6 @@ class Crypto {
 
 
     /**
-    * Derive a common AES-GCM session key from a public key and the
-    * user's private key.
-    * @param {CryptoKey} publicKey - A public key to generate the session key for.
-    * @returns {Promise} - Resolves with a AES-GCM CryptoKey that can be used for
-    * encryption and decryption between endpoints.
-    */
-    async __deriveAESKeyFromECDH(publicKey) {
-        this.app.logger.debug(`${this}deriving common aes-gcm key from ecdh secret`)
-        const aesKey = await crypto.subtle.deriveKey({
-            name: 'ECDH',
-            namedCurve: 'P-256',
-            public: publicKey,
-        }, this.keypair.privateKey, {
-            length: 256,
-            name: 'AES-GCM',
-        }, true, ['encrypt', 'decrypt'])
-        return aesKey
-    }
-
-
-    /**
-    * Export an AES-GCM CryptoKey to a base-64 encoded string.
-    * @param {CryptoKey} aesKey - An AES-GCM CryptoKey to convert.
-    * @returns {Promise} - Resolves with a base-64 representation of an AES-GCM
-    * CryptoKey.
-    */
-    async __exportAESKey(aesKey) {
-        // Export the AES key, so we can see if they look the same.
-        const keydata = await crypto.subtle.exportKey('raw', aesKey)
-        //returns the exported key data
-        let base64Keydata = this.__dataArrayToBase64(keydata)
-        this.app.logger.debug(`${this}exported AES-GCM session key`)
-        return base64Keydata
-    }
-
-
-    /**
-    * Export an ECDH private key to a base-64 encoded string.
-    * @param {CryptoKey} privateKey - The private key to export.
-    * @returns {Promise} - Resolves with a base-64 encoded pkcs8 private key.
-    */
-    async __exportPrivateKey(privateKey) {
-        // Export the AES key, so we can see if they look the same.
-        const keydata = await crypto.subtle.exportKey('pkcs8', privateKey)
-        this.app.logger.debug(`${this}exported private key`)
-        return this.__dataArrayToBase64(keydata)
-    }
-
-
-    /**
-    * Export an ECDH public key to a base-64 encoded string.
-    * @param {CryptoKey} publicKey - The public key to export.
-    * @returns {Promise} - Resolves with a base-64 encoded spki public key.
-    */
-    async __exportPublicKey(publicKey) {
-        const keydata = await crypto.subtle.exportKey('spki', publicKey)
-        let base64Keydata = this.__dataArrayToBase64(keydata)
-        this.app.logger.debug(`${this}exported public key`)
-        return base64Keydata
-    }
-
-
-    /**
-    * Import a base-64 encoded ECDH private key as CryptoKey. The browser
-    * version replaces the OID for Chrome, because Chrome's BoringSSL doesn't
-    * follow the OID as set out by WebCrypto yet.
-    * @param {String} privateKey - A base-64 encoded private key.
-    * @param {Object} params - The crypto params.
-    * @param {Array} uses - What the CryptoKey should be able to do.
-    * @returns {Promise} - Resolves with a private CryptoKey.
-    */
-    __importPrivateKey(privateKey, params, uses) {
-        this.app.logger.debug(`${this}importing ${params.name} private key`)
-        if (this.app.env.isBrowser) {
-            privateKey = this.__base64ToDataArray(privateKey.replace(
-                'MFYwEAYEK4EEcAYIKoZIzj0DAQcDQgAE',
-                'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE'
-            ))
-        } else {
-            privateKey = new Buffer(privateKey, 'base64')
-        }
-
-        return crypto.subtle.importKey('pkcs8', privateKey, params, true, uses)
-    }
-
-
-    /**
-    * Import a base-64 encoded spki public key as an ECDH CryptoKey.
-    * @param {String} publicKey - Base-64 encoded spki public key.
-    * @param {Object} params - The crypto params.
-    * @param {Array} uses - What the CryptoKey should be able to do.
-    * @returns {Promise} - Resolves with the imported public ECDH CryptoKey.
-    */
-    __importPublicKey(publicKey, params, uses = []) {
-        this.app.logger.debug(`${this}importing ${params.name} public key`)
-        let publicKeyData
-        if (this.app.env.isBrowser) {
-            let chromeSpkiPublickey = publicKey.replace(
-                'MFYwEAYEK4EEcAYIKoZIzj0DAQcDQgAE',
-                'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE'
-            )
-            publicKeyData = this.__base64ToDataArray(chromeSpkiPublickey)
-        } else {
-            publicKeyData = new Buffer(publicKey, 'base64')
-        }
-
-        return crypto.subtle.importKey('spki', publicKeyData, params, true, uses)
-    }
-
-
-    /**
-    * Generate a RSA keypair. This keypair is used to
-    * sign transient ECDH keys to provide PFS.
-    * See https://webkit.org/blog/7790/update-on-web-cryptography/
-    * @returns {Object} - Public/Private keypair.
-    */
-    async createIdentity() {
-        try {
-            this.identity = await crypto.subtle.generateKey(this.params.rsa.params, true, this.params.rsa.uses)
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(err)
-        }
-
-        let [privateKey, publicKey] = await Promise.all([
-            this.__exportPrivateKey(this.identity.privateKey),
-            this.__exportPublicKey(this.identity.publicKey),
-        ])
-
-        return {privateKey, publicKey}
-    }
-
-
-    /**
     * The vault AES key is generated from the user's password using
     * PBKDF2 and is cached in-memory. By default, it is also stored
     * in the unencrypted part of local storage, allowing the user to
@@ -305,6 +163,27 @@ class Crypto {
 
 
     /**
+    * Derive a common AES-GCM session key from a public key and the
+    * user's private key.
+    * @param {CryptoKey} publicKey - A public key to generate the session key for.
+    * @returns {Promise} - Resolves with a AES-GCM CryptoKey that can be used for
+    * encryption and decryption between endpoints.
+    */
+    async deriveAESFromECDH(publicKey) {
+        this.app.logger.debug(`${this}deriving common aes-gcm key from ecdh secret`)
+        const aesKey = await crypto.subtle.deriveKey({
+            name: 'ECDH',
+            namedCurve: 'P-256',
+            public: publicKey,
+        }, this.keypair.privateKey, {
+            length: 256,
+            name: 'AES-GCM',
+        }, true, ['encrypt', 'decrypt'])
+        return aesKey
+    }
+
+
+    /**
     * Encrypt a plaintext string with an AES-GCM session key.
     * @param {CryptoKey} aesKey - An AES-GCM key used to encrypt session data with.
     * @param {String} plaintext - The message data to encrypt.
@@ -327,6 +206,48 @@ class Crypto {
 
 
     /**
+    * Export an AES-GCM CryptoKey to a base-64 encoded string.
+    * @param {CryptoKey} aesKey - An AES-GCM CryptoKey to convert.
+    * @returns {Promise} - Resolves with a base-64 representation of an AES-GCM
+    * CryptoKey.
+    */
+    async exportAES(aesKey) {
+        // Export the AES key, so we can see if they look the same.
+        const keydata = await crypto.subtle.exportKey('raw', aesKey)
+        //returns the exported key data
+        let base64Keydata = this.__dataArrayToBase64(keydata)
+        this.app.logger.debug(`${this}exported AES-GCM session key`)
+        return base64Keydata
+    }
+
+
+    /**
+    * Export a private key to a base-64 encoded string.
+    * @param {CryptoKey} privateKey - The private key to export.
+    * @returns {Promise} - Resolves with a base-64 encoded pkcs8 private key.
+    */
+    async exportPrivateKey(privateKey) {
+        // Export the AES key, so we can see if they look the same.
+        const keydata = await crypto.subtle.exportKey('pkcs8', privateKey)
+        this.app.logger.debug(`${this}exported private key`)
+        return this.__dataArrayToBase64(keydata)
+    }
+
+
+    /**
+    * Export a public key to a base-64 encoded string.
+    * @param {CryptoKey} publicKey - The public key to export.
+    * @returns {Promise} - Resolves with a base-64 encoded spki public key.
+    */
+    async exportPublicKey(publicKey) {
+        const keydata = await crypto.subtle.exportKey('spki', publicKey)
+        let base64Keydata = this.__dataArrayToBase64(keydata)
+        this.app.logger.debug(`${this}exported public key`)
+        return base64Keydata
+    }
+
+
+    /**
     * Generate a SHA-256 checksum hash from a string.
     * @param {String} data - The data to hash.
     * @returns {Promise} - Resolves with the SHA-256 hash of the supplied data.
@@ -338,20 +259,51 @@ class Crypto {
 
 
     /**
-    * Import a previously created RSA identity.
+    * Import a base64 ECDH private key to a new private CryptoKey.
+    * The browser version replaces the OID for Chrome, since
+    * Chrome's BoringSSL doesn't use the OID as set out by
+    * WebCrypto.
+    * @param {String} privateKey - A base-64 encoded private key.
+    * @param {Object} params - The crypto params.
+    * @param {Array} uses - What the CryptoKey should be able to do.
+    * @returns {Promise} - Resolves with a private CryptoKey.
     */
-    async importIdentity({publicKey, privateKey}) {
-        try {
-            let [_privateKey, _publicKey] = await Promise.all([
-                this.__importPrivateKey(privateKey, this.params.rsa.params, ['sign']),
-                this.__importPublicKey(publicKey, this.params.rsa.params, ['verify']),
-            ])
-            this.identity = {privateKey: _privateKey, publicKey: _publicKey}
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(`${this}unable to decrypt rsa identity`)
-            throw err
+    importPrivateKey(privateKey, params, uses) {
+        this.app.logger.debug(`${this}importing private key (${params.name})`)
+        if (this.app.env.isBrowser) {
+            privateKey = this.__base64ToDataArray(privateKey.replace(
+                'MFYwEAYEK4EEcAYIKoZIzj0DAQcDQgAE',
+                'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE'
+            ))
+        } else {
+            privateKey = new Buffer(privateKey, 'base64')
         }
+
+        return crypto.subtle.importKey('pkcs8', privateKey, params, true, uses)
+    }
+
+
+    /**
+    * Import a base64 public key to a new public CryptoKey.
+    * @param {String} publicKey - Base64 encoded spki public key.
+    * @param {Object} params - The crypto params.
+    * @param {Array} uses - What the CryptoKey should be able to do.
+    * @returns {Promise} - Resolves with the imported public ECDH CryptoKey.
+    */
+    importPublicKey(publicKey, params, uses = []) {
+        this.app.logger.debug(`${this}importing public key (${params.name})`)
+        let publicKeyData
+        if (this.app.env.isBrowser) {
+            let chromeSpkiPublickey = publicKey.replace(
+                'MFYwEAYEK4EEcAYIKoZIzj0DAQcDQgAE',
+                'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE'
+            )
+            publicKeyData = this.__base64ToDataArray(chromeSpkiPublickey)
+        } else {
+            publicKeyData = new Buffer(publicKey, 'base64')
+        }
+
+        return crypto.subtle.importKey('spki', publicKeyData, params, true, uses)
     }
 
 
@@ -364,7 +316,7 @@ class Crypto {
     async importVaultKey(vaultKey) {
         try {
             this.vaultKey = await crypto.subtle.importKey(
-                'raw', this.__base64ToDataArray(vaultKey), this.params.aes.params,
+                'raw', this.__base64ToDataArray(vaultKey), this.aes.params,
                 true, ['encrypt', 'decrypt'])
         } catch (err) {
             // eslint-disable-next-line no-console
@@ -381,7 +333,7 @@ class Crypto {
     */
     async storeVaultKey() {
         this.app.logger.debug(`${this}enable auto session recovery`)
-        const vaultKey = await this.__exportAESKey(this.vaultKey)
+        const vaultKey = await this.exportAES(this.vaultKey)
         this.app.setState({app: {vault: {key: vaultKey}}}, {encrypt: false, persist: true})
         return vaultKey
     }

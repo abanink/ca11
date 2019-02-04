@@ -25,7 +25,7 @@ module.exports = (app) => {
             },
         },
         created: function() {
-            this.identity = app.sig11.network.identity
+            this.identity = app.sig11.identity
         },
         data: function() {
             return {

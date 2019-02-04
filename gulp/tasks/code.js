@@ -94,7 +94,6 @@ module.exports = function(settings) {
             CUSTOM_MOD: brand.plugins.custom,
 
             NODE_ENV: settings.NODE_ENV,
-            PLATFORM_URL: brand.permissions,
             PUBLISH_CHANNEL: settings.PUBLISH_CHANNEL,
             SENTRY_DSN: brand.telemetry.sentry.dsn,
             SIG11_ENDPOINT: brand.sig11.endpoint,

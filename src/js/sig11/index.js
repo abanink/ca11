@@ -7,10 +7,12 @@ const http = require('http')
 global.EventEmitter = require('eventemitter3')
 global.btoa = require('btoa')
 
+const Crypto = require('../lib/crypto')
 const Endpoint = require('./endpoint')
 const Network = require('./network')
 const Skeleton = require('../lib/skeleton')
-const Crypto = require('../lib/crypto')
+
+const CryptoSIG11 = require('./crypto')
 
 /**
 * Sig11 is a signalling layer used to setup p2p calls with.
@@ -35,6 +37,7 @@ class Sig11 extends Skeleton {
 
         this.protocol = new Protocol(this)
         this.crypto = new Crypto(this)
+        this.cryptoSIG11 = new CryptoSIG11(this)
         this.settings = settings
         this.sockets = []
 
@@ -43,7 +46,7 @@ class Sig11 extends Skeleton {
 
 
     async initNetwork() {
-        const {publicKey} = await this.crypto.createIdentity()
+        const {publicKey} = await this.cryptoSIG11.createIdentity()
         this.network = new Network(this)
         this.network.identify({key: publicKey})
     }

@@ -22,22 +22,26 @@ class MemoryStore {
 
 
 /**
-* A simple localstorage store.
-* AppBackground
+* Simple access to LocalStorage for the browser and
+* in-memory storage for Node.js using the same
+* interface.
 */
-class Store {
+class StateStore {
 
     constructor(app) {
         this.app = app
-        this.schema = 14
+        this.schema = 1
 
         this.cache = {
             encrypted: {},
             unencrypted: {},
         }
 
-        if (this.app.env.isNode) this.store = new MemoryStore()
-        else this.store = localStorage
+        if (this.app.env.isBrowser) {
+            this.store = localStorage
+        } else {
+            this.store = new MemoryStore()
+        }
     }
 
 
@@ -54,34 +58,6 @@ class Store {
     }
 
 
-    /**
-    * Multiple users can login the plugin. To prevent state
-    * collisioning, each user has its own state namespace, e.g.
-    * `myuser@domain/state`. This method returns all available
-    * sessions and a preferred one. The `active = null` means
-    * that no session is selected.
-    * @returns {Object} - The store sessions.
-    */
-    findSessions() {
-        let active = null
-        let available = []
-        for (const key of Object.keys(this.store)) {
-            if (key.endsWith('state')) {
-                const sessionName = key.replace('/state', '')
-                available.push(sessionName)
-                let state = JSON.parse(this.store.getItem(key))
-                // An active session has a stored key.
-                if (state.app.vault.salt && state.app.vault.key) {
-                    active = sessionName
-                }
-            }
-        }
-
-
-        return {active, available}
-    }
-
-
     get(key) {
         if (this.app.verbose) this.app.logger.debug(`${this}get value for key '${key}'`)
         var value = this.store.getItem(key)
@@ -93,9 +69,7 @@ class Store {
 
 
     remove(key) {
-        if (this.get(key)) {
-            this.store.removeItem(key)
-        }
+        if (this.get(key)) this.store.removeItem(key)
     }
 
 
@@ -118,7 +92,7 @@ class Store {
     }
 
 
-    validSchema() {
+    valid() {
         let schema = this.get('schema')
         if (schema === null || schema !== this.schema) {
             this.set('schema', this.schema)
@@ -131,4 +105,4 @@ class Store {
     }
 }
 
-module.exports = Store
+module.exports = StateStore

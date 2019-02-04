@@ -1,5 +1,5 @@
-const SipCalls = require('./sip')
-const Sig11Calls = require('./sig11')
+const SipCaller = require('./sip')
+const Sig11Caller = require('./sig11')
 
 
 /**
@@ -19,8 +19,8 @@ class PluginCaller extends Plugin {
         // This flag indicates whether a reconnection attempt will be
         // made when the websocket connection is gone.
 
-        this.app.sig11 = new Sig11Calls(this)
-        this.sip = new SipCalls(this)
+        this.app.sig11 = new Sig11Caller(this)
+        this.sip = new SipCaller(this)
 
         this.reconnect = true
         // The default connection timeout to start with.
@@ -283,7 +283,7 @@ class PluginCaller extends Plugin {
     * @param {Object} moduleStore - Root property for this module.
     */
     _restoreState(moduleStore) {
-        this.app.__mergeDeep(moduleStore, {
+        this.app._mergeDeep(moduleStore, {
             calls: {},
             sig11: {
                 status: 'loading',

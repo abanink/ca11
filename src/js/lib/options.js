@@ -28,12 +28,6 @@ module.exports = (function() {
                 {module: require('../plugins/sig11'), name: 'sig11'},
                 {module: require('../plugins/sip'), name: 'sip'},
                 {module: require('../plugins/ui'), name: 'ui'},
-                {
-                    adapter: null,
-                    i18n: null,
-                    module: require('../plugins/session'),
-                    name: 'session',
-                },
             ],
             custom: null,
         },
