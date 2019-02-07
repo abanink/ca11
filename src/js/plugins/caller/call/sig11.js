@@ -9,54 +9,55 @@ const Call = require('./index')
 */
 class CallSIG11 extends Call {
     /**
-    * @param {AppBackground} app - The background application.
-    * @param {String|Number|Session} [description] - An endpoint description to call.
+    * @param {CA11} app - The background application.
+    * @param {Node} description - Call description for SIG11.
     * @param {Object} [options] - An endpoint identifier to call to.
     * @param {Boolean} [options.active] - Activates this Call in the UI.
     * @param {Boolean} [options.silent] - Setup a Call without interfering with the UI.
     */
-    constructor(app, description, {active, silent} = {}) {
-        super(app, description, {active, silent})
+    constructor(app, description) {
+        super(app, description)
 
+        this.node = description.node
         this.state.protocol = 'sig11'
 
-        if (description.endpoint) {
-            app._mergeDeep(this.state, {
-                endpoint: description.endpoint,
-                keypad: {mode: 'call'},
-                status: 'new',
-                type: 'outgoing',
-            })
+        const state = {
+            endpoint: description.node.id,
+            keypad: {mode: 'call'},
         }
+
+        state.type = description.type
+
+        if (state.type === 'outgoing') {
+            state.status = 'new'
+        } else {
+            // An incoming call starts with the sdp offer.
+            this.offer = description.offer
+            state.status = 'invite'
+        }
+
+        app._mergeDeep(this.state, state)
     }
 
 
     _events() {
         // send any ice candidates to the other peer
-        // this.pc.onicecandidate = ({candidate}) => {
-        //     console.log("ONICECANDIDATE", candidate)
-        //     this.plugin.ws.send({candidate})
-        // }
+        this.pc.onicecandidate = ({candidate}) => {
+            // this.plugin.ws.send({candidate})
+        }
 
-        // // let the "negotiationneeded" event trigger offer generation
+        // let the "negotiationneeded" event trigger offer generation
         // this.pc.onnegotiationneeded = async () => {
-        //     console.log("NEGOTATION NEEDED")
-        //     try {
-        //         await this.pc.setLocalDescription(await this.pc.createOffer())
-        //         // send the offer to the other peer
-        //         this.plugin.ws.send({desc: this.pc.localDescription})
-        //     } catch (err) {
-        //         console.error(err)
-        //     }
+        //     console.log("NEGOTIATION SEND")
+
         // }
 
-        // // once remote track media arrives, show it in remote video element
-        // this.pc.ontrack = (event) => {
-        //     console.log("ONTRACK", event)
-        //     // don't set srcObject again if it is already set.
-        //     // if (remoteView.srcObject) return
-        //     // remoteView.srcObject = event.streams[0]
-        // }
+        // once remote track media arrives, show it in remote video element
+        this.pc.ontrack = (event) => {
+            // don't set srcObject again if it is already set.
+            // if (remoteView.srcObject) return
+            // remoteView.srcObject = event.streams[0]
+        }
     }
 
 
@@ -69,43 +70,55 @@ class CallSIG11 extends Call {
 
 
     /**
-    * Setup an outgoing call.
+    * Setup an outgoing call to a destination node.
     * @param {(Number|String)} number - The number to call.
     */
     async _outgoing() {
         super._outgoing()
 
+        this.pc = new RTCPeerConnection({
+            iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
+        })
+
+        this._events()
+
+        const stream = this.app.state.settings.webrtc.media.stream
+        const localStream = this.app.media.streams[stream[stream.type].id]
+        this.pc.addStream(localStream)
+
+        const offer = await this.pc.createOffer()
+        this.pc.setLocalDescription(offer)
+
+        // Send the offer to the target node Id.
+        await this.app.sig11.emit(this.state.endpoint, 'call-offer', {
+            callId: this.id,
+            offer: this.pc.localDescription.sdp,
+        })
+    }
+
+
+    /**
+    * An incoming call is accepted by the user. Let's
+    * start with establishing a WebRTC session.
+    */
+    async accept() {
+        super.accept()
 
         this.pc = new RTCPeerConnection({
             iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
         })
 
-        const stream = this.app.state.settings.webrtc.media.stream
-        const localStream = this.app.media.streams[stream[stream.type].id]
+        await this.pc.setRemoteDescription({sdp: this.offer, type: 'offer'})
+        const answer = await this.pc.createAnswer()
 
-        this.pc.addStream(localStream)
-
-        this._events()
-
-        const offer = await this.pc.createOffer()
-        this.pc.setLocalDescription(offer)
-
-        // this.plugin.sig11.ws.send(JSON.stringify({
-        //     node: this.state.endpoint,
-        //     sdp: this.pc.localDescription,
-        // }))
+        await this.app.sig11.emit(this.node.id, 'call-answer', {
+            answer: answer.sdp,
+            callId: this.id,
+        })
     }
 
 
-    /**
-    * Accept an incoming session.
-    */
-    accept() {
-        super.accept()
-    }
-
-
-    hold() {
+    setupAnswer() {
 
     }
 

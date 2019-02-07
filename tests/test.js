@@ -76,7 +76,7 @@ const lib = {
         let pages = await browser.pages()
         // Default viewport size during tests.
         pages[0].setViewport({height: 600, width: 500})
-        const uri = `http://127.0.0.1:${brand.tests.port}/index.html?test=true`
+        const uri = `http://127.0.0.1:${brand.tests.port}/index.html?mode=test`
         await pages[0].goto(uri, {})
 
         const actor = {browser, page: pages[0]}

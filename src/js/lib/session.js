@@ -245,6 +245,7 @@ class Session {
         } finally {
             this.app.media.query()
             this.app.setState({session: {status: null}})
+            this.app.emit('ca11:services')
         }
     }
 

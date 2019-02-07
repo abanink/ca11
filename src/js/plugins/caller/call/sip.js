@@ -14,8 +14,8 @@ class CallSIP extends Call {
     * @param {Boolean} [options.active] - Activates this Call in the UI.
     * @param {Boolean} [options.silent] - Setup a Call without interfering with the UI.
     */
-    constructor(app, description, {active, silent} = {}) {
-        super(app, description, {active, silent})
+    constructor(app, description) {
+        super(app, description)
         this.state.protocol = 'sip'
 
         // Created from an invite means that the session is
@@ -234,7 +234,6 @@ class CallSIP extends Call {
                     this.state.displayName = session.remoteIdentity.uri.user
                     this.state.endpoint = session.remoteIdentity.uri.user
                 }
-
             }, 0)
         })
 

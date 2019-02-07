@@ -13,11 +13,6 @@ class Crypto {
         this.aes = {
             params: {length: 256, name: 'AES-GCM'},
         }
-
-        this.ecdh = {
-            params: {name: 'ECDH', namedCurve: 'P-256'},
-            uses: ['deriveKey', 'deriveBits'],
-        }
     }
 
 
@@ -222,32 +217,6 @@ class Crypto {
 
 
     /**
-    * Export a private key to a base-64 encoded string.
-    * @param {CryptoKey} privateKey - The private key to export.
-    * @returns {Promise} - Resolves with a base-64 encoded pkcs8 private key.
-    */
-    async exportPrivateKey(privateKey) {
-        // Export the AES key, so we can see if they look the same.
-        const keydata = await crypto.subtle.exportKey('pkcs8', privateKey)
-        this.app.logger.debug(`${this}exported private key`)
-        return this.__dataArrayToBase64(keydata)
-    }
-
-
-    /**
-    * Export a public key to a base-64 encoded string.
-    * @param {CryptoKey} publicKey - The public key to export.
-    * @returns {Promise} - Resolves with a base-64 encoded spki public key.
-    */
-    async exportPublicKey(publicKey) {
-        const keydata = await crypto.subtle.exportKey('spki', publicKey)
-        let base64Keydata = this.__dataArrayToBase64(keydata)
-        this.app.logger.debug(`${this}exported public key`)
-        return base64Keydata
-    }
-
-
-    /**
     * Generate a SHA-256 checksum hash from a string.
     * @param {String} data - The data to hash.
     * @returns {Promise} - Resolves with the SHA-256 hash of the supplied data.
@@ -255,55 +224,6 @@ class Crypto {
     async hash(data) {
         const ab = await crypto.subtle.digest({name: 'SHA-256'}, this.stringToData(data))
         return this.__dataArrayToHex(ab)
-    }
-
-
-    /**
-    * Import a base64 ECDH private key to a new private CryptoKey.
-    * The browser version replaces the OID for Chrome, since
-    * Chrome's BoringSSL doesn't use the OID as set out by
-    * WebCrypto.
-    * @param {String} privateKey - A base-64 encoded private key.
-    * @param {Object} params - The crypto params.
-    * @param {Array} uses - What the CryptoKey should be able to do.
-    * @returns {Promise} - Resolves with a private CryptoKey.
-    */
-    importPrivateKey(privateKey, params, uses) {
-        this.app.logger.debug(`${this}importing private key (${params.name})`)
-        if (this.app.env.isBrowser) {
-            privateKey = this.__base64ToDataArray(privateKey.replace(
-                'MFYwEAYEK4EEcAYIKoZIzj0DAQcDQgAE',
-                'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE'
-            ))
-        } else {
-            privateKey = new Buffer(privateKey, 'base64')
-        }
-
-        return crypto.subtle.importKey('pkcs8', privateKey, params, true, uses)
-    }
-
-
-    /**
-    * Import a base64 public key to a new public CryptoKey.
-    * @param {String} publicKey - Base64 encoded spki public key.
-    * @param {Object} params - The crypto params.
-    * @param {Array} uses - What the CryptoKey should be able to do.
-    * @returns {Promise} - Resolves with the imported public ECDH CryptoKey.
-    */
-    importPublicKey(publicKey, params, uses = []) {
-        this.app.logger.debug(`${this}importing public key (${params.name})`)
-        let publicKeyData
-        if (this.app.env.isBrowser) {
-            let chromeSpkiPublickey = publicKey.replace(
-                'MFYwEAYEK4EEcAYIKoZIzj0DAQcDQgAE',
-                'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE'
-            )
-            publicKeyData = this.__base64ToDataArray(chromeSpkiPublickey)
-        } else {
-            publicKeyData = new Buffer(publicKey, 'base64')
-        }
-
-        return crypto.subtle.importKey('spki', publicKeyData, params, true, uses)
     }
 
 

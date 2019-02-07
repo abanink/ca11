@@ -101,7 +101,7 @@ class PluginUI extends Plugin {
         else if (sipStatus === 'disconnected') base = 'disconnected'
         else {
             if (sipStatus === 'registered') {
-                if (this.app.state.availability.dnd) base = 'dnd'
+                if (this.app.state.app.dnd) base = 'dnd'
                 else base = 'active'
             } else base = 'disconnected'
         }

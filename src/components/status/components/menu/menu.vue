@@ -1,28 +1,27 @@
-<component class="c-status main-status t-status">
-    <transition name="c-status">
-    <div class="c-status__menu">
+<component class="c-status-menu">
+
+    <div class="c-status-menu__menu">
         <button
-            class="button button--menu c-status__button t-btn-settings tooltip tooltip-bottom"
+            class="button button--menu c-status-menu__button t-btn-settings tooltip tooltip-bottom"
             :class="{active: layer === 'settings'}"
             :data-tooltip="$t('settings')"
             @click="setLayer('settings')"
         ><icon name="settings"/></button>
 
         <button
-            class="button button--menu c-status__button tooltip tooltip-bottom"
+            class="button button--menu c-status-menu__button tooltip tooltip-bottom"
             :class="{active: layer === 'about'}"
             :data-tooltip="$t('about {name}', {name: app.name})"
             @click="setLayer('about')"
         ><icon name="help"/></button>
 
-        <Availability class="c-status__option dnd-switch" />
+        <Dnd class="c-status-menu__option dnd-switch" />
     </div>
-    </transition>
 
-    <div class="c-status__menu-side">
+    <div class="c-status-menu__menu-side">
         <button
             v-if="sig11.enabled"
-            class="c-status__indicator tooltip tooltip-left"
+            class="c-status-menu__indicator tooltip tooltip-left"
             :class="`t-st-status-sig11-${sig11.status}`"
             :data-tooltip="tooltip.sig11"
         >
@@ -36,7 +35,7 @@
 
         <button
             v-if="sip.enabled"
-            class="c-status__indicator tooltip tooltip-left"
+            class="c-status-menu__indicator tooltip tooltip-left"
             :class="`t-st-status-sip-${sip.status}`"
             :data-tooltip="tooltip.sip"
         >
@@ -49,7 +48,7 @@
         </button>
 
         <button
-            class="button c-status__option tooltip tooltip-left"
+            class="button c-status-menu__option tooltip tooltip-left"
             @click="logout"
             :data-tooltip="$t('quit session')"
         >

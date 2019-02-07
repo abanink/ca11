@@ -6,7 +6,6 @@
             v-on:input="inputChange($event.target.value)"
             v-on:keyup.enter="validateCall(description)"
             autocomplete="off"
-            autofocus
             name="number-input"
             placeholder="..."
             ref="input"

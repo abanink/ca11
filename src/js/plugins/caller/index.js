@@ -13,14 +13,16 @@ class PluginCaller extends Plugin {
     constructor(app) {
         super(app)
 
-        this.callFactory = require('./call/factory')(this.app)
         // Keeps track of calls. Keys match Sip.js session keys.
         this.calls = {}
+
+        this.SipCall = require('./call/sip')
+        this.Sig11Call = require('./call/sig11')
         // This flag indicates whether a reconnection attempt will be
         // made when the websocket connection is gone.
 
-        this.app.sig11 = new Sig11Caller(this)
-        this.sip = new SipCaller(this)
+        this.app.sig11 = new Sig11Caller(this.app, this)
+        this.sip = new SipCaller(this.app, this)
 
         this.reconnect = true
         // The default connection timeout to start with.
@@ -50,7 +52,7 @@ class PluginCaller extends Plugin {
         /**
         * Create - and optionally start - a new Call. This is the main
         * event used to start a call with.
-        * @event module:ModuleCalls#caller:call-add
+        * @event module:ModuleCaller#caller:call-add
         *  @property {Object} description - Information about the new Call.
         * @property {String} [description.endpoint] - The endpoint to call.
         * @property {String} [description.start] - Start calling right away or just create a Call instance.
@@ -70,6 +72,7 @@ class PluginCaller extends Plugin {
             } else {
                 // Both a 'regular' new call and an attended transfer call will
                 // create or get a new Call and activate it.
+                description.type = 'outgoing'
                 let call = this._newCall(description)
 
                 call.start()
@@ -256,9 +259,19 @@ class PluginCaller extends Plugin {
     * @returns {Call} - A new or existing Call with status `new`.
     */
     _newCall(description = null) {
-        let call = this.callFactory(description)
-        this.calls[call.id] = call
+        let call
+        if (description.protocol === 'sip') {
+            call = new this.SipCall(this.app, description)
+        } else if (description.protocol === 'sig11') {
+            const node = this.app.sig11.network.node(description.endpoint)
 
+            call = new this.Sig11Call(this.app, {node, type: 'outgoing'})
+        } else {
+            throw new Error('invalid call type:', description.type)
+        }
+
+
+        this.calls[call.id] = call
         call.state.endpoint = description.endpoint
         call.setState(call.state)
 

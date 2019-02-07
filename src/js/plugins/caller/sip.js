@@ -2,10 +2,11 @@
 
 
 
-class SipCalls {
+class SipCaller {
 
-    constructor(callsPlugin) {
-        this.app = callsPlugin.app
+    constructor(app, plugin) {
+        this.app = app
+        this.plugin = plugin
 
         // Handle incoming calls.
         this.app.on('sip:ua', () => {
@@ -29,7 +30,7 @@ class SipCalls {
         const callOngoing = this.app.helpers.callOngoing()
         const closingCalls = this.app.helpers.callsClosing()
         const deviceReady = this.app.state.settings.webrtc.devices.ready
-        const dnd = this.app.state.availability.dnd
+        const dnd = this.app.state.app.dnd
         const microphoneAccess = this.app.state.settings.webrtc.media.permission
 
         let acceptCall = true
@@ -66,7 +67,7 @@ class SipCalls {
         }
         // A declined Call will still be initialized, but as a silent
         // Call, meaning it won't notify the user about it.
-        const call = this.app.plugins.caller.callFactory({
+        const call = new this.plugin.SipCall(this.app, {
             protocol: 'sip',
             session,
         }, {silent: !acceptCall})
@@ -95,4 +96,4 @@ class SipCalls {
 
 }
 
-module.exports = SipCalls
+module.exports = SipCaller

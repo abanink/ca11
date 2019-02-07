@@ -29,7 +29,7 @@ module.exports = (app) => {
                 delete settings.webrtc.media
 
                 let settingsState = {
-                    availability: {dnd: false},
+                    app: {dnd: false},
                     language: this.language,
                     settings,
                     sig11: {

@@ -12,14 +12,11 @@ class Call {
      * and set initial state. This state is shared by the UI of
      * AppForeground and the backend of AppBackground.
      * @param {AppBackground} app - The background application.
-     * @param {String} description - An endpoint description to call.
-     * @param {Object} [options] - New Call options.
-     * @param {Boolean} [options.active] - Activate this Call in the UI.
-     * @param {Boolean} [options.silent] - Setup Call without notifying the UI.
+     * @param {Object} description - Generic Call options.
      */
-    constructor(app, description, {active, silent} = {}) {
+    constructor(app, description) {
         this.app = app
-        this.silent = silent
+
         // References to MediaStream objects related to this call.
         this.streams = {}
         this._started = false
@@ -27,8 +24,11 @@ class Call {
         this.busyTone = app.sounds.busyTone
         this.translations = app.helpers.getTranslations().call
 
+        if (!description.id) this.id = shortid.generate()
+        else this.id = description.id
 
-        this.id = shortid.generate()
+        if (description.silent) this.silent = true
+
         /**
          * @property {Object} state - Reactive computed properties from Vue-stash.
          * @property {Boolean} state.active - Whether the Call shows in the UI or not.
@@ -245,7 +245,7 @@ class Call {
      * @param {String} [options.message] - Force a notification message.
      * @param {Number} options.timeout - Postpone resetting the call state for the duration of 3 busy tones.
      */
-    _stop({force = false, message = '', timeout = 0} = {}) {
+    _stop({force = false, message = '', timeout = 500} = {}) {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
 
         if (this.silent) {

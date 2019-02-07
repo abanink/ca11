@@ -10,7 +10,7 @@ module.exports = (app) => {
             }
         },
         methods: Object.assign({
-            classes: function(block, transferHint) {
+            classes: function(block) {
                 let classes = {}
                 // We assume here that a block is always an option. Change
                 // this logic if other kind of blocks are required.
@@ -18,27 +18,19 @@ module.exports = (app) => {
 
                 if (block === 'activities') {
                     classes.unread = this.activities.unread
-                } else if (block === 'availability') {
-                    if (this.dnd) classes.dnd = true
-                    else if (this.available) classes.available = true
-                    else classes.unavailable = true
                 } else if (block === 'caller') {
                     classes.disabled = !this.app.online
-                } else if (transferHint) {
-                    classes.hint = (this.transferStatus === 'select')
                 }
 
                 return classes
             },
             logout: app.helpers.logout,
         }, app.helpers.sharedMethods()),
-        render: templates.main_menu.r,
-        staticRenderFns: templates.main_menu.s,
+        render: templates.menu.r,
+        staticRenderFns: templates.menu.s,
         store: {
             activities: 'activities',
             app: 'app',
-            available: 'availability.available',
-            dnd: 'availability.dnd',
             layer: 'ui.layer',
         },
     }

@@ -1,6 +1,5 @@
 const WebCrypto = require('node-webcrypto-ossl')
 
-const Protocol = require('./protocol')
 const WebSocket = require('ws')
 const http = require('http')
 
@@ -12,7 +11,6 @@ const Endpoint = require('./endpoint')
 const Network = require('./network')
 const Skeleton = require('../lib/skeleton')
 
-const CryptoSIG11 = require('./crypto')
 
 /**
 * Sig11 is a signalling layer used to setup p2p calls with.
@@ -30,14 +28,10 @@ class Sig11 extends Skeleton {
         const env = require('../lib/env')({})
         super({env})
         process.title = 'sig11'
+        global.crypto = new WebCrypto({})
 
-        global.crypto = new WebCrypto({
-            // directory: settings.ROOT_DIR,
-        })
-
-        this.protocol = new Protocol(this)
         this.crypto = new Crypto(this)
-        this.cryptoSIG11 = new CryptoSIG11(this)
+
         this.settings = settings
         this.sockets = []
 
@@ -46,25 +40,34 @@ class Sig11 extends Skeleton {
 
 
     async initNetwork() {
-        const {publicKey} = await this.cryptoSIG11.createIdentity()
         this.network = new Network(this)
-        this.network.identify({key: publicKey})
+        this.keypair = await this.network.crypto.createIdentity()
+        this.network.setIdentity(this.keypair)
     }
 
 
     async onConnection(ws, req) {
-        const endpoint = new Endpoint(this, {transport: ws})
+        const endpoint = new Endpoint(this.network, {}, ws)
 
         // Transport data handler.
-        ws.on('message', (msg) => {
-            this.protocol.in(msg, endpoint)
+        ws.on('message', async(msg) => {
+            try {
+                msg = JSON.parse(msg)
+            } catch (err) {
+                return
+            }
+            if (msg.length === 3) {
+                await this.network.protocol.in(msg, endpoint)
+            } else if (msg.length === 4) {
+                this.network.protocol.inRelay(msg, endpoint)
+            }
         })
 
         endpoint.once('sig11:identified', () => {
             this.network.addEndpoint(endpoint, this.network.identity)
-            endpoint.send(this.protocol.out('network', this.network.export()))
+            endpoint.send(this.network.protocol.out('network', this.network.export()))
 
-            const msg = this.protocol.out('node-added', {
+            const msg = this.network.protocol.out('node-added', {
                 node: endpoint.serialize(),
                 parent: this.network.identity,
             })
@@ -74,7 +77,7 @@ class Sig11 extends Skeleton {
 
         ws.on('close', () => {
             this.network.removeEndpoint(endpoint)
-            const msg = this.protocol.out('node-removed', endpoint.serialize())
+            const msg = this.network.protocol.out('node-removed', endpoint.serialize())
             this.network.broadcast(msg)
         })
     }
@@ -134,7 +137,7 @@ class Sig11 extends Skeleton {
     * @returns {String} - An identifier for this module.
     */
     toString() {
-        return '[sig11] '
+        return '[sig11]'
     }
 }
 

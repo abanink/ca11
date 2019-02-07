@@ -12,11 +12,6 @@ module.exports = (function() {
             builtin: [
                 {module: require('../plugins/activities'), name: 'activities'},
                 {module: require('../plugins/app'), name: 'app'},
-                {
-                    addons: null,
-                    module: require('../plugins/availability'),
-                    name: 'availability',
-                },
                 {module: require('../plugins/caller'), name: 'caller'},
                 {
                     i18n: null,

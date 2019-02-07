@@ -53,7 +53,7 @@ html.chrome.android {
             background: none;
 
             svg {
-                fill: var(--grey-200);
+                fill: var(--grey-100);
             }
         }
 
@@ -62,7 +62,6 @@ html.chrome.android {
         }
     }
 }
-
 
 .tr-stream-enter {
     opacity: 0;
@@ -81,5 +80,5 @@ html.chrome.android {
 }
 
 .tr-stream-enter-active {
-    transition: all 0.5s;
+    transition: opacity 0.5s;
 }

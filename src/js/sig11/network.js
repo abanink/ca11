@@ -1,11 +1,17 @@
 const graphlib = require('graphlib')
 
+const Crypto = require('./crypto')
+const Protocol = require('./protocol')
 const D3 = require('./d3')
 
 
 class Network {
+
     constructor(app) {
         this.app = app
+        this.protocol = new Protocol(this)
+        this.crypto = new Crypto(app)
+
         // Reactive d3'ified graphlib.
         if (this.app.env.isBrowser) {
             this.d3 = new D3(this.app)
@@ -18,7 +24,8 @@ class Network {
 
 
     addEndpoint(endpoint, parent = null) {
-        this.endpoints.set(endpoint)
+        this.app.logger.debug(`${this}endpoint added <${endpoint.id.substr(0, 8)}>`)
+        this.endpoints.set(endpoint.id, endpoint)
         this.addNode(endpoint.serialize(), parent)
     }
 
@@ -26,14 +33,23 @@ class Network {
     addNode(node, parent = null) {
         this.graph.setNode(node.id, node)
         if (parent) this.graph.setEdge(parent.id, node.id)
+        this.app.logger.debug(`${this}node added <${node.id.substr(0, 8)}> (${this.graph.nodes().length})`)
         if (this.d3) this.d3.addNode(node, parent)
     }
 
 
     broadcast(msg, {excludes = []} = {}) {
-        for (const [endpoint] of this.endpoints.entries()) {
+        for (const endpoint of this.endpoints.values()) {
             if (excludes.length && excludes.includes(endpoint)) continue
             endpoint.send(msg)
+        }
+    }
+
+
+    clear() {
+        this.app.logger.debug(`${this}clear graph`)
+        for (const nodeId of this.graph.nodes()) {
+            this.removeNode(nodeId)
         }
     }
 
@@ -49,17 +65,8 @@ class Network {
     }
 
 
-    async identify(node) {
-        node.id = await this.app.crypto.hash(node.key)
-        node.headless = this.app.env.isNode
-
-        this.identity = node
-        this.app.logger.info(`${this}network from node ${this.identity.id.substr(0, 8)}...`)
-        this.graph.setNode(node.id, node)
-    }
-
-
     import({edges, nodes}) {
+        this.app.logger.info(`${this}import network`)
         for (const node of nodes) {
             if (!this.graph.node(node.v)) {
                 this.graph.setNode(node.v, node.value)
@@ -95,16 +102,35 @@ class Network {
 
 
     removeEndpoint(endpoint) {
-        this.endpoints.delete(endpoint)
-        this.app.logger.debug(`${this}endpoint removed: ${endpoint.id.substr(0, 8)}...`)
-        this.removeNode(endpoint.serialize())
+        this.endpoints.delete(endpoint.id)
+        this.app.logger.debug(`${this}endpoint removed <${endpoint.id}>`)
+        this.removeNode(endpoint.id)
     }
 
 
-    removeNode(node) {
-        this.app.logger.debug(`${this}node removed: ${node.id.substr(0, 8)}...`)
-        this.graph.removeNode(node.id)
-        if (this.d3) this.d3.removeNode(node.id)
+    removeNode(nodeId) {
+        if (this.d3) this.d3.removeNode(nodeId)
+
+        for (const edge of this.graph.edges()) {
+            if (edge.v === nodeId || edge.w === nodeId) {
+                this.graph.removeEdge(edge)
+            }
+        }
+
+        this.graph.removeNode(nodeId)
+        this.app.logger.debug(`${this}node removed <${nodeId}> (${this.graph.nodes().length})`)
+
+    }
+
+
+    async setIdentity(keypair) {
+        this.clear()
+        this.keypair = keypair
+        this.identity = await this.crypto.serializeIdentity(keypair)
+
+        this.app.logger.info(`${this}peer identity on network: ${this.identity.id}`)
+        this.graph.setNode(this.identity.id, this.identity)
+        return this.identity
     }
 
 
@@ -113,7 +139,7 @@ class Network {
     * @returns {String} - An identifier for this module.
     */
     toString() {
-        return `${this.app}[sig11] `
+        return `${this.app}[net] `
     }
 
 }

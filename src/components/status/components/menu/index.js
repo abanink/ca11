@@ -2,7 +2,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const MainStatus = {
+    const Menu = {
         computed: app.helpers.sharedComputed(),
         data: function() {
             return {
@@ -59,11 +59,11 @@ module.exports = (app) => {
             },
             logout: app.helpers.logout,
         }, app.helpers.sharedMethods()),
-        render: templates.main_status.r,
-        staticRenderFns: templates.main_status.s,
+        render: templates.status_menu.r,
+        staticRenderFns: templates.status_menu.s,
         store: {
             app: 'app',
-            dnd: 'availability.dnd',
+            dnd: 'app.dnd',
             layer: 'ui.layer',
             settings: 'settings',
             sig11: 'sig11',
@@ -71,5 +71,5 @@ module.exports = (app) => {
         },
     }
 
-    return MainStatus
+    return Menu
 }

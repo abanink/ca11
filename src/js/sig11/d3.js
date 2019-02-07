@@ -5,22 +5,23 @@
 class D3 {
     constructor(app) {
         this.app = app
-        this.state = this.app.state.sig11.network
     }
 
 
     addNode(node, parent) {
+        const {edges, nodes} = this.app.state.sig11.network
+
         node = this.node(node)
-        this.state.nodes.push(node)
+        nodes.push(node)
         if (parent) {
-            parent = this.state.nodes.find((i) => i.id === parent.id)
+            parent = nodes.find((i) => i.id === parent.id)
             if (parent) {
-                this.state.edges.push({
+                edges.push({
                     source: {
-                        index: this.state.nodes.indexOf(node),
+                        index: nodes.indexOf(node),
                     },
                     target: {
-                        index: this.state.nodes.indexOf(parent),
+                        index: nodes.indexOf(parent),
                     },
                 })
             }
@@ -35,11 +36,9 @@ class D3 {
      */
     graph(graph) {
         const nodeIds = graph.nodes()
-
         const nodes = graph.nodes().map((i) => {
             const value = graph.node(i)
-            let node = this.node(value)
-            return node
+            return this.node(value)
         })
 
         const edges = graph.edges().map((i) => {
@@ -54,13 +53,13 @@ class D3 {
 
 
     node(value) {
-        Object.assign(value, {
-            fx: null,
-            fy: null,
+        return {
+            fx: null, fy: null,
+            headless: value.headless,
+            id: value.id,
             selected: false,
             x: 0, y: 0,
-        })
-        return value
+        }
     }
 
 
@@ -68,20 +67,31 @@ class D3 {
      * The network is kept in state in d3 format, because d3-force
      * is used to represent the network layout. This is only used
      * on the CA11 side.
-     * @param {*} id - The node id.
+     * @param {*} nodeId - The node id.
      */
-    removeNode(id) {
-        for (const [index, node] of this.state.nodes.entries()) {
-            if (node.id === id) {
-                for (const [_index, edge] of this.state.edges.entries()) {
-                    if (edge.source.index === index || edge.target.index === index) {
-                        this.state.edges.splice(_index, 1)
-                    }
-                }
-
-                this.state.nodes.splice(index, 1)
+    removeNode(nodeId) {
+        const {edges, nodes} = this.app.state.sig11.network
+        const nodeIndex = nodes.findIndex((i) => i.id === nodeId)
+        // First delete all edges to/from this node.
+        for (const [edgeIndex, edge] of edges.entries()) {
+            if (edge.source.index === nodeIndex || edge.target.index === nodeIndex) {
+                edges.splice(edgeIndex, 1)
             }
         }
+
+        // Then update affected edges pointing to an outdated node index.
+        if (edges.length) {
+            for (let i = nodeIndex + 1; i < nodes.length; i++) {
+                for (const edge of edges) {
+                    if (edge.source.index === i || edge.target.index === i) {
+                        edge.source.index -= 1
+                        edge.target.index -= 1
+                    }
+
+                }
+            }
+        }
+        nodes.splice(nodeIndex, 1)
     }
 }
 

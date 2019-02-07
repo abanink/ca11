@@ -1,24 +1,30 @@
+/**
+ * An Endpoint is an abstraction to decouple
+ * transport and node. The Endpoint generates
+ * a one-time session Key to the other node
+ * using ECDHE.
+ */
 class Endpoint extends EventEmitter {
 
-    constructor(app, node) {
+    constructor(network, node, transport) {
         super()
+        this.app = network.app
+        this.network = network
+        this.transport = transport
 
-        this.app = app
-        this.transport = node.transport
-
-        // Endpoint is already identifiedis (e.g. `sig11:network`)
-        if (node.id && node.key) {
+        // Endpoint is already identified (e.g. from `sig11:network`)
+        if (node.id && node.publicKey) {
             this.id = node.id
             this.headless = node.headless
-            this.key = node.key
+            this.publicKey = node.publicKey
         } else {
-            // Do an initial identification.
+            // Perform an initial identification.
             this.once('sig11:identify', async(_node) => {
                 this.headless = _node.headless
-                this.key = _node.key
+                this.publicKey = _node.publicKey
 
-                this.id = await this.app.crypto.hash(this.key)
-                this.app.logger.info(`${this}identified as ${this.id}`)
+                this.id = await this.app.crypto.hash(this.publicKey.n)
+                this.network.app.logger.info(`${this}identified <${this.id}>`)
                 this.emit('sig11:identified')
             })
         }
@@ -41,14 +47,14 @@ class Endpoint extends EventEmitter {
         return {
             headless: this.headless,
             id: this.id,
-            key: this.key,
+            publicKey: this.publicKey,
         }
     }
 
 
     toString() {
-        if (this.id) return `[node-${this.id.substr(0, 6)}] `
-        else return '[node-?]'
+        if (this.id) return `[ep-${this.id.substr(0, 6)}] `
+        else return '[ep-?]'
     }
 }
 

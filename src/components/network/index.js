@@ -24,13 +24,9 @@ module.exports = (app) => {
                 })
             },
         },
-        created: function() {
-            this.identity = app.sig11.identity
-        },
         data: function() {
             return {
                 height: 100,
-                identity: null,
                 move: null,
                 padding: 15,
                 simulation: null,
@@ -103,7 +99,7 @@ module.exports = (app) => {
                         _node.selected = !_node.selected
                         if (_node.selected) {
                             if (!_node.headless && _node.id !== this.identity.id) {
-                                this.description.endpoint = _node.key
+                                this.description.endpoint = _node.id
                             } else {
                                 this.description.endpoint = null
                             }
@@ -126,12 +122,12 @@ module.exports = (app) => {
         store: {
             description: 'caller.description',
             edges: 'sig11.network.edges',
+            identity: 'sig11.identity',
             nodes: 'sig11.network.nodes',
         },
         watch: {
             edges: function() {
                 this.simulation.nodes(this.nodes, this.edges)
-                // this.simulation.nodes(this.nodes, this.edges)
                 this.simulate()
             },
             nodes: function() {

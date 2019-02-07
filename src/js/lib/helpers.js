@@ -85,16 +85,7 @@ function helpers(app) {
     * @returns {Boolean} - Whether one or more calls is active.
     */
     _helpers.callOngoing = function() {
-        const calls = app.state.caller.calls
-        const callIds = Object.keys(calls)
-
-        for (const callId of callIds) {
-            const status = calls[callId].status
-            // An active Call is not a new Call, but may be a closing Call.
-            if (status !== 'new') return true
-        }
-
-        return false
+        return Object.keys(app.state.caller.calls).length
     }
 
 
@@ -131,10 +122,10 @@ function helpers(app) {
                 bye: $t('call ended'),
                 callee_busy: $t('callee is busy'),
                 callee_unavailable: $t('callee is unavailable'),
-                create: $t('setting up call'),
+                create: $t('setup'),
                 dialing_a: $t('dialing phone A'),
                 dialing_b: $t('dialing phone B'),
-                invite: $t('incoming call'),
+                invite: $t('incoming'),
                 request_terminated: $t('busy here'),
             },
             callingDisabled: {

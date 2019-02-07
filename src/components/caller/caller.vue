@@ -1,5 +1,4 @@
 <component class="c-caller t-caller" :class="classes('component')">
-
     <header v-if="callActive.status === 'new'" class="content__header header">
         <icon class="header__icon" name="phone"/>
 

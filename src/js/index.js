@@ -1,6 +1,9 @@
 /**
-* The Background app namespace.
-* @namespace AppBackground
+* The CA11 namespace is the base of the CA11
+* application. It inherits from App, which
+* contains generic Vue application logic. The
+* App class is shared with the Docs application.
+* @namespace CA11
 */
 const App = require('./lib/app')
 const Crypto = require('./lib/crypto')
@@ -38,20 +41,22 @@ class CA11 extends App {
             this.components = {
                 About: require('../components/about'),
                 Activities: require('../components/activities'),
-                Availability: require('../components/availability'),
                 Call: require('../components/call'),
                 Caller: require('../components/caller'),
                 Contacts: require('../components/contacts'),
                 DeviceControls: require('../components/device-controls'),
+                Dnd: require('../components/dnd'),
                 Field: require('../components/field'),
                 Main: require('../components/main'),
                 MediaControls: require('../components/media-controls'),
                 MediaPermission: require('../components/media-permission'),
+                Menu: require('../components/menu'),
                 Network: require('../components/network'),
                 Notifications: require('../components/notifications'),
                 Session: require('../components/session'),
                 Settings: require('../components/settings'),
                 Soundmeter: require('../components/soundmeter'),
+                Status: require('../components/status'),
                 Stream: require('../components/stream'),
                 StreamPreview: require('../components/stream-preview'),
                 StreamView: require('../components/stream-view'),

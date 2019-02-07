@@ -11,6 +11,10 @@ class Utils {
         String.prototype.uc = function() {
             return this.charAt(0).toUpperCase() + this.slice(1)
         }
+
+        String.prototype.sid = function() {
+            return this.substring(0, 10) + '...'
+        }
     }
 
     copyObject(obj) {

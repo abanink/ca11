@@ -26,7 +26,7 @@
             v-if="plugin.menubarIcon"
             v-for="plugin in customPlugins" @click="setLayer(plugin.menubarIcon)"
             class="button option"
-            :class="classes(plugin.menubarIcon, plugin.menubarTransferHint)"
+            :class="classes(plugin.menubarIcon)"
         ><icon :name="plugin.menubarIcon"/></button>
 
     </div>

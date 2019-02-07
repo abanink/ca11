@@ -18,6 +18,11 @@ class CryptoSIG11 {
             },
             uses: ['sign', 'verify'],
         }
+
+        this.ecdh = {
+            params: {name: 'ECDH', namedCurve: 'P-256'},
+            uses: ['deriveKey', 'deriveBits'],
+        }
     }
 
 
@@ -29,19 +34,13 @@ class CryptoSIG11 {
     */
     async createIdentity() {
         try {
-            this.identity = await crypto.subtle.generateKey(this.rsa.params, true, this.rsa.uses)
+            return await crypto.subtle.generateKey(
+                this.rsa.params, true, this.rsa.uses
+            )
         } catch (err) {
             // eslint-disable-next-line no-console
-            console.error(err)
+            throw err
         }
-
-        let [privateKey, publicKey] = await Promise.all([
-            this.app.crypto.exportPrivateKey(this.identity.privateKey),
-            this.app.crypto.exportPublicKey(this.identity.publicKey),
-        ])
-
-        const id = await this.app.crypto.hash(publicKey)
-        return {id, privateKey, publicKey}
     }
 
 
@@ -51,24 +50,52 @@ class CryptoSIG11 {
     * @returns {Object} - Serializable identity.
     */
     async importIdentity({publicKey, privateKey}) {
-        try {
-            let [privateCryptoKey, publicCryptoKey] = await Promise.all([
-                this.app.crypto.importPrivateKey(privateKey, this.rsa.params, ['sign']),
-                this.app.crypto.importPublicKey(publicKey, this.rsa.params, ['verify']),
-            ])
-            // The crypto.identity property holds both CryptoKeys.
-            this.identity = {
-                privateKey: publicCryptoKey,
-                publicKey: privateCryptoKey,
-            }
-            const id = await this.app.crypto.hash(publicKey)
-            return {id, privateKey, publicKey}
-        } catch (err) {
-            // eslint-disable-next-line no-console
-            console.error(`${this}unable to decrypt rsa identity`)
-            throw err
+        if (!publicKey || !privateKey) throw new Error('invalid keypair')
+
+        let [privateCryptoKey, publicCryptoKey] = await Promise.all([
+            crypto.subtle.importKey('jwk', privateKey, this.rsa.params, true, ['sign']),
+            crypto.subtle.importKey('jwk', publicKey, this.rsa.params, true, ['verify']),
+        ])
+        // The crypto.identity property holds both CryptoKeys.
+        return {
+            privateKey: privateCryptoKey,
+            publicKey: publicCryptoKey,
         }
     }
+
+
+    async serializeIdentity(keypair) {
+        const publicKey = await crypto.subtle.exportKey('jwk', keypair.publicKey)
+        const id = await this.app.crypto.hash(publicKey.n)
+        return {
+            headless: this.app.env.isNode,
+            id,
+            publicKey,
+        }
+    }
+
+
+    async serializeKeypair(keypair) {
+        let [privateKey, publicKey] = await Promise.all([
+            crypto.subtle.exportKey('jwk', keypair.privateKey),
+            crypto.subtle.exportKey('jwk', keypair.publicKey),
+        ])
+
+        const id = await this.app.crypto.hash(publicKey.n)
+        return {id, privateKey, publicKey}
+    }
+
+
+    // async signPubKey(privateKey, publicKey) {
+    //     const result = await crypto.subtle.exportKey('raw', keypair.publicKey)
+
+    //     const signed = await crypto.subtle.sign(
+    //         {name: this.rsa.params.name, saltLength: 16},
+    //         keypair.privateKey,
+    //         result,
+    //     )
+
+    // }
 }
 
 module.exports = CryptoSIG11

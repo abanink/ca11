@@ -1,0 +1,40 @@
+@import 'ca11/lib/mixins';
+@import 'ca11/lib/variables';
+
+
+.c-status-call {
+    $self: &;
+    background: var(--primary-base);
+    color: $white-color;
+
+    &__protocol {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        width: $space-4;
+
+        svg {
+            @include icon-size($spacer * 4);
+        }
+    }
+
+    &__info {
+        align-items: center;
+        display: flex;
+        flex-grow: 1;
+        padding-left: $spacer-05;
+        text-transform: uppercase;
+
+        svg {
+            @include icon-size($spacer * 3);
+            margin: 0 $spacer;
+        }
+    }
+
+    &__timer {
+        align-items: center;
+        display: flex;
+        margin-right: $spacer;
+    }
+}

@@ -26,12 +26,7 @@ module.exports = (app) => {
                     activeSlots.push(localStream)
                 }
                 if (this.call) {
-                    // const streams = Object.values(this.call.streams).filter((i) => {
-                    //     return i.selected && slots.find((j) => j.id === i.id)
-                    // })
-
                     const streams = Object.values(this.call.streams).filter((i) => i.selected)
-
                     activeSlots = activeSlots.concat(streams)
                 }
 
@@ -41,11 +36,6 @@ module.exports = (app) => {
                     return 0
                 })
 
-                // slotCache = []
-                // for (const [index, stream] of streamSlots.entries()) {
-                //     slotCache.push(slots[index])
-                //     slots[index] = stream
-                // }
 
                 if (activeSlots.length < slotSize) {
                     for (let i = activeSlots.length; i < slotSize; i++) {
