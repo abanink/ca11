@@ -18,6 +18,7 @@ class CallSIG11 extends Call {
     constructor(app, description) {
         super(app, description)
 
+        this.candidates = []
         this.node = description.node
         this.state.protocol = 'sig11'
 
@@ -40,27 +41,6 @@ class CallSIG11 extends Call {
     }
 
 
-    _events() {
-        // send any ice candidates to the other peer
-        this.pc.onicecandidate = ({candidate}) => {
-            // this.plugin.ws.send({candidate})
-        }
-
-        // let the "negotiationneeded" event trigger offer generation
-        // this.pc.onnegotiationneeded = async () => {
-        //     console.log("NEGOTIATION SEND")
-
-        // }
-
-        // once remote track media arrives, show it in remote video element
-        this.pc.ontrack = (event) => {
-            // don't set srcObject again if it is already set.
-            // if (remoteView.srcObject) return
-            // remoteView.srcObject = event.streams[0]
-        }
-    }
-
-
     /**
     * Handle an incoming `invite` call from.
     */
@@ -80,13 +60,17 @@ class CallSIG11 extends Call {
             iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
         })
 
-        this._events()
+        this.rtcEvents()
 
         const stream = this.app.state.settings.webrtc.media.stream
         const localStream = this.app.media.streams[stream[stream.type].id]
-        this.pc.addStream(localStream)
+
+        for (const track of localStream.getTracks()) {
+            this.pc.addTrack(track, localStream)
+        }
 
         const offer = await this.pc.createOffer()
+        // Triggers ICE negotiation.
         this.pc.setLocalDescription(offer)
 
         // Send the offer to the target node Id.
@@ -99,7 +83,11 @@ class CallSIG11 extends Call {
 
     /**
     * An incoming call is accepted by the user. Let's
-    * start with establishing a WebRTC session.
+    * start with establishing a WebRTC session. ICE
+    * candidates can be already available from
+    * `sig11:call-candidate`, because ICE gathering
+    * is an async process that starts when `setLocalDescription`
+    * is executed on the initiating side.
     */
     async accept() {
         super.accept()
@@ -108,56 +96,92 @@ class CallSIG11 extends Call {
             iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
         })
 
+        this.rtcEvents()
+
+        const stream = this.app.state.settings.webrtc.media.stream
+        const localStream = this.app.media.streams[stream[stream.type].id]
+
+        for (const track of localStream.getTracks()) {
+            this.pc.addTrack(track, localStream)
+        }
+
         await this.pc.setRemoteDescription({sdp: this.offer, type: 'offer'})
         const answer = await this.pc.createAnswer()
 
+        this.candidates.forEach((c) => {
+            if (c) this.pc.addIceCandidate(new RTCIceCandidate(c))
+        })
+
+        delete this.candidates
+        // Triggers ICE negotiation.
+        await this.pc.setLocalDescription(answer)
         await this.app.sig11.emit(this.node.id, 'call-answer', {
             answer: answer.sdp,
             callId: this.id,
         })
+
+        this._start({message: this.translations.accepted.outgoing})
     }
 
 
-    setupAnswer() {
+    rtcEvents() {
+        // send any ice candidates to the other peer
+        this.pc.onicecandidate = ({candidate}) => {
+            // Send candidates as soon the outgoing call is confirmed
+            // with the remote node sending a `c ll-answer`.
+            this.app.sig11.emit(this.node.id, 'call-candidate', {
+                callId: this.id,
+                candidate,
+            })
+        }
 
+        // once remote track media arrives, show it in remote video element
+        this.pc.ontrack = (e) => {
+            const stream = e.streams[0]
+            if (!this.app.media.streams[stream.id]) this.addStream(stream, 'video')
+
+            const path = `caller.calls.${this.id}.streams.${stream.id}`
+            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+            e.track.onended = () => {this._cleanupStream(stream.id)}
+        }
     }
 
 
     /**
-    * Terminate a Call depending on it's current status.
+    * Other side accepted the call. Process sdp with the
+    * RTCPeerConnection that was made in `_outgoing`.
+    * @param {String} answer - The raw SDP message.
     */
-    terminate() {
-        if (this.state.status === 'new') {
-            // An empty/new call; just delete the Call object without noise.
-            this.app.plugins.caller.deleteCall(this)
-            return
-        } else if (this.state.status === 'create') {
-            // A fresh outgoing Call; not yet started. There may or may not
-            // be a session object. End the session if there is one.
-            if (this.session) this.session.terminate()
-            this.setState({status: 'request_terminated'})
-            // The session's closing events will not be called, so manually
-            // trigger the Call to stop here.
-            this._stop()
-        } else {
+    async setupAnswer(answer) {
+        await this.pc.setRemoteDescription({sdp: answer, type: 'answer'})
+        this._start()
+    }
 
-            // Calls with other statuses need some more work to end.
+
+    /**
+    * Terminate this Call.
+    * @param {Boolean} remote - Inform remote node about termination.
+    */
+    async terminate({remote = true, status = 'bye'} = {}) {
+        this.setState({status})
+        // Close connected streams when the call is already
+        // flowing. Skip when the call is terminated before
+        // the peer is connected.
+        if (this.pc) {
             try {
-                if (this.state.status === 'invite') {
-                    this.setState({status: 'request_terminated'})
-                    this.session.reject() // Decline an incoming call.
-                } else if (['accepted'].includes(this.state.status)) {
-                    // Hangup a running call.
-                    this.session.bye()
-                    // Set the status here manually, because the bye event on the
-                    // session is not triggered.
-                    this.setState({status: 'bye'})
-                }
+                this.pc.close()
             } catch (err) {
-                this.app.logger.warn(`${this}unable to close the session properly. (${err})`)
-                // Get rid of the Call anyway.
-                this._stop()
+                // Just try to close it anyway; don't bother for errors.
             }
+        }
+
+        this._stop()
+        if (remote) {
+            await this.app.sig11.emit(this.node.id, 'call-terminate', {
+                callId: this.id,
+                status,
+            })
         }
     }
 
@@ -167,16 +191,7 @@ class CallSIG11 extends Call {
     * @returns {String} - An identifier for this module.
     */
     toString() {
-        return `${this.app}[CallSIP][${this.id}] `
-    }
-
-
-    transfer(targetCall) {
-        if (typeof targetCall === 'string') {
-            this.session.refer(`sip:${targetCall}@ca11.io`)
-        } else {
-            this.session.refer(targetCall.session)
-        }
+        return `${this.app}[CallSIG11][${this.id}] `
     }
 
 

@@ -13,11 +13,28 @@ class Sig11Caller {
         this.plugin = plugin
 
         /**
-         * An outgoing call was made by this peer; the other node
-         * accepted the call and sent back the 'Call answer'.
+         * Remote node signalled that the call is accepted.
          */
-        this.app.on('sig11:call-answer', async({answer, callId, nodeId}) => {
+        this.app.on('sig11:call-answer', ({answer, callId, nodeId}) => {
             plugin.calls[callId].setupAnswer(answer)
+        })
+
+
+        // Candidates from initiating caller, sent after it got the
+        // confirmation that the call was accepted.
+        this.app.on('sig11:call-candidate', ({callId, candidate, nodeId}) => {
+            // Only accept candidates for a valid call.
+            if (!plugin.calls[callId]) return
+            if (plugin.calls[callId].state.status === 'bye') return
+
+            const pc = plugin.calls[callId].pc
+            // The RTCPeerConnection is not available in the early
+            // state of a call. Candidates are temporarily stored to
+            // be processed when the RTCPeerConnection is made.
+            if (pc && candidate) pc.addIceCandidate(new RTCIceCandidate(candidate))
+            else {
+                plugin.calls[callId].candidates.push(candidate)
+            }
         })
 
 
@@ -25,19 +42,28 @@ class Sig11Caller {
          * An incoming call, a 'Call offer', is coming in from
          * a remote node. A new incoming call will show up.
          */
-        this.app.on('sig11:call-offer', async({callId, nodeId, offer}) => {
+        this.app.on('sig11:call-offer', ({callId, nodeId, offer}) => {
             const node = this.app.sig11.network.node(nodeId)
             const description = {id: callId, node, offer, type: 'incoming'}
+            // For now, don't support call waiting and abandon the incoming
+            // call when there is already a call going on.
+            if (Object.keys(plugin.calls).length) {
+                this.app.sig11.emit(nodeId, 'call-terminate', {callId, status: 'callee_busy'})
+                return
+            }
+
             const call = new Sig11Call(this.app, description)
-
-
-            this.app.logger.info(`${this}incoming call from ${nodeId}`)
+            this.app.logger.info(`${this}incoming call ${callId}:${nodeId}`)
 
             Vue.set(this.app.state.caller.calls, call.id, call.state)
             plugin.calls[call.id] = call
-            // Show UI and start ringing.
-            call.start()
 
+            call.start()
+        })
+
+
+        this.app.on('sig11:call-terminate', ({callId, status}) => {
+            plugin.calls[callId].terminate({remote: false, status})
         })
     }
 

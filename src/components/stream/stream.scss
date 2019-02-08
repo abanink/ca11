@@ -10,11 +10,6 @@
     overflow: hidden;
     position: relative;
     transition: all 0.5s;
-    // text-align: center;
-
-    &.no-progress {
-        display: none;
-    }
 
     &__icon {
         fill: var(--grey-400);

@@ -13,7 +13,7 @@ class PluginCaller extends Plugin {
     constructor(app) {
         super(app)
 
-        // Keeps track of calls. Keys match Sip.js session keys.
+        // Keeps track  of calls. Keys match Sip.js session keys.
         this.calls = {}
 
         this.SipCall = require('./call/sip')
@@ -95,7 +95,14 @@ class PluginCaller extends Plugin {
         * @event module:ModuleCalls#caller:call-terminate
         * @property {callId} callId - Id of the Call to delete.
         */
-        this.app.on('caller:call-terminate', ({callId}) => this.calls[callId].terminate())
+        this.app.on('caller:call-terminate', ({callId}) => {
+            let status = 'bye'
+            if (this.calls[callId].state.status === 'invite') {
+                status = 'callee_busy'
+            }
+            // Use SIG11 parameters. SIP terminate doesn't have any atm.
+            this.calls[callId].terminate({remote: true, status})
+        })
 
         this.app.on('caller:call-hold', ({callId}) => {
             const call = this.calls[callId]
@@ -441,7 +448,9 @@ class PluginCaller extends Plugin {
 
         // Finally delete the call and its references.
         this.app.logger.debug(`${this}delete call ${call.id}`)
-        Vue.delete(this.app.state.caller.calls, call.id)
+        // Vue.delete(this.app.state.caller.calls, call.id)
+        const path = `caller.calls.${call.id}`
+        this.app.setState(null, {action: 'delete', path})
         delete this.calls[call.id]
     }
 

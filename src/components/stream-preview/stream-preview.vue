@@ -7,7 +7,6 @@
             :key="Object.values(call.streams).indexOf(stream)"
             :class="{selected: stream.selected}"
             :controls="false"
-            :progress="false"
             :stream="stream"
             @click="toggleSelect(stream)"
         />

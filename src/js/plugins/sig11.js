@@ -71,6 +71,7 @@ class PluginSIG11 extends Plugin {
 
             node.sessionKey = await this.verifyEcPublicKey(node.ecdh, node, signedPublicKey)
             node._sessionPromise.resolve(node.sessionKey)
+            node._negotiating = false
             delete node._sessionPromise
             delete node.ecdh
         })
@@ -144,14 +145,31 @@ class PluginSIG11 extends Plugin {
      * @param {Object} payload - Payload to send.
      */
     async emit(nodeId, event, payload) {
+        if (event.includes('sig11:')) throw new Error('invalid `sig11:` prefix')
+
         const node = this.network.node(nodeId)
+        if (!node.sessionQ) node.sessionQ = []
 
         // A sessionKey must be negotiated before sending
-        // any data over the network.
-        if (!node.sessionKey) await this.negotiateSession(node)
+        // any data over the network. Messages trying to be
+        // send are queud and sent after negotiation.
+        if (!node.sessionKey) {
+            if (node._negotiating) {
+                node.sessionQ.push(async() => {
+                    const message = await this.network.protocol.outRelay(node.id, event, payload, node.sessionKey)
+                    return message
+                })
+                return
+            } else {
+                await this.negotiateSession(node)
+            }
+        }
 
-        const data = await this.network.protocol.outRelay(node.id, event, payload, node.sessionKey)
-        this.ws.send(data)
+        const message = await this.network.protocol.outRelay(node.id, event, payload, node.sessionKey)
+        this.ws.send(message)
+        // Send queued messages.
+        const messages = await Promise.all(node.sessionQ.map((x) => x()))
+        messages.forEach((msg) => this.ws.send(msg))
     }
 
 
@@ -162,6 +180,7 @@ class PluginSIG11 extends Plugin {
      * @returns {Promise} - Resolves when the AES secret is known.
      */
     async negotiateSession(node) {
+        node._negotiating = true
         return new Promise(async(resolve, reject) => {
             node._sessionPromise = {reject, resolve}
             // Generate a transient ECDH keypair.
@@ -188,9 +207,9 @@ class PluginSIG11 extends Plugin {
     }
 
 
-    async onMessage(e) {
+    onMessage(e) {
         const msg = JSON.parse(e.data)
-        await this.network.protocol.in(msg)
+        this.network.protocol.in(msg)
     }
 
 

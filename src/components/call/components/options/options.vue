@@ -25,6 +25,7 @@
     <template v-if="call.id && call.status === 'accepted'">
 
     <button
+        v-if="call.protocol === 'sip'"
         class="button button--menu c-options__option tooltip tooltip-left"
         :class="classes('dialpad-button')"
         :data-tooltip="$t('toggle keypad')"
@@ -41,7 +42,7 @@
     ><icon name="pause"/></button>
 
     <button
-        v-if="call.transfer.type !== 'accept'"
+        v-if="call.protocol === 'sip' && call.transfer.type !== 'accept'"
         class="button button--menu c-options__option t-btn-options-transfer-toggle button tooltip tooltip-left"
         :class="classes('transfer-button')"
         :data-tooltip="$t('toggle transfer')"
@@ -50,7 +51,7 @@
     ><icon name="transfer"/></button>
 
     <button
-        v-else
+        v-else-if="call.protocol === 'sip'"
         class="button button--menu c-options__option t-btn-options-transfer-finalize button tooltip tooltip-left"
         :data-tooltip="$t('finalize transfer')"
         :disabled="call.status !== 'accepted'"

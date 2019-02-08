@@ -20,8 +20,6 @@ module.exports = (app) => {
                     selected: this.stream.selected,
                 }
 
-                classes['no-progress'] = (!this.progress && !this.stream.ready)
-
                 if (this.stream.ready) classes[`t-btn-media-stream-${this.stream.kind}`] = true
                 return classes
             },
@@ -82,10 +80,6 @@ module.exports = (app) => {
         },
         props: {
             controls: {
-                default: true,
-                type: Boolean,
-            },
-            progress: {
                 default: true,
                 type: Boolean,
             },

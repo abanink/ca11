@@ -33,6 +33,14 @@ module.exports = (app) => {
             stream: 'settings.webrtc.media.stream',
             ui: 'ui',
         },
+        watch: {
+            'description.protocol': function(protocol) {
+                app.setState({caller: {description: {
+                    endpoint: '',
+                    protocol,
+                }}}, {persist: true})
+            },
+        },
     }
 
     return Caller

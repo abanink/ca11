@@ -125,51 +125,31 @@ class CallSIP extends Call {
      * @param {RTCTrackEvent} e - Contains the added track from RTCPeerConnection.
      */
     _onTrackAdded(e) {
-        this.pc = this.session.sessionDescriptionHandler.peerConnection
-        const remoteStreamId = e.track.id
+        let stream = e.streams[0]
 
-        // State of the stream.
-        const stream = {
-            id: remoteStreamId,
-            kind: e.track.kind,
-            local: false,
-            muted: false,
-            ready: false,
-            selected: false,
-        }
-
-        const path = `caller.calls.${this.id}.streams.${remoteStreamId}`
-
-        // There is always only one audio track coming from the PBX.
-        // Associate this audio track with the other tracks.
+        // Assume the audio track of the stream is always added first.
+        // There is only one audio track in each call. Add this track
+        // to all video tracks.
         if (e.track.kind === 'audio') {
-            this.audioStreamId = remoteStreamId
+            this.audiostream = stream
+            // The video track from Asterisk sharing the same stream id
+            // as the audio is not an active video stream and should
+            // not be added to the scene.
+            stream.getVideoTracks().forEach((t) => {
+                stream.removeTrack(t)
+            })
 
-            this.streams[remoteStreamId] = new MediaStream()
-            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
-            this.streams[remoteStreamId].addTrack(e.track)
-            this.app.setState(stream, {path})
-            // Keep an eye on track state changes.
-
-            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
-            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
-            e.track.onended = () => {this._cleanupStream(remoteStreamId)}
+            this.addStream(stream, 'audio')
         } else {
-            // Create a new stream for video.
-            this.streams[remoteStreamId] = new MediaStream()
-            this.app.media.streams[remoteStreamId] = this.streams[remoteStreamId]
-            this.streams[remoteStreamId].addTrack(e.track)
-
-            // ALL remote tracks share one audio track. Add the audio track
-            // to all, which makes recording possible.
-            this.streams[remoteStreamId].addTrack(this.streams[this.audioStreamId].getAudioTracks()[0])
-            stream.audio = this.audioStreamId
-
-            this.app.setState(stream, {path})
-            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
-            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
-            e.track.onended = () => {this._cleanupStream(remoteStreamId)}
+            if (this.audiostream.id !== stream.id) {
+                this.addStream(stream, 'video')
+            }
         }
+
+        const path = `caller.calls.${this.id}.streams.${stream.id}`
+        e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+        e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+        e.track.onended = () => {this._cleanupStream(stream.id)}
     }
 
 

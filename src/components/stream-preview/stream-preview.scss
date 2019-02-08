@@ -4,14 +4,12 @@
 .c-stream-preview {
     background: var(--grey-100);
     // Visual trackbar extension.
-    // border-right: $spacer-05 solid var(--grey-300);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
 
     .streams-container {
-        // border-right: $spacer-05 solid $white-color;
         display: flex;
         flex-direction: row-reverse;
         width: 100%;
@@ -31,5 +29,3 @@
         }
     }
 }
-
-

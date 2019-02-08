@@ -116,19 +116,23 @@ class Call {
      */
     _incoming() {
         this.setState(this.state)
-        // Signal the user about the incoming call.
-        if (!this.silent) {
-            this.app.setState({ui: {layer: 'caller', menubar: {event: 'ringing'}}})
+        if (this.silent) return
 
-            this.app.plugins.ui.notification({
-                endpoint: this.state.endpoint,
-                message: `${this.state.endpoint}: ${this.state.displayName}`,
-                title: this.translations.invite,
-            })
+        const streamType = this.app.state.settings.webrtc.media.stream.type
+        // Switch to the caller and activate the local stream.
+        this.app.setState({
+            settings: {webrtc: {media: {stream: {[streamType]: {selected: true}}}}},
+            ui: {layer: 'caller', menubar: {event: 'ringing'}},
+        })
 
-            this.app.sounds.ringTone.play({loop: true})
-            this.app.plugins.caller.activateCall(this, true)
-        }
+        this.app.plugins.ui.notification({
+            endpoint: this.state.endpoint,
+            message: `${this.state.endpoint}: ${this.state.displayName}`,
+            title: this.translations.invite,
+        })
+
+        this.app.plugins.caller.activateCall(this, true)
+        this.app.sounds.ringTone.play({loop: true})
     }
 
 
@@ -199,7 +203,7 @@ class Call {
      * @param {Boolean} options.force - Force showing a notification.
      * @param {String} [options.message] - Force a notification message.
      */
-    _start({force = false, message = ''}) {
+    _start({force = false, message = ''} = {}) {
         // A silent Call doesn't need to do anything here.
         if (this.silent) return
 
@@ -245,7 +249,7 @@ class Call {
      * @param {String} [options.message] - Force a notification message.
      * @param {Number} options.timeout - Postpone resetting the call state for the duration of 3 busy tones.
      */
-    _stop({force = false, message = '', timeout = 500} = {}) {
+    _stop({force = false, message = '', timeout = 1000} = {}) {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
 
         if (this.silent) {
@@ -292,18 +296,16 @@ class Call {
             this.app.plugins.caller.__setTransferState(this, false)
         }
 
+        const streamType = this.app.state.settings.webrtc.media.stream.type
+        this.app.setState({
+            settings: {webrtc: {media: {stream: {[streamType]: {selected: false}}}}},
+        })
+
+        this.app.plugins.ui.notification({endpoint: this.state.endpoint})
+        this.busyTone.stop()
+
         window.setTimeout(() => {
-            this.busyTone.stop()
             this.app.plugins.caller.deleteCall(this)
-            // Signal browser tabs to remove the click-to-dial notification label.
-            this.app.plugins.ui.notification({endpoint: this.state.endpoint})
-
-
-            const streamType = this.app.state.settings.webrtc.media.stream.type
-            this.app.setState({
-                settings: {webrtc: {media: {stream: {[streamType]: {selected: null}}}}},
-            })
-
         }, timeout)
     }
 
@@ -313,6 +315,22 @@ class Call {
      */
     accept() {
         if (!(this.state.type === 'incoming')) throw 'session must be incoming type'
+    }
+
+
+    addStream(stream, kind) {
+        const streamState = {
+            id: stream.id,
+            kind,
+            local: false,
+            muted: false,
+            ready: false,
+            selected: true,
+        }
+
+        this.app.media.streams[stream.id] = stream
+        const path = `caller.calls.${this.id}.streams.${stream.id}`
+        this.app.setState(streamState, {path})
     }
 
 
