@@ -16,12 +16,12 @@ class PluginActivity extends Plugin {
         this.app.on('caller:call-rejected', ({call}) => {
             let activity = {
                 description: {
-                    endpoint: call.endpoint,
+                    number: call.number,
                     protocol: call.protocol,
                 },
                 icon: `call-missed-${call.type}`,
                 selected: false,
-                status: call.type === 'outgoing' ? 'unanswered' : 'missed',
+                status: call.direction === 'outgoing' ? 'unanswered' : 'missed',
             }
 
             this.addActivity(activity)
@@ -30,7 +30,7 @@ class PluginActivity extends Plugin {
         this.app.on('caller:call-ended', ({call}) => {
             let activity = {
                 description: {
-                    endpoint: call.endpoint,
+                    number: call.number,
                     protocol: call.protocol,
                 },
                 icon: `call-${call.type}`,

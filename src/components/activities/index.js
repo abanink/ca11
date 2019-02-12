@@ -12,7 +12,7 @@ module.exports = (app) => {
 
                 // Dynamically mix in contact information.
                 activities = activities.map((i) => {
-                    const contactInfo = app.helpers.matchContact(i.description.endpoint)
+                    const contactInfo = app.helpers.matchContact(i.description.number)
                     if (contactInfo) i.contact = this.contacts[contactInfo.contact]
                     else i.contact = null
                     return i
@@ -31,7 +31,7 @@ module.exports = (app) => {
                             }
                         }
                         // Search on contact endpoint number.
-                        if (!match) match = i.description.endpoint.includes(searchQuery)
+                        if (!match) match = i.description.number.includes(searchQuery)
                         return match
                     })
                 }
@@ -41,7 +41,7 @@ module.exports = (app) => {
         },
         methods: Object.assign({
             callEndpoint: function(activity) {
-                app.emit('caller:call-add', {
+                app.plugins.caller.call({
                     description: activity.description,
                     start: true,
                 })

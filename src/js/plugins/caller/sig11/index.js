@@ -1,12 +1,11 @@
-const Sig11Call = require('./call/sig11')
+const SIG11Call = require('./call')
 
 
 /**
- * Deals with SIG11 call logic that is not strictly
- * bound to a single Call.
- * @module Sig11Caller
+ * Manage SIG11 calls.
+ * @module SIG11Caller
  */
-class Sig11Caller {
+class SIG11Caller {
 
     constructor(app, plugin) {
         this.app = app
@@ -44,7 +43,7 @@ class Sig11Caller {
          */
         this.app.on('sig11:call-offer', ({callId, nodeId, offer}) => {
             const node = this.app.sig11.network.node(nodeId)
-            const description = {id: callId, node, offer, type: 'incoming'}
+            const description = {direction: 'incoming', id: callId, node, offer}
             // For now, don't support call waiting and abandon the incoming
             // call when there is already a call going on.
             if (Object.keys(plugin.calls).length) {
@@ -52,7 +51,7 @@ class Sig11Caller {
                 return
             }
 
-            const call = new Sig11Call(this.app, description)
+            const call = new SIG11Call(this.app, description)
             this.app.logger.info(`${this}incoming call ${callId}:${nodeId}`)
 
             Vue.set(this.app.state.caller.calls, call.id, call.state)
@@ -68,6 +67,16 @@ class Sig11Caller {
     }
 
 
+    call(description) {
+        // Search node that has the appropriate number.
+        let node = this.app.sig11.network.filterNode({number: description.number})
+        if (!node.length) return null
+        description.node = node[0]
+
+        return new SIG11Call(this.app, description)
+    }
+
+
     /**
     * Generate a representational name for this module. Used for logging.
     * @returns {String} - An identifier for this module.
@@ -77,4 +86,4 @@ class Sig11Caller {
     }
 }
 
-module.exports = Sig11Caller
+module.exports = SIG11Caller

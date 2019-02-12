@@ -8,13 +8,13 @@ module.exports = (app) => {
     const CallKeypad = {
         computed: Object.assign({
             matchedContact: function() {
-                let _number = String(this.endpoint)
+                let _number = String(this.number)
                 if (_number.length > 1) {
-                    let match = app.helpers.matchContact(String(this.endpoint), true)
+                    let match = app.helpers.matchContact(String(this.number), true)
                     if (match) {
                         return {
                             contact: this.contacts[match.contact],
-                            endpoint: this.contacts[match.contact].endpoints[match.endpoint],
+                            number: this.contacts[match.contact].endpoints[match.number],
                         }
                     }
                 }
@@ -34,7 +34,7 @@ module.exports = (app) => {
             },
             press: function(key) {
                 if (!allowedKeys.includes(key)) return
-                let newVal = app.utils.sanitizeNumber(`${this.endpoint}${key}`)
+                let newVal = app.utils.sanitizeNumber(`${this.number}${key}`)
                 if (newVal) this.$emit('update:model', newVal)
                 if (this.mode === 'dtmf') {
                     app.emit('sip:dtmf', {callId: this.call.id, key})
@@ -44,9 +44,9 @@ module.exports = (app) => {
             },
             removeLastNumber: function() {
                 if (this.callingDisabled) return
-                if (this.endpoint) {
+                if (this.number) {
                     navigator.vibrate(100)
-                    this.$emit('update:model', this.endpoint.substring(0, this.endpoint.length - 1))
+                    this.$emit('update:model', this.number.substring(0, this.number.length - 1))
                 }
             },
         }, app.helpers.sharedMethods()),
@@ -57,8 +57,8 @@ module.exports = (app) => {
         props: {
             call: {default: null},
             dtmf: {default: false, type: Boolean},
-            endpoint: {default: '', type: String},
             mode: {default: 'call', type: String},
+            number: {default: ''},
             search: {default: true, type: Boolean},
         },
         render: templates.call_keypad.r,
@@ -76,12 +76,10 @@ module.exports = (app) => {
             'description.protocol': function(protocol) {
                 app.setState({calls: {description: {protocol}}}, {persist: true})
             },
-            endpoint: function(endpoint) {
+            number: function(number) {
                 if (this.callingDisabled) return
-                let cleanedNumber = endpoint
-                if (this.description.protocol === 'sip') {
-                    cleanedNumber = app.utils.sanitizeNumber(endpoint)
-                }
+                let cleanedNumber = number
+                cleanedNumber = app.utils.sanitizeNumber(number)
                 this.$emit('update:model', cleanedNumber)
             },
         },

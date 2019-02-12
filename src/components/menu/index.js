@@ -24,7 +24,9 @@ module.exports = (app) => {
 
                 return classes
             },
-            logout: app.helpers.logout,
+            logout: function() {
+                app.session.close()
+            },
         }, app.helpers.sharedMethods()),
         render: templates.menu.r,
         staticRenderFns: templates.menu.s,

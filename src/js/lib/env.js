@@ -24,6 +24,7 @@ function env() {
         isMacOS: false,
         isNode: false,
         isStandalone: false,
+        isTel: false,
         isWindows: false,
         name: 'unknown',
     }
@@ -56,11 +57,15 @@ function env() {
         else if (navigator.platform.match(/(Mac)/i)) _env.isMacOS = true
         else if (navigator.platform.match(/(Windows|Win32)/i)) _env.isWindows = true
 
-        if (location.search.includes('mode=test')) {
+        const search = decodeURIComponent(location.search)
+        if (search.includes('mode=test')) {
             $('html').classList.add('test')
-        } else if (location.search.includes('mode=standalone')) {
+        } else if (search.includes('mode=standalone')) {
             _env.isStandalone = true
             $('html').classList.add('standalone')
+        } else if (search.includes('tel:')) {
+            _env.isTel = search.replace('?tel:', '')
+            history.replaceState({}, null, '/')
         }
 
         if (_env.isChrome) $('html').classList.add('chrome')

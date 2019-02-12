@@ -1,5 +1,6 @@
 <component class="c-caller t-caller" :class="classes('component')">
-    <header v-if="callActive.status === 'new'" class="content__header header">
+
+    <header v-if="!callActive.id" class="content__header header">
         <icon class="header__icon" name="phone"/>
 
         <div class="header__filters">
@@ -13,8 +14,17 @@
         </div>
 
         <span class="header__text">{{$t('calling')}}</span>
-        <div class="header__actions"></div>
+        <div class="header__actions">
+            <button v-if="description.protocol === 'sig11'"
+                class="header__action"
+                :class="{'active': sig11.network.view}"
+                @click.stop="toggleNodeView()"
+            >
+                <icon name="nodes"/>
+            </button>
+        </div>
     </header>
+
     <StreamPreview v-else-if="callActive.id" :call="callActive"/>
 
     <main class="main">
@@ -37,14 +47,14 @@
         </div>
         <!-- starting without any active call -->
         <Keypad
-            v-else-if="description.protocol === 'sip'"
+            v-else-if="description.protocol === 'sip' || !sig11.network.view"
             display="touch"
             mode="call"
-            :endpoint="description.endpoint"
-            :model.sync="description.endpoint"
+            :number="description.number"
+            :model.sync="description.number"
         />
         <Network
-            v-else="description.protocol === 'sig11'"
+            v-else
         />
     </main>
 </component>

@@ -2,10 +2,10 @@
 
     <button
         v-if="!call.id && ui.layer === 'caller'"
-        :disabled="!description.endpoint"
+        :disabled="!description.number"
         class="button button--menu c-options__option t-btn-options-call-start tooltip tooltip-left"
         :data-tooltip="$t('start new call')"
-        @click="placeCall(description)"
+        @click="callDescription({description})"
     ><icon name="phone"/></button>
 
     <button

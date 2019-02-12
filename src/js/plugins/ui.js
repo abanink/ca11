@@ -50,7 +50,9 @@ class PluginUI extends Plugin {
 
     _ready() {
         this.__menubarIcon(this.app.state.ui.menubar.base)
-        this.app.setState({ui: {visible: true}})
+        let state = {ui: {visible: true}}
+
+        this.app.setState(state)
     }
 
 

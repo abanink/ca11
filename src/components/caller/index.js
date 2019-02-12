@@ -22,6 +22,11 @@ module.exports = (app) => {
                 }
                 return classes
             },
+            toggleNodeView: function() {
+                app.setState({sig11: {
+                    network: {view: !this.sig11.network.view}},
+                }, {persist: true})
+            },
         }, app.helpers.sharedMethods()),
         render: templates.caller.r,
         staticRenderFns: templates.caller.s,

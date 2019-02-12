@@ -8,26 +8,6 @@ class Session {
     constructor(app) {
         this.app = app
         Object.assign(app._state, this._initialState())
-
-        app.on('session:start', (...args) => {
-            this.start(...args)
-        })
-
-        app.on('session:close', (...args) => {
-            this.close(...args)
-        })
-
-        app.on('session:unlock', (...args) => {
-            this.unlock(...args)
-        })
-
-        app.on('session:select', ({session}) => {
-            this.change(session)
-        })
-
-        app.on('session:destroy', ({session}) => {
-            this.destroy(session)
-        })
     }
 
 

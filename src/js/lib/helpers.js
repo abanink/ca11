@@ -1,13 +1,5 @@
-/** @memberof lib */
-
 /**
-* Actions shared across components. Don't modify state
-* local component state from here.
-*/
-
-/**
-* Closure method that makes the app context available
-* to all inner methods.
+* Common used methods and helpers.
 * @param {App} app - The application object.
 * @returns {Object} - The application's common helpers.
 * @memberof App
@@ -168,30 +160,6 @@ function helpers(app) {
     }
 
 
-    _helpers.playSound = function(soundName, sinkTarget) {
-        this.playing[sinkTarget] = true
-
-        if (app.sounds[soundName].off) {
-            // Prevent frenzy-clicking the test-audio button.
-            if (app.sounds[soundName].playing) return
-
-            app.sounds[soundName].play(false, this.devices.sinks[sinkTarget])
-            app.sounds[soundName].off('stop').on('stop', () => {
-                this.playing[sinkTarget] = false
-            })
-        } else {
-            // Prevent frenzy-clicking the test-audio button.
-            if (app.sounds[soundName].started) return
-
-            app.sounds[soundName].play(this.devices.sinks[sinkTarget])
-            setTimeout(() => {
-                app.sounds[soundName].stop()
-                this.playing[sinkTarget] = false
-            }, 2500)
-        }
-    }
-
-
     // Allow plugins to add their own shared methods. These
     // must be added before components are setting their
     // methods.
@@ -199,45 +167,43 @@ function helpers(app) {
 
     _helpers.sharedMethods = function() {
         return Object.assign({
-            closeOverlay: function() {
-                app.setState({ui: {overlay: null}})
-            },
             getTranslations: _helpers.getTranslations,
-            isTransferTarget: function(contact, number) {
-                let numbers = []
-                const calls = this.$store.caller.calls
-                for (let callId of Object.keys(calls)) {
-                    numbers.push(parseInt(calls[callId].number))
-                }
-
-                if (contact) {
-                    for (const contactId of Object.keys(contact.endpoints)) {
-                        if (numbers.includes(contact.endpoints[contactId].number)) return false
-                    }
-                } else if (number) {
-                    if (numbers.includes(number)) return false
-                }
-
-                return true
-            },
             openTab: _helpers.openTab,
-            playSound: _helpers.playSound,
+            playSound: function(soundName, sinkTarget) {
+                this.playing[sinkTarget] = true
+
+                if (app.sounds[soundName].off) {
+                    // Prevent frenzy-clicking the test-audio button.
+                    if (app.sounds[soundName].playing) return
+
+                    app.sounds[soundName].play(false, this.devices.sinks[sinkTarget])
+                    app.sounds[soundName].off('stop').on('stop', () => {
+                        this.playing[sinkTarget] = false
+                    })
+                } else {
+                    // Prevent frenzy-clicking the test-audio button.
+                    if (app.sounds[soundName].started) return
+
+                    app.sounds[soundName].play(this.devices.sinks[sinkTarget])
+                    setTimeout(() => {
+                        app.sounds[soundName].stop()
+                        this.playing[sinkTarget] = false
+                    }, 2500)
+                }
+            },
             setLayer: function(layerName) {
                 // Haptic feedback for mobile devices.
                 navigator.vibrate(50)
                 app.setState({ui: {layer: layerName}}, {encrypt: false, persist: true})
-            },
-            setOverlay: function(layerName) {
-                app.setState({ui: {overlay: layerName}})
             },
             setTab: function(category, name, condition = true) {
                 if (!condition) return
                 app.setState({ui: {tabs: {[category]: {active: name}}}}, {encrypt: false, persist: true})
             },
             setupCall: function(description) {
-                app.emit('caller:call-add', {description, start: true, transfer: false})
+                app.plugins.caller.call({description, start: true, transfer: false})
                 // Clean up the number so it is gone when the keypad reappears after the call.
-                description.endpoint = ''
+                description.number = ''
             },
             toggleEditMode: function() {
                 navigator.vibrate(250)
@@ -346,14 +312,6 @@ function helpers(app) {
             if (!res) return false
             return true
         },
-    }
-
-
-    /**
-    * Set user state to unauthenticated and notify the background.
-    */
-    _helpers.logout = function() {
-        app.emit('session:close')
     }
 
     return _helpers

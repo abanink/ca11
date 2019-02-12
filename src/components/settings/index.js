@@ -35,6 +35,7 @@ module.exports = (app) => {
                     sig11: {
                         enabled: app.state.sig11.toggled,
                         endpoint: app.state.sig11.endpoint,
+                        identity: app.state.sig11.identity,
                         toggled: app.state.sig11.toggled,
                     },
                     sip: {

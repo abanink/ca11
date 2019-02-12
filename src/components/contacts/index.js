@@ -83,11 +83,12 @@ module.exports = (app) => {
                 })
             },
             callEndpoint: function(contact, endpoint) {
-                // Make a description.
-                this.setupCall({
-                    endpoint: endpoint.protocol === 'sip' ? endpoint.number : endpoint.pubkey,
-                    protocol: endpoint.protocol,
-                    status: 'new',
+                app.plugins.caller.call({
+                    description: {
+                        endpoint: endpoint.protocol === 'sip' ? endpoint.number : endpoint.pubkey,
+                        protocol: endpoint.protocol,
+                        status: 'new',
+                    },
                 })
             },
             classes: function(block, context = null) {
@@ -132,6 +133,23 @@ module.exports = (app) => {
                 if (endpoint.number && endpoint.protocol === 'sip') return true
                 else if (endpoint.pubkey && endpoint.protocol === 'sig11') return true
                 return false
+            },
+            isTransferTarget: function(contact, number) {
+                let numbers = []
+                const calls = this.$store.caller.calls
+                for (let callId of Object.keys(calls)) {
+                    numbers.push(parseInt(calls[callId].number))
+                }
+
+                if (contact) {
+                    for (const contactId of Object.keys(contact.endpoints)) {
+                        if (numbers.includes(contact.endpoints[contactId].number)) return false
+                    }
+                } else if (number) {
+                    if (numbers.includes(number)) return false
+                }
+
+                return true
             },
             toggleEndpointProtocol: function(contact, endpoint) {
                 if (!this.editMode) return

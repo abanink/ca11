@@ -1,7 +1,7 @@
 /**
 * @module ModuleCalls
 */
-const Call = require('./index')
+const Call = require('../call')
 
 /**
 * Call implementation for incoming and outgoing calls
@@ -23,13 +23,14 @@ class CallSIG11 extends Call {
         this.state.protocol = 'sig11'
 
         const state = {
-            endpoint: description.node.id,
             keypad: {mode: 'call'},
+            name: this.node.name,
+            number: this.node.number,
         }
 
-        state.type = description.type
+        state.direction = description.direction
 
-        if (state.type === 'outgoing') {
+        if (state.direction === 'outgoing') {
             state.status = 'new'
         } else {
             // An incoming call starts with the sdp offer.
@@ -38,46 +39,6 @@ class CallSIG11 extends Call {
         }
 
         app._mergeDeep(this.state, state)
-    }
-
-
-    /**
-    * Handle an incoming `invite` call from.
-    */
-    _incoming() {
-        super._incoming()
-    }
-
-
-    /**
-    * Setup an outgoing call to a destination node.
-    * @param {(Number|String)} number - The number to call.
-    */
-    async _outgoing() {
-        super._outgoing()
-
-        this.pc = new RTCPeerConnection({
-            iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
-        })
-
-        this.rtcEvents()
-
-        const stream = this.app.state.settings.webrtc.media.stream
-        const localStream = this.app.media.streams[stream[stream.type].id]
-
-        for (const track of localStream.getTracks()) {
-            this.pc.addTrack(track, localStream)
-        }
-
-        const offer = await this.pc.createOffer()
-        // Triggers ICE negotiation.
-        this.pc.setLocalDescription(offer)
-
-        // Send the offer to the target node Id.
-        await this.app.sig11.emit(this.state.endpoint, 'call-offer', {
-            callId: this.id,
-            offer: this.pc.localDescription.sdp,
-        })
     }
 
 
@@ -124,6 +85,66 @@ class CallSIG11 extends Call {
     }
 
 
+    hold() {
+        this.setState({hold: {active: !this.state.hold.active}})
+    }
+
+
+    /**
+    * Handle an incoming `invite` call from.
+    */
+    incoming() {
+        super.incoming()
+    }
+
+
+    /**
+    * Handle Track event, when a new MediaStreamTrack is
+    * added to an RTCRtpReceiver.
+    * @param {RTCTrackEvent} e - Contains track information.
+    */
+    onTrack(e) {
+        const stream = e.streams[0]
+        if (!this.app.media.streams[stream.id]) this.addStream(stream, 'video')
+
+        const path = `caller.calls.${this.id}.streams.${stream.id}`
+        e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
+        e.track.onmute = () => {this.app.setState({muted: true}, {path})}
+        e.track.onended = () => {this._cleanupStream(stream.id)}
+    }
+
+    /**
+    * Setup an outgoing call to a destination node.
+    * @param {(Number|String)} number - The number to call.
+    */
+    async outgoing() {
+        super.outgoing()
+
+        this.pc = new RTCPeerConnection({
+            iceServers: this.app.state.settings.webrtc.stun.map((i) => ({urls: i})),
+        })
+
+        this.rtcEvents()
+
+        const stream = this.app.state.settings.webrtc.media.stream
+        const localStream = this.app.media.streams[stream[stream.type].id]
+
+        for (const track of localStream.getTracks()) {
+            this.pc.addTrack(track, localStream)
+        }
+
+        const offer = await this.pc.createOffer()
+        // Triggers ICE negotiation.
+        this.pc.setLocalDescription(offer)
+
+        // Send the offer to the target node Id.
+        await this.app.sig11.emit(this.node.id, 'call-offer', {
+            callId: this.id,
+            offer: this.pc.localDescription.sdp,
+        })
+    }
+
+
     rtcEvents() {
         // send any ice candidates to the other peer
         this.pc.onicecandidate = ({candidate}) => {
@@ -136,21 +157,13 @@ class CallSIG11 extends Call {
         }
 
         // once remote track media arrives, show it in remote video element
-        this.pc.ontrack = (e) => {
-            const stream = e.streams[0]
-            if (!this.app.media.streams[stream.id]) this.addStream(stream, 'video')
-
-            const path = `caller.calls.${this.id}.streams.${stream.id}`
-            e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
-            e.track.onmute = () => {this.app.setState({muted: true}, {path})}
-            e.track.onended = () => {this._cleanupStream(stream.id)}
-        }
+        this.pc.ontrack = this.onTrack.bind(this)
     }
 
 
     /**
     * Other side accepted the call. Process sdp with the
-    * RTCPeerConnection that was made in `_outgoing`.
+    * RTCPeerConnection that was made in `outgoing`.
     * @param {String} answer - The raw SDP message.
     */
     async setupAnswer(answer) {

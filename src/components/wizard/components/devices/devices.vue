@@ -1,10 +1,9 @@
 <component class="c-devices t-devices">
     <header class="c-wizard__header">
-        {{$t('your audio settings')}}
+        {{$t('audio settings')}}
     </header>
 
     <div class="c-wizard__description">
-        {{$t('the audio settings affect the call sound quality.').ca()}}
         {{$t('a USB headset or earbuds with a microphone are recommended.').ca()}}
 
         <DeviceControls

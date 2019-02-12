@@ -1,8 +1,11 @@
-// Custom SIP.js description handler.
+const SIPCall = require('./call')
 
 
-
-class SipCaller {
+/**
+ * Manage SIG11 calls.
+ * @module SIPCaller
+ */
+class SIPCaller {
 
     constructor(app, plugin) {
         this.app = app
@@ -17,6 +20,11 @@ class SipCaller {
         this.app.on('sip:dtmf', ({callId, key}) => {
             this.app.plugins.caller.calls[callId].session.dtmf(key)
         })
+    }
+
+
+    call(description) {
+        return new SIPCall(this.app, description)
     }
 
 
@@ -96,4 +104,4 @@ class SipCaller {
 
 }
 
-module.exports = SipCaller
+module.exports = SIPCaller

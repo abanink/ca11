@@ -14,6 +14,7 @@ module.exports = (app) => {
             callAccept: function(call) {
                 app.emit('caller:call-accept', {callId: call.id})
             },
+            callDescription: function(...args) {app.plugins.caller.call(...args)},
             callTerminate: function(call) {
                 app.emit('caller:call-terminate', {callId: call.id})
             },
@@ -49,11 +50,6 @@ module.exports = (app) => {
             },
             muteToggle: function() {
                 app.emit('caller:call-mute', {callId: this.call.id})
-            },
-            placeCall: function(description) {
-                // Prevents calling without endpoint.
-                if (!description.endpoint) return
-                this.setupCall(description)
             },
             transferFinalize: function() {
                 app.emit('caller:transfer-finalize', {callId: this.call.id})

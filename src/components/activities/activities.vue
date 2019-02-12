@@ -74,10 +74,10 @@
                         {{activity.contact.name}}
                     </div>
                     <div v-else class="item__title">
-                        {{activity.description.endpoint.sid()}}
+                        {{activity.description.number}}
                     </div>
                     <div class="item__description">
-                        {{activity.description.endpoint}} - {{activity.date | fuzzydate}}
+                        {{activity.description.number}} - {{activity.date | fuzzydate}}
                     </div>
                 </div>
 

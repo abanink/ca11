@@ -1,7 +1,5 @@
-const SipCaller = require('./sip')
-const Sig11Caller = require('./sig11')
-
-
+const SIPCaller = require('./sip')
+const SIG11Caller = require('./sig11')
 /**
 * Main entrypoint for Calls.
 * @memberof AppBackground.plugins
@@ -13,16 +11,14 @@ class PluginCaller extends Plugin {
     constructor(app) {
         super(app)
 
-        // Keeps track  of calls. Keys match Sip.js session keys.
+        // Keeps track of running calls.
         this.calls = {}
 
-        this.SipCall = require('./call/sip')
-        this.Sig11Call = require('./call/sig11')
-        // This flag indicates whether a reconnection attempt will be
-        // made when the websocket connection is gone.
-
-        this.app.sig11 = new Sig11Caller(this.app, this)
-        this.sip = new SipCaller(this.app, this)
+        // Protocol-specific call handlers. Currently supports SIP and SIG11.
+        this.callers = {
+            sig11: new SIG11Caller(this.app, this),
+            sip: new SIPCaller(this.app, this),
+        }
 
         this.reconnect = true
         // The default connection timeout to start with.
@@ -47,46 +43,6 @@ class PluginCaller extends Plugin {
             let call = null
             if (callId) call = this.calls[callId]
             this.activateCall(call, holdInactive, unholdActive)
-        })
-
-        /**
-        * Create - and optionally start - a new Call. This is the main
-        * event used to start a call with.
-        * @event module:ModuleCaller#caller:call-add
-        *  @property {Object} description - Information about the new Call.
-        * @property {String} [description.endpoint] - The endpoint to call.
-        * @property {String} [description.start] - Start calling right away or just create a Call instance.
-        */
-        this.app.on('caller:call-add', ({callback, description, start}) => {
-            // Sanitize the number.
-            if (this.app.state.caller.description.protocol === 'sip') {
-                description.endpoint = this.app.utils.sanitizeNumber(description.endpoint)
-            }
-
-            // Deal with a blind transfer Call.
-            let activeOngoingCall = this.findCall({active: true, ongoing: true})
-            if (activeOngoingCall && activeOngoingCall.state.transfer.active && activeOngoingCall.state.transfer.type === 'blind') {
-                // Directly transfer the number to the currently activated
-                // call when the active call has blind transfer mode set.
-                activeOngoingCall.transfer(description.endpoint)
-            } else {
-                // Both a 'regular' new call and an attended transfer call will
-                // create or get a new Call and activate it.
-                description.type = 'outgoing'
-                let call = this._newCall(description)
-
-                call.start()
-
-                // Sync the others transfer state of other calls to the new situation.
-                this.__setTransferState()
-                // A newly created call is always activated unless
-                // there is another call already ringing.
-                if (!Object.keys(this.calls).find((i) => ['create', 'invite'].includes(this.calls[i].state.status))) {
-                    this.activateCall(call, true, true)
-                }
-
-                if (callback) callback({call: call.state})
-            }
         })
 
 
@@ -248,10 +204,8 @@ class PluginCaller extends Plugin {
         return {
             calls: {},
             description: {
-                endpoint: '',
+                number: '',
                 protocol: 'sig11',
-                status: 'new',
-                video: true,
             },
         }
     }
@@ -261,40 +215,37 @@ class PluginCaller extends Plugin {
     * Create and return a new `Call` object based on a
     * call description.
     * @param {Object} description - New call object.
-    * @param {String} [description.endpoint] - Endpoint to call to.
+    * @param {String} [description.number] - Endpoint to call to.
     * @param {String} [description.protocol] - Protocol to use.
     * @returns {Call} - A new or existing Call with status `new`.
     */
-    _newCall(description = null) {
-        let call
-        if (description.protocol === 'sip') {
-            call = new this.SipCall(this.app, description)
-        } else if (description.protocol === 'sig11') {
-            const node = this.app.sig11.network.node(description.endpoint)
-
-            call = new this.Sig11Call(this.app, {node, type: 'outgoing'})
-        } else {
-            throw new Error('invalid call type:', description.type)
-        }
-
+    _newCall(description) {
+        let call = this.callers[description.protocol].call(description)
 
         this.calls[call.id] = call
-        call.state.endpoint = description.endpoint
+        call.state.number = description.number
         call.setState(call.state)
 
         if (!this.app.state.caller.calls[call.id]) {
             Vue.set(this.app.state.caller.calls, call.id, call.state)
         }
 
-        this.app.logger.info(`${this}created new ${call.constructor.name} call`)
+        this.app.logger.info(`${this}created new ${call.state.protocol} call`)
         return call
     }
 
 
     _ready() {
-        if (!this.app.state.app.online) {
-            this.app.setState({calls: {status: null}})
+        let state = {}
+        if (!this.app.state.app.online) state.caller = {status: null}
+
+        if (this.app.env.isTel) {
+            state.ui = {layer: 'caller'}
+            state.caller = {description: {number: this.app.env.isTel}}
+            state.sig11 = {network: {view: false}}
         }
+
+        this.app.setState(state)
     }
 
 
@@ -374,6 +325,45 @@ class PluginCaller extends Plugin {
         }
 
         return call
+    }
+
+
+    /**
+    * Create - and optionally start - a new Call. This is the main
+    * event used to start a call with.
+    * @property {Object} description - Information about the new Call.
+    * @property {String} [description.number] - The endpoint to call.
+    * @property {String} [description.start] - Start calling right away or just create a Call instance.
+    */
+    call({description, start}) {
+        // Sanitize the number.
+        if (this.app.state.caller.description.protocol === 'sip') {
+            description.number = this.app.utils.sanitizeNumber(description.number)
+        }
+
+        // Deal with a blind transfer Call.
+        let activeOngoingCall = this.findCall({active: true, ongoing: true})
+        if (activeOngoingCall && activeOngoingCall.state.transfer.active && activeOngoingCall.state.transfer.type === 'blind') {
+            // Directly transfer the number to the currently activated
+            // call when the active call has blind transfer mode set.
+            activeOngoingCall.transfer(description.number)
+            return
+        }
+
+        // Both a 'regular' new call and an attended transfer call will
+        // create or get a new Call and activate it.
+        description.direction = 'outgoing'
+        let call = this._newCall(description)
+        call.start()
+        // Sync the others transfer state of other calls to the new situation.
+        this.__setTransferState()
+
+        // A newly created call is always activated unless another call is already ringing.
+        if (!Object.keys(this.calls).find((i) => ['create', 'invite'].includes(this.calls[i].state.status))) {
+            this.activateCall(call, true, true)
+        }
+
+        this.app.setState({caller: {description: {number: null}}})
     }
 
 

@@ -53,7 +53,7 @@ class PluginSettings extends Plugin {
                             local: true,
                             muted: false,
                             ready: false,
-                            selected: false,
+                            selected: true,
                         },
                         display: {
                             id: null,
@@ -61,7 +61,7 @@ class PluginSettings extends Plugin {
                             local: true,
                             muted: false,
                             ready: false,
-                            selected: false,
+                            selected: true,
                         },
                         type: 'video', // Switch between audio, display and video stream.
                         video: {
@@ -70,7 +70,7 @@ class PluginSettings extends Plugin {
                             local: true,
                             muted: false,
                             ready: false,
-                            selected: false,
+                            selected: true,
                         },
                     },
                     type: {
@@ -88,12 +88,13 @@ class PluginSettings extends Plugin {
                 completed: false,
                 steps: {
                     options: [
-                        {name: 'WizardWelcome'},
+                        {name: 'WizardSig11'},
+                        {name: 'WizardProtocolHandler'},
                         {name: 'WizardMediaPermission'},
                         {name: 'WizardDevices'},
                         {name: 'WizardTelemetry'},
                     ],
-                    selected: {name: 'WizardWelcome'},
+                    selected: {name: 'WizardSig11'},
                 },
             },
         }

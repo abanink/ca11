@@ -33,8 +33,8 @@ class Call {
          * @property {Object} state - Reactive computed properties from Vue-stash.
          * @property {Boolean} state.active - Whether the Call shows in the UI or not.
          * @property {String} state.class - Used to identify the Call type with.
-         * @property {String} state.displayName - The name to show when calling.
-         * @property {String} state.endpoint - The Call's endpoint identifier.
+         * @property {String} state.name - The name to show when calling.
+         * @property {String} state.number - The Call's number.
          * @property {Object} state.hangup - Specifies the hangup feature of a Call.
          * @property {Object} state.hold - Specifies the hold feature of a Call.
          * @property {String} state.id - The generated UUID of the Call.
@@ -47,9 +47,7 @@ class Call {
          */
         this.state = {
             active: false,
-            class: this.constructor.name,
-            displayName: null,
-            endpoint: null,
+            direction: null, // incoming or outgoing
             hangup: {
                 disabled: false,
             },
@@ -66,7 +64,9 @@ class Call {
             mute: {
                 active: false,
             },
-            protocol: 'unknown',
+            name: null,
+            number: null,
+            protocol: null,
             stats: {
                 callId: null,
             },
@@ -81,7 +81,6 @@ class Call {
                 disabled: false,
                 type: 'attended',
             },
-            type: null, // incoming or outgoing
         }
 
         // The default Call status codes, which each Call implementation should map to.
@@ -106,33 +105,6 @@ class Call {
         const path = `caller.calls.${this.id}.streams.${streamId}`
         this.app.setState(null, {action: 'delete', path})
         delete this.app.media.streams[streamId]
-    }
-
-
-    /**
-     * Generic UI and state-related logic for an outgoing call.
-     * Note: first set the endpoint and displayName in the parent,
-     * before calling this super.
-     */
-    _incoming() {
-        this.setState(this.state)
-        if (this.silent) return
-
-        const streamType = this.app.state.settings.webrtc.media.stream.type
-        // Switch to the caller and activate the local stream.
-        this.app.setState({
-            settings: {webrtc: {media: {stream: {[streamType]: {selected: true}}}}},
-            ui: {layer: 'caller', menubar: {event: 'ringing'}},
-        })
-
-        this.app.plugins.ui.notification({
-            endpoint: this.state.endpoint,
-            message: `${this.state.endpoint}: ${this.state.displayName}`,
-            title: this.translations.invite,
-        })
-
-        this.app.plugins.caller.activateCall(this, true)
-        this.app.sounds.ringTone.play({loop: true})
     }
 
 
@@ -165,37 +137,6 @@ class Call {
 
 
     /**
-     * Some UI state plumbing to setup an outgoing Call.
-     */
-    _outgoing() {
-        // Try to fill in the displayName from contacts.
-        const contacts = this.app.state.contacts.contacts
-        let displayName = ''
-        for (const id of Object.keys(contacts)) {
-            if (contacts[id].endpoint === parseInt(this.endpoint)) {
-                displayName = contacts[id].name
-            }
-        }
-
-        // Always set this call to be the active call.
-        this.app.plugins.caller.activateCall(this, true)
-        let message = ''
-        if (displayName) {
-            message = `${this.state.endpoint}: ${displayName}`
-        } else {
-            message = this.state.endpoint
-        }
-
-        this.app.plugins.ui.notification({endpoint: this.state.endpoint, message, title: this.translations.create})
-        this.setState({displayName: displayName, status: this._statusMap.create})
-
-        if (!this.silent) {
-            this.app.setState({ui: {layer: 'caller', menubar: {event: 'ringing'}}})
-        }
-    }
-
-
-    /**
      * Handle UI-related logic when a Call is started; both for
      * incoming and outgoing calls.
      * @param {Object} options - Options to pass to _start.
@@ -208,8 +149,8 @@ class Call {
         if (this.silent) return
 
         if (!message) {
-            message = this.state.endpoint
-            if (this.state.displayName) message += `:${this.state.displayName}`
+            message = this.state.number
+            if (this.state.name) message += `:${this.state.name}`
         }
         this._started = true
         this.app.sounds.ringbackTone.stop()
@@ -224,7 +165,7 @@ class Call {
         })
 
         const title = this.translations.accepted[this.state.type]
-        this.app.plugins.ui.notification({endpoint: this.state.endpoint, force, message, title})
+        this.app.plugins.ui.notification({force, message, number: this.state.number, title})
 
         const streamType = this.app.state.settings.webrtc.media.stream.type
         this.app.setState({
@@ -258,8 +199,8 @@ class Call {
         }
 
         if (!message) {
-            message = this.state.endpoint
-            if (this.state.displayName) message += `:${this.state.displayName}`
+            message = this.state.number
+            if (this.state.name) message += `:${this.state.name}`
         }
         // Stop all call state sounds that may still be playing.
         this.app.sounds.ringbackTone.stop()
@@ -269,10 +210,10 @@ class Call {
         if (force) {
             if (this.state.status === 'callee_busy') {
                 const title = this.translations.callee_busy
-                this.app.plugins.ui.notification({endpoint: this.state.endpoint, force, message, stack: true, title})
+                this.app.plugins.ui.notification({force, message, number: this.state.number, stack: true, title})
             } else {
                 const title = this.translations.bye
-                this.app.plugins.ui.notification({endpoint: this.state.endpoint, force, message, stack: true, title})
+                this.app.plugins.ui.notification({force, message, number: this.state.number, stack: true, title})
             }
         }
 
@@ -301,7 +242,7 @@ class Call {
             settings: {webrtc: {media: {stream: {[streamType]: {selected: false}}}}},
         })
 
-        this.app.plugins.ui.notification({endpoint: this.state.endpoint})
+        this.app.plugins.ui.notification({number: this.state.number})
         this.busyTone.stop()
 
         window.setTimeout(() => {
@@ -314,7 +255,9 @@ class Call {
      * Shared accept Call logic.
      */
     accept() {
-        if (!(this.state.type === 'incoming')) throw 'session must be incoming type'
+        if (this.state.direction !== 'incoming') {
+            throw 'session must be incoming type'
+        }
     }
 
 
@@ -331,6 +274,64 @@ class Call {
         this.app.media.streams[stream.id] = stream
         const path = `caller.calls.${this.id}.streams.${stream.id}`
         this.app.setState(streamState, {path})
+    }
+
+
+    /**
+     * Generic UI and state-related logic for an outgoing call.
+     * Note: first set the endpoint and name in the parent,
+     * before calling this super.
+     */
+    incoming() {
+        this.setState(this.state)
+        if (this.silent) return
+
+        const streamType = this.app.state.settings.webrtc.media.stream.type
+        // Switch to the caller and activate the local stream.
+        this.app.setState({
+            settings: {webrtc: {media: {stream: {[streamType]: {selected: true}}}}},
+            ui: {layer: 'caller', menubar: {event: 'ringing'}},
+        })
+
+        this.app.plugins.ui.notification({
+            message: `${this.state.number}: ${this.state.name}`,
+            number: this.state.number,
+            title: this.translations.invite,
+        })
+
+        this.app.plugins.caller.activateCall(this, true)
+        this.app.sounds.ringTone.play({loop: true})
+    }
+
+
+    /**
+     * Some UI state plumbing to setup an outgoing Call.
+     */
+    outgoing() {
+        // Try to fill in the name from contacts.
+        const contacts = this.app.state.contacts.contacts
+        let name = ''
+        for (const id of Object.keys(contacts)) {
+            if (contacts[id].endpoint === parseInt(this.number)) {
+                name = contacts[id].name
+            }
+        }
+
+        // Always set this call to be the active call.
+        this.app.plugins.caller.activateCall(this, true)
+        let message = ''
+        if (name) {
+            message = `${this.state.number}: ${name}`
+        } else {
+            message = this.state.number
+        }
+
+        this.app.plugins.ui.notification({message, number: this.state.number, title: this.translations.create})
+        this.setState({name: name, status: this._statusMap.create})
+
+        if (!this.silent) {
+            this.app.setState({ui: {layer: 'caller', menubar: {event: 'ringing'}}})
+        }
     }
 
 
@@ -352,9 +353,9 @@ class Call {
     async start() {
         if (!this.silent) await this._initSinks()
 
-        if (this.state.type === 'incoming') this._incoming()
-        else if (this.state.type === 'outgoing') this._outgoing()
-        else throw new Error(`invalid call type ${this.state.type}`)
+        if (this.state.direction === 'incoming') this.incoming()
+        else if (this.state.direction === 'outgoing') this.outgoing()
+        else throw new Error(`invalid call direction: ${this.state.direction}`)
     }
 
 

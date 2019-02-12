@@ -10,7 +10,7 @@ const Crypto = require('../lib/crypto')
 const Endpoint = require('./endpoint')
 const Network = require('./network')
 const Skeleton = require('../lib/skeleton')
-
+const Utils = require('../lib/utils')
 
 /**
 * Sig11 is a signalling layer used to setup p2p calls with.
@@ -30,6 +30,7 @@ class Sig11 extends Skeleton {
         process.title = 'sig11'
         global.crypto = new WebCrypto({})
 
+        this.utils = new Utils()
         this.crypto = new Crypto(this)
 
         this.settings = settings

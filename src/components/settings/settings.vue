@@ -111,13 +111,20 @@
                 :validation="$v.sig11.endpoint"
             />
 
-            <FieldTextarea
+            <FieldText
                 v-if="sig11.toggled"
-                v-model="sig11.identity.publicKey"
-                name="sig11_identity"
-                :help="$t('automatically unlock your session after restart.')"
-                :label="$t('public identity')"
-                :readonly="true"
+                v-model="sig11.identity.name"
+                name="sig11_name"
+                :help="$t('your display name to others.')"
+                :label="$t('display name')"
+            />
+
+            <FieldText
+                v-if="sig11.toggled"
+                v-model="sig11.identity.number"
+                name="sig11_number"
+                :help="$t('the number that people can reach you on.')"
+                :label="`SIG11 ${$t('number')}`"
             />
         </div>
 

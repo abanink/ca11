@@ -1,7 +1,7 @@
 /**
 * @module ModuleCalls
 */
-const Call = require('./index')
+const Call = require('../call')
 
 /**
 * Call implementation for incoming and outgoing calls
@@ -23,16 +23,55 @@ class CallSIP extends Call {
         if (description.session) {
             // Passing in a session as target means an incoming call.
             app._mergeDeep(this.state, {
+                direction: 'incoming',
                 status: 'invite',
-                type: 'incoming',
             })
             this.session = description.session
         } else {
             // Passing in no target or a number means an outgoing call.
             app._mergeDeep(this.state, {
-                endpoint: description.endpoint,
-                status: 'new', type: 'outgoing',
+                direction: 'outgoing',
+                endpoint: description.number,
+                status: 'new',
             })
+        }
+    }
+
+
+    /**
+    * Convert a comma-separated string like:
+    * `SIP;cause=200;text="Call completed elsewhere` to a Map.
+    * @param {String} header - The header to parse.
+    * @returns {Map} - A map of key/values of the header.
+    */
+    _parseHeader(header) {
+        return new Map(header.replace(/\"/g, '').split(';').map((i) => i.split('=')))
+    }
+
+
+    /**
+    * Accept an incoming session.
+    */
+    accept() {
+        super.accept()
+        // Handle connecting streams to the appropriate video element.
+        this.session.on('track', this.onTrack.bind(this))
+        this.session.accept({
+            sessionDescriptionHandlerOptions: {
+                constraints: this.app.media._getUserMediaFlags(),
+            },
+        })
+    }
+
+
+    hold() {
+        if (this.session) {
+            this.session.hold({
+                sessionDescriptionHandlerOptions: {
+                    constraints: this.app.media._getUserMediaFlags(),
+                },
+            })
+            this.setState({hold: {active: true}})
         }
     }
 
@@ -40,13 +79,13 @@ class CallSIP extends Call {
     /**
     * Handle an incoming `invite` call from.
     */
-    _incoming() {
+    incoming() {
         this.state.endpoint = this.session.assertedIdentity.uri.user
-        this.state.displayName = this.session.assertedIdentity.uri.user
+        this.state.name = this.session.assertedIdentity.uri.user
 
         this.state.stats.callId = this.session.request.call_id
         this.app.logger.debug(`${this}incoming call ${this.state.stats.callId} started`)
-        super._incoming()
+        super.incoming()
 
         // Setup some event handlers for the different stages of a call.
         this.session.on('accepted', (request) => {
@@ -109,7 +148,7 @@ class CallSIP extends Call {
             // the old name is keps in assertedIdentity, unless a timeout
             // is added.
             setTimeout(() => {
-                this.state.displayName = session.assertedIdentity.uri.user
+                this.state.name = session.assertedIdentity.uri.user
                 this.state.endpoint = session.assertedIdentity.uri.user
             }, 0)
         })
@@ -117,14 +156,11 @@ class CallSIP extends Call {
 
 
     /**
-     * Asterisk always returns only one (mixed) audio
-     * track; and one or more video tracks, depending
-     * on whether video contraints requested video.
-     * The audio track is grouped with the first available
-     * video track.
-     * @param {RTCTrackEvent} e - Contains the added track from RTCPeerConnection.
-     */
-    _onTrackAdded(e) {
+    * Handle Track event, when a new MediaStreamTrack is
+    * added to an RTCRtpReceiver.
+    * @param {RTCTrackEvent} e - Contains track information.
+    */
+    onTrack(e) {
         let stream = e.streams[0]
 
         // Assume the audio track of the stream is always added first.
@@ -156,8 +192,8 @@ class CallSIP extends Call {
     /**
     * Setup an outgoing call.
     */
-    _outgoing() {
-        super._outgoing()
+    outgoing() {
+        super.outgoing()
         const uri = `sip:${this.state.endpoint}@${this.app.state.sip.endpoint.split('/')[0]}`
         this.session = this.app.sip.ua.invite(uri, {
             sessionDescriptionHandlerOptions: {
@@ -167,7 +203,7 @@ class CallSIP extends Call {
 
         this.setState({stats: {callId: this.session.request.call_id}})
         // Handle connecting streams to the appropriate video element.
-        this.session.on('track', this._onTrackAdded.bind(this))
+        this.session.on('track', this.onTrack.bind(this))
 
         // Notify user about the new call being setup.
         this.session.on('accepted', (data) => {
@@ -208,10 +244,10 @@ class CallSIP extends Call {
             // is added.
             setTimeout(() => {
                 if (session.assertedIdentity) {
-                    this.state.displayName = session.assertedIdentity.uri.user
+                    this.state.name = session.assertedIdentity.uri.user
                     this.state.endpoint = session.assertedIdentity.uri.user
                 } else {
-                    this.state.displayName = session.remoteIdentity.uri.user
+                    this.state.name = session.remoteIdentity.uri.user
                     this.state.endpoint = session.remoteIdentity.uri.user
                 }
             }, 0)
@@ -238,44 +274,6 @@ class CallSIP extends Call {
             this.app.emit('caller:call-rejected', {call: this.state}, true)
             this._stop({message: this.translations[this.state.status]})
         })
-    }
-
-
-    /**
-    * Convert a comma-separated string like:
-    * `SIP;cause=200;text="Call completed elsewhere` to a Map.
-    * @param {String} header - The header to parse.
-    * @returns {Map} - A map of key/values of the header.
-    */
-    _parseHeader(header) {
-        return new Map(header.replace(/\"/g, '').split(';').map((i) => i.split('=')))
-    }
-
-
-    /**
-    * Accept an incoming session.
-    */
-    accept() {
-        super.accept()
-        // Handle connecting streams to the appropriate video element.
-        this.session.on('track', this._onTrackAdded.bind(this))
-        this.session.accept({
-            sessionDescriptionHandlerOptions: {
-                constraints: this.app.media._getUserMediaFlags(),
-            },
-        })
-    }
-
-
-    hold() {
-        if (this.session) {
-            this.session.hold({
-                sessionDescriptionHandlerOptions: {
-                    constraints: this.app.media._getUserMediaFlags(),
-                },
-            })
-            this.setState({hold: {active: true}})
-        }
     }
 
 

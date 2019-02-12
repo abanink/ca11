@@ -19,12 +19,12 @@ module.exports = (app) => {
                 if (this.$v.$invalid) return
 
                 if (this.app.session.active === 'new' || !this.app.session.available.length) {
-                    app.emit('session:start', {
+                    app.session.start({
                         password: this.password,
                         username: this.session.username,
                     })
                 } else {
-                    app.emit('session:unlock', {
+                    app.session.unlock({
                         password: this.password,
                         username: this.app.session.active,
                     })
@@ -33,12 +33,12 @@ module.exports = (app) => {
             newSession: function() {
                 app.setState({app: {session: {active: 'new'}}, session: {username: ''}})
             },
-            removeSession: function(session) {
-                app.emit('session:destroy', {session})
+            removeSession: function(sessionId) {
+                app.session.destroy(sessionId)
             },
             selectSession: function(session = null) {
                 this.password = ''
-                app.emit('session:select', {session})
+                app.session.change(session)
             },
         }, app.helpers.sharedMethods()),
         render: templates.session.r,

@@ -76,6 +76,7 @@ class PluginSIG11 extends Plugin {
             delete node.ecdh
         })
 
+
         // Node is identified on the network.
         this.app.on('sig11:network', ({edges, identity, nodes}) => {
             // Add the provider of this network as an endpoint,
@@ -95,12 +96,15 @@ class PluginSIG11 extends Plugin {
             endpoint: process.env.SIG11_ENDPOINT,
             identity: {
                 id: null,
+                name: '',
+                number: '',
                 privateKey: null,
                 publicKey: null,
             },
             network: {
                 edges: [],
                 nodes: [],
+                view: false,
             },
             status: 'loading',
             toggled: true,
@@ -217,9 +221,13 @@ class PluginSIG11 extends Plugin {
         this.app.logger.debug(`${this}transport open`)
         this.app.setState({sig11: {status: 'connected'}})
 
+        const identity = this.app.state.sig11.identity
+
         this.ws.send(this.network.protocol.out('identify', {
             headless: this.app.env.isNode,
-            publicKey: this.app.state.sig11.identity.publicKey,
+            name: identity.name,
+            number: identity.number,
+            publicKey: identity.publicKey,
         }))
 
         this.ws.onmessage = this.onMessage.bind(this)

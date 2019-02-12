@@ -4,8 +4,8 @@
     </div>
     <Dialer
         mode="call"
-        :endpoint="description.endpoint"
-        :model.sync="description.endpoint"
+        :number="description.number"
+        :model.sync="description.number"
     />
 
     <div class="c-transfer__options">
@@ -24,26 +24,26 @@
 
     <ol class="c-transfer__instruction" v-if="call.transfer.type === 'attended'">
         <li>
-            {{$t('starts a new call with {endpoint}', {endpoint: description.endpoint ? description.endpoint : '...'})}}
+            {{$t('starts a new call with {number}', {number: description.number ? description.number : '...'})}}
         </li>
 
-        <li class="action">{{$t('consult with {endpoint} about this caller', {
-            endpoint: description.endpoint ? description.endpoint : '...'
+        <li class="action">{{$t('consult with {number} about this caller', {
+            number: description.number ? description.number : '...'
             })}}
         </li>
         <li class="action">{{$t('finalize transfer')}}</li>
-        <li>{{$t('connects {target} with {endpoint}', {
-            endpoint: description.endpoint ? description.endpoint : '...',
-            target: call.endpoint,
+        <li>{{$t('connects {target} with {number}', {
+            number: description.number ? description.number : '...',
+            target: call.number,
         })}}</li>
         <li>{{$t('connection ends')}}</li>
     </ol>
 
     <ol class="c-transfer__instruction" v-else-if="call.transfer.type === 'blind'">
         <li>
-            {{$t('connects {endpoint} with {target}', {
-                endpoint: call.endpoint,
-                target: description.endpoint ? description.endpoint : '...'
+            {{$t('connects {number} with {target}', {
+                number: call.number,
+                target: description.number ? description.number : '...'
             })}}
         </li>
         <li>{{$t('connection ends')}}</li>

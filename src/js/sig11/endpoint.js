@@ -23,8 +23,11 @@ class Endpoint extends EventEmitter {
                 this.headless = _node.headless
                 this.publicKey = _node.publicKey
 
+                this.name = _node.name
+                this.number = _node.number
+
                 this.id = await this.app.crypto.hash(this.publicKey.n)
-                this.network.app.logger.info(`${this}identified <${this.id}>`)
+                this.network.app.logger.info(`${this}identified ${this.name}:${this.number}:${this.id.sid()}`)
                 this.emit('sig11:identified')
             })
         }
@@ -47,6 +50,8 @@ class Endpoint extends EventEmitter {
         return {
             headless: this.headless,
             id: this.id,
+            name: this.name,
+            number: this.number,
             publicKey: this.publicKey,
         }
     }

@@ -99,11 +99,11 @@ module.exports = (app) => {
                         _node.selected = !_node.selected
                         if (_node.selected) {
                             if (!_node.headless && _node.id !== this.identity.id) {
-                                this.description.endpoint = _node.id
+                                this.description.number = app.sig11.network.node(_node.id).number
                             } else {
-                                this.description.endpoint = null
+                                this.description.number = null
                             }
-                        } else this.description.endpoint = null
+                        } else this.description.number = null
 
                     }
                 }

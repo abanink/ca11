@@ -24,7 +24,7 @@ class Network {
 
 
     addEndpoint(endpoint, parent = null) {
-        this.app.logger.debug(`${this}endpoint added <${endpoint.id.substr(0, 8)}>`)
+        this.app.logger.debug(`${this}endpoint added ${endpoint.id.sid()}`)
         this.endpoints.set(endpoint.id, endpoint)
         this.addNode(endpoint.serialize(), parent)
     }
@@ -33,7 +33,7 @@ class Network {
     addNode(node, parent = null) {
         this.graph.setNode(node.id, node)
         if (parent) this.graph.setEdge(parent.id, node.id)
-        this.app.logger.debug(`${this}node added <${node.id.substr(0, 8)}> (${this.graph.nodes().length})`)
+        this.app.logger.debug(`${this}node added ${node.id.sid()} (${this.graph.nodes().length})`)
         if (this.d3) this.d3.addNode(node, parent)
     }
 
@@ -62,6 +62,16 @@ class Network {
             identity: this.identity,
             nodes: exportGraph.nodes,
         }
+    }
+
+
+    filterNode({number}) {
+        let results = []
+        for (const nodeId of this.graph.nodes()) {
+            const node = this.node(nodeId)
+            if (node.number === number) results.push(node)
+        }
+        return results
     }
 
 
@@ -103,7 +113,7 @@ class Network {
 
     removeEndpoint(endpoint) {
         this.endpoints.delete(endpoint.id)
-        this.app.logger.debug(`${this}endpoint removed <${endpoint.id}>`)
+        this.app.logger.debug(`${this}endpoint removed ${endpoint.id.sid()}`)
         this.removeNode(endpoint.id)
     }
 
@@ -118,7 +128,7 @@ class Network {
         }
 
         this.graph.removeNode(nodeId)
-        this.app.logger.debug(`${this}node removed <${nodeId}> (${this.graph.nodes().length})`)
+        this.app.logger.debug(`${this}node removed ${nodeId.sid()} (${this.graph.nodes().length})`)
 
     }
 
@@ -128,7 +138,7 @@ class Network {
         this.keypair = keypair
         this.identity = await this.crypto.serializeIdentity(keypair)
 
-        this.app.logger.info(`${this}peer identity on network: ${this.identity.id}`)
+        this.app.logger.info(`${this}peer identity on network: ${this.identity.id.sid()}`)
         this.graph.setNode(this.identity.id, this.identity)
         return this.identity
     }

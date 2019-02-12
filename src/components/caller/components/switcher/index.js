@@ -35,7 +35,7 @@ module.exports = (app) => {
                     if (call.active) return this.$t('close new call').ca()
                     else return `${this.$t('select new call')}`.ca()
                 } else {
-                    let text = `${call.endpoint} - `
+                    let text = `${call.number} - `
                     if (call.status === 'accepted') {
                         if (call.hold.active) text += translations[call.status].hold
                         else text += translations[call.status][call.type]
@@ -54,12 +54,6 @@ module.exports = (app) => {
                     }
                 }
                 return allowed
-            },
-            placeCall: function() {
-                // This method is also called on enter. The keypad may
-                // be in dtmf mode at that moment; block the call request.
-                if (!this.mode === 'call') return
-                app.emit('caller:call-add', {description: this.call, start: false, transfer: false})
             },
         }, app.helpers.sharedMethods()),
         render: templates.caller_switcher.r,

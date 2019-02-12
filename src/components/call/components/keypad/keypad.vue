@@ -2,9 +2,8 @@
 
     <div class="c-keypad__input">
         <input
-            v-bind:value="endpoint"
+            v-bind:value="number"
             v-on:input="inputChange($event.target.value)"
-            v-on:keyup.enter="validateCall(description)"
             autocomplete="off"
             name="number-input"
             placeholder="..."
@@ -23,7 +22,7 @@
         </button>
     </div>
 
-    <div class="c-keypad__keys" v-on:keyup.enter="validateCall(description)">
+    <div class="c-keypad__keys">
         <div class="c-keypad__key-row">
             <button class="c-keypad__key t-btn-keypad-1" @mousedown="press('1')">
                 1<div class="sub"><icon name="voicemail"/></div/>

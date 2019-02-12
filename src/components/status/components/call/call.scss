@@ -28,7 +28,7 @@
 
         svg {
             @include icon-size($spacer * 3);
-            margin: 0 $spacer;
+            margin-right: $spacer;
         }
     }
 

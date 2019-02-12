@@ -42,6 +42,8 @@ module.exports = (app) => {
 
                         if (protocol === 'sip') {
                             tooltip += ` (${this.sip.account.selected.username})`
+                        } else if (protocol === 'sig11') {
+                            tooltip += ` (${this.sig11.identity.number})`
                         }
                     } else {
                         classes.error = true
@@ -57,7 +59,9 @@ module.exports = (app) => {
 
                 return classes
             },
-            logout: app.helpers.logout,
+            logout: function() {
+                app.session.close()
+            },
         }, app.helpers.sharedMethods()),
         render: templates.status_menu.r,
         staticRenderFns: templates.status_menu.s,
