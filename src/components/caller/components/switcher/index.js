@@ -22,7 +22,7 @@ module.exports = (app) => {
 
             },
             callIcon: function(call) {
-                if (['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(call.status)) {
+                if (['answered_elsewhere', 'bye', 'caller_unavailable', 'callee_busy'].includes(call.status)) {
                     return 'call-end'
                 } else {
                     if (call.hold.active) return 'call-hold'
@@ -31,25 +31,15 @@ module.exports = (app) => {
             },
             callTitle: function(call) {
                 const translations = app.helpers.getTranslations().call
-                if (call.status === 'new') {
-                    if (call.active) return this.$t('close new call').ca()
-                    else return `${this.$t('select new call')}`.ca()
-                } else {
-                    let text = `${call.number} - `
-                    if (call.status === 'accepted') {
-                        if (call.hold.active) text += translations[call.status].hold
-                        else text += translations[call.status][call.type]
-                    } else {
-                        text += translations[call.status]
-                    }
-
-                    return text.ca()
-                }
+                let text = `${call.number} - `
+                if (call.hold.active) text += translations.hold
+                text += translations[call.status]
+                return text.ca()
             },
             newCallAllowed: function() {
                 let allowed = true
                 for (let callId of Object.keys(this.calls)) {
-                    if (['new', 'create', 'invite'].includes(this.calls[callId].status)) {
+                    if (['create', 'invite'].includes(this.calls[callId].status)) {
                         allowed = false
                     }
                 }

@@ -52,12 +52,8 @@ class PluginCaller extends Plugin {
         * @property {callId} callId - Id of the Call to delete.
         */
         this.app.on('caller:call-terminate', ({callId}) => {
-            let status = 'bye'
-            if (this.calls[callId].state.status === 'invite') {
-                status = 'callee_busy'
-            }
             // Use SIG11 parameters. SIP terminate doesn't have any atm.
-            this.calls[callId].terminate({remote: true, status})
+            this.calls[callId].terminate(null, {remote: true})
         })
 
         this.app.on('caller:call-hold', ({callId}) => {
@@ -169,7 +165,7 @@ class PluginCaller extends Plugin {
                 if (_callId !== sourceCall.id) {
                     _call.setState({transfer: {active: false, type: 'accept'}})
                     // Hold all other ongoing calls.
-                    if (!['new', 'create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
+                    if (!['create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
                         _call.hold()
                     }
                 }
@@ -187,7 +183,7 @@ class PluginCaller extends Plugin {
                 if (_callId !== sourceCall.id) {
                     this.calls[_callId].setState({transfer: {active: false, type: null}})
                     // Make sure all other ongoing calls stay on hold.
-                    if (!['new', 'create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
+                    if (!['create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
                         _call.hold()
                     }
                 }
@@ -422,7 +418,7 @@ class PluginCaller extends Plugin {
                 if (callId === call.id) continue
 
                 // Prefer not to switch to a call that is already closing.
-                if (['answered_elsewhere', 'bye', 'request_terminated', 'callee_busy'].includes(this.calls[callId].state.status)) {
+                if (['answered_elsewhere', 'bye', 'caller_unavailable', 'callee_busy'].includes(this.calls[callId].state.status)) {
                     // The fallback Call is a non-specific closing call.
                     if (this.calls[callId]) fallbackCall = this.calls[callId]
                 } else {

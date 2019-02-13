@@ -19,7 +19,7 @@ class PluginActivity extends Plugin {
                     number: call.number,
                     protocol: call.protocol,
                 },
-                icon: `call-missed-${call.type}`,
+                icon: `call-missed-${call.direction}`,
                 selected: false,
                 status: call.direction === 'outgoing' ? 'unanswered' : 'missed',
             }
@@ -33,7 +33,7 @@ class PluginActivity extends Plugin {
                     number: call.number,
                     protocol: call.protocol,
                 },
-                icon: `call-${call.type}`,
+                icon: `call-${call.direction}`,
                 selected: false,
                 status: 'finished',
             }

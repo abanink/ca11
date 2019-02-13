@@ -16,7 +16,9 @@ module.exports = (app) => {
             },
             callDescription: function(...args) {app.plugins.caller.call(...args)},
             callTerminate: function(call) {
-                app.emit('caller:call-terminate', {callId: call.id})
+                let status = 'bye'
+                if (call.status === 'create') status = 'caller_busy'
+                app.emit('caller:call-terminate', {callId: call.id, status})
             },
             classes: function(block) {
                 let classes = {}

@@ -6,7 +6,7 @@
 */
 function helpers(app) {
 
-    const closingStatus = ['answered_elsewhere', 'request_terminated', 'callee_busy', 'bye']
+    const closingStatus = ['answered_elsewhere', 'caller_unavailable', 'callee_busy', 'bye']
     let _helpers = {}
 
     _helpers.callActive = function() {
@@ -103,22 +103,17 @@ function helpers(app) {
     _helpers.getTranslations = function() {
         const $t = app.$t
         return {
-            // Human translation to internal status codes.
+            // Map between CA11 status codes and human translation.
             call: {
-                accepted: {
-                    hold: $t('on hold'),
-                    incoming: $t('calling'),
-                    outgoing: $t('calling'),
-                },
+                accepted: $t('calling'),
                 answered_elsewhere: $t('answered elsewhere'),
                 bye: $t('ended'),
-                callee_busy: $t('callee busy'),
+                callee_busy: $t('busy'),
                 callee_unavailable: $t('unavailable'),
+                caller_unavailable: $t('unavailable'),
                 create: $t('setup'),
-                dialing_a: $t('dialing phone A'),
-                dialing_b: $t('dialing phone B'),
-                invite: $t('incoming'),
-                request_terminated: $t('busy'),
+                hold: $t('on hold'),
+                invite: $t('ringing'),
             },
             callingDisabled: {
                 device: $t('audio device settings - invalid audio device').ca(),
@@ -231,31 +226,6 @@ function helpers(app) {
             callingDisabled: _helpers.callingDisabled,
             callOngoing: _helpers.callOngoing,
             callsReady: _helpers.callsReady,
-            callStatus: function() {
-                const translations = _helpers.getTranslations().call
-                if (this.call.status === 'accepted') {
-                    if (this.call.hold.active) return translations.accepted.hold
-                    return translations.accepted[this.call.type]
-                }
-                return translations[this.call.status]
-            },
-            hours: function() {
-                return Math.trunc((this.call.timer.current - this.call.timer.start) / 1000 / 60 / 60) % 24
-            },
-            minutes: function() {
-                return Math.trunc((this.call.timer.current - this.call.timer.start) / 1000 / 60) % 60
-            },
-            seconds: function() {
-                return Math.trunc((this.call.timer.current - this.call.timer.start) / 1000) % 60
-            },
-            sessionTime: function() {
-                let formattedTime
-                if (this.minutes <= 9) formattedTime = `0${this.minutes}`
-                else formattedTime = `${this.minutes}`
-                if (this.seconds <= 9) formattedTime = `${formattedTime}:0${this.seconds}`
-                else formattedTime = `${formattedTime}:${this.seconds}`
-                return formattedTime
-            },
             transferStatus: function() {
                 let transferStatus = false
                 const calls = this.$store.caller.calls

@@ -27,8 +27,6 @@ class Call {
         if (!description.id) this.id = shortid.generate()
         else this.id = description.id
 
-        if (description.silent) this.silent = true
-
         /**
          * @property {Object} state - Reactive computed properties from Vue-stash.
          * @property {Boolean} state.active - Whether the Call shows in the UI or not.
@@ -59,7 +57,7 @@ class Call {
             keypad: {
                 active: false,
                 disabled: false,
-                endpoint: null,
+                number: null,
             },
             mute: {
                 active: false,
@@ -67,9 +65,6 @@ class Call {
             name: null,
             number: null,
             protocol: null,
-            stats: {
-                callId: null,
-            },
             status: null,
             streams: {},
             timer: {
@@ -81,18 +76,6 @@ class Call {
                 disabled: false,
                 type: 'attended',
             },
-        }
-
-        // The default Call status codes, which each Call implementation should map to.
-        this._statusMap = {
-            accepted: 'accepted',
-            answered_elsewhere: 'answered_elsewhere',
-            bye: 'bye',
-            callee_busy: 'callee_busy',
-            callee_unavailable: 'callee_unavailable',
-            create: 'create',
-            invite: 'invite',
-            request_terminated: 'request_terminated',
         }
     }
 
@@ -137,21 +120,9 @@ class Call {
 
 
     /**
-     * Handle UI-related logic when a Call is started; both for
-     * incoming and outgoing calls.
-     * @param {Object} options - Options to pass to _start.
-     * @param {Number} options.timeout - Postpones resetting the call state.
-     * @param {Boolean} options.force - Force showing a notification.
-     * @param {String} [options.message] - Force a notification message.
+     * Handle UI and state for new incoming and outgoing calls.
      */
-    _start({force = false, message = ''} = {}) {
-        // A silent Call doesn't need to do anything here.
-        if (this.silent) return
-
-        if (!message) {
-            message = this.state.number
-            if (this.state.name) message += `:${this.state.name}`
-        }
+    _start() {
         this._started = true
         this.app.sounds.ringbackTone.stop()
         this.app.sounds.ringTone.stop()
@@ -164,14 +135,13 @@ class Call {
             },
         })
 
-        const title = this.translations.accepted[this.state.type]
-        this.app.plugins.ui.notification({force, message, number: this.state.number, title})
-
         const streamType = this.app.state.settings.webrtc.media.stream.type
         this.app.setState({
             settings: {webrtc: {media: {stream: {[streamType]: {selected: new Date().getTime()}}}}},
             ui: {menubar: {event: 'calling'}},
         })
+
+        // Start the call timer.
         this.timerId = window.setInterval(() => {
             this.setState({timer: {current: new Date().getTime()}})
         }, 1000)
@@ -186,41 +156,47 @@ class Call {
      * happened in between. A silent call is dropped immediatly
      * however; since no UI-interaction is involved.
      * @param {Object} options - Options to pass to _stop.
-     * @param {Boolean} options.force - Force showing a notification.
      * @param {String} [options.message] - Force a notification message.
      * @param {Number} options.timeout - Postpone resetting the call state for the duration of 3 busy tones.
      */
-    _stop({force = false, message = '', timeout = 1000} = {}) {
+    _stop({timeout = 1000} = {}) {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
 
-        if (this.silent) {
-            this.app.plugins.caller.deleteCall(this)
-            return
-        }
-
-        if (!message) {
-            message = this.state.number
-            if (this.state.name) message += `:${this.state.name}`
-        }
         // Stop all call state sounds that may still be playing.
         this.app.sounds.ringbackTone.stop()
         this.app.sounds.ringTone.stop()
         this.app.sounds.callEnd.play()
 
-        if (force) {
-            if (this.state.status === 'callee_busy') {
-                const title = this.translations.callee_busy
-                this.app.plugins.ui.notification({force, message, number: this.state.number, stack: true, title})
-            } else {
-                const title = this.translations.bye
-                this.app.plugins.ui.notification({force, message, number: this.state.number, stack: true, title})
-            }
+        let message = `${new Date().toLocaleTimeString()} [${this.state.protocol.toUpperCase()}] - `
+        let title = `${this.state.number}`
+        if (this.state.name) title += ` - ${this.state.name}`
+
+        const fromto = {
+            incoming: this.app.$t('from'),
+            outgoing: this.app.$t('to'),
         }
 
-        // An ongoing call is closed. Signal listeners like activity about it.
-        if (this.state.status === 'bye') {
+        // Make a Notification with relevant call information.
+        const failCodes = ['callee_busy', 'callee_unavailable', 'caller_unavailable']
+        if (failCodes.includes(this.state.status)) {
+            title += ` (${this.app.$t(this.translations[this.state.status])})`
+            message += this.app.$t('missed call {fromto} {name}', {
+                fromto: fromto[this.state.direction],
+                name: this.state.name ? this.state.name : this.state.number,
+            }).ca()
+            this.app.emit('caller:call-rejected', {call: this.state}, true)
+        } else {
+            title += ` (${this.timer().formatted})`
+            message = this.app.$t('finished call {fromto} {name} after {time}', {
+                fromto: fromto[this.state.direction],
+                name: this.state.name ? this.state.name : this.state.number,
+                time: this.timer().formatted,
+            }).ca()
+
             this.app.emit('caller:call-ended', {call: this.state}, true)
         }
+
+        this.app.plugins.ui.notification({message, number: this.state.number, stack: true, title})
 
         // Remove the streams that are associated with this call.
         for (const streamId of Object.keys(this.streams)) {
@@ -242,7 +218,6 @@ class Call {
             settings: {webrtc: {media: {stream: {[streamType]: {selected: false}}}}},
         })
 
-        this.app.plugins.ui.notification({number: this.state.number})
         this.busyTone.stop()
 
         window.setTimeout(() => {
@@ -293,12 +268,6 @@ class Call {
             ui: {layer: 'caller', menubar: {event: 'ringing'}},
         })
 
-        this.app.plugins.ui.notification({
-            message: `${this.state.number}: ${this.state.name}`,
-            number: this.state.number,
-            title: this.translations.invite,
-        })
-
         this.app.plugins.caller.activateCall(this, true)
         this.app.sounds.ringTone.play({loop: true})
     }
@@ -319,19 +288,8 @@ class Call {
 
         // Always set this call to be the active call.
         this.app.plugins.caller.activateCall(this, true)
-        let message = ''
-        if (name) {
-            message = `${this.state.number}: ${name}`
-        } else {
-            message = this.state.number
-        }
-
-        this.app.plugins.ui.notification({message, number: this.state.number, title: this.translations.create})
-        this.setState({name: name, status: this._statusMap.create})
-
-        if (!this.silent) {
-            this.app.setState({ui: {layer: 'caller', menubar: {event: 'ringing'}}})
-        }
+        this.setState({name: name, status: 'create'})
+        this.app.setState({ui: {layer: 'caller', menubar: {event: 'ringing'}}})
     }
 
 
@@ -351,11 +309,43 @@ class Call {
      * devices when it's not silent.
      */
     async start() {
-        if (!this.silent) await this._initSinks()
+        await this._initSinks()
 
         if (this.state.direction === 'incoming') this.incoming()
         else if (this.state.direction === 'outgoing') this.outgoing()
         else throw new Error(`invalid call direction: ${this.state.direction}`)
+    }
+
+
+    /**
+    * Set the final call status on termination and
+    * fire off the call closing ritual.
+    * @param {String} status - Terminate with a set status.
+    */
+    terminate(status = null) {
+        if (!status) {
+            if (this.state.status === 'accepted') status = 'bye'
+            else if (this.state.status === 'create') status = 'caller_unavailable'
+            else if (this.state.status === 'invite') status = 'callee_busy'
+        }
+        this.setState({status})
+        this._stop()
+    }
+
+
+    timer() {
+        const hours = Math.trunc((this.state.timer.current - this.state.timer.start) / 1000 / 60 / 60) % 24
+        const minutes = Math.trunc((this.state.timer.current - this.state.timer.start) / 1000 / 60) % 60
+        const seconds = Math.trunc((this.state.timer.current - this.state.timer.start) / 1000) % 60
+
+        let formatted
+        if (minutes <= 9) formatted = `0${minutes}`
+        else formatted = `${minutes}`
+        if (seconds <= 9) formatted = `${formatted}:0${seconds}`
+        else formatted = `${formatted}:${seconds}`
+        return {
+            formatted, hours, minutes, seconds,
+        }
     }
 
 

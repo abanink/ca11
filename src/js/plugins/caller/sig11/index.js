@@ -62,7 +62,7 @@ class SIG11Caller {
 
 
         this.app.on('sig11:call-terminate', ({callId, status}) => {
-            plugin.calls[callId].terminate({remote: false, status})
+            plugin.calls[callId].terminate(status, {remote: false})
         })
     }
 

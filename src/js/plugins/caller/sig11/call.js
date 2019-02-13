@@ -81,7 +81,7 @@ class CallSIG11 extends Call {
             callId: this.id,
         })
 
-        this._start({message: this.translations.accepted.outgoing})
+        this._start({message: this.translations.accepted})
     }
 
 
@@ -173,23 +173,19 @@ class CallSIG11 extends Call {
 
 
     /**
-    * Terminate this Call.
-    * @param {Boolean} remote - Inform remote node about termination.
+    * Terminate a SIG11 Call.
+    * @param {String} status - Force a status while terminating.
+    * @param {Boolean} remote - Terminate remote node's call endpoint.
     */
-    async terminate({remote = true, status = 'bye'} = {}) {
-        this.setState({status})
+    async terminate(status, {remote = true} = {}) {
         // Close connected streams when the call is already
         // flowing. Skip when the call is terminated before
         // the peer is connected.
         if (this.pc) {
-            try {
-                this.pc.close()
-            } catch (err) {
-                // Just try to close it anyway; don't bother for errors.
-            }
+            this.pc.close()
         }
 
-        this._stop()
+        super.terminate(status)
         if (remote) {
             await this.app.sig11.emit(this.node.id, 'call-terminate', {
                 callId: this.id,

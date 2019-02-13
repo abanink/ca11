@@ -65,14 +65,12 @@ class CallSIP extends Call {
 
 
     hold() {
-        if (this.session) {
-            this.session.hold({
-                sessionDescriptionHandlerOptions: {
-                    constraints: this.app.media._getUserMediaFlags(),
-                },
-            })
-            this.setState({hold: {active: true}})
-        }
+        this.session.hold({
+            sessionDescriptionHandlerOptions: {
+                constraints: this.app.media._getUserMediaFlags(),
+            },
+        })
+        this.setState({hold: {active: true}})
     }
 
 
@@ -80,27 +78,18 @@ class CallSIP extends Call {
     * Handle an incoming `invite` call from.
     */
     incoming() {
-        this.state.endpoint = this.session.assertedIdentity.uri.user
-        this.state.name = this.session.assertedIdentity.uri.user
+        this.state.number = this.session.assertedIdentity.uri.user
+        this.state.name = this.session.assertedIdentity.displayName
 
-        this.state.stats.callId = this.session.request.call_id
-        this.app.logger.debug(`${this}incoming call ${this.state.stats.callId} started`)
+        this.app.logger.debug(`${this}incoming call ${this.id} started`)
         super.incoming()
 
         // Setup some event handlers for the different stages of a call.
         this.session.on('accepted', (request) => {
-            this._start({message: this.translations.accepted.incoming})
+            this._start({message: this.translations.accepted})
         })
 
         this.session.on('bye', (e) => {
-            if (e.getHeader('X-Asterisk-Hangupcausecode') === '58') {
-                this.app.notify({
-                    icon: 'warning',
-                    message: this.app.$t('code 58: PBX AVPF/encryption issue'),
-                    type: 'warning',
-                })
-            }
-
             this.setState({status: 'bye'})
             this._stop({message: this.translations[this.state.status]})
         })
@@ -114,33 +103,20 @@ class CallSIP extends Call {
         * call module's invite handler.
         */
         this.session.on('failed', (message) => {
-            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.plugin.sip.ua)
+            if (typeof message === 'string') message = SIP.Parser.parseMessage(message, this.app.sip.ua)
             let reason = message.getHeader('Reason')
-            if (reason) {
-                reason = this._parseHeader(reason).get('text')
-            }
+            let status = 'caller_unavailable'
+
+            if (reason) reason = this._parseHeader(reason).get('text')
 
             if (reason === 'Call completed elsewhere') {
-                this.app.logger.info(`${this}call completed elsewhere: ${this.state.stats.callId}`)
-                this.setState({status: 'answered_elsewhere'})
-            } else {
-                this.app.logger.info(`${this}call rejected: ${this.state.stats.callId}`)
-                // `Call completed elsewhere` is not considered to be
-                // a missed call and will not end up in the activity log.
-                this.app.emit('caller:call-rejected', {call: this.state}, true)
-                // We could distinguish here between a CANCEL send by the calling
-                // party, or a cancel made by the callee. For now let's use
-                // `request_terminated` for both cases.
-                if (message.method === 'CANCEL') {
-                    this.setState({status: 'request_terminated'})
-                } else if (message.status_code === 480) {
-                    // The accepting party terminated the incoming call.
-                    this.setState({status: 'request_terminated'})
-                }
+                status = 'answered_elsewhere'
+            } else if (message.status_code === 480) {
+                // The accepting party terminated the incoming call.
+                status = 'callee_unavailable'
             }
 
-
-            this._stop({message: this.translations[this.state.status]})
+            super.terminate(status)
         })
 
         this.session.on('reinvite', (session, request) => {
@@ -207,13 +183,12 @@ class CallSIP extends Call {
 
         // Notify user about the new call being setup.
         this.session.on('accepted', (data) => {
-            this._start({message: this.translations.accepted.outgoing})
+            this._start({message: this.translations.accepted})
         })
 
         // Reset call state when the other halve hangs up.
         this.session.on('bye', (e) => {
-            this.setState({status: 'bye'})
-            this._stop({message: this.translations[this.state.status]})
+            super.terminate('bye')
         })
 
 
@@ -254,63 +229,32 @@ class CallSIP extends Call {
         })
 
         this.session.on('failed', (message) => {
-            this.app.logger.info(`${this}call declined: ${message.status_code}/${this.state.stats.callId}`)
-
-            if (message.status_code === 480) {
-                // Temporarily Unavailable; Callee currently unavailable.
-                this.setState({status: 'callee_unavailable'})
-            } else if (message.status_code === 486) {
-                // Busy here; Callee is busy.
-                this.setState({status: 'callee_busy'})
+            let status = 'callee_unavailable'
+            // 486 - Busy here; Callee is busy.
+            // 487 - Request terminated; Request has terminated by bye or cancel.
+            if (message.status_code === 486) {
+                status = 'callee_busy'
             } else if (message.status_code === 487) {
-                // Request terminated; Request has terminated by bye or cancel.
-                this.setState({status: 'request_terminated'})
-            } else {
-                // Assume `request_terminated`, but log unhandled status as a warning.
-                this.app.logger.warn(`${this}unhandled status code: ${message.status_code}`)
-                this.setState({status: 'request_terminated'})
+                status = 'caller_unavailable'
             }
 
-            this.app.emit('caller:call-rejected', {call: this.state}, true)
-            this._stop({message: this.translations[this.state.status]})
+            super.terminate(status)
         })
     }
 
 
     /**
-    * Terminate a Call depending on it's current status.
+    * Terminate a SIP Call.
     */
     terminate() {
-        if (this.state.status === 'new') {
-            // An empty/new call; just delete the Call object without noise.
-            this.app.plugins.caller.deleteCall(this)
-            return
-        } else if (this.state.status === 'create') {
-            // A fresh outgoing Call; not yet started. There may or may not
-            // be a session object. End the session if there is one.
-            if (this.session) this.session.terminate()
-            this.setState({status: 'request_terminated'})
-            // The session's closing events will not be called, so manually
-            // trigger the Call to stop here.
-            this._stop()
-        } else {
-            // Calls with other statuses need some more work to end.
-            try {
-                if (this.state.status === 'invite') {
-                    this.setState({status: 'request_terminated'})
-                    this.session.reject() // Decline an incoming call.
-                } else if (['accepted'].includes(this.state.status)) {
-                    // Hangup a running call.
-                    this.session.bye()
-                    // Set the status here manually, because the bye event on the
-                    // session is not triggered.
-                    this.setState({status: 'bye'})
-                }
-            } catch (err) {
-                this.app.logger.warn(`${this}unable to close the session properly. (${err})`)
-                // Get rid of the Call anyway.
-                this._stop()
-            }
+        const status = this.state.status
+        try {
+            if (status === 'accepted') this.session.bye()
+            else if (status === 'create' && this.session) this.session.terminate()
+            else if (status === 'invite') this.session.reject()
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error(err)
         }
     }
 

@@ -7,7 +7,7 @@
     background: var(--primary-base);
     color: $white-color;
 
-    &__protocol {
+    &__direction {
         align-items: center;
         display: flex;
         justify-content: center;
@@ -19,22 +19,28 @@
         }
     }
 
-    &__info {
+    &__endpoint {
         align-items: center;
         display: flex;
         flex-grow: 1;
         padding-left: $spacer-05;
         text-transform: uppercase;
+    }
+
+    &__status {
+        align-items: center;
+        display: flex;
+        text-transform: uppercase;
 
         svg {
             @include icon-size($spacer * 3);
-            margin-right: $spacer;
+            margin: 0 $spacer;
         }
-    }
 
-    &__timer {
-        align-items: center;
-        display: flex;
-        margin-right: $spacer;
+        &-timer {
+            padding-right: $spacer;
+            text-align: right;
+            width: $space-4;
+        }
     }
 }
