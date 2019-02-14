@@ -1,8 +1,6 @@
 [![CircleCI](https://circleci.com/gh/garage11/ca11/tree/develop.svg?style=shield)](https://circleci.com/gh/garage11/ca11/tree/develop)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-CA11 is an open-source software project developed by [Garage11](https://garage11.tech).
-
 <img align="left" src="https://docs.ca11.io/screens/alice-new-session-input.png" height="200">
 <img align="left" src="https://docs.ca11.io/screens/alice-dialing-bob.png" height="200">
 <img src="https://docs.ca11.io/screens/alice-calling-with-bob.png" height="200">
@@ -37,3 +35,6 @@ with WebRTC and SIG11 has major advantages over centralized telephony:
 * Freedom: Open network, no accounts, select your own number on the fly
 * Features: Everything a regular phone does + Web + WebRTC Audio/Video/Data
 * Ubiquitous: Runs on web; PWA experience everywhere Chrom(ium/e) runs
+
+
+&copy; [Garage11](https://garage11.tech)
