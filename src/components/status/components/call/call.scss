@@ -5,6 +5,7 @@
 .c-status-call {
     $self: &;
     background: var(--primary-base);
+    box-shadow: 0 0 2px 1px palette('grey', 100);
     color: $white-color;
 
     &__direction {

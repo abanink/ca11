@@ -6,9 +6,10 @@ module.exports = (app, shared) => {
         computed: app.helpers.sharedComputed(),
         methods: Object.assign({
             triggerProtocolHandler: function() {
+                this.stepNext()
+                if (app.env.isTest) return
                 if (navigator.unregisterProtocolHandler) navigator.unregisterProtocolHandler('tel', `${document.location.origin}/?%s`, 'CA11')
                 navigator.registerProtocolHandler('tel', `${document.location.origin}/?%s`, 'CA11')
-                this.stepNext()
             },
         }, shared().methods),
         render: templates.wizard_protocol_handler.r,

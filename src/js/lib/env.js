@@ -17,7 +17,6 @@ function env() {
         isAndroid: false,
         isBrowser: false,
         isChrome: false,
-        isEdge: false,
         isElectron: false,
         isFirefox: false,
         isLinux: false,
@@ -25,6 +24,7 @@ function env() {
         isNode: false,
         isStandalone: false,
         isTel: false,
+        isTest: false,
         isWindows: false,
         name: 'unknown',
     }
@@ -59,6 +59,7 @@ function env() {
 
         const search = decodeURIComponent(location.search)
         if (search.includes('mode=test')) {
+            _env.isTest = true
             $('html').classList.add('test')
         } else if (search.includes('mode=standalone')) {
             _env.isStandalone = true

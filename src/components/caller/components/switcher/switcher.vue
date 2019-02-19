@@ -1,9 +1,8 @@
 <component class="c-call-switcher">
-
     <div class="container">
-        <button v-if="call.status !== 'new'" v-for="call in calls"
+        <button v-for="call in calls"
             class="button call tooltip tooltip-left"
-            :class="{active: call.active}"
+            :class="classes(call)"
             :data-tooltip="callTitle(call)"
             @click="activateCall(call)"
         >
@@ -11,8 +10,8 @@
         </button>
 
         <button
-            class="button call placeholder tooltip tooltip-left"
-            :class="{active: callActive.status === 'new' && ui.layer === 'caller', hint: 'true'}"
+            class="button call t-btn-switcher-call-new placeholder tooltip tooltip-left"
+            :class="{active: !callActive.id && ui.layer === 'caller', hint: 'true'}"
             :data-tooltip="$t('add new call')"
             @click="activateCall()"
         >

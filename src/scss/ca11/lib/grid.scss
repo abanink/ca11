@@ -17,8 +17,6 @@
 
     &__menu {
         grid-area: main-menu;
-        // Make space for main-content-header's negative left margin.
-        margin-top: $space-4 + $spacer-05;
     }
 
     &__status {
@@ -37,12 +35,6 @@
 
         .header {
             grid-area: main-content-header;
-
-            &__icon {
-                margin-left: #{(-$space-4 - $spacer-05)};
-                margin-right: $spacer-05;
-                width: $space-4;
-            }
         }
 
         &.c-about,
@@ -69,5 +61,3 @@
     grid-row-end: main-content;
     grid-row-start: main-status;
 }
-
-

@@ -34,7 +34,7 @@
     }
 
     &__logo {
-        @include icon-size(var(--icon-normal));
+        @include icon-size($spacer * 7);
         fill: var(--primary-base);
     }
 
@@ -42,6 +42,7 @@
         color: var(--grey-300);
         font-size: var(--text-base);
         font-weight: 500;
+        height: $spacer * 4;
         letter-spacing: 0;
         margin-bottom: var(--gutter);
         margin-top: var(--spacer);
@@ -165,4 +166,18 @@
             right: 0;
         }
     }
+}
+
+.slogan-leave-to,
+.slogan-enter {
+    opacity: 0;
+}
+
+.slogan-leave,
+.slogan-enter-to {
+    opacity: 1;
+}
+
+.slogan-enter-active {
+    transition: opacity 1s;
 }

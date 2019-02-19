@@ -80,7 +80,7 @@ const lib = {
         await pages[0].goto(uri, {})
 
         const actor = {browser, page: pages[0]}
-        // Assign username/password to actor.
+        // Assign test credentials to actor.
         Object.assign(actor, brand.tests[name])
 
         lib.actors[name] = actor
@@ -92,17 +92,22 @@ const lib = {
     * @param {String} name - Name the screenshot (actor name will be prepended).
     * @param {Object} options - Extra screenshot options.
     * @param {String} options.scope - Puppeteer scoped element container.
-    * * @param {String} options.unique - Don't make the same named screenshot again.
+    * @param {String} options.subject - Subject for in the screenshot name.
+    * @param {String} options.unique - Don't make the same named screenshot again.
     */
-    screenshot: async(actor, name, {scope = null, unique = true} = {}) => {
+    screenshot: async(actor, name, {only = null, scope = null, unique = true} = {}) => {
+        if (only && only !== actor.session.username) return
         if (unique && lib.screenshots[name]) return
+
         lib.screenshots[name] = true
+
         // Make a screenshot of the app container without scope.
         if (!scope) scope = actor.page
 
         if (settings.SCREENS) {
             await mkdirp(settings.SCREENS_DIR)
-            const filename = `${actor.session.username}-${name}.png`
+            let filename = `${actor.session.username}-${name}.png`
+
             const screenshotPath = path.join(settings.SCREENS_DIR, filename)
             await scope.screenshot({path: screenshotPath})
         }

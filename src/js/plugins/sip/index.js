@@ -238,7 +238,7 @@ class PluginSIP extends Plugin {
         if (env.isChrome) userAgent += 'Chrome'
         if (env.isElectron) userAgent += 'Electron'
         else if (env.isFirefox) userAgent += 'Firefox'
-        else if (env.isEdge) userAgent += 'Edge'
+
         userAgent += `) ${this.app.state.app.vendor.name}`
         return userAgent
     }

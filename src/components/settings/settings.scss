@@ -40,4 +40,12 @@
             font-size: 0.6rem !important;
         }
     }
+
+    .sip-disclaimer {
+        color: var(--grey-300);
+        font-family: 'Rajdhani';
+        font-size: var(--text-small);
+        max-width: $breakpoint-mobile;
+        padding: $spacer 0;
+    }
 }

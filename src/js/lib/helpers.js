@@ -10,10 +10,21 @@ function helpers(app) {
     let _helpers = {}
 
     _helpers.callActive = function() {
-        let callActive = this.description
+        let callActive = false
 
         for (const id of Object.keys(this.calls)) {
             if (this.calls[id].active) callActive = this.calls[id]
+        }
+
+        return callActive
+    }
+
+
+    _helpers.callActiveOngoing = function() {
+        let callActive = false
+
+        for (const call of Object.values(this.calls)) {
+            if (call.active && call.status !== 'bye') callActive = call
         }
 
         return callActive
@@ -31,6 +42,11 @@ function helpers(app) {
         }
 
         return accepted
+    }
+
+
+    _helpers.callsExist = function() {
+        return Boolean(Object.keys(this.calls).length)
     }
 
 
@@ -71,13 +87,12 @@ function helpers(app) {
     }
 
 
-    /**
-    * An ongoing Call is a Call that is either ongoing or
-    * in the process of being closed.
-    * @returns {Boolean} - Whether one or more calls is active.
-    */
     _helpers.callOngoing = function() {
-        return Object.keys(app.state.caller.calls).length
+        for (const call of Object.values(app.state.caller.calls)) {
+            if (call.status === 'accepted') return true
+        }
+
+        return false
     }
 
 
@@ -105,9 +120,9 @@ function helpers(app) {
         return {
             // Map between CA11 status codes and human translation.
             call: {
-                accepted: $t('calling'),
+                accepted: $t('talking'),
                 answered_elsewhere: $t('answered elsewhere'),
-                bye: $t('ended'),
+                bye: $t('hung up'),
                 callee_busy: $t('busy'),
                 callee_unavailable: $t('unavailable'),
                 caller_unavailable: $t('unavailable'),
@@ -225,6 +240,7 @@ function helpers(app) {
             callActive: _helpers.callActive,
             callingDisabled: _helpers.callingDisabled,
             callOngoing: _helpers.callOngoing,
+            callsExist: _helpers.callsExist,
             callsReady: _helpers.callsReady,
             transferStatus: function() {
                 let transferStatus = false

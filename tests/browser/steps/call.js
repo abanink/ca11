@@ -1,68 +1,61 @@
 module.exports = function(_) {
 
     return {
-        answerActor: async function(callee, caller) {
+        answerActor: async function(callee, caller, {protocol}) {
             await _.step(callee, `answers call from ${caller.session.username}`)
-            await callee.page.waitFor('.t-st-caller-ongoing')
-            await _.screenshot(callee, `call-invite-from-${caller.session.username}`)
-
+            await callee.page.waitFor('.t-btn-options-call-accept')
+            await _.screenshot(callee, `call-ringing-${caller.session.username}`)
             await callee.page.click('.t-btn-options-call-accept')
-            // Alice and bob are now getting connected;
-            // wait for Alice to see the connected screen.
-            await caller.page.waitFor('.t-btn-media-stream-video')
-            await callee.page.waitFor('.t-btn-media-stream-video')
 
-            await caller.page.click('.t-btn-media-stream-video')
-            await callee.page.click('.t-btn-media-stream-video')
+            await callee.page.waitFor('.t-st-caller-ongoing')
+            await caller.page.waitFor('.t-st-caller-ongoing')
 
-            await _.screenshot(caller, `calling-with-${callee.session.username}`)
-            await _.screenshot(callee, `calling-with-${caller.session.username}`)
+            await _.screenshot(caller, `call-talking-${callee.session.username}`)
+            await _.screenshot(callee, `call-talking-${caller.session.username}`)
         },
-        callActor: async function(caller, callee) {
+        callActor: async function(caller, callee, {inCall = false, protocol}) {
             await _.step(caller, `calls ${callee.session.username}`)
 
             // Enter a number and press the call button.
-            await caller.page.click('.t-btn-menu-calls')
-            await caller.page.waitFor('.t-keypad')
+            await caller.page.click('.t-btn-menu-caller')
 
-            // Test by clicking the dialpad buttons.
-            for (const n of String(callee.sip.username).split('')) {
-                await caller.page.click(`.t-btn-keypad-${n}`)
+            // Press new call button.
+            if (inCall) {
+                await caller.page.waitFor('.t-btn-switcher-call-new')
+                await caller.page.click('.t-btn-switcher-call-new')
             }
 
-            await _.screenshot(caller, `dialing-${callee.session.username}`)
+            await caller.page.waitFor('.t-keypad__input')
+
+            // Test by clicking the dialpad buttons.
+            await caller.page.focus('.t-keypad__input')
+            await caller.page.type('.t-keypad__input', callee[protocol].number)
+            await _.screenshot(caller, `call-${protocol}-keypad-dial-${callee.session.username}`, {only: 'alice'})
             await caller.page.click('.t-btn-options-call-start')
-            await _.screenshot(caller, `calling-${callee.session.username}`)
+            await _.screenshot(caller, `call-${protocol}-setup-${callee.session.username}`, {only: 'alice'})
         },
         /**
-         * Assumes caller and callee are already in a call
-         * with each other.
+         * Assumes caller and callee are already calling.
          * @param {*} caller - The caller actor.
          * @param {*} callee - The callee actor.
          * @param {*} transfer - The transfer actor.
          */
-        transferActor: async function(caller, callee, transfer) {
-            // Alice blind transfers to Charlie.
+        transferActor: async function(caller, callee, transfer, {protocol}) {
             _.step(callee, `transfer ${caller.session.username} to ${transfer.session.username}`)
+
             await callee.page.waitFor('.t-btn-options-transfer-toggle:not([disabled])')
             await callee.page.click('.t-btn-options-transfer-toggle')
-            // Pick blind (unattended) transfer.
-            await callee.page.click('.t-btn-transfer-attended')
 
-            // Focus number input
-            await callee.page.click('.t-txt-dialer-number')
-            await callee.page.type('.t-txt-dialer-number', transfer.sip.username)
-            await _.screenshot(callee, `transfers-${caller.session.username}-to-${transfer.session.username}-attended`)
+            await _.screenshot(callee, `call-${protocol}-transfer-init-${caller.session.username}-${transfer.session.username}`)
 
-            await callee.page.click('.t-btn-dialer-call')
+            await callee.page.click(`.call-${protocol}-${caller[protocol].number}`)
 
-            await transfer.page.waitFor('.t-btn-options-call-accept')
-            await transfer.page.click('.t-btn-options-call-accept')
-
-            await _.step(transfer, `accepted incoming call from ${callee.session.username}`)
+            await _.screenshot(callee, `call-${protocol}-transfer-switch-${caller.session.username}-${transfer.session.username}`)
 
             await callee.page.waitFor('.t-btn-options-transfer-finalize')
             await callee.page.click('.t-btn-options-transfer-finalize')
+
+            await _.screenshot(caller, `call-${protocol}-transfer-complete-${transfer.session.username}`)
         },
     }
 }

@@ -9,16 +9,10 @@
     background: linear-gradient(to right, var(--grey-50), var(--grey-100));
     border-right: $spacer-05 solid var(--primary-base);
     display: flex;
+    height: $space-4;
     justify-content: flex-start;
     position: relative;
     width: 100%;
-
-    &__icon {
-        background: var(--primary-base);
-        fill: $white-color;
-        height: 100%;
-        padding: $spacer-05;
-    }
 
     &__text {
         align-items: center;
@@ -105,18 +99,12 @@
 
         li {
             align-items: center;
-            border-bottom: var(--border) solid transparent;
             border-left: 0;
             border-right: 0;
             color: var(--grey-200);
             display: flex;
             justify-content: center;
             width: $space-4;
-
-            &.active {
-                border-bottom: var(--border) solid var(--primary-base);
-                color: var(--primary-base);
-            }
 
             &.disabled {
                 opacity: 0.3;

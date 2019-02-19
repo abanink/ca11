@@ -21,12 +21,11 @@ module.exports = (app) => {
              */
             slots: function() {
                 let activeSlots = []
-                const localStream = this.stream[this.stream.type]
-                if (localStream.selected && localStream.id) {
-                    activeSlots.push(localStream)
-                }
+
+                activeSlots.push(this.stream[this.stream.type])
+
                 if (this.call) {
-                    const streams = Object.values(this.call.streams).filter((i) => i.selected)
+                    const streams = Object.values(this.call.streams).filter((i) => i.visible)
                     activeSlots = activeSlots.concat(streams)
                 }
 

@@ -1,8 +1,6 @@
 <section component class="c-activities content">
 
     <header class="content__header header">
-        <icon class="header__icon" name="recent"/>
-
         <div class="header__filters">
             <button
                 class="header__filter tooltip tooltip-bottom"
@@ -54,7 +52,7 @@
     <main class="main scrollable items" v-click-outside="toggleSelectItem">
 
         <div v-if="!filteredActivities.length" class="items__empty">
-            <icon class="items__empty-icon" name="recent"/>
+            <icon class="items__empty-icon" name="activities"/>
             <div class="items__empty-text cf">{{$t('no {target}', {target: $t('activity')})}}</div>
         </div>
 

@@ -49,11 +49,12 @@ module.exports = (app) => {
                     this.$emit('update:model', this.number.substring(0, this.number.length - 1))
                 }
             },
+            toggleNodeView: function() {
+                app.setState({sig11: {
+                    network: {view: !this.sig11.network.view}},
+                }, {persist: true})
+            },
         }, app.helpers.sharedMethods()),
-        mounted: function() {
-            // Only focus on desktop.
-            if (!app.env.isAndroid) this.$refs.input.focus()
-        },
         props: {
             call: {default: null},
             dtmf: {default: false, type: Boolean},
@@ -70,6 +71,7 @@ module.exports = (app) => {
             env: 'env',
             sig11: 'sig11',
             sip: 'sip',
+            stream: 'settings.webrtc.media.stream',
             ui: 'ui',
         },
         watch: {

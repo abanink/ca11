@@ -6,7 +6,6 @@
 <img src="https://docs.ca11.io/screens/alice-calling-with-bob.png" height="200">
 
 # Install
-
     git clone git@github.com:garage11/ca11.git
     cd ca11
     yarn
@@ -14,24 +13,25 @@
 
 
 # Resources
+* [PWA](https://ca11.io/) - Softphone PWA
+* [Documentation](https://docs.ca11.io) - Users & Developers
+* [News](https://twitter.com/ca11_webrtc) - Project updates
 
-* [PWA](https://ca11.io/) - Installable Progressive Web App
-* [Documentation](https://docs.ca11.io) - User & Developer documentation
-* [News](https://twitter.com/ca11_webrtc) - Project updates on Twitter
 
-
-# Purpose
-CA11's purpose is to open up Telecom by introducing open, free and secure
-Web Telephony. CA11 is backwards compatible with SIP networks, and comes with its
-own free decentralized signalling network for P2P telephony; SIG11. P2P telephony
-with WebRTC and SIG11 has major advantages over centralized telephony:
+# Mission
+CA11's mission is to open up the Telecom industry by introducing free, open and
+privacy-friendly Web Telephony. CA11 is backwards compatible with SIP networks,
+and comes with its own free decentralized signalling network for P2P telephony:
+SIG11. P2P telephony with WebRTC and SIG11 has some major advantages over
+centralized telephony:
 
 * Privacy: all WebRTC calls are P2P and securely encrypted (DTLS-SRTP)
-* Trust: Not a phonenumber, but public keys verify caller/callee identity
+* Trust: Public key crypto verifies caller & callee identity
 * Quality: High quality audio(OPUS) and video(VP9)
 * Costs: Free for users, low costs for SIG11 network operators
-* Scalable: Simple signalling relay services instead of large media pipes
+* Scalability: Low-cost simple relay signalling services instead of large media pipes
 * Customizable: Plugin-based, themable phone
+* Integrations: Combines perfectly with other communication software, like web-based CRM software
 * Freedom: Open network, no accounts, select your own number on the fly
 * Features: Everything a regular phone does + Web + WebRTC Audio/Video/Data
 * Ubiquitous: Runs on web; PWA experience everywhere Chrom(ium/e) runs

@@ -28,23 +28,27 @@
     padding: $spacer;
     -webkit-tap-highlight-color: transparent;
     text-transform: uppercase;
-    transition: all ease 0.5s;
+    transition: color ease 0.5s;
 
     // Typical menu button used in status and menu.
     &--menu {
+        border-bottom: $border solid transparent;
+        border-top: $border solid transparent;
         height: $space-4;
         width: $space-4;
 
         &.active,
         &:hover {
-            background: var(--grey-50);
-            border-bottom: 1px solid var(--primary-base);
             color: var(--primary-base);
+        }
+
+        &.active {
+            border-bottom: $border solid var(--primary-base);
         }
 
         &[disabled] {
             &:hover {
-                border-bottom: 1px solid var(--grey-200);
+                border-bottom: $border solid var(--grey-200);
             }
         }
     }
@@ -61,7 +65,7 @@
     }
 
     svg {
-        @include icon-size(#{$spacer * 3});
+        @include icon-size(#{$spacer * 3.5});
     }
 
     &[disabled] {

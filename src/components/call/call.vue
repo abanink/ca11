@@ -1,10 +1,6 @@
 <component class="c-call" :class="`t-st-call-${call.status}`">
-    <CallTransfer
-        v-if="call.transfer.active && call.status === 'accepted'"
-        :call="call"
-    />
     <Keypad
-        v-else-if="call.keypad.active"
+        v-if="call.keypad.active"
         mode="dtmf"
         :call="call"
         :number="call.keypad.number"

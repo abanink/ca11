@@ -1,12 +1,13 @@
-<component class="c-welcome">
+<component class="c-protocol-handler t-protocol-handler">
     <header class="c-wizard__header">{{$t('click-to-dial')}}</header>
 
     <div class="c-wizard__description">
-        {{$t('{name} introduces free, secure and privacy-friendly audio and video web telephony to and from any number on a decentralized phone network.', {name: app.name}).ca()}}
-        {{$t('do you also want to use {name} to dial clicked phone numbers on websites?', {name: app.name}).ca()}}<br/>
+        {{$t('phone hyperlinks (e.g. tel:1187654321) on websites can be associated with the {name} phone.', {name: app.name}).ca()}}
+        {{$t('do you want {name} to open after clicking on such links?', {name: app.name}).ca()}}<br/>
+
 
         <div class="cf c-wizard__help">
-            {{$t('permission is asked after pressing').ca()}}<br/><em class="uc">{{$t('next')}}</em>
+            {{$t('browser permission is asked after pressing').ca()}}<br/><em class="uc">{{$t('next')}}</em>
         </div>
     </div>
 
@@ -14,11 +15,11 @@
 
     <div class="buttons is-centered stretched" v-if="selected.ready !== null">
         <button
-            class="button button--widget t-media-permission-back is-left"
+            class="button button--widget t-btn-protocol-handler-back is-left"
             @click="stepBack()"
         >{{$t('back')}}</button>
         <button
-            class="button button--widget is-primary t-btn-welcome-next"
+            class="button button--widget is-primary t-btn-protocol-handler-next"
             @click="triggerProtocolHandler()"
         >{{$t('next')}}</button>
     </div>

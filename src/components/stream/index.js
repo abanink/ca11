@@ -66,15 +66,15 @@ module.exports = (app) => {
         },
         mounted: function() {
             if (this.stream.id) {
-                Vue.nextTick(() => {
-                    const mediaElement = this.$refs[this.stream.kind]
-                    mediaElement.srcObject = app.media.streams[this.stream.id]
+                if (!this.$refs[this.stream.kind]) return
 
-                    if (this.stream.muted) mediaElement.muted = true
+                const mediaElement = this.$refs[this.stream.kind]
+                mediaElement.srcObject = app.media.streams[this.stream.id]
 
-                    mediaElement.addEventListener('loadeddata', () => {
-                        this.stream.ready = true
-                    })
+                if (this.stream.muted) mediaElement.muted = true
+
+                mediaElement.addEventListener('loadeddata', () => {
+                    this.stream.ready = true
                 })
             }
         },
@@ -92,16 +92,15 @@ module.exports = (app) => {
         staticRenderFns: templates.stream.s,
         watch: {
             'stream.id': function(streamId) {
-                Vue.nextTick(() => {
-                    const mediaElement = this.$refs[this.stream.kind]
-                    mediaElement.srcObject = app.media.streams[streamId]
-                    if (this.stream.muted) mediaElement.muted = true
+                if (!this.$refs[this.stream.kind]) return
+                const mediaElement = this.$refs[this.stream.kind]
 
-                    mediaElement.addEventListener('loadeddata', () => {
-                        this.stream.ready = true
-                    })
+                mediaElement.srcObject = app.media.streams[streamId]
+                if (this.stream.muted) mediaElement.muted = true
+
+                mediaElement.addEventListener('loadeddata', () => {
+                    this.stream.ready = true
                 })
-
             },
         },
     }

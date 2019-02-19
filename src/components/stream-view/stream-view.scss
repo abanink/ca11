@@ -5,21 +5,19 @@
 html.chrome.android {
     &:not(.standalone) {
         .c-stream-view {
-            height: calc(100vh - #{($spacer * 13) + $android-toolbar-height});
+            // height: calc(100vh - #{($spacer * 13) + $android-toolbar-height});
         }
     }
 }
 
 .c-stream-view {
     align-items: stretch;
-    background: linear-gradient(to right, $white-color, var(--grey-100));
+    background: linear-gradient(to right, $white-color, var(--grey-50));
     display: flex;
     flex: 1;
     flex-direction: row;
     flex-wrap: wrap;
-    height: calc(100vh - #{($spacer * 13)});
     justify-content: space-evenly;
-    margin-top: $spacer-05;
     position: relative;
     width: 100%;
 

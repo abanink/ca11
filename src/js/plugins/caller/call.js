@@ -44,7 +44,7 @@ class Call {
          * @property {String} state.type - Either `incoming` or `outgoing`.
          */
         this.state = {
-            active: false,
+            active: true,
             direction: null, // incoming or outgoing
             hangup: {
                 disabled: false,
@@ -162,6 +162,11 @@ class Call {
     _stop({timeout = 1000} = {}) {
         this.app.logger.debug(`${this}call is stopping in ${timeout}ms`)
 
+        const streamType = this.app.state.settings.webrtc.media.stream.type
+        this.app.setState({
+            settings: {webrtc: {media: {stream: {[streamType]: {selected: false}}}}},
+        })
+
         // Stop all call state sounds that may still be playing.
         this.app.sounds.ringbackTone.stop()
         this.app.sounds.ringTone.stop()
@@ -210,13 +215,8 @@ class Call {
         // Reset the transfer state of target calls in case the transfer mode
         // of this Call is active and the callee ends the call.
         if (this.state.transfer.active) {
-            this.app.plugins.caller.__setTransferState(this, false)
+            this.app.plugins.caller.transferState(this, false)
         }
-
-        const streamType = this.app.state.settings.webrtc.media.stream.type
-        this.app.setState({
-            settings: {webrtc: {media: {stream: {[streamType]: {selected: false}}}}},
-        })
 
         this.busyTone.stop()
 
@@ -236,14 +236,14 @@ class Call {
     }
 
 
-    addStream(stream, kind) {
+    addStream(stream, kind, visible = true) {
         const streamState = {
             id: stream.id,
             kind,
             local: false,
             muted: false,
             ready: false,
-            selected: true,
+            visible,
         }
 
         this.app.media.streams[stream.id] = stream

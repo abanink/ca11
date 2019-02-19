@@ -3,6 +3,19 @@
 
 .c-menu {
     background: var(--grey-50);
-    box-shadow: 0 2px 1px 1px palette('grey', 200);
+    box-shadow: 0 2px 1px 1px palette('grey', 100);
     z-index: 100;
+
+    .layer-topic {
+        align-items: center;
+        background: var(--primary-base);
+        display: flex;
+        height: $space-4;
+        justify-content: center;
+
+        svg {
+            @include icon-size($spacer * 5);
+            color: $white-color;
+        }
+    }
 }

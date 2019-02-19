@@ -66,7 +66,7 @@ class PluginCaller extends Plugin {
                 // on others.
                 if (call.state.transfer.active) {
                     // Unset the transfer state when it was active during an unhold.
-                    this.__setTransferState(call, !call.state.transfer.active)
+                    this.transferState(call, !call.state.transfer.active)
                 }
                 this.activateCall(call, true, true)
             }
@@ -118,77 +118,8 @@ class PluginCaller extends Plugin {
          */
         this.app.on('caller:transfer-initialize', ({callId}) => {
             const sourceCall = this.calls[callId]
-            this.__setTransferState(sourceCall, !sourceCall.state.transfer.active)
+            this.transferState(sourceCall, !sourceCall.state.transfer.active)
         })
-    }
-
-    /**
-    * Set the transfer state of a source call and update the transfer state of
-    * other calls. This method doesn't change the intended transfer status
-    * when no source Call is passed along. It just update outdated call state
-    * in that case.
-    * @param {Call} [sourceCall] - The call to update the calls status for.
-    * @param {Boolean} active - The transfer status to switch or update to.
-    */
-    __setTransferState(sourceCall = {id: null}, active) {
-        const callIds = Object.keys(this.calls)
-        // Look for an active transfer call when the source call isn't
-        // passed as a parameter.
-        if (!sourceCall.id) {
-            for (let _callId of callIds) {
-                if (this.calls[_callId].state.transfer.active) {
-                    sourceCall = this.calls[_callId]
-                    // In this case we are not toggling the active status;
-                    // just updating the status of other calls.
-                    active = true
-                    break
-                }
-            }
-        }
-
-        // Still no sourceCall. There is no transfer active at the moment.
-        // Force all calls to deactivate their transfer.
-        if (!sourceCall.id) active = false
-
-        if (active) {
-            // Enable transfer mode.
-            if (sourceCall.id) {
-                // Always disable the keypad, set the sourceCall on-hold and
-                // switch to the default `attended` mode when activating
-                // transfer mode on a call.
-                sourceCall.setState({keypad: {active: false, number: ''}, transfer: {active: true, type: 'attended'}})
-                sourceCall.hold()
-            }
-            // Set attended status on other calls.
-            for (let _callId of callIds) {
-                const _call = this.calls[_callId]
-                if (_callId !== sourceCall.id) {
-                    _call.setState({transfer: {active: false, type: 'accept'}})
-                    // Hold all other ongoing calls.
-                    if (!['create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
-                        _call.hold()
-                    }
-                }
-            }
-        } else {
-            // Disable transfer mode.
-            if (sourceCall.id) {
-                sourceCall.setState({transfer: {active: false, type: 'attended'}})
-                sourceCall.unhold()
-            }
-            // Set the correct state of all other calls; se the transfer
-            // type to accept and disable transfer modus..
-            for (let _callId of callIds) {
-                const _call = this.calls[_callId]
-                if (_callId !== sourceCall.id) {
-                    this.calls[_callId].setState({transfer: {active: false, type: null}})
-                    // Make sure all other ongoing calls stay on hold.
-                    if (!['create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
-                        _call.hold()
-                    }
-                }
-            }
-        }
     }
 
 
@@ -211,7 +142,7 @@ class PluginCaller extends Plugin {
     * Create and return a new `Call` object based on a
     * call description.
     * @param {Object} description - New call object.
-    * @param {String} [description.number] - Endpoint to call to.
+    * @param {String} [description.number] - Number to call to.
     * @param {String} [description.protocol] - Protocol to use.
     * @returns {Call} - A new or existing Call with status `new`.
     */
@@ -329,30 +260,18 @@ class PluginCaller extends Plugin {
     * event used to start a call with.
     * @property {Object} description - Information about the new Call.
     * @property {String} [description.number] - The endpoint to call.
-    * @property {String} [description.start] - Start calling right away or just create a Call instance.
     */
-    call({description, start}) {
+    call({description}) {
         // Sanitize the number.
         if (this.app.state.caller.description.protocol === 'sip') {
             description.number = this.app.utils.sanitizeNumber(description.number)
         }
 
-        // Deal with a blind transfer Call.
-        let activeOngoingCall = this.findCall({active: true, ongoing: true})
-        if (activeOngoingCall && activeOngoingCall.state.transfer.active && activeOngoingCall.state.transfer.type === 'blind') {
-            // Directly transfer the number to the currently activated
-            // call when the active call has blind transfer mode set.
-            activeOngoingCall.transfer(description.number)
-            return
-        }
-
-        // Both a 'regular' new call and an attended transfer call will
-        // create or get a new Call and activate it.
         description.direction = 'outgoing'
         let call = this._newCall(description)
         call.start()
         // Sync the others transfer state of other calls to the new situation.
-        this.__setTransferState()
+        this.transferState()
 
         // A newly created call is always activated unless another call is already ringing.
         if (!Object.keys(this.calls).find((i) => ['create', 'invite'].includes(this.calls[i].state.status))) {
@@ -474,6 +393,76 @@ class PluginCaller extends Plugin {
     */
     toString() {
         return `${this.app}[caller] `
+    }
+
+
+    /**
+    * Set the transfer state of a source call and update the transfer state of
+    * other calls. This method doesn't change the intended transfer status
+    * when no source Call is passed along. It just update outdated call state
+    * in that case.
+    * @param {Call} [sourceCall] - The call to update the calls status for.
+    * @param {Boolean} active - The transfer status to switch or update to.
+    */
+    transferState(sourceCall = {id: null}, active) {
+        const callIds = Object.keys(this.calls)
+        // Look for an active transfer call when the source call isn't
+        // passed as a parameter.
+        if (!sourceCall.id) {
+            for (let _callId of callIds) {
+                if (this.calls[_callId].state.transfer.active) {
+                    sourceCall = this.calls[_callId]
+                    // In this case we are not toggling the active status;
+                    // just updating the status of other calls.
+                    active = true
+                    break
+                }
+            }
+        }
+
+        // Still no sourceCall. There is no transfer active at the moment.
+        // Force all calls to deactivate their transfer.
+        if (!sourceCall.id) active = false
+
+        if (active) {
+            // Enable transfer mode.
+            if (sourceCall.id) {
+                // Always disable the keypad, set the sourceCall on-hold and
+                // switch to the default `attended` mode when activating
+                // transfer mode on a call.
+                sourceCall.setState({keypad: {active: false, number: ''}, transfer: {active: true, type: 'attended'}})
+                sourceCall.hold()
+            }
+            // Set attended status on other calls.
+            for (let _callId of callIds) {
+                const _call = this.calls[_callId]
+                if (_callId !== sourceCall.id) {
+                    _call.setState({transfer: {active: false, type: 'accept'}})
+                    // Hold all other ongoing calls.
+                    if (!['create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
+                        _call.hold()
+                    }
+                }
+            }
+        } else {
+            // Disable transfer mode.
+            if (sourceCall.id) {
+                sourceCall.setState({transfer: {active: false, type: 'attended'}})
+                sourceCall.unhold()
+            }
+            // Set the correct state of all other calls; se the transfer
+            // type to accept and disable transfer modus..
+            for (let _callId of callIds) {
+                const _call = this.calls[_callId]
+                if (_callId !== sourceCall.id) {
+                    this.calls[_callId].setState({transfer: {active: false, type: null}})
+                    // Make sure all other ongoing calls stay on hold.
+                    if (!['create', 'invite'].includes(_call.state.status) && !_call.state.hold) {
+                        _call.hold()
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -1,10 +1,39 @@
 <component class="c-keypad t-keypad" tabindex="-1">
 
+    <header class="content__header header">
+        <div class="header__filters">
+            <FieldRadio
+                v-model="description.protocol"
+                elementclass="t-rd-calls-protocol"
+                class="header__filter"
+                name="protocol"
+                :options="protocols"
+            />
+        </div>
+
+        <span class="header__text">{{$t('calling')}}</span>
+        <div class="header__actions">
+            <button v-if="description.protocol === 'sig11'"
+                class="header__action"
+                :class="{'active': sig11.network.view}"
+                @click.stop="toggleNodeView()"
+            >
+                <icon name="nodes"/>
+            </button>
+        </div>
+    </header>
+
+
+    <Network v-if="description.protocol === 'sig11' && sig11.network.view"/>
+
+    <template v-else>
+
     <div class="c-keypad__input">
         <input
             v-bind:value="number"
             v-on:input="inputChange($event.target.value)"
             autocomplete="off"
+            class="t-keypad__input"
             name="number-input"
             placeholder="..."
             ref="input"
@@ -64,4 +93,6 @@
             <button class="c-keypad__key function t-btn-keypad-#" @mousedown="press('#')">#</button>
         </div>
     </div>
+
+    </template>
 </component>

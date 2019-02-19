@@ -1,14 +1,15 @@
 <component class="c-sig11 t-sig11">
-    <header class="c-wizard__header">{{$t('your number')}}</header>
+    <header class="c-wizard__header">{{$t('choose your number')}}</header>
 
     <div class="c-wizard__description">
 
-        {{$t('{name} introduces free, secure and privacy-friendly audio and video web telephony to and from any number on a decentralized phone network.', {name: app.name}).ca()}}
-        {{$t('choose any number that people can use to call you.').ca()}}
+        {{$t('{name} introduces free, secure and privacy-friendly audio and video web telephony to and from any number.', {name: app.name}).ca()}}
+        {{$t('choose your display name and the number that people can use to call you.').ca()}}
         <br/><br/>
 
         <FieldText
             v-model="sig11.identity.name"
+            elementclass="t-txt-sig11-name"
             name="sig11_name"
             :help="$t('this name identifies you to callees.')"
             :label="$t('display name')"
@@ -16,6 +17,7 @@
 
         <FieldText
             v-model="sig11.identity.number"
+            elementclass="t-txt-sig11-number"
             name="sig11_number"
             :help="$t('a number on the network that people can call you on.')"
             :label="`SIG11 ${$t('number')}`"
@@ -26,13 +28,13 @@
 
     <div class="buttons is-centered stretched" v-if="selected.ready !== null">
         <button
-            class="button button--widget t-btn-welcome-cancel"
+            class="button button--widget t-btn-sig11-cancel"
             @click="stepBackFirst()"
         >
             {{$t('cancel')}}
         </button>
         <button
-            class="button button--widget is-primary t-btn-welcome-next"
+            class="button button--widget is-primary t-btn-sig11-next"
             @click="updateIdentity()"
         >{{$t('next')}}</button>
     </div>

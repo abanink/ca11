@@ -70,7 +70,7 @@ class PluginSettings extends Plugin {
                             local: true,
                             muted: false,
                             ready: false,
-                            selected: true,
+                            selected: false,
                         },
                     },
                     type: {

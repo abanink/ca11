@@ -13,13 +13,12 @@ module.exports = (app) => {
                 if (call) {
                     app.emit('caller:call-activate', {
                         callId: call.id,
-                        holdInactive: false,
+                        holdInactive: true,
                         unholdActive: false,
                     })
                 } else {
                     app.emit('caller:call-activate', {callId: null})
                 }
-
             },
             callIcon: function(call) {
                 if (['answered_elsewhere', 'bye', 'caller_unavailable', 'callee_busy'].includes(call.status)) {
@@ -35,6 +34,12 @@ module.exports = (app) => {
                 if (call.hold.active) text += translations.hold
                 text += translations[call.status]
                 return text.ca()
+            },
+            classes: function(call) {
+                let classes = {}
+                classes.active = call.active
+                classes[`call-${call.protocol}-${call.number}`] = true
+                return classes
             },
             newCallAllowed: function() {
                 let allowed = true

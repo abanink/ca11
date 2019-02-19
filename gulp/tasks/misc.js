@@ -94,8 +94,7 @@ module.exports = function(settings) {
         manifest.description = PACKAGE.description
         manifest.name = PACKAGE.productName
         manifest.short_name = PACKAGE.productName
-        const colors = settings.brands[settings.BRAND_TARGET].colors
-        manifest.theme_color = colors['primary-color']
+        manifest.theme_color = settings.theme.colors['primary-color']
 
         await mkdirp(settings.BUILD_DIR)
         await writeFileAsync(

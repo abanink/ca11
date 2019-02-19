@@ -253,7 +253,6 @@ class Session {
             this.app._setVueWatchers()
             this.app._languagePresets()
             this.app.setState({ui: {layer: 'caller'}}, {encrypt: false, persist: true})
-            this.app.notify({icon: 'contact', message: this.app.$t('welcome back {username}', {username}), type: 'info'})
             this.app.emit('ca11:services')
         } catch (err) {
             // Wrong password, resulting in a failure to decrypt.

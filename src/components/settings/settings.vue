@@ -1,11 +1,10 @@
 <section component class="c-settings t-settings">
 
     <header class="content__header header">
-        <icon class="header__icon" name="settings"/>
 
         <ul class="header__tabs">
             <li
-                class="button tooltip tooltip-bottom"
+                class="button button--menu tooltip tooltip-bottom"
                 :class="classes('tabs', 'general')"
                 :data-tooltip="$t('general')"
                 @click="setTab('settings', 'general')"
@@ -13,7 +12,7 @@
                 <icon name="settings-misc"/>
             </li>
             <li
-                class="button tooltip tooltip-bottom"
+                class="button button--menu tooltip tooltip-bottom"
                 :class="classes('tabs', 'devices')"
                 :data-tooltip="$t('devices')"
                 @click="setTab('settings', 'devices', settings.webrtc.enabled)"
@@ -21,7 +20,7 @@
                 <icon name="headset_mic"/>
             </li>
             <li
-                class="button tooltip tooltip-bottom"
+                class="button button--menu tooltip tooltip-bottom"
                 :class="classes('tabs', 'sig11')"
                 data-tooltip="SIG11"
                 @click="setTab('settings', 'sig11')"
@@ -29,7 +28,7 @@
                 <icon name="protocol-sig11"/>
             </li>
             <li
-                class="button tooltip tooltip-bottom t-tab-sip"
+                class="button button--menu tooltip tooltip-bottom t-tab-sip"
                 :class="classes('tabs', 'sip')"
                 data-tooltip="SIP"
                 @click="setTab('settings', 'sip')"
@@ -135,9 +134,15 @@
                 v-model="sip.toggled"
                 elementclass="t-cb-sip-toggled"
                 name="sip_enabled"
-                :help="$t('calling on SIP network using a VoIP provider.')"
+                :help="$t('calling on the network of a SIP provider.')"
                 :label="`SIP ${$t('network')} (${$t('centralized')})`"
             />
+
+            <div class="sip-disclaimer" v-if="!sip.toggled">
+                <b>{{$t('disclaimer').toUpperCase()}}:</b><br/>
+                {{$t('{name} supports connecting to SIP networks, but {vendor} is not a SIP provider.', {name: app.name, vendor: app.vendor.name}).ca()}}
+                {{$t('in no event will {vendor} be liable for any loss, damage or fraud that may result from using {name} for SIP calling.', {name: app.name, vendor: app.vendor.name}).ca()}}
+            </div>
 
             <FieldText
                 v-if="sip.toggled"

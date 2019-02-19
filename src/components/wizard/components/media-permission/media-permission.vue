@@ -11,12 +11,12 @@
 
         <div class="buttons stretched">
             <button
-                class="button button--widget t-media-permission-back is-left"
+                class="button button--widget t-btn-media-permission-back is-left"
                 @click="stepBack()"
             >{{$t('back')}}</button>
 
             <button
-                class="button button--widget is-primary t-media-permission-next"
+                class="button button--widget is-primary t-btn-media-permission-next"
                 @click="queryDevices()"
                 :disabled="!stepValid"
             >{{$t('next')}}</button>

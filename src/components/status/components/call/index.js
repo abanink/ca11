@@ -17,6 +17,9 @@ module.exports = (app) => {
         props: ['call'],
         render: templates.status_call.r,
         staticRenderFns: templates.status_call.s,
+        store: {
+            description: 'caller.description',
+        },
     }
 
     return Call

@@ -41,6 +41,7 @@ class CA11 extends App {
             this.components = {
                 About: require('../components/about'),
                 Activities: require('../components/activities'),
+                AudioBg: require('../components/audio-bg'),
                 Call: require('../components/call'),
                 Caller: require('../components/caller'),
                 Contacts: require('../components/contacts'),
@@ -58,7 +59,6 @@ class CA11 extends App {
                 Soundmeter: require('../components/soundmeter'),
                 Status: require('../components/status'),
                 Stream: require('../components/stream'),
-                StreamPreview: require('../components/stream-preview'),
                 StreamView: require('../components/stream-view'),
                 Wizard: require('../components/wizard'),
             }

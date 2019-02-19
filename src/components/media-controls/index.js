@@ -1,12 +1,10 @@
 module.exports = (app) => {
-    /**
-    * @memberof fg.components
-    */
+
     const MediaControls = {
+        computed: {
+            callsExist: app.helpers.sharedComputed().callsExist,
+        },
         methods: {
-            /**
-             * Always go the calls layer when clicked.
-             */
             toggleSelect: function() {
                 let selected = this.stream[this.stream.type].selected
                 if (!selected) selected = new Date().getTime()
@@ -21,6 +19,7 @@ module.exports = (app) => {
         render: templates.media_controls.r,
         staticRenderFns: templates.media_controls.s,
         store: {
+            calls: 'caller.calls',
             stream: 'settings.webrtc.media.stream',
         },
     }

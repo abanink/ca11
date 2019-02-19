@@ -6,15 +6,18 @@
 >
 
     <header>
+
+        <icon name="caller" class="c-login__logo"/>
         <div class="c-login__title">
             {{$t('welcome to {name}', {name: app.name})}}
         </div>
 
-        <icon name="logo" class="c-login__logo"/>
+
 
         <div class="c-login__slogan">
-            {{$t('free calling')}}<br/>
-            {{$t('open communication')}}<br/>
+            <transition name="slogan" appear>
+                <div v-if="slogans[currentSlogan].show" :key="slogans[currentSlogan].id">{{slogans[currentSlogan].phrase}}</div>
+            </transition>
         </div>
     </header>
 
@@ -38,7 +41,7 @@
             elementclass="t-txt-session-pw"
             name="session-pw"
             :autofocus="true"
-            :help="$t('a password that will unlock your phone.')"
+            :help="$t('a password to secure your phone with.')"
             :label="$t('phone password')"
             :placeholder="$t('secret password')"
             :validation="$v.password"

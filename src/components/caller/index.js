@@ -22,26 +22,19 @@ module.exports = (app) => {
                 }
                 return classes
             },
-            toggleNodeView: function() {
-                app.setState({sig11: {
-                    network: {view: !this.sig11.network.view}},
-                }, {persist: true})
-            },
         }, app.helpers.sharedMethods()),
         render: templates.caller.r,
         staticRenderFns: templates.caller.s,
         store: {
             calls: 'caller.calls',
             description: 'caller.description',
-            sig11: 'sig11',
-            sip: 'sip',
             stream: 'settings.webrtc.media.stream',
             ui: 'ui',
         },
         watch: {
             'description.protocol': function(protocol) {
                 app.setState({caller: {description: {
-                    endpoint: '',
+                    number: '',
                     protocol,
                 }}}, {persist: true})
             },

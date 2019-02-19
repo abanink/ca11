@@ -2,7 +2,6 @@ module.exports = (app) => {
     const components = {
         CallOptions: require('./components/options'),
         CallTransfer: require('./components/transfer'),
-        Dialer: require('./components/dialer'),
         Keypad: require('./components/keypad'),
     }
 

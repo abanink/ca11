@@ -16,7 +16,7 @@ module.exports = (app, shared) => {
             generatePhonenumber: function() {
                 const min = 1100000000
                 const max = 1199999999
-                return Math.floor(Math.random() * (max - min) + min)
+                return String(Math.floor(Math.random() * (max - min) + min))
             },
             updateIdentity: function() {
                 app.setState({sig11: {identity: this.sig11.identity}}, {persist: true})

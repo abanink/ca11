@@ -1,9 +1,8 @@
 <section component class="c-about content">
 
     <header class="content__header header">
-         <icon class="header__icon" name="help"/>
          <div class="header__filters"></div>
-         <div class="header__text">{{app.name}} {{app.version.current}}</div>
+         <div class="header__text">{{app.name}} {{app.version.current}} | &copy; Garage11</div>
          <div class="header__actions"></div>
     </header>
 
@@ -14,7 +13,7 @@
                 class="support-item"
                 @click="openTab(vendor.support.website)"
             >
-                <div class="support-item__icon"><icon name="help"/></div>
+                <div class="support-item__icon"><icon name="about"/></div>
                 <div class="support-item-l">
                     <div class="support-item__title cf">{{$t('need help?')}}</div>
                     <div class="support-item__description cf">

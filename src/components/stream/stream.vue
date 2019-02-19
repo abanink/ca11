@@ -8,23 +8,23 @@
     <icon v-else name="spinner" class="spinner c-stream__icon" />
 
     <audio
-        v-if="stream.id && stream.kind === 'audio'"
+        v-show="stream.id && stream.kind === 'audio'"
         autoplay="true"
         muted="true"
         ref="audio"
     />
 
     <video
-        v-else-if="stream.id && stream.kind === 'video'"
+        v-show="stream.id && stream.kind === 'video'"
         autoplay="true"
-        :muted="stream.muted || stream.kind !== 'video'"
+        :muted="stream.muted"
         ref="video"
     />
 
     <video
-        v-else-if="stream.id && stream.kind === 'display'"
+        v-show="stream.id && stream.kind === 'display'"
         autoplay="true"
-        :muted="stream.muted || stream.kind !== 'display'"
+        :muted="stream.muted"
         ref="display"
     />
 

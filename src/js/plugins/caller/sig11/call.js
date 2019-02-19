@@ -76,6 +76,8 @@ class CallSIG11 extends Call {
         delete this.candidates
         // Triggers ICE negotiation.
         await this.pc.setLocalDescription(answer)
+
+        // Ask the endpoint about the number.
         await this.app.sig11.emit(this.node.id, 'call-answer', {
             answer: answer.sdp,
             callId: this.id,

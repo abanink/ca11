@@ -1,12 +1,16 @@
 <nav component class="c-menu">
     <div class="options">
 
+        <div class="layer-topic">
+            <icon :name="layer"/>
+        </div>
+
         <button
             class="button button--menu c-menu__option t-btn-menu-activity tooltip tooltip-right"
             :class="classes('activities')"
-            :data-tooltip="$t('activities')"
+            :data-tooltip="$t('activity')"
             @click="setLayer('activities')"
-        ><icon name="recent"/></button>
+        ><icon name="activities"/></button>
 
         <button
             class="button button--menu c-menu__option t-btn-menu-contacts tooltip tooltip-right"
@@ -16,11 +20,11 @@
         ><icon name="contacts"/></button>
 
         <button
-            class="button button--menu c-menu__option t-btn-menu-calls tooltip tooltip-right"
+            class="button button--menu c-menu__option t-btn-menu-caller tooltip tooltip-right"
             :class="classes('caller')"
-            :data-tooltip="$t('caller')"
+            :data-tooltip="$t('calling')"
             @click="setLayer('caller')"
-        ><icon name="phone"/></button>
+        ><icon name="caller"/></button>
 
         <button
             v-if="plugin.menubarIcon"

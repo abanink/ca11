@@ -40,8 +40,11 @@
                         "password": "testing"
                     },
                     "sip": {
-                        "username": "1000",
+                        "number": "1000",
                         "password": "unsecurepassword"
+                    },
+                    "sig11": {
+                        "number": "1100000001"
                     }
                 },
                 "bob": {
@@ -50,8 +53,11 @@
                         "password": "testing"
                     },
                     "sip": {
-                        "username": "2000",
+                        "number": "2000",
                         "password": "unsecurepassword"
+                    },
+                    "sig11": {
+                        "number": "1100000002"
                     }
                 },
                 "charlie": {
@@ -60,8 +66,11 @@
                         "password": "testing"
                     },
                     "sip": {
-                        "username": "3000",
+                        "number": "3000",
                         "password": "unsecurepassword"
+                    },
+                    "sig11": {
+                        "number": "1100000003"
                     }
                 },
                 "headless": false,

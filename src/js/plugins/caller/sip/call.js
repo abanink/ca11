@@ -16,6 +16,7 @@ class CallSIP extends Call {
     */
     constructor(app, description) {
         super(app, description)
+
         this.state.protocol = 'sip'
 
         // Created from an invite means that the session is
@@ -31,7 +32,7 @@ class CallSIP extends Call {
             // Passing in no target or a number means an outgoing call.
             app._mergeDeep(this.state, {
                 direction: 'outgoing',
-                endpoint: description.number,
+                number: description.number,
                 status: 'new',
             })
         }
@@ -125,7 +126,7 @@ class CallSIP extends Call {
             // is added.
             setTimeout(() => {
                 this.state.name = session.assertedIdentity.uri.user
-                this.state.endpoint = session.assertedIdentity.uri.user
+                this.state.number = session.assertedIdentity.uri.user
             }, 0)
         })
     }
@@ -139,21 +140,21 @@ class CallSIP extends Call {
     onTrack(e) {
         let stream = e.streams[0]
 
-        // Assume the audio track of the stream is always added first.
-        // There is only one audio track in each call. Add this track
-        // to all video tracks.
+        // The audio track of the stream is always added first.
+        // There is only one audio track in each call.
         if (e.track.kind === 'audio') {
-            this.audiostream = stream
+            this.audioTrackEvent = e
             // The video track from Asterisk sharing the same stream id
-            // as the audio is not an active video stream and should
-            // not be added to the scene.
+            // as the audio is not an active video stream and is removed
+            // from the scene.
             stream.getVideoTracks().forEach((t) => {
                 stream.removeTrack(t)
             })
-
-            this.addStream(stream, 'audio')
+            // Add an invisible audio stream.
+            this.addStream(stream, 'audio', false)
         } else {
-            if (this.audiostream.id !== stream.id) {
+            if (this.audioTrackEvent.streams[0].id !== stream.id) {
+                stream.addTrack(this.audioTrackEvent.track)
                 this.addStream(stream, 'video')
             }
         }
@@ -161,7 +162,9 @@ class CallSIP extends Call {
         const path = `caller.calls.${this.id}.streams.${stream.id}`
         e.track.onunmute = () => {this.app.setState({muted: false}, {path})}
         e.track.onmute = () => {this.app.setState({muted: true}, {path})}
-        e.track.onended = () => {this._cleanupStream(stream.id)}
+        e.track.onended = () => {
+            this._cleanupStream(stream.id)
+        }
     }
 
 
@@ -170,7 +173,7 @@ class CallSIP extends Call {
     */
     outgoing() {
         super.outgoing()
-        const uri = `sip:${this.state.endpoint}@${this.app.state.sip.endpoint.split('/')[0]}`
+        const uri = `sip:${this.state.number}@${this.app.state.sip.endpoint.split('/')[0]}`
         this.session = this.app.sip.ua.invite(uri, {
             sessionDescriptionHandlerOptions: {
                 constraints: this.app.media._getUserMediaFlags(),
@@ -220,10 +223,10 @@ class CallSIP extends Call {
             setTimeout(() => {
                 if (session.assertedIdentity) {
                     this.state.name = session.assertedIdentity.uri.user
-                    this.state.endpoint = session.assertedIdentity.uri.user
+                    this.state.number = session.assertedIdentity.uri.user
                 } else {
                     this.state.name = session.remoteIdentity.uri.user
-                    this.state.endpoint = session.remoteIdentity.uri.user
+                    this.state.number = session.remoteIdentity.uri.user
                 }
             }, 0)
         })

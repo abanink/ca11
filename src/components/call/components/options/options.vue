@@ -1,5 +1,4 @@
 <component class="c-options">
-
     <button
         v-if="!call.id && ui.layer === 'caller'"
         :disabled="!description.number"
@@ -17,7 +16,7 @@
 
     <button
         v-if="call.id && callCanTerminate"
-        class="button button--menu c-options__option t-btn-options-call-stop tooltip tooltip-left"
+        class="button button--menu c-options__option t-btn-options-call-hangup tooltip tooltip-left"
         :data-tooltip="$t('end call')"
         @click="callTerminate(call)"
     ><icon name="call-end"/></button>
@@ -28,7 +27,7 @@
         v-if="call.protocol === 'sip'"
         class="button button--menu c-options__option tooltip tooltip-left"
         :class="classes('dialpad-button')"
-        :data-tooltip="$t('toggle keypad')"
+        :data-tooltip="$t('keypad')"
         :disabled="call.status !== 'accepted' || call.transfer.active"
         @click="keypadToggle"
     ><icon name="dialpad"/></button>
@@ -36,7 +35,7 @@
     <button
         class="button button--menu c-options__option tooltip tooltip-left"
         :class="classes('hold-button')"
-        :data-tooltip="$t('toggle on-hold')"
+        :data-tooltip="$t('on hold')"
         :disabled="call.status !== 'accepted'"
         @click="holdToggle"
     ><icon name="pause"/></button>
@@ -45,8 +44,8 @@
         v-if="call.protocol === 'sip' && call.transfer.type !== 'accept'"
         class="button button--menu c-options__option t-btn-options-transfer-toggle button tooltip tooltip-left"
         :class="classes('transfer-button')"
-        :data-tooltip="$t('toggle transfer')"
-        :disabled="call.status !== 'accepted'"
+        :data-tooltip="$t('transfer {number}', {number: call.number})"
+        :disabled="transferDisabled"
         @click="transferToggle"
     ><icon name="transfer"/></button>
 

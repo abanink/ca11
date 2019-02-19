@@ -13,7 +13,7 @@
             :class="{active: layer === 'about'}"
             :data-tooltip="$t('about {name}', {name: app.name})"
             @click="setLayer('about')"
-        ><icon name="help"/></button>
+        ><icon name="about"/></button>
 
         <Dnd class="c-status-menu__option dnd-switch" />
     </div>
@@ -48,9 +48,9 @@
         </button>
 
         <button
-            class="button c-status-menu__option tooltip tooltip-left"
+            class="button button--menu c-status-menu__button tooltip tooltip-left"
             @click="logout"
-            :data-tooltip="$t('quit session')"
+            :data-tooltip="$t('quit')"
         >
             <icon name="logout"/>
         </button>

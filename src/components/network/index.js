@@ -35,7 +35,6 @@ module.exports = (app) => {
         },
         methods: {
             classes(block, entity) {
-
                 const classes = {}
                 if (block === 'node') {
                     classes.headless = entity.headless

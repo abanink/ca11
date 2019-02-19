@@ -1,16 +1,15 @@
-<aside component="media-controls" class="c-media-controls">
-
+<component class="c-media-controls">
     <Stream
+        v-if="!callsExist"
         :controls="false"
         :stream="stream[stream.type]"
         class="local"
         @click="toggleSelect"
     />
 
-    <CallsSwitcher :call="callActive"/>
+    <CallsSwitcher/>
 
-    <!-- A preview of the current local stream -->
     <div class="c-media-controls__bar">
         <CallOptions :call="call"/>
     </div>
-</aside>
+</component>

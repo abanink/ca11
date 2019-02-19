@@ -9,6 +9,16 @@ module.exports = (app) => {
                 if (!['accepted', 'create', 'invite'].includes(this.call.status)) return false
                 return true
             },
+            // Requires two active sip calls.
+            transferDisabled: function() {
+                let transferTargets = 0
+                for (const call of Object.values(this.calls)) {
+                    if (call.protocol === 'sip' && call.status === 'accepted') {
+                        transferTargets += 1
+                    }
+                }
+                return transferTargets < 2
+            },
         },
         methods: Object.assign({
             callAccept: function(call) {
@@ -65,6 +75,7 @@ module.exports = (app) => {
         render: templates.call_options.r,
         staticRenderFns: templates.call_options.s,
         store: {
+            calls: 'caller.calls',
             description: 'caller.description',
             ui: 'ui',
         },

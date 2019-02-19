@@ -1,8 +1,6 @@
 <section component class="c-contacts content">
 
     <header class="content__header header">
-        <icon class="header__icon" name="contacts"/>
-
         <div class="header__filters">
             <button
                 class="header__filter tooltip tooltip-bottom"
