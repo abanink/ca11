@@ -24,7 +24,7 @@
         </li>
         <li class="instruction">
             <div class="instruction__image">
-                <img src="/screens/alice-wizard-protocol-handler.png"/>
+                <img src="/screens/alice-wizard-click-to-dial.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
@@ -35,28 +35,17 @@
             </div>
         </li>
 
-
-        <li class="instruction">
-            <div class="instruction__image">
-                <img src="/screens/alice-wizard-media-permission.png"/>
-            </div>
-            <div class="instruction__counter"></div>
-            <div class="instruction__text">
-            This step checks if {{app.name}} has permission to use
-            the microphone and webcam of your computer. Check the browser
-            navigation bar in case it indicates no permission.
-            </div>
-        </li>
-
         <li class="instruction">
             <div class="instruction__image">
                 <img src="/screens/alice-wizard-devices.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            You are likely to have a separate Bluetooth/USB headset installed.
-            In the Device setup, you can assign devices to several tasks, like
-            on which device the Ringtone should play.
+                This step is to give permission to use your audio device and
+                to setup audio. You are likely to have a separate Bluetooth/
+                USB headset installed. In the Device setup, you can assign
+                devices to several tasks, like on which device the Ringtone
+                should play.
             </div>
         </li>
         <li class="instruction">

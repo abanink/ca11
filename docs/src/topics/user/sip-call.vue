@@ -31,7 +31,7 @@
     <ol class="instructions steps">
         <li class="instruction">
             <div class="instruction__image">
-                <img src="/screens/alice-enable-sip.png"/>
+                <img src="/screens/alice-sip-enabled.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
@@ -43,7 +43,7 @@
         </li>
         <li class="instruction">
             <div class="instruction__image">
-                <img src="/screens/alice-dialing-bob.png"/>
+                <img src="/screens/alice-call-sip-setup-bob.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
@@ -57,7 +57,7 @@
 
         <li class="instruction">
             <div class="instruction__image">
-                <img src="/screens/alice-calling-bob.png"/>
+                <img src="/screens/alice-call-sip-talking-bob.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
@@ -69,7 +69,7 @@
 
         <li class="instruction">
             <div class="instruction__image">
-                <img src="/screens/bob-calling-with-alice.png"/>
+                <img src="/screens/bob-call-sip-talking-alice.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">

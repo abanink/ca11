@@ -45,42 +45,25 @@
 
     <h2>Transfer [SIP]</h2>
     <p>
-
         Charlie is still on the phone with Bob; who just solved Charlie's
         financial perils. Besides, Charlie also has complaints about a
         malfunctioning internet router, that he leases from Acme Corporation.
-        <img class="illustration right shadow" src="/screens/bob-transfers-alice-to-charlie-attended.png"/>
+        <img class="illustration right shadow" src="/screens/bob-call-sip-transfer-init-alice-charlie.png"/>
         <br/><br/>
 
         Bob explains that he can transfer Charlie to the technical support
         division, so someone like Alice can further help Charlie.
         Bob presses the <em>Toggle Transfer</em> button, which puts the call
         on hold and opens the Transfer dialog.
+
+        He types Alice her internal number in the phonenumber input and presses
+        the Call button. Alice picks up Bob's incoming call. Bob explains
+        Charlie's situation to Alice and asks her to take over the call.
+        Bob presses the <em>Finalize Transfer</em> button. Charlie is now
+        calling with Alice. Bob's calls to Alice and Charlie are automatically
+        ended.
     </p>
 
-    <div class="columns">
-        <div class="column">
-            <h3>Attended transfer</h3>
-            <p>
-                He types Alice her internal number in the phonenumber input and presses
-                the Call button. Alice picks up Bob's incoming call. Bob explains
-                Charlie's situation to Alice and asks her to take over the call.
-                Bob presses the <em>Finalize Transfer</em> button. Charlie is now
-                calling with Alice. Bob's calls to Alice and Charlie are automatically
-                ended.
-            </p>
-        </div>
-        <div class="column">
-            <h3>Blind transfer</h3>
-            <p>
-                Bob has a train to catch and doesn't think he need to explain Charlie's
-                situation to Alice first. He types Alice her internal number in the
-                phonenumber input and presses the Call button. Alice's phone is ringing,
-                she picks up the phone and gets Charlie on the line, without any prior
-                context. Not advisable in most situations!
-            </p>
-        </div>
-    </div>
     <h2>Mute microphone [SIP, SIG11]</h2>
     <p>
         Alice stumbled in a call with Charlie, after Charlie was blindly transferred by

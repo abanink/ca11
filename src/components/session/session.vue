@@ -6,13 +6,12 @@
 >
 
     <header>
-
-        <icon name="caller" class="c-login__logo"/>
-        <div class="c-login__title">
-            {{$t('welcome to {name}', {name: app.name})}}
-        </div>
-
-
+        <a target="_blank" href="https://docs.ca11.io">
+            <icon name="caller" class="c-login__logo"/>
+            <div class="c-login__title">
+                {{app.name}}
+            </div>
+        </a>
 
         <div class="c-login__slogan">
             <transition name="slogan" appear>
@@ -118,11 +117,10 @@
     </div>
 
     <footer class="footer" >
-        <div class="footer__docs"  @click="openTab(vendor.support.website)">
-            <icon name="school"/><br/>{{$t('about {name}', {name: app.name})}}
-        </div>
         <div class="footer__version">
-            <a target="_blank" href="https://github.com/garage11/ca11">{{app.version.current}}</a>
+            <a target="_blank" href="https://github.com/garage11/ca11">{{app.name}} {{app.version.current}}</a>
+            &#8226;
+            <a target="_blank" href="https://garage11.tech">&copy; Garage11</a>
         </div>
     </footer>
 </section>

@@ -10,8 +10,8 @@ module.exports = function(_) {
             await callee.page.waitFor('.t-st-caller-ongoing')
             await caller.page.waitFor('.t-st-caller-ongoing')
 
-            await _.screenshot(caller, `call-talking-${callee.session.username}`)
-            await _.screenshot(callee, `call-talking-${caller.session.username}`)
+            await _.screenshot(caller, `call-${protocol}-talking-${callee.session.username}`)
+            await _.screenshot(callee, `call-${protocol}-talking-${caller.session.username}`)
         },
         callActor: async function(caller, callee, {inCall = false, protocol}) {
             await _.step(caller, `calls ${callee.session.username}`)

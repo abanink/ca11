@@ -153,7 +153,6 @@ module.exports = {
     'unlock phone': 'ontgrendel telefoon',
     'use a headset or earbuds for better sound quality': 'gebruik een koptelefoon of oordopjes voor beter geluid',
     'video conferencing': 'video conferencing',
-    'welcome to {name}': 'welkom bij {name}',
     'what is wrong?': 'wat is er mis?',
     'yesterday': 'gisteren',
     'you can also change your decision later from Settings.': 'je kunt je keuze ook later aanpassen vanuit Instellingen.',

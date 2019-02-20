@@ -3,9 +3,9 @@
     <h2>Installation</h2>
     <p>
         <img class="illustration right" src="/img/illustration-2.jpg"/>
-        {{app.name}} is a Progressive Web App (PWA). This means that you can start
+        {{app.name}} is a PWA (Progressive Web App), which means that you can start
         using {{app.name}} as soon you open <a :href="vendor.website">{{app.name}}</a>
-        in your browser. You can extend this to an app-like experience, by adding {{app.name}}
+        in the browser. You can change to an app-like experience, by adding {{app.name}}
         to your homescreen, using the <em>Add to homescreen</em> option in Chrom(e/ium).
         The {{app.name}} web app can be installed on the following platforms with a
         pre-installed Chrom(e/ium) browser: Android, ChromeOS, Linux, OSX and Windows.

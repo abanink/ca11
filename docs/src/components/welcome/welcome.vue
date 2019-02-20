@@ -4,8 +4,8 @@
         <img class="illustration right" src="/img/illustration-1.jpg"/>
         {{app.name}} is a new P2P Web Telephony platform, introducing <b>free</b>,
         <b>accessable</b> and <b>privacy-friendly</b> calling on the internet;
-        to and from any number! Choose your own free <em>SIG11 number</em> and start
-        taking calls and call others right away! No need for an account.
+        to and from any number or name! Choose your own free <em>Caller Identity</em> and start
+        taking calls and call others right away. No need for an account.
         {{app.name}} opens up a direct, private communication channel between
         you and your calling website visitors, customers, clients, colleagues,
         friends and family. All you need is a modern browser. Do you know you
