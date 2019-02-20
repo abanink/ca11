@@ -1,16 +1,22 @@
 <component class="c-sidebar">
     <header class="header">
         <div class="header__logo">
+
             <router-link to="/">
+                <icon name="logo-o"/>
                 <div class="header__title">CA11</div>
-                <icon name="logo"/>
+                <div class="header__description">
+                    <transition name="slogan" appear>
+                        <div v-if="slogans[currentSlogan].show" :key="slogans[currentSlogan].id">{{slogans[currentSlogan].phrase}}</div>
+                    </transition>
+                </div>
             </router-link>
         </div>
+
+
+
         <div class="header__version">{{version.current}}</div>
 
-        <div class="header__description">
-            Free Communication<br/>To Everyone
-        </div>
     </header>
     <nav class="navigation">
         <div class="l-accordion navigation__user">

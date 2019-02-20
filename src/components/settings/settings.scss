@@ -9,6 +9,10 @@
         border: 1px solid var(--grey-50);
     }
 
+    .tip {
+        display: none;
+    }
+
     // The switch is disabled, but use more opacity to indicate
     // that it's value is set from the browser.
     .webrtc-switch {

@@ -16,16 +16,16 @@ module.exports = function(_) {
             await page.click('.t-btn-sig11-next')
 
             // 2. Click-to-dial Protocol handler
-            await page.waitFor('.t-protocol-handler')
-            await _.screenshot(actor, 'wizard-protocol-handler', {only: 'alice'})
-            await page.click('.t-btn-protocol-handler-next')
+            await page.waitFor('.t-click-to-dial')
+            await _.screenshot(actor, 'wizard-click-to-dial', {only: 'alice'})
+            await page.click('.t-btn-click-to-dial-next')
 
-            // 3. Media Permissions
-            await page.waitFor('.t-media-permission')
-            await _.screenshot(actor, 'wizard-media-permission', {only: 'alice'})
-            await page.click('.t-btn-media-permission-next')
+            // // 3. Media Permissions
+            // await page.waitFor('.t-media-permission')
+            // await _.screenshot(actor, 'wizard-media-permission', {only: 'alice'})
+            // await page.click('.t-btn-media-permission-next')
 
-            // 4. Devices
+            // 3. Devices
             await page.waitFor('.t-devices')
             await page.waitFor('.t-sel-headset-input .option')
             await _.screenshot(actor, 'wizard-devices', {only: 'alice'})
@@ -36,7 +36,7 @@ module.exports = function(_) {
             ])
             await page.click('.t-btn-devices-next')
 
-            // 5. Telemetry consent
+            // 4. Telemetry consent
             await page.waitFor('.t-telemetry')
             await _.screenshot(actor, 'wizard-telemetry', {only: 'alice'})
             await page.click('.t-btn-telemetry-next-yes')

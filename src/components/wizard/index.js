@@ -22,9 +22,8 @@ module.exports = (app) => {
     }
 
     const components = {
+        WizardClickToDial: require('./components/click-to-dial'),
         WizardDevices: require('./components/devices'),
-        WizardMediaPermission: require('./components/media-permission'),
-        WizardProtocolHandler: require('./components/protocol-handler'),
         WizardSig11: require('./components/sig11'),
         WizardTelemetry: require('./components/telemetry'),
     }
@@ -39,11 +38,12 @@ module.exports = (app) => {
     const Wizard = {
         computed: app.helpers.sharedComputed(),
         created: function() {
-            // Protocol handling is not supported on Android.
+            // Click-to-dial step is excluded on Android, because protocol
+            // handlers are not supported on that platform.
             if (app.env.isAndroid) {
                 app.setState({
                     settings: {wizard: {steps: {
-                        options: this.steps.options.filter((step) => step.name !== 'WizardProtocolHandler'),
+                        options: this.steps.options.filter((step) => step.name !== 'WizardClickToDial'),
                     }}},
                 }, {persist: true})
             }

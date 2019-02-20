@@ -306,7 +306,6 @@ class App extends Skeleton {
         notification.id = shortid.generate()
         let notifications = this.state.app.notifications
         notifications.push(notification)
-        navigator.vibrate(250)
         this.setState({app: {notifications}})
     }
 

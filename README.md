@@ -9,7 +9,7 @@
     git clone git@github.com:garage11/ca11.git
     cd ca11
     yarn
-    gulp develop
+    gulp build develop
 
 
 # Resources

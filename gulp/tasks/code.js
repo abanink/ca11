@@ -104,6 +104,7 @@ module.exports = function(settings) {
             VENDOR_SUPPORT_EMAIL: brand.vendor.support.email,
             VENDOR_SUPPORT_PHONE: brand.vendor.support.phone,
             VENDOR_SUPPORT_WEBSITE: brand.vendor.support.website,
+            VENDOR_WEBSITE: brand.vendor.website,
             VERSION: settings.PACKAGE.version,
         })
     }

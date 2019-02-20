@@ -14,6 +14,11 @@
     padding: $spacer * 3;
     width: 100%;
 
+    .field {
+        text-align: left;
+        width: 100%;
+    }
+
     &__header {
         color: var(--primary-base);
         font-family: 'Rajdhani';
@@ -25,7 +30,9 @@
 
     &__description {
         color: var(--grey-300);
-        text-align: center;
+        line-height: 1.5rem;
+        text-align: justify;
+        text-align-last: center;
     }
 
     &__help {

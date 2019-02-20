@@ -1,7 +1,7 @@
 module.exports = (app, shared) => {
-    /**
-    * @memberof fg.components
-    */
+
+    const v = Vuelidate.validators
+
     const WizardSig11 = {
         computed: app.helpers.sharedComputed(),
         created: function() {
@@ -31,6 +31,24 @@ module.exports = (app, shared) => {
             options: 'settings.wizard.steps.options',
             selected: 'settings.wizard.steps.selected',
             sig11: 'sig11',
+        },
+        validations: function() {
+            let validations = {
+                sig11: {
+                    identity: {
+                        name: {
+                            minLength: v.minLength(3),
+                            required: v.required,
+                        },
+                        number: {
+                            minLength: v.minLength(3),
+                            required: v.required,
+                        },
+                    },
+                },
+            }
+
+            return validations
         },
     }
 

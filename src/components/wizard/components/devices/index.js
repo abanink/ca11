@@ -3,11 +3,11 @@ module.exports = (app, shared) => {
     * @memberof fg.components
     */
     const WizardDevices = {
-        beforeMount: function() {
-            if (!this.devices.input.length || !this.devices.output.length) {
-                app.devices.verifySinks()
-            }
-        },
+        // beforeMount: function() {
+        //     if (!this.devices.input.length || !this.devices.output.length) {
+        //         app.devices.verifySinks()
+        //     }
+        // },
         computed: Object.assign({
             stepValid: function() {
                 return this.media.permission
@@ -22,6 +22,9 @@ module.exports = (app, shared) => {
                 this.stepNext()
             },
         }, shared().methods),
+        mounted: function() {
+            app.media.poll()
+        },
         render: templates.wizard_devices.r,
         staticRenderFns: templates.wizard_devices.s,
         store: {

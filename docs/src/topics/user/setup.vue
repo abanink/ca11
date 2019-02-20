@@ -1,33 +1,48 @@
 <component class="c-page">
-    <h1>Initial Setup</h1>
+    <h1>Quick Setup</h1>
     <p>
-        CA11 shows you a wizard welcome screen<i class="instruction__ref">1</i>
-        just after you started a new session. This wizard guides you through
-        the minimal amount of setup steps to make your first SIG11 call. SIP
-        calling is currently not part of the wizard, because this requires
-        an account from a compatible VoIP-provider.
+        After starting your {{app.name}} phone with a new session, {{app.name}}
+        will walk you through a few steps to get you up and running. The first step<i class="instruction__ref">1</i>
+        is to choose the number where people can call you on.
     </p>
 
     <ol class="instructions steps">
         <li class="instruction">
             <div class="instruction__image">
-                <img src="/screens/alice-wizard-welcome.png"/>
+                <img src="/screens/alice-wizard-sig11.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            The welcome screen is the landing page of the Wizard.
-            You can decide here to go a step back and close the session
-            if you are not sure if you wish to proceed. Proceed with the
-            wizard if you want to setup CA11.
+            The <em>Display Name</em> and the <em>SIG11 Identifier</em>
+            are what people see on their {{app.name}} phone when you call
+            them. The SIG11 Identifier can be your own phonenumber or any
+            random number you like.
+
+            You can decide from this step to go back and close the session
+            or to proceed to the next step.
             </div>
         </li>
+        <li class="instruction">
+            <div class="instruction__image">
+                <img src="/screens/alice-wizard-protocol-handler.png"/>
+            </div>
+            <div class="instruction__counter"></div>
+            <div class="instruction__text">
+            Open <em>tel:</em> hyperlinks with {{app.name}} is particulary
+            useful when you browse the web and want to open {{app.name}}
+            automatically with the filled number, just by clicking on a number
+            on a webpage.
+            </div>
+        </li>
+
+
         <li class="instruction">
             <div class="instruction__image">
                 <img src="/screens/alice-wizard-media-permission.png"/>
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            This wizard step checks if {{app.name}} has permission to use
+            This step checks if {{app.name}} has permission to use
             the microphone and webcam of your computer. Check the browser
             navigation bar in case it indicates no permission.
             </div>
@@ -39,8 +54,9 @@
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            The welcome is just there to inform you about
-            what is going to happen next.
+            You are likely to have a separate Bluetooth/USB headset installed.
+            In the Device setup, you can assign devices to several tasks, like
+            on which device the Ringtone should play.
             </div>
         </li>
         <li class="instruction">
@@ -49,8 +65,9 @@
             </div>
             <div class="instruction__counter"></div>
             <div class="instruction__text">
-            The welcome is just there to inform you about
-            what is going to happen next.
+                By enabling this option, you allow semi-anonimized bug reports to be
+                sent to an external service for bug tracking. Choose <em>Deny</em> if
+                you're not comfortable with this.
             </div>
         </li>
     </ol>

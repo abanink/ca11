@@ -5,7 +5,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const DeviceControls = {
+    const DevicesConfig = {
         data: function() {
             return {
                 playing: {
@@ -42,8 +42,8 @@ module.exports = (app) => {
         mounted: function() {
             this.$v.$touch()
         },
-        render: templates.device_controls.r,
-        staticRenderFns: templates.device_controls.s,
+        render: templates.devices_config.r,
+        staticRenderFns: templates.devices_config.s,
         store: {
             devices: 'settings.webrtc.devices',
             settings: 'settings',
@@ -115,5 +115,5 @@ module.exports = (app) => {
 
     }
 
-    return DeviceControls
+    return DevicesConfig
 }

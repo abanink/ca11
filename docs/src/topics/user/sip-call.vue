@@ -1,8 +1,27 @@
 <component class="c-page">
-    <h1>SIP Call</h1>
+    <h1>SIP Calls</h1>
     <p>
-        CA11 supports receiving and placing video and audio calls over a VoIP network,
-        using a SIP-over-WSS and WebRTC backend. WebRTC is not supported by all VoIP providers.
+        <b>Disclaimer:</b><br/>
+        <i>
+            {{app.name}} supports calls from and to legacy Telecom networks using the
+            SIP protocol, but the {{vendor.name}} company is not a Telecom provider.
+            In no event will {{vendor.name}} be liable for any loss, damage or fraud
+            that might result from using {{app.name}} with a third-party SIP service.
+        </i>
+    </p>
+    <p>
+        Enabling {{app.name}}'s SIP feature enhances your call reach to traditional
+        telephony networks. You can basically call and be called  by anything from
+        a landline, to a mobile, a service number or any device that communicates
+        using the SIP protocol. Please note that, in comparison to SIG11 calls,
+        SIP calls are only encrypted between you and your SIP service provider.
+        SIG11 calls are end-to-end encrypted between you and your callee/caller.
+    </p>
+    <p>
+        Please note that most VoIP providers don't support WebRTC yet. {{app.name}}'s
+         A compatible
+        VoIP provider needs to support SIP-over-WSS and
+        depends on
         Ask your VoIP provider when you're not sure about WebRTC support, or setup
         <router-link :to="{name: 'view_developer_topic', params: {topic_id: 'asterisk'}}">your own PBX</router-link>
         if you have a technical background. SIP integration needs to be manually enabled from the

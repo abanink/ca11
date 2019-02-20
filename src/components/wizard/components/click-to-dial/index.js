@@ -2,18 +2,16 @@ module.exports = (app, shared) => {
     /**
     * @memberof fg.components
     */
-    const ProtocolHandler = {
+    const ClickToDial = {
         computed: app.helpers.sharedComputed(),
         methods: Object.assign({
             triggerProtocolHandler: function() {
-                this.stepNext()
-                if (app.env.isTest) return
                 if (navigator.unregisterProtocolHandler) navigator.unregisterProtocolHandler('tel', `${document.location.origin}/?%s`, 'CA11')
                 navigator.registerProtocolHandler('tel', `${document.location.origin}/?%s`, 'CA11')
             },
         }, shared().methods),
-        render: templates.wizard_protocol_handler.r,
-        staticRenderFns: templates.wizard_protocol_handler.s,
+        render: templates.wizard_click_to_dial.r,
+        staticRenderFns: templates.wizard_click_to_dial.s,
         store: {
             app: 'app',
             options: 'settings.wizard.steps.options',
@@ -21,5 +19,5 @@ module.exports = (app, shared) => {
         },
     }
 
-    return ProtocolHandler
+    return ClickToDial
 }

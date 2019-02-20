@@ -1,17 +1,22 @@
 <component class="c-page">
-    <h1>Welcome!</h1>
+    <h1>Welcome to {{app.name}}</h1>
     <p>
-        CA11 is a decentralized internet telephony platform for secure free calling.<img class="illustration right" src="/img/illustration-1.jpg"/>
-        Calls are protected with <a href="https://tools.ietf.org/html/rfc5764">standards-based</a>
-        encryption and use high quality
-        <a href="https://www.webmproject.org/vp9/">video</a> and
-        <a href="http://opus-codec.org/">audio</a>.<br/><br/>
-
-        CA11 can also be used to receive and make SIP calls,
-        but this requires an account from a compatible VoIP provider.
-        Calls on a VoIP network have less privacy protection, but have
-        the benefit of making you reachable on a broader range of
-        phone networks. Checkout the <router-link to="/users/requirements">requirements</router-link>
-        to to get started!
+        <img class="illustration right" src="/img/illustration-1.jpg"/>
+        {{app.name}} is a new P2P Web Telephony platform, introducing <b>free</b>,
+        <b>accessable</b> and <b>privacy-friendly</b> calling on the internet;
+        to and from any number! Choose your own free <em>SIG11 number</em> and start
+        taking calls and call others right away! No need for an account.
+        {{app.name}} opens up a direct, private communication channel between
+        you and your calling website visitors, customers, clients, colleagues,
+        friends and family. All you need is a modern browser. Do you know you
+        can also install {{app.name}} as a web app on your desktop?
+    </p>
+    <p>
+        {{app.name}} uses <a href="https://webrtc.org/">WebRTC technology</a>,
+        is protected with <a href="https://tools.ietf.org/html/rfc5764">standards-based</a>
+        encryption and offers the highest possible <a href="http://opus-codec.org/">audio</a>
+        and <a href="https://www.webmproject.org/vp9/">video</a> quality in the industry.
+        Interested? Checkout the <router-link to="/users/requirements">requirements</router-link>
+        to get you started.
     </p>
 </component>

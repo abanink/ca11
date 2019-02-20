@@ -42,6 +42,14 @@
         <!-- General settings -->
         <div class="tab" :class="{active: tabs.active === 'general'}">
             <FieldSelect
+                v-model="language.selected"
+                name="language"
+                :help="$t('language used throughout the application.')"
+                :label="$t('application language')"
+                :options="language.options"
+            />
+
+            <FieldSelect
                 v-model="settings.ringtones.selected"
                 name="ringtone"
                 :label="$t('ringtone')"
@@ -57,14 +65,6 @@
                 </button>
             </FieldSelect>
 
-            <FieldSelect
-                v-model="language.selected"
-                name="language"
-                :help="$t('language used throughout the application.')"
-                :label="$t('application language')"
-                :options="language.options"
-            />
-
             <FieldCheckbox
                 v-model="app.vault.store"
                 name="store_key"
@@ -76,18 +76,14 @@
                 v-model="settings.telemetry.enabled"
                 name="store_key"
                 :help="$t('log anonymized application errors to Sentry in order to improve {name}.', {name: app.name})"
-                :label="$t('exception telemetry')"
+                :label="$t('quality metrics')"
             />
         </div>
 
 
         <!-- Device settings -->
         <div class="tab" :class="{active: tabs.active === 'devices'}">
-            <DeviceControls
-                v-if="media.stream[media.stream.type].id && media.permission"
-                :stream="media.stream[media.stream.type]"
-            />
-            <MediaPermission v-else/>
+            <Devices :stream="media.stream[media.stream.type]"/>
         </div>
 
 
@@ -178,7 +174,7 @@
 
         <div class="tabs-actions">
             <button
-                class="button button--widget t-btn-settings-save"
+                class="button button--widget primary t-btn-settings-save"
                 :disabled="$v.$invalid"
                 @click="save"
             >{{$t('save settings')}}</button>

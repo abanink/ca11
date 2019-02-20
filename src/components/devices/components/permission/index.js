@@ -2,7 +2,7 @@ module.exports = (app) => {
     /**
     * @memberof fg.components
     */
-    const MediaPermission = {
+    const DevicesPermission = {
         beforeDestroy: function() {
             clearInterval(this.intervalId)
         },
@@ -11,16 +11,16 @@ module.exports = (app) => {
         props: {
             soundmeter: {default: true},
         },
-        render: templates.media_permission.r,
-        staticRenderFns: templates.media_permission.s,
+        render: templates.devices_permission.r,
+        staticRenderFns: templates.devices_permission.s,
         store: {
             app: 'app',
             devices: 'settings.webrtc.devices',
             env: 'env',
-            permission: 'settings.webrtc.media.permission',
+            media: 'settings.webrtc.media',
             settings: 'settings',
         },
     }
 
-    return MediaPermission
+    return DevicesPermission
 }

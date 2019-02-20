@@ -37,6 +37,7 @@ class Docs extends App {
             pages: global.pages,
             vendor: {
                 name: process.env.VENDOR_NAME,
+                website: process.env.VENDOR_WEBSITE,
             },
             version: {
                 current: process.env.VERSION,

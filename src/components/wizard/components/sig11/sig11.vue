@@ -1,28 +1,29 @@
 <component class="c-sig11 t-sig11">
-    <header class="c-wizard__header">{{$t('choose your number')}}</header>
+    <header class="c-wizard__header">{{$t('your caller id')}}</header>
 
     <div class="c-wizard__description">
-
-        {{$t('{name} introduces free, secure and privacy-friendly audio and video web telephony to and from any number.', {name: app.name}).ca()}}
-        {{$t('choose your display name and the number that people can use to call you.').ca()}}
+        {{$t('{name} introduces easy, secure and free P2P Web Telephony that protects your privacy.', {name: app.name}).ca()}}
+        {{$t('unlike traditional telephony, you can also choose your own number, or even a name, on which callers may reach you.').ca()}}
         <br/><br/>
-
-        <FieldText
-            v-model="sig11.identity.name"
-            elementclass="t-txt-sig11-name"
-            name="sig11_name"
-            :help="$t('this name identifies you to callees.')"
-            :label="$t('display name')"
-        />
-
-        <FieldText
-            v-model="sig11.identity.number"
-            elementclass="t-txt-sig11-number"
-            name="sig11_number"
-            :help="$t('a number on the network that people can call you on.')"
-            :label="`SIG11 ${$t('number')}`"
-        />
     </div>
+
+    <FieldText
+        v-model="sig11.identity.number"
+        elementclass="t-txt-sig11-number"
+        name="sig11_number"
+        :help="$t('number or name that you want to be reachable on.')"
+        :label="$t('caller identity')"
+        :validation="$v.sig11.identity.number"
+    />
+
+    <FieldText
+        v-model="sig11.identity.name"
+        elementclass="t-txt-sig11-name"
+        name="sig11_name"
+        :help="$t('name that identifies you during calls.')"
+        :label="$t('caller description')"
+        :validation="$v.sig11.identity.name"
+    />
 
     <slot name="progress"></slot>
 
@@ -34,7 +35,8 @@
             {{$t('cancel')}}
         </button>
         <button
-            class="button button--widget is-primary t-btn-sig11-next"
+            class="button button--widget primary t-btn-sig11-next"
+            :disabled="$v.$invalid"
             @click="updateIdentity()"
         >{{$t('next')}}</button>
     </div>

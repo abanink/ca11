@@ -34,7 +34,7 @@
 
             svg {
                 display: none;
-                height: 100px;
+                height: 90px;
                 opacity: 0.3;
             }
         }
@@ -44,8 +44,8 @@
             font-size: 1.5rem;
             font-weight: 600;
             letter-spacing: -2px;
-            margin-top: $spacer-05;
-            position: absolute;
+            margin-top: -40px;
+            // position: absolute;
             text-transform: uppercase;
             transform: rotate(90deg);
             width: 100%;
@@ -58,9 +58,13 @@
             font-family: 'Rajdhani';
             font-size: var(--text-small);
             font-weight: bold;
+            height: $spacer * 3;
+            // position: absolute;
             text-align: center;
             text-transform: uppercase;
+            top: 100px;
             width: 100%;
+            z-index: 100;
         }
 
         @media screen and (min-width: $breakpoint-mobile) {
@@ -78,7 +82,7 @@
 
             &__title {
                 font-size: 2rem;
-                margin-top: 60px;
+                // margin-top: 60px;
                 transform: rotate(0deg);
             }
 
@@ -188,4 +192,16 @@
 }
 
 
+.slogan-leave-to,
+.slogan-enter {
+    opacity: 0;
+}
 
+.slogan-leave,
+.slogan-enter-to {
+    opacity: 1;
+}
+
+.slogan-enter-active {
+    transition: opacity 1s;
+}

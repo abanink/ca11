@@ -57,10 +57,35 @@
         background: var(--grey-50);
         border: 1px solid var(--grey-100);
 
+        &[disabled] {
+            background: var(--grey-100);
+            color: var(--grey-200);
+
+            &:hover {
+                color: var(--grey-200);
+            }
+        }
+
         &.active,
         &:hover {
             border-bottom: 1px solid var(--primary-base);
             color: var(--primary-base);
+        }
+
+        &.primary {
+            background: var(--primary-base);
+            border-bottom: 1px solid lighten($primary-color, 5%);
+            color: var(--grey-50);
+
+            &[disabled] {
+                background: var(--grey-400);
+                color: var(--grey-300);
+            }
+
+            &:not([disabled]):hover {
+                background: lighten($primary-color, 5%);
+                color: var(--grey-50);
+            }
         }
     }
 
@@ -68,14 +93,6 @@
         @include icon-size(#{$spacer * 3.5});
     }
 
-    &[disabled] {
-        background: var(--grey-100);
-        color: var(--grey-200);
-
-        &:hover {
-            color: var(--grey-200);
-        }
-    }
 
     &:not([disabled]) {
         &.hint {

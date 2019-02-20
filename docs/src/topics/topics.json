@@ -8,10 +8,10 @@
         ],
         "user": [
             {"icon": "requirements", "name": "requirements", "title": "Requirements"},
-            {"icon": "phone-add", "name": "session", "title": "Start Phone"},
-            {"icon": "sim-card", "name": "setup", "title": "Initial Setup"},
-            {"icon": "protocol-sig11", "name": "sig11-call", "title": "SIG11 Call"},
-            {"icon": "protocol-sip", "name": "sip-call", "title": "SIP Call"},
+            {"icon": "logo-o", "name": "session", "title": "Start your Phone"},
+            {"icon": "sim-card", "name": "setup", "title": "Quick Setup"},
+            {"icon": "nodes", "name": "sig11-call", "title": "SIG11 Calls"},
+            {"icon": "cloud", "name": "sip-call", "title": "SIP Calls"},
             {"icon": "phone", "name": "call-features", "title": "Call Options"}
         ]
     }

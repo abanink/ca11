@@ -89,8 +89,7 @@ class PluginSettings extends Plugin {
                 steps: {
                     options: [
                         {name: 'WizardSig11'},
-                        {name: 'WizardProtocolHandler'},
-                        {name: 'WizardMediaPermission'},
+                        {name: 'WizardClickToDial'},
                         {name: 'WizardDevices'},
                         {name: 'WizardTelemetry'},
                     ],

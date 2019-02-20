@@ -1,16 +1,9 @@
-<component class="c-devices t-devices">
+<component class="c-wizard-devices t-devices">
     <header class="c-wizard__header">
-        {{$t('audio settings')}}
+        {{$t('devices')}}
     </header>
 
-    <div class="c-wizard__description">
-        {{$t('a USB headset or earbuds with a microphone are recommended.').ca()}}
-
-        <DeviceControls
-            v-if="media.stream[media.stream.type].id && media.permission"
-            :stream="media.stream[media.stream.type]"
-        />
-    </div>
+    <Devices/>
 
     <slot name="progress"></slot>
 
@@ -21,7 +14,7 @@
         >{{$t('back')}}</button>
 
         <button
-            class="button button--widget is-primary t-btn-devices-next"
+            class="button button--widget primary t-btn-devices-next"
             @click="storeDevices()"
             :disabled="!stepValid"
         >{{$t('next')}}</button>

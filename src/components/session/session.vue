@@ -41,7 +41,7 @@
             elementclass="t-txt-session-pw"
             name="session-pw"
             :autofocus="true"
-            :help="$t('a password to secure your phone with.')"
+            :help="$t('the password to secure your phone with.')"
             :label="$t('phone password')"
             :placeholder="$t('secret password')"
             :validation="$v.password"
@@ -55,7 +55,7 @@
                 :disabled="session.status === 'login'"
             >{{$t('change session')}}</button>
             <button
-                class="button button--widget t-btn-login"
+                class="button button--widget primary t-btn-login"
                 :class="{'is-loading': session.status === 'login'}"
                 :disabled="$v.$invalid || session.status === 'login'"
                 @click="login"
@@ -85,7 +85,7 @@
             >{{$t('change session')}}</button>
 
             <button
-                class="button button--widget t-btn-login"
+                class="button button--widget primary t-btn-login"
                 :class="{'is-loading': session.status === 'login'}"
                 :disabled="$v.$invalid || session.status === 'login'"
                 @click="login"

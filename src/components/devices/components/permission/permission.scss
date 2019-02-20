@@ -1,20 +1,19 @@
 @import 'ca11/lib/mixins';
 @import 'ca11/lib/variables';
 
-.c-media-permission {
-    .mic-popout-notice {
-        font-size: 0.8rem;
-        font-style: italic;
-        margin-bottom: $spacer;
-    }
+.c-devices-permission {
+    color: var(--grey-300);
+    line-height: 1.5rem;
+    text-align: justify;
+    text-align-last: center;
 
-    .mic-details {
+    .browser-bar {
         align-items: center;
         display: flex;
         justify-content: center;
         position: relative;
 
-        .browser-bar {
+        .cam-disabled {
             align-items: center;
             background: var(--grey-50);
             border: var(--border) solid var(--grey-100);
@@ -53,20 +52,5 @@
                 fill: var(--grey-500);
             }
         }
-    }
-
-    .permission-message {
-        color: var(--primary-base);
-        font-family: 'Rajdhani';
-        font-size: var(--text-small);
-        font-weight: 600;
-        padding-bottom: $spacer;
-        text-transform: uppercase;
-    }
-
-    .instruction {
-        font-size: var(--text-small);
-        font-style: italic;
-        margin-top: var(--gutter);
     }
 }

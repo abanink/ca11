@@ -1,10 +1,16 @@
-<component class="c-device-controls">
+<component class="c-devices-config">
+
+    <div class="tip">
+        <icon name="school"/>
+        {{$t('use a headset or earbuds for better sound quality').ca()}}
+    </div>
+
     <FieldSelect
         v-model="devices.sinks.headsetInput"
         elementclass="t-sel-headset-input"
         name="headset_input"
         :help="$t('does the microphone of your headset respond?')"
-        :label="$t('headset microphone')"
+        :label="$t('microphone')"
         :options="devices.input"
         :validation="$v.settings.webrtc.devices.sinks.headsetInput.valid"
     >

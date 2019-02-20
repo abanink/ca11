@@ -12,11 +12,8 @@
 @import 'lib/animations';
 @import 'lib/grid';
 
+@import 'elements/guides';
 @import 'elements/header';
 @import 'elements/items';
 @import 'elements/notification-box';
 @import 'elements/tabs';
-
-body {
-    color: var(--grey-300);
-}

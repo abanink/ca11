@@ -4,7 +4,6 @@
 
 .c-select {
     $self: &;
-    font-family: 'Rajdhani';
     max-width: 400px;
 
     &__control {
@@ -21,13 +20,14 @@
         #{$self}__element {
             font-size: 1rem;
             outline: none;
-            padding: $spacer;
             user-select: none;
             width: 100%;
 
             &::placeholder {
                 color: var(--grey-300);
-                font-family: 'Rajdhani';
+                font-style: italic;
+
+                // font-family: 'Rajdhani';
             }
 
             &:focus {
@@ -43,9 +43,9 @@
 
     &__options {
         background: var(--grey-50);
-        border: 1px solid var(--grey-200);
-        box-shadow: 0 0 $spacer rgba(palette('grey', 500), 0.8);
-        font-weight: 600;
+        border: 1px solid var(--grey-100);
+        box-shadow: 0 0 $border rgba(palette('grey', 500), 0.8);
+        // font-weight: 600;
         margin-top: $spacer * 5;
         max-height: 162px;
 
@@ -56,7 +56,7 @@
         z-index: 100000;
 
         .option {
-            color: var(--grey-200);
+            color: var(--grey-400);
             padding: $spacer;
             text-align: left;
             user-select: none;
